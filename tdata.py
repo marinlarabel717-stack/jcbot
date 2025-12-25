@@ -3218,14 +3218,13 @@ class FileProcessor:
                 for dir_name in dirs:
                     dir_path = os.path.join(root, dir_name)
                     
-                    # 【关键修复】支持六种TData结构（包括变体）：
+                    # 【关键修复】支持四种TData结构（包括变体）：
                     # 0. tdata子目录包装: account/tdata/D877F783D5D3EF8C/maps + key_data(s)（最常见）
                     #    变体: account/tdata/key_datas + D877F783D5D3EF8C/maps（key文件在D877外）
                     # 1. 标准结构: account/D877F783D5D3EF8C/maps + key_data(s)
-                    # 2. tdata目录自身: tdata/D877F783D5D3EF8C/maps + key_data(s)
-                    #    变体: tdata/key_datas + D877F783D5D3EF8C/maps（key文件在D877外）
-                    # 3. 直接D877结构: D877F783D5D3EF8C/maps + key_data(s)
-                    # 4. 嵌套结构: D877F783D5D3EF8C/D877*/maps + key_data(s)
+                    # 2. 直接D877结构: D877F783D5D3EF8C/maps + key_data(s)
+                    # 3. 嵌套结构: D877F783D5D3EF8C/D877*/maps + key_data(s)
+                    # 注: 已移除"tdata目录自身"的检测以避免重复识别（每个账号被识别两次的问题）
                     
                     d877_check_path = None
                     maps_file = None
@@ -3270,20 +3269,12 @@ class FileProcessor:
                                 except (OSError, PermissionError) as e:
                                     print(f"⚠️ 无法读取D877F783D5D3EF8C子目录: {e}")
                     
-                    # 情况2: 当前目录本身名为"tdata"（不区分大小写），查找其中的D877F783D5D3EF8C
-                    if not is_valid_tdata and dir_name.lower() == "tdata":
-                        tdata_d877_path = os.path.join(dir_path, "D877F783D5D3EF8C")
-                        if os.path.exists(tdata_d877_path):
-                            # 先检查标准结构（key文件在D877内），如果失败则检查变体结构（key文件在tdata目录）
-                            is_valid_tdata, maps_file = self._validate_tdata_structure(tdata_d877_path, check_parent_for_keys=False)
-                            if not is_valid_tdata:
-                                is_valid_tdata, maps_file = self._validate_tdata_structure(tdata_d877_path, check_parent_for_keys=True)
-                            if is_valid_tdata:
-                                d877_check_path = tdata_d877_path
-                                tdata_root_path = dir_path  # TDesktop需要tdata目录本身
-                                print(f"📂 检测到tdata目录结构: tdata/D877F783D5D3EF8C")
+                    # 情况2已移除: 不再检测当前目录名为"tdata"的情况
+                    # 情况2已移除: 不再检测当前目录名为"tdata"的情况
+                    # 原因: 会导致账号被重复检测（Case 0已经处理了 account/tdata/D877 结构）
+                    # 移除此case避免同一账号被识别两次并标记为重复
                     
-                    # 情况3: 当前目录本身就是D877开头的目录（直接包含TData文件）
+                    # 情况2: 当前目录本身就是D877开头的目录（直接包含TData文件）
                     if not is_valid_tdata and dir_name.startswith("D877"):
                         is_valid_tdata, maps_file = self._validate_tdata_structure(dir_path)
                         if is_valid_tdata:
