@@ -3292,9 +3292,10 @@ class FileProcessor:
                     account_root_path = os.path.dirname(tdata_root_path) if os.path.basename(tdata_root_path).lower() == "tdata" else tdata_root_path
                     normalized_path = os.path.normpath(os.path.abspath(account_root_path))
                     
-                    # 检查是否已经添加过此TData目录
+                    # 检查是否已经添加过此账号
                     if normalized_path in seen_tdata_paths:
-                        print(f"⚠️ 跳过重复TData目录: {normalized_path}")
+                        account_name = os.path.basename(normalized_path)
+                        print(f"⚠️ 跳过重复账号: {account_name}")
                         continue
                     
                     seen_tdata_paths.add(normalized_path)
