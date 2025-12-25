@@ -3318,13 +3318,16 @@ class FileProcessor:
             shutil.rmtree(task_upload_dir, ignore_errors=True)
             return [], "", "error"
         
-        # 优先级：Session > TData（优先使用Session检查，准确性更高）
-        # 如果同时存在Session和TData，优先使用Session进行检查
+        # 优先级调整：如果同时存在Session和TData，将TData也转换为Session一起检查
+        # 这样可以检查所有账号，而不是忽略TData文件
         if session_files:
             print(f"📱 检测到Session文件，优先使用Session检测（准确性更高）")
             print(f"✅ 找到 {len(session_files)} 个Session文件")
             if tdata_folders:
-                print(f"📂 同时发现 {len(tdata_folders)} 个TData文件夹（已忽略，优先Session）")
+                print(f"📂 同时发现 {len(tdata_folders)} 个TData文件夹")
+                print(f"🔄 将TData文件也转换为Session一起检查（不忽略）")
+                # 将TData和Session合并返回，使用混合类型标识
+                return session_files + tdata_folders, task_upload_dir, "mixed"
             return session_files, task_upload_dir, "session"
         elif tdata_folders:
             print(f"🎯 检测到TData文件，使用TData检测")
@@ -3383,6 +3386,15 @@ class FileProcessor:
                 
                 if file_type == "session":
                     status, info, account_name = await self.checker.check_account_status(file_path, file_name, self.db)
+                elif file_type == "mixed":
+                    # 混合类型：需要判断当前文件是session还是tdata
+                    if file_path.endswith('.session'):
+                        # Session文件
+                        status, info, account_name = await self.checker.check_account_status(file_path, file_name, self.db)
+                    else:
+                        # TData文件夹
+                        print(f"📂 [{file_name}] 格式: TData - 将自动转换为Session进行检查")
+                        status, info, account_name = await self.convert_tdata_and_check(file_path, file_name)
                 else:  # tdata
                     # 问题1: TData格式统一转换为Session后检查（更准确）
                     print(f"📂 [{file_name}] 格式: TData - 将自动转换为Session进行检查")
