@@ -3284,10 +3284,13 @@ class FileProcessor:
                         print(f"⚠️ 警告: TData路径未正确设置，跳过: {dir_name}")
                         continue
                     
-                    # 【修复】使用tdata_root_path（包含账号完整路径）进行去重，而不是d877_check_path
-                    # 这样可以正确识别不同账号，即使它们的D877子目录名称相同
-                    # 例如: 8619912345678/tdata 和 8619987654321/tdata 是不同的账号
-                    normalized_path = os.path.normpath(os.path.abspath(tdata_root_path))
+                    # 【修复】使用账号根目录（手机号目录）进行去重
+                    # 每个账号都有一样的tdata子目录，所以必须使用tdata的父目录（手机号目录）作为唯一标识
+                    # 例如: 8619912345678 和 8619987654321 是不同的账号
+                    # tdata_root_path可能是: account/tdata 或 tdata 本身
+                    # 我们需要找到账号根目录（包含tdata的父目录）
+                    account_root_path = os.path.dirname(tdata_root_path) if os.path.basename(tdata_root_path).lower() == "tdata" else tdata_root_path
+                    normalized_path = os.path.normpath(os.path.abspath(account_root_path))
                     
                     # 检查是否已经添加过此TData目录
                     if normalized_path in seen_tdata_paths:
