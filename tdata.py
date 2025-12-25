@@ -3284,13 +3284,14 @@ class FileProcessor:
                         print(f"⚠️ 警告: TData路径未正确设置，跳过: {dir_name}")
                         continue
                     
-                    # 使用D877目录的规范化路径防止重复计数（而不是父目录）
-                    # 这样即使从不同路径访问同一个D877目录，也能正确去重
-                    normalized_path = os.path.normpath(os.path.abspath(d877_check_path))
+                    # 【修复】使用tdata_root_path（包含账号完整路径）进行去重，而不是d877_check_path
+                    # 这样可以正确识别不同账号，即使它们的D877子目录名称相同
+                    # 例如: 8619912345678/tdata 和 8619987654321/tdata 是不同的账号
+                    normalized_path = os.path.normpath(os.path.abspath(tdata_root_path))
                     
                     # 检查是否已经添加过此TData目录
                     if normalized_path in seen_tdata_paths:
-                        print(f"⚠️ 跳过重复TData目录: {dir_name}")
+                        print(f"⚠️ 跳过重复TData目录: {normalized_path}")
                         continue
                     
                     seen_tdata_paths.add(normalized_path)
