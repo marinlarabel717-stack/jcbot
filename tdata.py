@@ -3325,9 +3325,35 @@ class FileProcessor:
             print(f"✅ 找到 {len(session_files)} 个Session文件")
             if tdata_folders:
                 print(f"📂 同时发现 {len(tdata_folders)} 个TData文件夹")
-                print(f"🔄 将TData文件也转换为Session一起检查（不忽略）")
-                # 将TData和Session合并返回，使用混合类型标识
-                return session_files + tdata_folders, task_upload_dir, "mixed"
+                
+                # 去重：如果Session和TData中有相同账号，优先使用Session
+                # 提取Session文件的账号标识（去掉.session后缀）
+                session_accounts = set()
+                for _, session_name in session_files:
+                    account_id = session_name.replace('.session', '')
+                    session_accounts.add(account_id)
+                
+                # 过滤TData，只保留没有对应Session的账号
+                filtered_tdata = []
+                duplicate_count = 0
+                for tdata_path, tdata_name in tdata_folders:
+                    if tdata_name not in session_accounts:
+                        filtered_tdata.append((tdata_path, tdata_name))
+                    else:
+                        duplicate_count += 1
+                
+                if duplicate_count > 0:
+                    print(f"🔄 去重: 发现 {duplicate_count} 个重复账号（Session和TData相同），优先使用Session")
+                
+                if filtered_tdata:
+                    print(f"🔄 将剩余 {len(filtered_tdata)} 个TData文件转换为Session一起检查")
+                    # 将去重后的TData和Session合并返回
+                    all_files = session_files + filtered_tdata
+                    print(f"📊 总计: {len(all_files)} 个唯一账号 (Session: {len(session_files)}, TData: {len(filtered_tdata)})")
+                    return all_files, task_upload_dir, "mixed"
+                else:
+                    print(f"ℹ️ 所有TData账号都有对应的Session文件，无需额外处理")
+                    return session_files, task_upload_dir, "session"
             return session_files, task_upload_dir, "session"
         elif tdata_folders:
             print(f"🎯 检测到TData文件，使用TData检测")
