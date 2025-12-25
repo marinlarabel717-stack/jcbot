@@ -33,3 +33,6 @@ typing_extensions>=4.12.2; python_version < "3.11"
 cryptg>=0.4.0; platform_python_implementation == "CPython"
 
 phonenumbers>=8.13.0
+
+# 随机数据生成（用于生成本地化姓名和简介）
+Faker>=39.0.0
