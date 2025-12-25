@@ -489,6 +489,21 @@ class ProxyManager:
 # 账号资料管理器（Profile Manager）
 # ================================
 
+# 错误类型映射（用于资料修改）
+ERROR_MESSAGES = {
+    'UserDeactivatedBanError': '账号已被封禁',
+    'UserDeactivatedError': '账号已注销',
+    'AuthKeyUnregisteredError': '授权已失效，需重新登录',
+    'UsernameOccupiedError': '用户名已被占用',
+    'UsernameInvalidError': '用户名格式无效',
+    'FloodWaitError': '触发频率限制',
+    'TimeoutError': '网络连接超时',
+    'ConnectionError': '网络连接失败',
+    'RPCError': 'Telegram API错误',
+    'SessionPasswordNeededError': '需要两步验证密码',
+    'PhoneNumberBannedError': '手机号已被封禁',
+}
+
 class ProfileManager:
     """账号资料管理器 - 使用Faker动态生成随机不重样的本地化内容"""
     
@@ -21595,7 +21610,16 @@ admin3</code>
                 session_path = file_path
             
             if not client or not await client.is_user_authorized():
-                return {'success': False, 'account': file_name, 'error': '账号未授权'}
+                error_type = 'AuthKeyUnregisteredError'
+                error_message = ERROR_MESSAGES.get(error_type, '账号未授权')
+                return {
+                    'success': False,
+                    'account': file_name,
+                    'file_name': file_name,
+                    'file_path': file_path,
+                    'error': error_message,
+                    'error_type': error_type
+                }
             
             # 获取账号信息
             me = await client.get_me()
@@ -21606,8 +21630,11 @@ admin3</code>
                 'success': True,
                 'account': file_name,
                 'phone': phone,
+                'file_name': file_name,
+                'file_path': file_path,
                 'country': country,
                 'proxy': f"{used_proxy['type']}://{used_proxy['host']}:{used_proxy['port']}" if used_proxy else '本地连接',
+                'changes': {},
                 'actions': []
             }
             
@@ -21617,18 +21644,34 @@ admin3</code>
             # 1. 更新姓名
             if config.update_name and config.mode == 'random':
                 first_name, last_name = self.profile_manager.generate_random_name(country)
-                if await self.profile_manager.update_profile_name(client, first_name, last_name):
-                    detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
-                else:
-                    detail['actions'].append("❌ 姓名更新失败")
+                try:
+                    if await self.profile_manager.update_profile_name(client, first_name, last_name):
+                        detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
+                        detail['changes']['name'] = {
+                            'old': f"{me.first_name or ''} {me.last_name or ''}".strip(),
+                            'new': f"{first_name} {last_name}".strip(),
+                            'success': True
+                        }
+                    else:
+                        detail['actions'].append("❌ 姓名更新失败")
+                        detail['changes']['name'] = {'success': False}
+                except Exception as e:
+                    detail['actions'].append(f"❌ 姓名更新失败: {str(e)}")
+                    detail['changes']['name'] = {'success': False, 'error': str(e)}
                 await asyncio.sleep(1)
             
             # 2. 处理头像
             if config.update_photo and config.photo_action == 'delete_all':
-                if await self.profile_manager.delete_profile_photos(client):
-                    detail['actions'].append("✅ 删除所有头像")
-                else:
-                    detail['actions'].append("❌ 删除头像失败")
+                try:
+                    if await self.profile_manager.delete_profile_photos(client):
+                        detail['actions'].append("✅ 删除所有头像")
+                        detail['changes']['photo'] = {'action': 'deleted', 'success': True}
+                    else:
+                        detail['actions'].append("❌ 删除头像失败")
+                        detail['changes']['photo'] = {'action': 'deleted', 'success': False}
+                except Exception as e:
+                    detail['actions'].append(f"❌ 删除头像失败: {str(e)}")
+                    detail['changes']['photo'] = {'action': 'deleted', 'success': False, 'error': str(e)}
                 await asyncio.sleep(1)
             
             # 3. 更新简介
@@ -21639,39 +21682,153 @@ admin3</code>
                 elif config.bio_action == 'random':
                     bio = self.profile_manager.generate_random_bio(country)
                 
-                if await self.profile_manager.update_profile_bio(client, bio):
-                    bio_display = bio[:20] + '...' if len(bio) > 20 else bio if bio else '(空)'
-                    detail['actions'].append(f"✅ 简介: {bio_display}")
-                else:
-                    detail['actions'].append("❌ 简介更新失败")
+                try:
+                    # 获取当前简介
+                    old_bio = ''
+                    try:
+                        full = await client(GetFullUserRequest(me.id))
+                        old_bio = full.full_user.about if hasattr(full.full_user, 'about') else ''
+                    except:
+                        pass
+                    
+                    if await self.profile_manager.update_profile_bio(client, bio):
+                        bio_display = bio[:20] + '...' if len(bio) > 20 else bio if bio else '(空)'
+                        detail['actions'].append(f"✅ 简介: {bio_display}")
+                        detail['changes']['bio'] = {
+                            'old': old_bio or '',
+                            'new': bio,
+                            'success': True
+                        }
+                    else:
+                        detail['actions'].append("❌ 简介更新失败")
+                        detail['changes']['bio'] = {'success': False}
+                except Exception as e:
+                    detail['actions'].append(f"❌ 简介更新失败: {str(e)}")
+                    detail['changes']['bio'] = {'success': False, 'error': str(e)}
                 await asyncio.sleep(1)
             
             # 4. 更新用户名
             if config.update_username:
+                old_username = me.username if hasattr(me, 'username') else None
                 if config.username_action == 'random':
                     # 尝试3次生成不重复的用户名
+                    success_flag = False
+                    new_username = ''
                     for _ in range(3):
                         username = self.profile_manager.generate_random_username()
-                        if await self.profile_manager.update_profile_username(client, username):
-                            detail['actions'].append(f"✅ 用户名: {username}")
+                        try:
+                            if await self.profile_manager.update_profile_username(client, username):
+                                detail['actions'].append(f"✅ 用户名: {username}")
+                                detail['changes']['username'] = {
+                                    'old': f"@{old_username}" if old_username else '无',
+                                    'new': f"@{username}",
+                                    'success': True
+                                }
+                                success_flag = True
+                                break
+                        except UsernameOccupiedError:
+                            continue
+                        except Exception as e:
+                            detail['actions'].append(f"❌ 用户名更新失败: {str(e)}")
+                            detail['changes']['username'] = {'success': False, 'error': str(e), 'error_type': 'UsernameOccupiedError'}
+                            success_flag = False
                             break
-                    else:
+                    
+                    if not success_flag and 'username' not in detail['changes']:
                         detail['actions'].append("❌ 用户名更新失败（可能已被占用）")
+                        detail['changes']['username'] = {'success': False, 'error': '用户名已被占用', 'error_type': 'UsernameOccupiedError'}
                 elif config.username_action == 'delete':
-                    if await self.profile_manager.update_profile_username(client, ''):
-                        detail['actions'].append("✅ 用户名: 已删除")
-                    else:
-                        detail['actions'].append("❌ 用户名删除失败")
+                    try:
+                        if await self.profile_manager.update_profile_username(client, ''):
+                            detail['actions'].append("✅ 用户名: 已删除")
+                            detail['changes']['username'] = {
+                                'old': f"@{old_username}" if old_username else '无',
+                                'new': '已删除',
+                                'success': True
+                            }
+                        else:
+                            detail['actions'].append("❌ 用户名删除失败")
+                            detail['changes']['username'] = {'success': False}
+                    except Exception as e:
+                        detail['actions'].append(f"❌ 用户名删除失败: {str(e)}")
+                        detail['changes']['username'] = {'success': False, 'error': str(e)}
                 await asyncio.sleep(1)
             
             return detail
             
-        except Exception as e:
-            logger.error(f"Update profile failed for {file_name}: {e}")
+        except UserDeactivatedBanError as e:
+            error_type = 'UserDeactivatedBanError'
+            error_message = ERROR_MESSAGES.get(error_type, str(e))
+            logger.error(f"Update profile failed for {file_name}: {error_type}")
             return {
                 'success': False,
                 'account': file_name,
-                'error': str(e)
+                'file_name': file_name,
+                'file_path': file_path,
+                'error': error_message,
+                'error_type': error_type
+            }
+        except AuthKeyUnregisteredError as e:
+            error_type = 'AuthKeyUnregisteredError'
+            error_message = ERROR_MESSAGES.get(error_type, str(e))
+            logger.error(f"Update profile failed for {file_name}: {error_type}")
+            return {
+                'success': False,
+                'account': file_name,
+                'file_name': file_name,
+                'file_path': file_path,
+                'error': error_message,
+                'error_type': error_type
+            }
+        except FloodWaitError as e:
+            error_type = 'FloodWaitError'
+            wait_seconds = e.seconds if hasattr(e, 'seconds') else 0
+            error_message = f"{ERROR_MESSAGES.get(error_type, str(e))}，需等待 {wait_seconds} 秒后重试"
+            logger.error(f"Update profile failed for {file_name}: {error_type}")
+            return {
+                'success': False,
+                'account': file_name,
+                'file_name': file_name,
+                'file_path': file_path,
+                'error': error_message,
+                'error_type': error_type
+            }
+        except (UsernameOccupiedError, UsernameInvalidError) as e:
+            error_type = type(e).__name__
+            error_message = ERROR_MESSAGES.get(error_type, str(e))
+            logger.error(f"Update profile failed for {file_name}: {error_type}")
+            return {
+                'success': False,
+                'account': file_name,
+                'file_name': file_name,
+                'file_path': file_path,
+                'error': error_message,
+                'error_type': error_type
+            }
+        except asyncio.TimeoutError as e:
+            error_type = 'TimeoutError'
+            error_message = ERROR_MESSAGES.get(error_type, '网络连接超时')
+            logger.error(f"Update profile failed for {file_name}: {error_type}")
+            return {
+                'success': False,
+                'account': file_name,
+                'file_name': file_name,
+                'file_path': file_path,
+                'error': error_message,
+                'error_type': error_type
+            }
+        except Exception as e:
+            # 尝试获取错误类型
+            error_type = type(e).__name__
+            error_message = ERROR_MESSAGES.get(error_type, str(e))
+            logger.error(f"Update profile failed for {file_name}: {error_type} - {str(e)}")
+            return {
+                'success': False,
+                'account': file_name,
+                'file_name': file_name,
+                'file_path': file_path,
+                'error': error_message,
+                'error_type': error_type
             }
         finally:
             if client:
@@ -21691,94 +21848,310 @@ admin3</code>
                     pass
     
     def _generate_profile_update_report(self, context: CallbackContext, user_id: int, results: Dict, progress_msg):
-        """生成资料修改报告"""
-        logger.info("📊 开始生成报告...")
+        """生成资料修改详细报告和打包结果文件"""
+        logger.info("📊 开始生成详细报告和打包文件...")
         
         timestamp = datetime.now(BEIJING_TZ).strftime("%Y%m%d_%H%M%S")
+        total = len(results['success']) + len(results['failed'])
+        success_count = len(results['success'])
+        failed_count = len(results['failed'])
+        
+        # 统计错误类型
+        error_stats = {}
+        for file_path, file_name, detail in results['failed']:
+            error_type = detail.get('error_type', 'Unknown')
+            # 获取友好的错误名称
+            if error_type in ERROR_MESSAGES:
+                error_name = ERROR_MESSAGES[error_type]
+            else:
+                error_name = error_type
+            
+            if error_name not in error_stats:
+                error_stats[error_name] = 0
+            error_stats[error_name] += 1
+        
+        # ========================================
+        # 1. 生成详细的TXT报告
+        # ========================================
         report_lines = []
         
-        report_lines.append("=" * 50)
-        report_lines.append("资料修改报告")
-        report_lines.append(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}")
-        report_lines.append("=" * 50)
+        report_lines.append("=" * 80)
+        report_lines.append("📋 资料修改详细报告")
+        report_lines.append("=" * 80)
+        report_lines.append(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S')}")
+        report_lines.append(f"总数: {total} | 成功: {success_count} | 失败: {failed_count}")
         report_lines.append("")
         
-        report_lines.append(f"📊 统计信息")
-        report_lines.append(f"  总数: {len(results['success']) + len(results['failed'])}")
-        report_lines.append(f"  成功: {len(results['success'])}")
-        report_lines.append(f"  失败: {len(results['failed'])}")
-        report_lines.append("")
-        
-        # 成功的账号
+        # 成功的账号详情
         if results['success']:
-            report_lines.append("✅ 成功的账号:")
-            report_lines.append("-" * 50)
-            for file_path, file_name, detail in results['success']:
-                report_lines.append(f"\n账号: {file_name}")
-                if detail.get('phone'):
-                    report_lines.append(f"  手机: {detail['phone']}")
-                if detail.get('country'):
-                    report_lines.append(f"  国家: {detail['country']}")
-                if detail.get('proxy'):
-                    report_lines.append(f"  连接: {detail['proxy']}")
-                if detail.get('actions'):
-                    report_lines.append(f"  操作:")
-                    for action in detail['actions']:
-                        report_lines.append(f"    {action}")
+            report_lines.append("=" * 80)
+            report_lines.append(f"✅ 成功账号 ({success_count})")
+            report_lines.append("=" * 80)
+            for idx, (file_path, file_name, detail) in enumerate(results['success'], 1):
+                report_lines.append(f"\n{idx}. {detail.get('phone', file_name)}")
+                report_lines.append(f"   文件: {file_name}")
+                
+                # 显示变更详情
+                changes = detail.get('changes', {})
+                if 'name' in changes and changes['name'].get('success'):
+                    old_name = changes['name'].get('old', '')
+                    new_name = changes['name'].get('new', '')
+                    if old_name:
+                        report_lines.append(f"   - 姓名: {old_name} → {new_name} ✓")
+                    else:
+                        report_lines.append(f"   - 姓名: {new_name} ✓")
+                
+                if 'photo' in changes and changes['photo'].get('success'):
+                    report_lines.append(f"   - 头像: 已删除 ✓")
+                
+                if 'bio' in changes and changes['bio'].get('success'):
+                    old_bio = changes['bio'].get('old', '')
+                    new_bio = changes['bio'].get('new', '')
+                    if old_bio or new_bio:
+                        if new_bio:
+                            report_lines.append(f"   - 简介: {old_bio[:15] if old_bio else '无'} → {new_bio[:15]}... ✓")
+                        else:
+                            report_lines.append(f"   - 简介: 已清空 ✓")
+                
+                if 'username' in changes and changes['username'].get('success'):
+                    old_username = changes['username'].get('old', '')
+                    new_username = changes['username'].get('new', '')
+                    report_lines.append(f"   - 用户名: {old_username} → {new_username} ✓")
+            
             report_lines.append("")
         
-        # 失败的账号
+        # 失败的账号详情
         if results['failed']:
-            report_lines.append("❌ 失败的账号:")
-            report_lines.append("-" * 50)
-            for file_path, file_name, detail in results['failed']:
-                report_lines.append(f"\n账号: {file_name}")
-                if detail.get('error'):
-                    report_lines.append(f"  错误: {detail['error']}")
+            report_lines.append("=" * 80)
+            report_lines.append(f"❌ 失败账号 ({failed_count})")
+            report_lines.append("=" * 80)
+            for idx, (file_path, file_name, detail) in enumerate(results['failed'], 1):
+                report_lines.append(f"\n{idx}. {detail.get('phone', file_name) if detail.get('phone') else file_name}")
+                report_lines.append(f"   文件: {file_name}")
+                error_type = detail.get('error_type', 'Unknown')
+                error_message = detail.get('error', '未知错误')
+                report_lines.append(f"   错误类型: {error_type}")
+                report_lines.append(f"   错误原因: {error_message}")
+            
             report_lines.append("")
         
-        # 保存报告
+        # 错误统计
+        if error_stats:
+            report_lines.append("=" * 80)
+            report_lines.append("📊 错误统计")
+            report_lines.append("=" * 80)
+            for error_name, count in sorted(error_stats.items(), key=lambda x: x[1], reverse=True):
+                report_lines.append(f"• {error_name}: {count}")
+            report_lines.append("")
+        
+        # 保存报告文件
         report_content = "\n".join(report_lines)
-        report_path = f"/tmp/profile_report_{timestamp}.txt"
+        report_path = os.path.join(config.RESULTS_DIR, f"profile_report_{timestamp}.txt")
         
-        with open(report_path, 'w', encoding='utf-8') as f:
-            f.write(report_content)
-        
-        # 发送报告
         try:
-            with open(report_path, 'rb') as f:
-                context.bot.send_document(
-                    chat_id=user_id,
-                    document=f,
-                    filename=f"profile_report_{timestamp}.txt",
-                    caption=f"📊 资料修改报告\n\n✅ 成功: {len(results['success'])}\n❌ 失败: {len(results['failed'])}",
-                    parse_mode='HTML'
-                )
+            with open(report_path, 'w', encoding='utf-8') as f:
+                f.write(report_content)
+            logger.info(f"✅ 报告文件已生成: {report_path}")
         except Exception as e:
-            logger.error(f"Failed to send report: {e}")
+            logger.error(f"❌ 生成报告文件失败: {e}")
         
-        # 更新最终消息
+        # ========================================
+        # 2. 打包成功的账号文件
+        # ========================================
+        success_zip_path = None
+        if results['success']:
+            logger.info(f"📦 开始打包成功的账号文件...")
+            success_zip_path = os.path.join(config.RESULTS_DIR, f"profile_success_{success_count}_{timestamp}.zip")
+            
+            try:
+                with zipfile.ZipFile(success_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                    for file_path, file_name, detail in results['success']:
+                        original_file_path = detail.get('file_path', file_path)
+                        
+                        try:
+                            # 判断文件类型
+                            if os.path.isdir(original_file_path):
+                                # TData格式：打包整个目录
+                                for root, dirs, files in os.walk(original_file_path):
+                                    for file in files:
+                                        file_full_path = os.path.join(root, file)
+                                        rel_path = os.path.relpath(file_full_path, os.path.dirname(original_file_path))
+                                        zipf.write(file_full_path, rel_path)
+                            else:
+                                # Session格式：打包session文件及相关文件
+                                if os.path.exists(original_file_path):
+                                    zipf.write(original_file_path, file_name)
+                                
+                                # Journal文件
+                                journal_path = original_file_path + '-journal'
+                                if os.path.exists(journal_path):
+                                    zipf.write(journal_path, file_name + '-journal')
+                                
+                                # JSON文件
+                                json_path = os.path.splitext(original_file_path)[0] + '.json'
+                                if os.path.exists(json_path):
+                                    json_name = os.path.splitext(file_name)[0] + '.json'
+                                    zipf.write(json_path, json_name)
+                        except Exception as e:
+                            logger.warning(f"⚠️ 打包文件失败 {file_name}: {e}")
+                
+                logger.info(f"✅ 成功账号已打包: {success_zip_path}")
+            except Exception as e:
+                logger.error(f"❌ 打包成功账号失败: {e}")
+                success_zip_path = None
+        
+        # ========================================
+        # 3. 打包失败的账号文件
+        # ========================================
+        failed_zip_path = None
+        if results['failed']:
+            logger.info(f"📦 开始打包失败的账号文件...")
+            failed_zip_path = os.path.join(config.RESULTS_DIR, f"profile_failed_{failed_count}_{timestamp}.zip")
+            
+            try:
+                with zipfile.ZipFile(failed_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                    for file_path, file_name, detail in results['failed']:
+                        original_file_path = detail.get('file_path', file_path)
+                        
+                        try:
+                            # 判断文件类型
+                            if os.path.isdir(original_file_path):
+                                # TData格式：打包整个目录
+                                for root, dirs, files in os.walk(original_file_path):
+                                    for file in files:
+                                        file_full_path = os.path.join(root, file)
+                                        rel_path = os.path.relpath(file_full_path, os.path.dirname(original_file_path))
+                                        zipf.write(file_full_path, rel_path)
+                            else:
+                                # Session格式：打包session文件及相关文件
+                                if os.path.exists(original_file_path):
+                                    zipf.write(original_file_path, file_name)
+                                
+                                # Journal文件
+                                journal_path = original_file_path + '-journal'
+                                if os.path.exists(journal_path):
+                                    zipf.write(journal_path, file_name + '-journal')
+                                
+                                # JSON文件
+                                json_path = os.path.splitext(original_file_path)[0] + '.json'
+                                if os.path.exists(json_path):
+                                    json_name = os.path.splitext(file_name)[0] + '.json'
+                                    zipf.write(json_path, json_name)
+                        except Exception as e:
+                            logger.warning(f"⚠️ 打包文件失败 {file_name}: {e}")
+                
+                logger.info(f"✅ 失败账号已打包: {failed_zip_path}")
+            except Exception as e:
+                logger.error(f"❌ 打包失败账号失败: {e}")
+                failed_zip_path = None
+        
+        # ========================================
+        # 4. 发送报告文件
+        # ========================================
+        try:
+            if os.path.exists(report_path):
+                with open(report_path, 'rb') as f:
+                    context.bot.send_document(
+                        chat_id=user_id,
+                        document=f,
+                        filename=f"profile_report_{timestamp}.txt",
+                        caption="📋 资料修改详细报告",
+                        parse_mode='HTML'
+                    )
+                logger.info("✅ 报告文件已发送")
+        except Exception as e:
+            logger.error(f"❌ 发送报告文件失败: {e}")
+        
+        # ========================================
+        # 5. 发送成功账号ZIP
+        # ========================================
+        if success_zip_path and os.path.exists(success_zip_path):
+            try:
+                with open(success_zip_path, 'rb') as f:
+                    context.bot.send_document(
+                        chat_id=user_id,
+                        document=f,
+                        filename=f"profile_success_{success_count}.zip",
+                        caption=f"✅ 成功账号 ({success_count}个)",
+                        parse_mode='HTML',
+                        timeout=120
+                    )
+                logger.info("✅ 成功账号ZIP已发送")
+            except Exception as e:
+                logger.error(f"❌ 发送成功账号ZIP失败: {e}")
+        
+        # ========================================
+        # 6. 发送失败账号ZIP
+        # ========================================
+        if failed_zip_path and os.path.exists(failed_zip_path):
+            try:
+                with open(failed_zip_path, 'rb') as f:
+                    context.bot.send_document(
+                        chat_id=user_id,
+                        document=f,
+                        filename=f"profile_failed_{failed_count}.zip",
+                        caption=f"❌ 失败账号 ({failed_count}个)",
+                        parse_mode='HTML',
+                        timeout=120
+                    )
+                logger.info("✅ 失败账号ZIP已发送")
+            except Exception as e:
+                logger.error(f"❌ 发送失败账号ZIP失败: {e}")
+        
+        # ========================================
+        # 7. 更新最终消息
+        # ========================================
+        error_stats_text = ""
+        if error_stats:
+            error_stats_text = "\n\n📋 <b>错误类型统计:</b>\n"
+            for error_name, count in sorted(error_stats.items(), key=lambda x: x[1], reverse=True):
+                error_stats_text += f"• {error_name}: {count}\n"
+        
+        files_sent_text = "\n\n📁 <b>已发送文件:</b>\n• 详细报告: profile_report.txt"
+        if success_zip_path:
+            files_sent_text += f"\n• 成功账号: profile_success_{success_count}.zip"
+        if failed_zip_path:
+            files_sent_text += f"\n• 失败账号: profile_failed_{failed_count}.zip"
+        
         final_text = f"""✅ <b>资料修改完成！</b>
 
 📊 <b>统计信息：</b>
-• 总数: {len(results['success']) + len(results['failed'])}
-• 成功: {len(results['success'])}
-• 失败: {len(results['failed'])}
-
-📄 详细报告已发送
+• 总数: {total}
+• 成功: {success_count} ✅
+• 失败: {failed_count} ❌{error_stats_text}{files_sent_text}
 """
         
-        self.safe_edit_message_text(
-            progress_msg,
-            final_text,
-            parse_mode='HTML'
-        )
-        
-        # 清理报告文件
         try:
-            os.remove(report_path)
+            self.safe_edit_message_text(
+                progress_msg,
+                final_text,
+                parse_mode='HTML'
+            )
+        except Exception as e:
+            logger.error(f"❌ 更新最终消息失败: {e}")
+        
+        # ========================================
+        # 8. 清理临时文件
+        # ========================================
+        try:
+            if os.path.exists(report_path):
+                os.remove(report_path)
         except:
             pass
+        
+        try:
+            if success_zip_path and os.path.exists(success_zip_path):
+                os.remove(success_zip_path)
+        except:
+            pass
+        
+        try:
+            if failed_zip_path and os.path.exists(failed_zip_path):
+                os.remove(failed_zip_path)
+        except:
+            pass
+        
+        logger.info("📊 报告生成和文件发送完成！")
     
     def handle_registration_check_execute(self, update: Update, context: CallbackContext, query, user_id: int):
         """执行注册时间查询"""
