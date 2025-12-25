@@ -3099,6 +3099,23 @@ class FileProcessor:
             # 返回一个基于时间戳的标识符
             return f"tdata_{int(time.time())}"
     
+    def _get_account_root_from_tdata_path(self, tdata_root_path: str) -> str:
+        """
+        从tdata路径提取账号根目录
+        
+        如果路径以"tdata"结尾，返回其父目录（账号根目录）
+        否则返回路径本身
+        
+        Args:
+            tdata_root_path: TData根目录路径（可能是 account/tdata 或其他）
+            
+        Returns:
+            账号根目录路径（通常是手机号目录）
+        """
+        if os.path.basename(tdata_root_path).lower() == "tdata":
+            return os.path.dirname(tdata_root_path)
+        return tdata_root_path
+    
     def _validate_tdata_structure(self, d877_path: str, check_parent_for_keys: bool = False) -> Tuple[bool, Optional[str]]:
         """
         验证TData目录结构是否有效
@@ -3201,14 +3218,13 @@ class FileProcessor:
                 for dir_name in dirs:
                     dir_path = os.path.join(root, dir_name)
                     
-                    # 【关键修复】支持六种TData结构（包括变体）：
+                    # 【关键修复】支持四种TData结构（包括变体）：
                     # 0. tdata子目录包装: account/tdata/D877F783D5D3EF8C/maps + key_data(s)（最常见）
                     #    变体: account/tdata/key_datas + D877F783D5D3EF8C/maps（key文件在D877外）
                     # 1. 标准结构: account/D877F783D5D3EF8C/maps + key_data(s)
-                    # 2. tdata目录自身: tdata/D877F783D5D3EF8C/maps + key_data(s)
-                    #    变体: tdata/key_datas + D877F783D5D3EF8C/maps（key文件在D877外）
-                    # 3. 直接D877结构: D877F783D5D3EF8C/maps + key_data(s)
-                    # 4. 嵌套结构: D877F783D5D3EF8C/D877*/maps + key_data(s)
+                    # 2. 直接D877结构: D877F783D5D3EF8C/maps + key_data(s)
+                    # 3. 嵌套结构: D877F783D5D3EF8C/D877*/maps + key_data(s)
+                    # 注: 已移除"tdata目录自身"的检测以避免重复识别（每个账号被识别两次的问题）
                     
                     d877_check_path = None
                     maps_file = None
@@ -3253,20 +3269,12 @@ class FileProcessor:
                                 except (OSError, PermissionError) as e:
                                     print(f"⚠️ 无法读取D877F783D5D3EF8C子目录: {e}")
                     
-                    # 情况2: 当前目录本身名为"tdata"（不区分大小写），查找其中的D877F783D5D3EF8C
-                    if not is_valid_tdata and dir_name.lower() == "tdata":
-                        tdata_d877_path = os.path.join(dir_path, "D877F783D5D3EF8C")
-                        if os.path.exists(tdata_d877_path):
-                            # 先检查标准结构（key文件在D877内），如果失败则检查变体结构（key文件在tdata目录）
-                            is_valid_tdata, maps_file = self._validate_tdata_structure(tdata_d877_path, check_parent_for_keys=False)
-                            if not is_valid_tdata:
-                                is_valid_tdata, maps_file = self._validate_tdata_structure(tdata_d877_path, check_parent_for_keys=True)
-                            if is_valid_tdata:
-                                d877_check_path = tdata_d877_path
-                                tdata_root_path = dir_path  # TDesktop需要tdata目录本身
-                                print(f"📂 检测到tdata目录结构: tdata/D877F783D5D3EF8C")
+                    # 情况2已移除: 不再检测当前目录名为"tdata"的情况
+                    # 情况2已移除: 不再检测当前目录名为"tdata"的情况
+                    # 原因: 会导致账号被重复检测（Case 0已经处理了 account/tdata/D877 结构）
+                    # 移除此case避免同一账号被识别两次并标记为重复
                     
-                    # 情况3: 当前目录本身就是D877开头的目录（直接包含TData文件）
+                    # 情况2: 当前目录本身就是D877开头的目录（直接包含TData文件）
                     if not is_valid_tdata and dir_name.startswith("D877"):
                         is_valid_tdata, maps_file = self._validate_tdata_structure(dir_path)
                         if is_valid_tdata:
@@ -3284,13 +3292,16 @@ class FileProcessor:
                         print(f"⚠️ 警告: TData路径未正确设置，跳过: {dir_name}")
                         continue
                     
-                    # 使用D877目录的规范化路径防止重复计数（而不是父目录）
-                    # 这样即使从不同路径访问同一个D877目录，也能正确去重
-                    normalized_path = os.path.normpath(os.path.abspath(d877_check_path))
+                    # 【修复】使用账号根目录（手机号目录）进行去重
+                    # 关键点：每个账号都有相同的"tdata"子目录，因此必须基于手机号目录去重
+                    # 例如: 8619912345678 和 8619987654321 是不同账号，虽然都有 tdata/D877F783D5D3EF8C
+                    account_root_path = self._get_account_root_from_tdata_path(tdata_root_path)
+                    normalized_path = os.path.normpath(os.path.abspath(account_root_path))
                     
-                    # 检查是否已经添加过此TData目录
+                    # 检查是否已经添加过此账号
                     if normalized_path in seen_tdata_paths:
-                        print(f"⚠️ 跳过重复TData目录: {dir_name}")
+                        account_name = os.path.basename(normalized_path)
+                        print(f"⚠️ 跳过重复账号: {account_name}")
                         continue
                     
                     seen_tdata_paths.add(normalized_path)
@@ -3307,13 +3318,42 @@ class FileProcessor:
             shutil.rmtree(task_upload_dir, ignore_errors=True)
             return [], "", "error"
         
-        # 优先级：Session > TData（优先使用Session检查，准确性更高）
-        # 如果同时存在Session和TData，优先使用Session进行检查
+        # 优先级调整：如果同时存在Session和TData，将TData也转换为Session一起检查
+        # 这样可以检查所有账号，而不是忽略TData文件
         if session_files:
             print(f"📱 检测到Session文件，优先使用Session检测（准确性更高）")
             print(f"✅ 找到 {len(session_files)} 个Session文件")
             if tdata_folders:
-                print(f"📂 同时发现 {len(tdata_folders)} 个TData文件夹（已忽略，优先Session）")
+                print(f"📂 同时发现 {len(tdata_folders)} 个TData文件夹")
+                
+                # 去重：如果Session和TData中有相同账号，优先使用Session
+                # 提取Session文件的账号标识（去掉.session后缀）
+                session_accounts = set()
+                for _, session_name in session_files:
+                    account_id = session_name.replace('.session', '')
+                    session_accounts.add(account_id)
+                
+                # 过滤TData，只保留没有对应Session的账号
+                filtered_tdata = []
+                duplicate_count = 0
+                for tdata_path, tdata_name in tdata_folders:
+                    if tdata_name not in session_accounts:
+                        filtered_tdata.append((tdata_path, tdata_name))
+                    else:
+                        duplicate_count += 1
+                
+                if duplicate_count > 0:
+                    print(f"🔄 去重: 发现 {duplicate_count} 个重复账号（Session和TData相同），优先使用Session")
+                
+                if filtered_tdata:
+                    print(f"🔄 将剩余 {len(filtered_tdata)} 个TData文件转换为Session一起检查")
+                    # 将去重后的TData和Session合并返回
+                    all_files = session_files + filtered_tdata
+                    print(f"📊 总计: {len(all_files)} 个唯一账号 (Session: {len(session_files)}, TData: {len(filtered_tdata)})")
+                    return all_files, task_upload_dir, "mixed"
+                else:
+                    print(f"ℹ️ 所有TData账号都有对应的Session文件，无需额外处理")
+                    return session_files, task_upload_dir, "session"
             return session_files, task_upload_dir, "session"
         elif tdata_folders:
             print(f"🎯 检测到TData文件，使用TData检测")
@@ -3372,6 +3412,15 @@ class FileProcessor:
                 
                 if file_type == "session":
                     status, info, account_name = await self.checker.check_account_status(file_path, file_name, self.db)
+                elif file_type == "mixed":
+                    # 混合类型：需要判断当前文件是session还是tdata
+                    if file_path.endswith('.session'):
+                        # Session文件
+                        status, info, account_name = await self.checker.check_account_status(file_path, file_name, self.db)
+                    else:
+                        # TData文件夹
+                        print(f"📂 [{file_name}] 格式: TData - 将自动转换为Session进行检查")
+                        status, info, account_name = await self.convert_tdata_and_check(file_path, file_name)
                 else:  # tdata
                     # 问题1: TData格式统一转换为Session后检查（更准确）
                     print(f"📂 [{file_name}] 格式: TData - 将自动转换为Session进行检查")
