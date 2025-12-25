@@ -9093,6 +9093,7 @@ class EnhancedBot:
         self.processor = FileProcessor(self.checker, self.db)
         self.converter = FormatConverter(self.db)
         self.two_factor_manager = TwoFactorManager(self.proxy_manager, self.db)
+        self.profile_manager = ProfileManager(self.proxy_manager, self.db)  # 初始化资料管理器
         import inspect
         print("DEBUG APIFormatConverter source:", inspect.getsourcefile(APIFormatConverter))
         print("DEBUG APIFormatConverter signature:", str(inspect.signature(APIFormatConverter)))
@@ -9146,6 +9147,9 @@ class EnhancedBot:
         
         # 查询注册时间任务跟踪
         self.pending_registration_check: Dict[int, Dict[str, Any]] = {}
+        
+        # 资料修改待处理任务
+        self.pending_profile_update: Dict[int, Dict[str, Any]] = {}
         
         # 初始化设备参数加载器
         self.device_loader = DeviceParamsLoader()
@@ -9586,6 +9590,7 @@ class EnhancedBot:
                 InlineKeyboardButton("🕰️ 查询注册时间", callback_data="check_registration_start")
             ],
             [
+                InlineKeyboardButton("📝 修改资料", callback_data="profile_update_start"),
                 InlineKeyboardButton("💳 开通/兑换会员", callback_data="vip_menu")
             ]
         ]
@@ -10701,6 +10706,10 @@ class EnhancedBot:
             self.handle_check_registration_start(query)
         elif data.startswith("check_reg_"):
             self.handle_check_registration_callbacks(update, context, query, data)
+        elif data == "profile_update_start":
+            self.handle_profile_update_start(query)
+        elif data.startswith("profile_"):
+            self.handle_profile_update_callbacks(update, context, query, data)
         elif query.data == "back_to_main":
             self.show_main_menu(update, user_id)
             # 返回主菜单 - 横排2x2布局
@@ -11715,7 +11724,7 @@ class EnhancedBot:
             row = c.fetchone()
             conn.close()
 
-            # 放行的状态，新增 waiting_api_file, waiting_rename_file, waiting_merge_files, waiting_cleanup_file, batch_create_upload, reauthorize_upload, registration_check_upload
+            # 放行的状态，新增 waiting_api_file, waiting_rename_file, waiting_merge_files, waiting_cleanup_file, batch_create_upload, reauthorize_upload, registration_check_upload, profile_update_upload
             if not row or row[0] not in [
                 "waiting_file",
                 "waiting_convert_tdata",
@@ -11734,6 +11743,7 @@ class EnhancedBot:
                 "batch_create_usernames",
                 "reauthorize_upload",
                 "registration_check_upload",
+                "profile_update_upload",
             ]:
                 self.safe_send_message(update, "❌ 请先点击相应的功能按钮")
                 return
@@ -11930,6 +11940,19 @@ class EnhancedBot:
                     import traceback
                     traceback.print_exc()
             thread = threading.Thread(target=process_registration_check, daemon=True)
+            thread.start()
+        elif user_status == "profile_update_upload":
+            # 资料修改文件处理
+            def process_profile_update():
+                try:
+                    asyncio.run(self.process_profile_update(update, context, document))
+                except asyncio.CancelledError:
+                    print(f"[process_profile_update] 任务被取消")
+                except Exception as e:
+                    print(f"[process_profile_update] 处理异常: {e}")
+                    import traceback
+                    traceback.print_exc()
+            thread = threading.Thread(target=process_profile_update, daemon=True)
             thread.start()
         # 清空用户状态
         self.db.save_user(
@@ -21327,6 +21350,381 @@ admin3</code>
             if temp_zip and os.path.exists(os.path.dirname(temp_zip)):
                 shutil.rmtree(os.path.dirname(temp_zip), ignore_errors=True)
     
+    async def process_profile_update(self, update: Update, context: CallbackContext, document):
+        """处理资料修改文件上传"""
+        user_id = update.effective_user.id
+        
+        progress_msg = self.safe_send_message(update, "📥 <b>正在处理文件...</b>", 'HTML')
+        if not progress_msg:
+            return
+        
+        temp_zip = None
+        try:
+            # 检查是否有配置任务
+            if user_id not in self.pending_profile_update:
+                self.safe_edit_message_text(progress_msg, "❌ <b>会话已过期</b>\n\n请重新配置", parse_mode='HTML')
+                return
+            
+            task = self.pending_profile_update[user_id]
+            config = task['config']
+            
+            # 清理旧的临时文件
+            self._cleanup_user_temp_sessions(user_id)
+            
+            # 创建唯一任务ID
+            unique_task_id = f"{user_id}_profile_{int(time.time() * 1000)}"
+            
+            # 下载文件
+            temp_dir = tempfile.mkdtemp(prefix="profile_update_")
+            temp_zip = os.path.join(temp_dir, document.file_name)
+            document.get_file().download(temp_zip)
+            
+            # 扫描文件
+            files, extract_dir, file_type = self.processor.scan_zip_file(temp_zip, user_id, unique_task_id)
+            
+            if not files:
+                self.safe_edit_message_text(progress_msg, "❌ <b>未找到有效文件</b>\n\n请确保ZIP包含Session或TData格式的文件", parse_mode='HTML')
+                return
+            
+            # 更新任务信息
+            task['files'] = files
+            task['file_type'] = file_type
+            task['temp_dir'] = temp_dir
+            task['extract_dir'] = extract_dir
+            task['progress_msg'] = progress_msg
+            
+            # 显示确认信息
+            config_text = "• 姓名: ✅ 根据国家自动生成\\n"
+            if config.update_photo:
+                if config.photo_action == 'delete_all':
+                    config_text += "• 头像: 🗑 删除所有\\n"
+            if config.update_bio:
+                if config.bio_action == 'clear':
+                    config_text += "• 简介: 📝 留空\\n"
+                elif config.bio_action == 'random':
+                    config_text += "• 简介: 🎲 随机生成\\n"
+            if config.update_username:
+                if config.username_action == 'delete':
+                    config_text += "• 用户名: 🗑 删除\\n"
+                elif config.username_action == 'random':
+                    config_text += "• 用户名: 🎲 随机生成\\n"
+            
+            text = f"""✅ <b>找到 {len(files)} 个账号文件</b>
+
+<b>文件类型：</b>{file_type.upper()}
+
+<b>修改配置：</b>
+{config_text}
+
+<b>⚠️ 注意事项：</b>
+• 姓名会根据手机号自动识别国家生成对应语言
+• 每个姓名都是随机生成，绝不重复
+• 系统会自动添加延迟避免触发限流
+• 用户名会自动检查是否可用
+
+准备开始修改吗？
+"""
+            
+            self.safe_edit_message_text(
+                progress_msg,
+                text,
+                parse_mode='HTML'
+            )
+            
+            # 直接开始执行（不需要额外确认）
+            await asyncio.sleep(1)
+            await self._execute_profile_update(user_id, files, file_type, config, context, progress_msg)
+            
+        except Exception as e:
+            logger.error(f"Profile update upload failed: {e}")
+            import traceback
+            traceback.print_exc()
+            
+            self.safe_edit_message_text(
+                progress_msg,
+                f"❌ <b>处理失败</b>\\n\\n错误: {str(e)}",
+                parse_mode='HTML'
+            )
+            
+            # 清理
+            if temp_zip and os.path.exists(os.path.dirname(temp_zip)):
+                shutil.rmtree(os.path.dirname(temp_zip), ignore_errors=True)
+    
+    async def _execute_profile_update(self, user_id: int, files: List, file_type: str, config: ProfileUpdateConfig, context: CallbackContext, progress_msg):
+        """执行资料修改的核心逻辑"""
+        results = {
+            'success': [],
+            'failed': [],
+            'details': []
+        }
+        
+        total = len(files)
+        processed = 0
+        
+        # 使用信号量控制并发
+        semaphore = asyncio.Semaphore(3)  # 最多3个并发（避免限流）
+        
+        async def update_single_account(file_path, file_name):
+            nonlocal processed
+            async with semaphore:
+                try:
+                    result = await self._update_single_profile(file_path, file_name, file_type, config)
+                    
+                    if result['success']:
+                        results['success'].append((file_path, file_name, result))
+                    else:
+                        results['failed'].append((file_path, file_name, result))
+                    
+                    results['details'].append(result)
+                    processed += 1
+                    
+                    # 每处理5个更新一次进度
+                    if processed % 5 == 0 or processed == total:
+                        try:
+                            progress_text = f"""🔄 <b>修改进度</b>
+
+• 总数：{total}
+• 已处理：{processed}
+• 成功：{len(results['success'])}
+• 失败：{len(results['failed'])}
+
+⏳ 请稍候...
+"""
+                            context.bot.edit_message_text(
+                                chat_id=user_id,
+                                message_id=progress_msg.message_id,
+                                text=progress_text,
+                                parse_mode='HTML'
+                            )
+                        except Exception as e:
+                            logger.warning(f"Failed to update progress: {e}")
+                    
+                except Exception as e:
+                    logger.error(f"Failed to update {file_name}: {e}")
+                    results['failed'].append((file_path, file_name, {'success': False, 'error': str(e)}))
+                    processed += 1
+        
+        # 执行所有修改
+        tasks = [update_single_account(file_path, file_name) for file_path, file_name in files]
+        await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # 生成报告
+        self._generate_profile_update_report(context, user_id, results, progress_msg)
+        
+        # 清理
+        self.cleanup_profile_update_task(user_id)
+    
+    async def _update_single_profile(self, file_path: str, file_name: str, file_type: str, config: ProfileUpdateConfig) -> Dict:
+        """更新单个账号资料"""
+        client = None
+        session_path = None
+        temp_session_path = None
+        
+        try:
+            # 创建客户端
+            if file_type == 'tdata':
+                # TData转Session
+                from opentele.td import TDesktop
+                from opentele.api import UseCurrentSession
+                
+                tdesk = TDesktop(file_path)
+                temp_session_path = f"/tmp/profile_{secrets.token_hex(8)}.session"
+                client = await tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession)
+                session_path = temp_session_path
+            elif file_type in ['session', 'session-json']:
+                # 直接使用Session
+                # 获取API凭据
+                api_id, api_hash = self.device_params_manager.get_random_api_credentials()
+                client = TelegramClient(file_path, api_id, api_hash)
+                await client.connect()
+                session_path = file_path
+            
+            if not client or not await client.is_user_authorized():
+                return {'success': False, 'account': file_name, 'error': '账号未授权'}
+            
+            # 获取账号信息
+            me = await client.get_me()
+            phone = me.phone if hasattr(me, 'phone') else None
+            country = self.profile_manager.get_country_from_phone(phone) if phone else 'US'
+            
+            detail = {
+                'success': True,
+                'account': file_name,
+                'phone': phone,
+                'country': country,
+                'actions': []
+            }
+            
+            # 随机延迟避免限流
+            await asyncio.sleep(random.uniform(2, 5))
+            
+            # 1. 更新姓名
+            if config.update_name and config.mode == 'random':
+                first_name, last_name = self.profile_manager.generate_random_name(country)
+                if await self.profile_manager.update_profile_name(client, first_name, last_name):
+                    detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
+                else:
+                    detail['actions'].append("❌ 姓名更新失败")
+                await asyncio.sleep(1)
+            
+            # 2. 处理头像
+            if config.update_photo and config.photo_action == 'delete_all':
+                if await self.profile_manager.delete_profile_photos(client):
+                    detail['actions'].append("✅ 删除所有头像")
+                else:
+                    detail['actions'].append("❌ 删除头像失败")
+                await asyncio.sleep(1)
+            
+            # 3. 更新简介
+            if config.update_bio:
+                bio = ''
+                if config.bio_action == 'clear':
+                    bio = ''
+                elif config.bio_action == 'random':
+                    bio = self.profile_manager.generate_random_bio(country)
+                
+                if await self.profile_manager.update_profile_bio(client, bio):
+                    bio_display = bio[:20] + '...' if len(bio) > 20 else bio if bio else '(空)'
+                    detail['actions'].append(f"✅ 简介: {bio_display}")
+                else:
+                    detail['actions'].append("❌ 简介更新失败")
+                await asyncio.sleep(1)
+            
+            # 4. 更新用户名
+            if config.update_username:
+                username = ''
+                if config.username_action == 'delete':
+                    username = ''
+                elif config.username_action == 'random':
+                    # 尝试3次生成不重复的用户名
+                    for _ in range(3):
+                        username = self.profile_manager.generate_random_username()
+                        if await self.profile_manager.update_profile_username(client, username):
+                            detail['actions'].append(f"✅ 用户名: {username}")
+                            break
+                    else:
+                        detail['actions'].append("❌ 用户名更新失败（可能已被占用）")
+                elif config.username_action == 'delete':
+                    if await self.profile_manager.update_profile_username(client, ''):
+                        detail['actions'].append("✅ 用户名: 已删除")
+                    else:
+                        detail['actions'].append("❌ 用户名删除失败")
+                await asyncio.sleep(1)
+            
+            return detail
+            
+        except Exception as e:
+            logger.error(f"Update profile failed for {file_name}: {e}")
+            return {
+                'success': False,
+                'account': file_name,
+                'error': str(e)
+            }
+        finally:
+            if client:
+                try:
+                    await client.disconnect()
+                except:
+                    pass
+            # 清理临时session文件
+            if temp_session_path and os.path.exists(temp_session_path):
+                try:
+                    os.remove(temp_session_path)
+                    # 清理.journal文件
+                    journal_file = temp_session_path + '.journal'
+                    if os.path.exists(journal_file):
+                        os.remove(journal_file)
+                except:
+                    pass
+    
+    def _generate_profile_update_report(self, context: CallbackContext, user_id: int, results: Dict, progress_msg):
+        """生成资料修改报告"""
+        logger.info("📊 开始生成报告...")
+        
+        timestamp = datetime.now(BEIJING_TZ).strftime("%Y%m%d_%H%M%S")
+        report_lines = []
+        
+        report_lines.append("=" * 50)
+        report_lines.append("资料修改报告")
+        report_lines.append(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}")
+        report_lines.append("=" * 50)
+        report_lines.append("")
+        
+        report_lines.append(f"📊 统计信息")
+        report_lines.append(f"  总数: {len(results['success']) + len(results['failed'])}")
+        report_lines.append(f"  成功: {len(results['success'])}")
+        report_lines.append(f"  失败: {len(results['failed'])}")
+        report_lines.append("")
+        
+        # 成功的账号
+        if results['success']:
+            report_lines.append("✅ 成功的账号:")
+            report_lines.append("-" * 50)
+            for file_path, file_name, detail in results['success']:
+                report_lines.append(f"\\n账号: {file_name}")
+                if detail.get('phone'):
+                    report_lines.append(f"  手机: {detail['phone']}")
+                if detail.get('country'):
+                    report_lines.append(f"  国家: {detail['country']}")
+                if detail.get('actions'):
+                    report_lines.append(f"  操作:")
+                    for action in detail['actions']:
+                        report_lines.append(f"    {action}")
+            report_lines.append("")
+        
+        # 失败的账号
+        if results['failed']:
+            report_lines.append("❌ 失败的账号:")
+            report_lines.append("-" * 50)
+            for file_path, file_name, detail in results['failed']:
+                report_lines.append(f"\\n账号: {file_name}")
+                if detail.get('error'):
+                    report_lines.append(f"  错误: {detail['error']}")
+            report_lines.append("")
+        
+        # 保存报告
+        report_content = "\\n".join(report_lines)
+        report_path = f"/tmp/profile_report_{timestamp}.txt"
+        
+        with open(report_path, 'w', encoding='utf-8') as f:
+            f.write(report_content)
+        
+        # 发送报告
+        try:
+            with open(report_path, 'rb') as f:
+                context.bot.send_document(
+                    chat_id=user_id,
+                    document=f,
+                    filename=f"profile_report_{timestamp}.txt",
+                    caption=f"📊 资料修改报告\\n\\n✅ 成功: {len(results['success'])}\\n❌ 失败: {len(results['failed'])}",
+                    parse_mode='HTML'
+                )
+        except Exception as e:
+            logger.error(f"Failed to send report: {e}")
+        
+        # 更新最终消息
+        final_text = f"""✅ <b>资料修改完成！</b>
+
+📊 <b>统计信息：</b>
+• 总数: {len(results['success']) + len(results['failed'])}
+• 成功: {len(results['success'])}
+• 失败: {len(results['failed'])}
+
+📄 详细报告已发送
+"""
+        
+        self.safe_edit_message_text(
+            progress_msg,
+            final_text,
+            parse_mode='HTML'
+        )
+        
+        # 清理报告文件
+        try:
+            os.remove(report_path)
+        except:
+            pass
+    
     def handle_registration_check_execute(self, update: Update, context: CallbackContext, query, user_id: int):
         """执行注册时间查询"""
         query.answer()
@@ -21997,6 +22395,283 @@ admin3</code>
             base_date = datetime(2024, 8, 1)
             estimated_date = base_date + timedelta(days=days_offset)
             return estimated_date.strftime("%Y-%m-%d")
+    
+    # ================================
+    # 资料修改功能处理方法
+    # ================================
+    
+    def handle_profile_update_start(self, query):
+        """处理修改资料开始"""
+        query.answer()
+        user_id = query.from_user.id
+        
+        # 检查会员权限
+        if not self.db.is_admin(user_id):
+            is_member, level, expiry = self.db.check_membership(user_id)
+            if not is_member:
+                query.edit_message_text(
+                    text="❌ 修改资料功能需要会员权限\n\n请先开通会员",
+                    reply_markup=InlineKeyboardMarkup([[
+                        InlineKeyboardButton("💳 开通会员", callback_data="vip_menu"),
+                        InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")
+                    ]]),
+                    parse_mode='HTML'
+                )
+                return
+        
+        text = """
+<b>📝 修改资料</b>
+
+该功能支持批量修改账号的姓名、头像、简介、用户名等信息
+
+<b>🎲 随机生成模式：</b>
+• 姓名：根据手机号国家自动生成本地化姓名
+  - 🇨🇳 中国号码 → 生成中文名字
+  - 🇺🇸 美国号码 → 生成英文名字
+  - 🇮🇩 印尼号码 → 生成印尼名字
+  - 🇷🇺 俄罗斯号码 → 生成俄语名字
+  - 支持40+种国家/地区
+  - 每个姓名都是随机生成，绝不重复
+
+• 头像：可选择删除所有历史头像或保留
+• 简介：可选择留空或随机生成对应语言的简介
+• 用户名：可选择删除或随机生成新用户名
+
+<b>✏️ 自定义生成模式：</b>
+• 上传txt文件（每行一个内容）
+• 或手动输入内容
+• 支持自定义姓名、头像、简介、用户名
+
+<b>⚠️ 注意事项：</b>
+1. Telegram对资料修改有频率限制
+2. 系统会自动添加适当延迟避免限流
+3. 用户名会自动检查是否可用
+4. 支持Session和TData格式
+
+<b>请选择修改模式：</b>
+        """
+        
+        keyboard = InlineKeyboardMarkup([
+            [
+                InlineKeyboardButton("🎲 随机生成", callback_data="profile_mode_random"),
+                InlineKeyboardButton("✏️ 自定义生成", callback_data="profile_mode_custom")
+            ],
+            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+        ])
+        
+        query.edit_message_text(
+            text=text,
+            reply_markup=keyboard,
+            parse_mode='HTML'
+        )
+    
+    def handle_profile_update_callbacks(self, update: Update, context: CallbackContext, query, data: str):
+        """处理修改资料相关回调"""
+        user_id = query.from_user.id
+        
+        if data == "profile_mode_random":
+            self.handle_profile_random_mode(query, user_id)
+        elif data == "profile_mode_custom":
+            self.handle_profile_custom_mode(query, user_id)
+        elif data.startswith("profile_random_"):
+            self.handle_profile_random_config(update, context, query, data, user_id)
+        elif data.startswith("profile_custom_"):
+            self.handle_profile_custom_config(update, context, query, data, user_id)
+        elif data == "profile_execute":
+            self.handle_profile_update_execute(update, context, query, user_id)
+        elif data == "profile_cancel":
+            query.answer()
+            if user_id in self.pending_profile_update:
+                self.cleanup_profile_update_task(user_id)
+            self.show_main_menu(update, user_id)
+    
+    def handle_profile_random_mode(self, query, user_id: int):
+        """处理随机生成模式"""
+        query.answer()
+        
+        # 初始化配置
+        config = ProfileUpdateConfig(mode='random')
+        config.update_name = True
+        config.photo_action = 'keep'
+        config.bio_action = 'keep'
+        config.username_action = 'keep'
+        
+        self.pending_profile_update[user_id] = {
+            'config': config,
+            'status': 'configuring'
+        }
+        
+        self._show_random_config_menu(query, user_id, config)
+    
+    def _show_random_config_menu(self, query, user_id: int, config: ProfileUpdateConfig):
+        """显示随机模式配置菜单"""
+        # 头像选项显示
+        if config.photo_action == 'delete_all':
+            photo_status = "🗑 删除所有"
+        else:
+            photo_status = "📷 保留当前"
+        
+        # 简介选项显示
+        if config.bio_action == 'clear':
+            bio_status = "📝 留空"
+        elif config.bio_action == 'random':
+            bio_status = "🎲 随机生成"
+        else:
+            bio_status = "⏩ 不修改"
+        
+        # 用户名选项显示
+        if config.username_action == 'delete':
+            username_status = "🗑 删除"
+        elif config.username_action == 'random':
+            username_status = "🎲 随机生成"
+        else:
+            username_status = "⏩ 不修改"
+        
+        text = f"""
+<b>🎲 随机生成模式</b>
+
+<b>当前配置：</b>
+
+• 姓名: ✅ 根据国家自动生成
+• 头像: {photo_status}
+• 简介: {bio_status}
+• 用户名: {username_status}
+
+<b>💡 提示：</b>
+姓名会根据手机号自动识别国家，生成对应语言的随机姓名，每个都不重复！
+
+<b>请配置修改选项或上传账号文件：</b>
+        """
+        
+        keyboard = InlineKeyboardMarkup([
+            [
+                InlineKeyboardButton(f"头像: {photo_status}", callback_data="profile_random_photo"),
+            ],
+            [
+                InlineKeyboardButton(f"简介: {bio_status}", callback_data="profile_random_bio"),
+            ],
+            [
+                InlineKeyboardButton(f"用户名: {username_status}", callback_data="profile_random_username"),
+            ],
+            [
+                InlineKeyboardButton("📤 上传账号文件开始处理", callback_data="profile_execute")
+            ],
+            [
+                InlineKeyboardButton("🔙 返回", callback_data="profile_update_start"),
+                InlineKeyboardButton("❌ 取消", callback_data="profile_cancel")
+            ]
+        ])
+        
+        query.edit_message_text(
+            text=text,
+            reply_markup=keyboard,
+            parse_mode='HTML'
+        )
+        
+        # 设置用户状态
+        self.db.save_user(user_id, "", "", "profile_random_config")
+    
+    def handle_profile_random_config(self, update: Update, context: CallbackContext, query, data: str, user_id: int):
+        """处理随机模式配置选项"""
+        query.answer()
+        
+        if user_id not in self.pending_profile_update:
+            query.answer("❌ 会话已过期")
+            return
+        
+        config = self.pending_profile_update[user_id]['config']
+        
+        if data == "profile_random_photo":
+            # 切换头像选项
+            if config.photo_action == 'keep':
+                config.photo_action = 'delete_all'
+                config.update_photo = True
+            else:
+                config.photo_action = 'keep'
+                config.update_photo = False
+        elif data == "profile_random_bio":
+            # 循环切换简介选项：keep -> clear -> random -> keep
+            if config.bio_action == 'keep':
+                config.bio_action = 'clear'
+                config.update_bio = True
+            elif config.bio_action == 'clear':
+                config.bio_action = 'random'
+                config.update_bio = True
+            else:
+                config.bio_action = 'keep'
+                config.update_bio = False
+        elif data == "profile_random_username":
+            # 循环切换用户名选项：keep -> delete -> random -> keep
+            if config.username_action == 'keep':
+                config.username_action = 'delete'
+                config.update_username = True
+            elif config.username_action == 'delete':
+                config.username_action = 'random'
+                config.update_username = True
+            else:
+                config.username_action = 'keep'
+                config.update_username = False
+        
+        # 刷新菜单
+        self._show_random_config_menu(query, user_id, config)
+    
+    def handle_profile_custom_mode(self, query, user_id: int):
+        """处理自定义生成模式"""
+        query.answer()
+        query.edit_message_text(
+            text="⚠️ 自定义模式开发中，请使用随机生成模式",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔙 返回", callback_data="profile_update_start")
+            ]]),
+            parse_mode='HTML'
+        )
+    
+    def handle_profile_custom_config(self, update: Update, context: CallbackContext, query, data: str, user_id: int):
+        """处理自定义模式配置选项"""
+        query.answer("⚠️ 自定义模式开发中")
+    
+    def handle_profile_update_execute(self, update: Update, context: CallbackContext, query, user_id: int):
+        """开始执行资料修改"""
+        query.answer()
+        
+        if user_id not in self.pending_profile_update:
+            self.safe_edit_message(query, "❌ 会话已过期，请重新配置")
+            return
+        
+        task = self.pending_profile_update[user_id]
+        config = task['config']
+        
+        text = """
+<b>📤 请上传账号文件</b>
+
+<b>支持的格式：</b>
+• Session格式：上传.session文件（可打包成zip）
+• TData格式：上传包含tdata目录的zip文件
+
+<b>⏱ 请在5分钟内上传文件...</b>
+
+💡 如需取消，请点击 /start 返回主菜单
+        """
+        
+        query.edit_message_text(
+            text=text,
+            parse_mode='HTML'
+        )
+        
+        # 设置用户状态为等待文件上传
+        self.db.save_user(user_id, "", "", "profile_update_upload")
+        task['status'] = 'waiting_file'
+    
+    def cleanup_profile_update_task(self, user_id: int):
+        """清理资料修改任务"""
+        if user_id in self.pending_profile_update:
+            task = self.pending_profile_update[user_id]
+            if task.get('temp_dir') and os.path.exists(task['temp_dir']):
+                shutil.rmtree(task['temp_dir'], ignore_errors=True)
+            del self.pending_profile_update[user_id]
+        
+        # 清除用户状态
+        self.db.save_user(user_id, "", "", "")
     
     def _generate_registration_report(self, context: CallbackContext, user_id: int, results: Dict, progress_msg):
         """生成注册时间查询报告和打包结果（按年-月-日分类）"""
