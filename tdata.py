@@ -21891,32 +21891,61 @@ admin3</code>
                 report_lines.append(f"\n{idx}. {detail.get('phone', file_name)}")
                 report_lines.append(f"   文件: {file_name}")
                 
-                # 显示变更详情
+                # 显示变更详情 - 使用"修改前xxx 修改后xxx"格式
                 changes = detail.get('changes', {})
+                
+                # 姓名修改
                 if 'name' in changes and changes['name'].get('success'):
-                    old_name = changes['name'].get('old', '')
-                    new_name = changes['name'].get('new', '')
-                    if old_name:
-                        report_lines.append(f"   - 姓名: {old_name} → {new_name} ✓")
-                    else:
-                        report_lines.append(f"   - 姓名: {new_name} ✓")
+                    old_name = changes['name'].get('old', '').strip()
+                    new_name = changes['name'].get('new', '').strip()
+                    if old_name and new_name:
+                        report_lines.append(f"   - 姓名: 修改前 {old_name}  修改后 {new_name} ✓")
+                    elif new_name:
+                        report_lines.append(f"   - 姓名: 修改后 {new_name} ✓")
                 
+                # 头像修改
                 if 'photo' in changes and changes['photo'].get('success'):
-                    report_lines.append(f"   - 头像: 已删除 ✓")
+                    action = changes['photo'].get('action', 'deleted')
+                    if action == 'deleted':
+                        report_lines.append(f"   - 头像: 已删除 ✓")
+                    elif action == 'uploaded':
+                        report_lines.append(f"   - 头像: 已上传新头像 ✓")
                 
+                # 简介修改
                 if 'bio' in changes and changes['bio'].get('success'):
-                    old_bio = changes['bio'].get('old', '')
-                    new_bio = changes['bio'].get('new', '')
-                    if old_bio or new_bio:
-                        if new_bio:
-                            report_lines.append(f"   - 简介: {old_bio[:15] if old_bio else '无'} → {new_bio[:15]}... ✓")
-                        else:
-                            report_lines.append(f"   - 简介: 已清空 ✓")
+                    old_bio = changes['bio'].get('old', '').strip()
+                    new_bio = changes['bio'].get('new', '').strip()
+                    if old_bio and new_bio:
+                        # 限制显示长度，避免报告太长
+                        old_bio_display = old_bio[:30] + '...' if len(old_bio) > 30 else old_bio
+                        new_bio_display = new_bio[:30] + '...' if len(new_bio) > 30 else new_bio
+                        report_lines.append(f"   - 简介: 修改前 {old_bio_display}  修改后 {new_bio_display} ✓")
+                    elif new_bio:
+                        new_bio_display = new_bio[:30] + '...' if len(new_bio) > 30 else new_bio
+                        report_lines.append(f"   - 简介: 修改前 (无)  修改后 {new_bio_display} ✓")
+                    elif old_bio:
+                        old_bio_display = old_bio[:30] + '...' if len(old_bio) > 30 else old_bio
+                        report_lines.append(f"   - 简介: 修改前 {old_bio_display}  修改后 (已清空) ✓")
+                    else:
+                        report_lines.append(f"   - 简介: 已清空 ✓")
                 
+                # 用户名修改
                 if 'username' in changes and changes['username'].get('success'):
-                    old_username = changes['username'].get('old', '')
-                    new_username = changes['username'].get('new', '')
-                    report_lines.append(f"   - 用户名: {old_username} → {new_username} ✓")
+                    old_username = changes['username'].get('old', '').strip()
+                    new_username = changes['username'].get('new', '').strip()
+                    
+                    # 格式化用户名显示
+                    if old_username and old_username != '无':
+                        old_display = old_username if old_username.startswith('@') else f"@{old_username}"
+                    else:
+                        old_display = "(无)"
+                    
+                    if new_username and new_username != '已删除':
+                        new_display = new_username if new_username.startswith('@') else f"@{new_username}"
+                    else:
+                        new_display = "(已删除)"
+                    
+                    report_lines.append(f"   - 用户名: 修改前 {old_display}  修改后 {new_display} ✓")
             
             report_lines.append("")
         
