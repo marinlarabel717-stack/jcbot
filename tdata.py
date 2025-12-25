@@ -3099,6 +3099,23 @@ class FileProcessor:
             # 返回一个基于时间戳的标识符
             return f"tdata_{int(time.time())}"
     
+    def _get_account_root_from_tdata_path(self, tdata_root_path: str) -> str:
+        """
+        从tdata路径提取账号根目录
+        
+        如果路径以"tdata"结尾，返回其父目录（账号根目录）
+        否则返回路径本身
+        
+        Args:
+            tdata_root_path: TData根目录路径（可能是 account/tdata 或其他）
+            
+        Returns:
+            账号根目录路径（通常是手机号目录）
+        """
+        if os.path.basename(tdata_root_path).lower() == "tdata":
+            return os.path.dirname(tdata_root_path)
+        return tdata_root_path
+    
     def _validate_tdata_structure(self, d877_path: str, check_parent_for_keys: bool = False) -> Tuple[bool, Optional[str]]:
         """
         验证TData目录结构是否有效
@@ -3285,11 +3302,9 @@ class FileProcessor:
                         continue
                     
                     # 【修复】使用账号根目录（手机号目录）进行去重
-                    # 每个账号都有一样的tdata子目录，所以必须使用tdata的父目录（手机号目录）作为唯一标识
-                    # 例如: 8619912345678 和 8619987654321 是不同的账号
-                    # tdata_root_path可能是: account/tdata 或 tdata 本身
-                    # 我们需要找到账号根目录（包含tdata的父目录）
-                    account_root_path = os.path.dirname(tdata_root_path) if os.path.basename(tdata_root_path).lower() == "tdata" else tdata_root_path
+                    # 关键点：每个账号都有相同的"tdata"子目录，因此必须基于手机号目录去重
+                    # 例如: 8619912345678 和 8619987654321 是不同账号，虽然都有 tdata/D877F783D5D3EF8C
+                    account_root_path = self._get_account_root_from_tdata_path(tdata_root_path)
                     normalized_path = os.path.normpath(os.path.abspath(account_root_path))
                     
                     # 检查是否已经添加过此账号
