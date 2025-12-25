@@ -21394,20 +21394,20 @@ admin3</code>
             task['progress_msg'] = progress_msg
             
             # 显示确认信息
-            config_text = "• 姓名: ✅ 根据国家自动生成\\n"
+            config_text = "• 姓名: ✅ 根据国家自动生成\n"
             if config.update_photo:
                 if config.photo_action == 'delete_all':
-                    config_text += "• 头像: 🗑 删除所有\\n"
+                    config_text += "• 头像: 🗑 删除所有\n"
             if config.update_bio:
                 if config.bio_action == 'clear':
-                    config_text += "• 简介: 📝 留空\\n"
+                    config_text += "• 简介: 📝 留空\n"
                 elif config.bio_action == 'random':
-                    config_text += "• 简介: 🎲 随机生成\\n"
+                    config_text += "• 简介: 🎲 随机生成\n"
             if config.update_username:
                 if config.username_action == 'delete':
-                    config_text += "• 用户名: 🗑 删除\\n"
+                    config_text += "• 用户名: 🗑 删除\n"
                 elif config.username_action == 'random':
-                    config_text += "• 用户名: 🎲 随机生成\\n"
+                    config_text += "• 用户名: 🎲 随机生成\n"
             
             text = f"""✅ <b>找到 {len(files)} 个账号文件</b>
 
@@ -21442,7 +21442,7 @@ admin3</code>
             
             self.safe_edit_message_text(
                 progress_msg,
-                f"❌ <b>处理失败</b>\\n\\n错误: {str(e)}",
+                f"❌ <b>处理失败</b>\n\n错误: {str(e)}",
                 parse_mode='HTML'
             )
             
@@ -21519,8 +21519,12 @@ admin3</code>
         client = None
         session_path = None
         temp_session_path = None
+        used_proxy = None
         
         try:
+            # 获取API凭据
+            api_id, api_hash = self.device_params_manager.get_random_api_credentials()
+            
             # 创建客户端
             if file_type == 'tdata':
                 # TData转Session
@@ -21529,14 +21533,65 @@ admin3</code>
                 
                 tdesk = TDesktop(file_path)
                 temp_session_path = f"/tmp/profile_{secrets.token_hex(8)}.session"
-                client = await tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession)
+                
+                # 先尝试使用代理连接
+                if self.proxy_manager.is_proxy_mode_active(self.db):
+                    proxy_dict = self.proxy_manager.get_random_proxy()
+                    if proxy_dict:
+                        try:
+                            logger.info(f"[{file_name}] 使用代理连接: {proxy_dict['type']}://{proxy_dict['host']}:{proxy_dict['port']}")
+                            client = await asyncio.wait_for(
+                                tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession, proxy=proxy_dict),
+                                timeout=30  # 30秒超时
+                            )
+                            used_proxy = proxy_dict
+                            logger.info(f"[{file_name}] 代理连接成功")
+                        except asyncio.TimeoutError:
+                            logger.warning(f"[{file_name}] 代理连接超时，退回本地连接")
+                            client = None
+                        except Exception as e:
+                            logger.warning(f"[{file_name}] 代理连接失败: {e}，退回本地连接")
+                            client = None
+                
+                # 如果代理失败或未启用，使用本地连接
+                if not client:
+                    logger.info(f"[{file_name}] 使用本地连接")
+                    client = await tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession)
+                
                 session_path = temp_session_path
+                
             elif file_type in ['session', 'session-json']:
                 # 直接使用Session
-                # 获取API凭据
-                api_id, api_hash = self.device_params_manager.get_random_api_credentials()
-                client = TelegramClient(file_path, api_id, api_hash)
-                await client.connect()
+                # 先尝试使用代理连接
+                if self.proxy_manager.is_proxy_mode_active(self.db):
+                    proxy_dict = self.proxy_manager.get_random_proxy()
+                    if proxy_dict:
+                        try:
+                            logger.info(f"[{file_name}] 使用代理连接: {proxy_dict['type']}://{proxy_dict['host']}:{proxy_dict['port']}")
+                            client = TelegramClient(file_path, api_id, api_hash, proxy=proxy_dict)
+                            await asyncio.wait_for(client.connect(), timeout=30)  # 30秒超时
+                            used_proxy = proxy_dict
+                            logger.info(f"[{file_name}] 代理连接成功")
+                        except asyncio.TimeoutError:
+                            logger.warning(f"[{file_name}] 代理连接超时，退回本地连接")
+                            if client:
+                                await client.disconnect()
+                            client = None
+                        except Exception as e:
+                            logger.warning(f"[{file_name}] 代理连接失败: {e}，退回本地连接")
+                            if client:
+                                try:
+                                    await client.disconnect()
+                                except:
+                                    pass
+                            client = None
+                
+                # 如果代理失败或未启用，使用本地连接
+                if not client:
+                    logger.info(f"[{file_name}] 使用本地连接")
+                    client = TelegramClient(file_path, api_id, api_hash)
+                    await client.connect()
+                
                 session_path = file_path
             
             if not client or not await client.is_user_authorized():
@@ -21552,6 +21607,7 @@ admin3</code>
                 'account': file_name,
                 'phone': phone,
                 'country': country,
+                'proxy': f"{used_proxy['type']}://{used_proxy['host']}:{used_proxy['port']}" if used_proxy else '本地连接',
                 'actions': []
             }
             
@@ -21592,10 +21648,7 @@ admin3</code>
             
             # 4. 更新用户名
             if config.update_username:
-                username = ''
-                if config.username_action == 'delete':
-                    username = ''
-                elif config.username_action == 'random':
+                if config.username_action == 'random':
                     # 尝试3次生成不重复的用户名
                     for _ in range(3):
                         username = self.profile_manager.generate_random_username()
@@ -21661,11 +21714,13 @@ admin3</code>
             report_lines.append("✅ 成功的账号:")
             report_lines.append("-" * 50)
             for file_path, file_name, detail in results['success']:
-                report_lines.append(f"\\n账号: {file_name}")
+                report_lines.append(f"\n账号: {file_name}")
                 if detail.get('phone'):
                     report_lines.append(f"  手机: {detail['phone']}")
                 if detail.get('country'):
                     report_lines.append(f"  国家: {detail['country']}")
+                if detail.get('proxy'):
+                    report_lines.append(f"  连接: {detail['proxy']}")
                 if detail.get('actions'):
                     report_lines.append(f"  操作:")
                     for action in detail['actions']:
@@ -21677,13 +21732,13 @@ admin3</code>
             report_lines.append("❌ 失败的账号:")
             report_lines.append("-" * 50)
             for file_path, file_name, detail in results['failed']:
-                report_lines.append(f"\\n账号: {file_name}")
+                report_lines.append(f"\n账号: {file_name}")
                 if detail.get('error'):
                     report_lines.append(f"  错误: {detail['error']}")
             report_lines.append("")
         
         # 保存报告
-        report_content = "\\n".join(report_lines)
+        report_content = "\n".join(report_lines)
         report_path = f"/tmp/profile_report_{timestamp}.txt"
         
         with open(report_path, 'w', encoding='utf-8') as f:
@@ -21696,7 +21751,7 @@ admin3</code>
                     chat_id=user_id,
                     document=f,
                     filename=f"profile_report_{timestamp}.txt",
-                    caption=f"📊 资料修改报告\\n\\n✅ 成功: {len(results['success'])}\\n❌ 失败: {len(results['failed'])}",
+                    caption=f"📊 资料修改报告\n\n✅ 成功: {len(results['success'])}\n❌ 失败: {len(results['failed'])}",
                     parse_mode='HTML'
                 )
         except Exception as e:
