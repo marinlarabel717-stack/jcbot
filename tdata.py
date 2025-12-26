@@ -878,7 +878,7 @@ class ProfileManager:
                     # 1. 更新姓名
                     if config.update_name:
                         first_name = None
-                        last_name = None
+                        last_name = ''
                         
                         if config.mode == 'random':
                             first_name, last_name = self.generate_random_name(country)
@@ -889,10 +889,11 @@ class ProfileManager:
                             first_name = parts[0]
                             last_name = parts[1] if len(parts) > 1 else ''
                         
-                        if first_name and await self.update_profile_name(client, first_name, last_name):
-                            detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
-                        elif first_name:
-                            detail['actions'].append(f"❌ 姓名更新失败")
+                        if first_name:
+                            if await self.update_profile_name(client, first_name, last_name):
+                                detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
+                            else:
+                                detail['actions'].append(f"❌ 姓名更新失败")
                     
                     # 2. 处理头像
                     if config.update_photo:
@@ -9224,6 +9225,10 @@ class EnhancedBot:
         
         # 资料修改待处理任务
         self.pending_profile_update: Dict[int, Dict[str, Any]] = {}
+        
+        # 常量定义
+        self.MAX_DISPLAY_ITEMS = 20  # 配置预览最大显示条目数
+        self.ALERT_TEXT_MAX_LENGTH = 200  # 弹出提示最大文本长度
         
         # 初始化设备参数加载器
         self.device_loader = DeviceParamsLoader()
@@ -23618,17 +23623,17 @@ admin3</code>
             elif field_name == 'username':
                 items = config.custom_usernames
             
-            # 只显示前20个
-            display_items = items[:20]
+            # 只显示前N个（使用常量）
+            display_items = items[:self.MAX_DISPLAY_ITEMS]
             text = f"<b>📊 已设置的{field_display} ({len(items)}个)</b>\n\n"
             
             for i, item in enumerate(display_items, 1):
                 text += f"{i}. {item}\n"
             
-            if len(items) > 20:
-                text += f"\n... 还有 {len(items) - 20} 个"
+            if len(items) > self.MAX_DISPLAY_ITEMS:
+                text += f"\n... 还有 {len(items) - self.MAX_DISPLAY_ITEMS} 个"
             
-            query.answer(text[:200], show_alert=True)
+            query.answer(text[:self.ALERT_TEXT_MAX_LENGTH], show_alert=True)
         
         elif action == "delete":
             # 删除头像
@@ -23685,29 +23690,23 @@ admin3</code>
         # 清除用户状态
         self.db.save_user(user_id, "", "", "profile_custom_config")
         
-        # 发送确认消息
-        msg = self.safe_send_message(
-            update,
-            f"✅ 已设置 {len(lines)} 个{field_display}\n\n返回配置菜单...",
-            'HTML'
-        )
-        
-        # 延迟后显示配置菜单
-        time.sleep(1)
-        
+        # 发送确认消息和返回按钮
         keyboard = InlineKeyboardMarkup([[
             InlineKeyboardButton("🔙 返回配置菜单", callback_data="profile_custom_back")
         ]])
         
-        try:
-            if msg:
-                msg.edit_text(
-                    f"✅ 已设置 {len(lines)} 个{field_display}",
-                    reply_markup=keyboard,
-                    parse_mode='HTML'
-                )
-        except:
-            pass
+        self.safe_send_message(
+            update,
+            f"✅ 已设置 {len(lines)} 个{field_display}",
+            'HTML',
+            reply_markup=keyboard
+        )
+    
+    def _create_avatar_upload_dir(self, user_id: int) -> str:
+        """创建头像上传目录并返回路径"""
+        upload_dir = os.path.join(config.UPLOADS_DIR, f"avatars_{user_id}_{int(time.time())}")
+        os.makedirs(upload_dir, exist_ok=True)
+        return upload_dir
     
     def handle_profile_custom_file_upload(self, update: Update, context: CallbackContext, user_id: int, field_name: str, document):
         """处理自定义资料的文件上传"""
@@ -23738,10 +23737,7 @@ admin3</code>
                 # 检查是否是图片文件
                 if temp_file.lower().endswith(('.jpg', '.jpeg', '.png', '.webp', '.gif')):
                     # 单个图片文件
-                    # 保存到永久位置
-                    upload_dir = os.path.join(config.UPLOADS_DIR, f"avatars_{user_id}_{int(time.time())}")
-                    os.makedirs(upload_dir, exist_ok=True)
-                    
+                    upload_dir = self._create_avatar_upload_dir(user_id)
                     dest_path = os.path.join(upload_dir, document.file_name)
                     shutil.copy(temp_file, dest_path)
                     items.append(dest_path)
@@ -23755,15 +23751,11 @@ admin3</code>
                         zip_ref.extractall(extract_dir)
                     
                     # 查找所有图片文件
+                    upload_dir = self._create_avatar_upload_dir(user_id)
                     for root, dirs, files in os.walk(extract_dir):
                         for file in files:
                             if file.lower().endswith(('.jpg', '.jpeg', '.png', '.webp', '.gif')):
                                 file_path = os.path.join(root, file)
-                                
-                                # 保存到永久位置
-                                upload_dir = os.path.join(config.UPLOADS_DIR, f"avatars_{user_id}_{int(time.time())}")
-                                os.makedirs(upload_dir, exist_ok=True)
-                                
                                 dest_path = os.path.join(upload_dir, file)
                                 shutil.copy(file_path, dest_path)
                                 items.append(dest_path)
