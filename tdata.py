@@ -29,6 +29,7 @@ import re
 import secrets
 import csv
 import traceback
+import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional, Tuple, Any, NamedTuple
 from dataclasses import dataclass, field, asdict
@@ -1081,8 +1082,6 @@ def copy_session_to_temp(session_path: str) -> Tuple[str, str]:
     Returns:
         (temp_session_path, temp_dir): 临时session路径和临时目录路径
     """
-    import uuid
-    
     # 创建临时目录
     temp_dir = tempfile.mkdtemp(prefix="session_temp_")
     
@@ -1091,8 +1090,13 @@ def copy_session_to_temp(session_path: str) -> Tuple[str, str]:
     temp_session_path = os.path.join(temp_dir, temp_session_name)
     
     # 移除.session后缀（如果存在）因为我们需要复制所有相关文件
-    session_base = session_path.replace('.session', '') if session_path.endswith('.session') else session_path
-    temp_session_base = temp_session_path.replace('.session', '')
+    # 使用rsplit来处理边缘情况
+    if session_path.endswith('.session'):
+        session_base = session_path.rsplit('.session', 1)[0]
+    else:
+        session_base = session_path
+    
+    temp_session_base = temp_session_path.rsplit('.session', 1)[0]
     
     try:
         # 复制主session文件
@@ -1105,11 +1109,16 @@ def copy_session_to_temp(session_path: str) -> Tuple[str, str]:
         
         # 返回临时session路径（不含.session后缀）
         return temp_session_base, temp_dir
-    except Exception as e:
+    except (OSError, IOError) as e:
         logger.error(f"复制session文件失败: {e}")
         # 如果复制失败，清理临时目录并返回原始路径
         shutil.rmtree(temp_dir, ignore_errors=True)
         return session_base, None
+    except Exception as e:
+        # 记录意外错误并重新抛出
+        logger.error(f"复制session文件时发生意外错误: {e}")
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        raise
 
 def cleanup_temp_session(temp_dir: Optional[str]):
     """清理临时session文件
@@ -1121,7 +1130,7 @@ def cleanup_temp_session(temp_dir: Optional[str]):
         try:
             shutil.rmtree(temp_dir, ignore_errors=True)
             logger.debug(f"已清理临时目录: {temp_dir}")
-        except Exception as e:
+        except (OSError, IOError) as e:
             logger.warning(f"清理临时目录失败: {e}")
 
 def process_accounts_with_dedup(accounts: List[Tuple[str, str]]) -> List[Tuple[str, str]]:
