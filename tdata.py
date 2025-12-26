@@ -21671,7 +21671,7 @@ admin3</code>
         # 使用信号量控制并发
         semaphore = asyncio.Semaphore(3)  # 最多3个并发（避免限流）
         
-        async def update_single_account(file_path, file_name):
+        async def update_single_account(idx, file_path, file_name):
             nonlocal processed, current_account_info
             async with semaphore:
                 try:
@@ -21679,7 +21679,7 @@ admin3</code>
                     current_account_info = f"🔄 当前处理: {file_name}"
                     await update_progress_display()
                     
-                    result = await self._update_single_profile(file_path, file_name, file_type, config)
+                    result = await self._update_single_profile(idx, file_path, file_name, file_type, config)
                     
                     if result['success']:
                         results['success'].append((file_path, file_name, result))
@@ -21707,7 +21707,7 @@ admin3</code>
         await update_progress_display(force=True)
         
         # 执行所有修改
-        tasks = [update_single_account(file_path, file_name) for file_path, file_name in files]
+        tasks = [update_single_account(idx, file_path, file_name) for idx, (file_path, file_name) in enumerate(files)]
         await asyncio.gather(*tasks, return_exceptions=True)
         
         # 生成报告
@@ -21716,7 +21716,7 @@ admin3</code>
         # 清理
         self.cleanup_profile_update_task(user_id)
     
-    async def _update_single_profile(self, file_path: str, file_name: str, file_type: str, config: ProfileUpdateConfig) -> Dict:
+    async def _update_single_profile(self, idx: int, file_path: str, file_name: str, file_type: str, config: ProfileUpdateConfig) -> Dict:
         """更新单个账号资料"""
         client = None
         session_path = None
@@ -21829,37 +21829,64 @@ admin3</code>
             await asyncio.sleep(random.uniform(2, 5))
             
             # 1. 更新姓名
-            if config.update_name and config.mode == 'random':
-                first_name, last_name = self.profile_manager.generate_random_name(country)
-                try:
-                    if await self.profile_manager.update_profile_name(client, first_name, last_name):
-                        detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
-                        detail['changes']['name'] = {
-                            'old': f"{me.first_name or ''} {me.last_name or ''}".strip(),
-                            'new': f"{first_name} {last_name}".strip(),
-                            'success': True
-                        }
-                    else:
-                        detail['actions'].append("❌ 姓名更新失败")
-                        detail['changes']['name'] = {'success': False}
-                except Exception as e:
-                    detail['actions'].append(f"❌ 姓名更新失败: {str(e)}")
-                    detail['changes']['name'] = {'success': False, 'error': str(e)}
-                await asyncio.sleep(1)
+            if config.update_name:
+                first_name = None
+                last_name = ''
+                
+                if config.mode == 'random':
+                    first_name, last_name = self.profile_manager.generate_random_name(country)
+                elif config.custom_names:
+                    # 循环使用自定义姓名列表
+                    full_name = config.custom_names[idx % len(config.custom_names)]
+                    parts = full_name.split(' ', 1)
+                    first_name = parts[0]
+                    last_name = parts[1] if len(parts) > 1 else ''
+                
+                if first_name:
+                    try:
+                        if await self.profile_manager.update_profile_name(client, first_name, last_name):
+                            detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
+                            detail['changes']['name'] = {
+                                'old': f"{me.first_name or ''} {me.last_name or ''}".strip(),
+                                'new': f"{first_name} {last_name}".strip(),
+                                'success': True
+                            }
+                        else:
+                            detail['actions'].append("❌ 姓名更新失败")
+                            detail['changes']['name'] = {'success': False}
+                    except Exception as e:
+                        detail['actions'].append(f"❌ 姓名更新失败: {str(e)}")
+                        detail['changes']['name'] = {'success': False, 'error': str(e)}
+                    await asyncio.sleep(1)
             
             # 2. 处理头像
-            if config.update_photo and config.photo_action == 'delete_all':
-                try:
-                    if await self.profile_manager.delete_profile_photos(client):
-                        detail['actions'].append("✅ 删除所有头像")
-                        detail['changes']['photo'] = {'action': 'deleted', 'success': True}
-                    else:
-                        detail['actions'].append("❌ 删除头像失败")
-                        detail['changes']['photo'] = {'action': 'deleted', 'success': False}
-                except Exception as e:
-                    detail['actions'].append(f"❌ 删除头像失败: {str(e)}")
-                    detail['changes']['photo'] = {'action': 'deleted', 'success': False, 'error': str(e)}
-                await asyncio.sleep(1)
+            if config.update_photo:
+                if config.photo_action == 'delete_all':
+                    try:
+                        if await self.profile_manager.delete_profile_photos(client):
+                            detail['actions'].append("✅ 删除所有头像")
+                            detail['changes']['photo'] = {'action': 'deleted', 'success': True}
+                        else:
+                            detail['actions'].append("❌ 删除头像失败")
+                            detail['changes']['photo'] = {'action': 'deleted', 'success': False}
+                    except Exception as e:
+                        detail['actions'].append(f"❌ 删除头像失败: {str(e)}")
+                        detail['changes']['photo'] = {'action': 'deleted', 'success': False, 'error': str(e)}
+                    await asyncio.sleep(1)
+                elif config.photo_action == 'custom' and config.custom_photos:
+                    # 循环使用自定义头像列表
+                    photo_path = config.custom_photos[idx % len(config.custom_photos)]
+                    try:
+                        if await self.profile_manager.update_profile_photo(client, photo_path):
+                            detail['actions'].append(f"✅ 上传头像")
+                            detail['changes']['photo'] = {'action': 'uploaded', 'success': True}
+                        else:
+                            detail['actions'].append("❌ 上传头像失败")
+                            detail['changes']['photo'] = {'action': 'uploaded', 'success': False}
+                    except Exception as e:
+                        detail['actions'].append(f"❌ 上传头像失败: {str(e)}")
+                        detail['changes']['photo'] = {'action': 'uploaded', 'success': False, 'error': str(e)}
+                    await asyncio.sleep(1)
             
             # 3. 更新简介
             if config.update_bio:
@@ -21868,6 +21895,9 @@ admin3</code>
                     bio = ''
                 elif config.bio_action == 'random':
                     bio = self.profile_manager.generate_random_bio(country)
+                elif config.bio_action == 'custom' and config.custom_bios:
+                    # 循环使用自定义简介列表
+                    bio = config.custom_bios[idx % len(config.custom_bios)]
                 
                 try:
                     # 获取当前简介
@@ -21938,6 +21968,26 @@ admin3</code>
                             detail['changes']['username'] = {'success': False}
                     except Exception as e:
                         detail['actions'].append(f"❌ 用户名删除失败: {str(e)}")
+                        detail['changes']['username'] = {'success': False, 'error': str(e)}
+                elif config.username_action == 'custom' and config.custom_usernames:
+                    # 循环使用自定义用户名列表
+                    username = config.custom_usernames[idx % len(config.custom_usernames)]
+                    try:
+                        if await self.profile_manager.update_profile_username(client, username):
+                            detail['actions'].append(f"✅ 用户名: {username}")
+                            detail['changes']['username'] = {
+                                'old': f"@{old_username}" if old_username else '无',
+                                'new': f"@{username}",
+                                'success': True
+                            }
+                        else:
+                            detail['actions'].append(f"❌ 用户名更新失败")
+                            detail['changes']['username'] = {'success': False}
+                    except UsernameOccupiedError:
+                        detail['actions'].append(f"❌ 用户名已被占用: {username}")
+                        detail['changes']['username'] = {'success': False, 'error': '用户名已被占用', 'error_type': 'UsernameOccupiedError'}
+                    except Exception as e:
+                        detail['actions'].append(f"❌ 用户名更新失败: {str(e)}")
                         detail['changes']['username'] = {'success': False, 'error': str(e)}
                 await asyncio.sleep(1)
             
