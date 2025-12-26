@@ -43,6 +43,10 @@ from collections import deque, namedtuple
 # 定义北京时区常量
 BEIJING_TZ = timezone(timedelta(hours=8))
 
+# 冷却期判断阈值（6天23小时，单位：秒）
+# Telegram密码重置冷却期为7天，如果剩余时间少于6天23小时，说明是已在冷却期
+COOLDOWN_THRESHOLD_SECONDS = 6 * 24 * 3600 + 23 * 3600  # 604800秒 - 3600秒 = 604000秒
+
 print("🔍 Telegram账号检测机器人 V8.0")
 print(f"📅 当前时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}")
 
@@ -849,6 +853,9 @@ class ProfileManager:
                         tdesk = TDesktop(file_path)
                         session_path = f"/tmp/profile_update_{secrets.token_hex(8)}.session"
                         client = await tdesk.ToTelethon(session_path, flag=UseCurrentSession)
+                        # 重要：TData转Session后必须显式连接
+                        if not client.is_connected():
+                            await client.connect()
                     elif file_type in ['session', 'session-json']:
                         session_path = file_path
                         # 从session文件创建客户端
@@ -1016,6 +1023,125 @@ def format_time(seconds: float) -> str:
         return f"{hours:02d}:{minutes:02d}:{secs:02d}"
     else:
         return f"{minutes:02d}:{secs:02d}"
+
+# ================================
+# TData 处理辅助函数
+# ================================
+
+def extract_phone_from_path(path: str) -> Optional[str]:
+    """从路径中提取手机号
+    
+    Args:
+        path: 文件或目录路径
+        
+    Returns:
+        提取的手机号，如果未找到则返回None
+    """
+    basename = os.path.basename(path.rstrip('/\\'))
+    # 移除扩展名
+    name = os.path.splitext(basename)[0]
+    # 提取数字（手机号通常10-15位，使用单词边界确保匹配完整数字）
+    match = re.search(r'\b\d{10,15}\b', name)
+    return match.group() if match else None
+
+def detect_tdata_structure(account_path: str) -> Optional[Tuple]:
+    """检测 TData 目录结构类型
+    
+    Args:
+        account_path: 账号目录路径
+        
+    Returns:
+        ('type1', tdata_path) - key_datas在tdata目录内
+        ('type2', tdata_path, key_datas_path) - key_datas与tdata同级
+        None - 未找到有效的TData结构
+    """
+    tdata_path = os.path.join(account_path, 'tdata')
+    
+    # 方式1: key_datas 在 tdata 目录内
+    key_in_tdata = os.path.join(tdata_path, 'key_datas')
+    if os.path.exists(key_in_tdata):
+        logger.info(f"检测到TData结构类型1: key_datas在tdata内 - {account_path}")
+        return ('type1', tdata_path)
+    
+    # 方式2: key_datas 与 tdata 同级
+    key_beside_tdata = os.path.join(account_path, 'key_datas')
+    if os.path.exists(key_beside_tdata) and os.path.exists(tdata_path):
+        logger.info(f"检测到TData结构类型2: key_datas与tdata同级 - {account_path}")
+        return ('type2', tdata_path, key_beside_tdata)
+    
+    logger.warning(f"未找到有效的TData结构 - {account_path}")
+    return None
+
+def process_accounts_with_dedup(accounts: List[Tuple[str, str]]) -> List[Tuple[str, str]]:
+    """处理账号列表并去重
+    
+    Args:
+        accounts: 账号列表 [(账号名, 路径), ...]
+        
+    Returns:
+        去重后的账号列表
+    """
+    processed_phones = set()
+    unique_accounts = []
+    
+    for account_name, account_path in accounts:
+        phone = extract_phone_from_path(account_path)
+        if phone and phone not in processed_phones:
+            processed_phones.add(phone)
+            unique_accounts.append((account_name, account_path))
+            logger.info(f"添加账号: {phone}")
+        else:
+            logger.info(f"跳过重复手机号: {phone or account_name}")
+    
+    logger.info(f"去重完成: 原始 {len(accounts)} 个，去重后 {len(unique_accounts)} 个")
+    return unique_accounts
+
+def create_zip_with_unique_paths(accounts: List[Tuple[str, str]], output_path: str) -> bool:
+    """创建ZIP，使用手机号作为前缀避免重名
+    
+    Args:
+        accounts: 账号列表 [(账号名, 路径), ...]
+        output_path: 输出ZIP文件路径
+        
+    Returns:
+        是否成功
+    """
+    try:
+        with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+            added_paths = set()
+            
+            for account_name, account_path in accounts:
+                phone = extract_phone_from_path(account_path) or account_name
+                
+                if os.path.isdir(account_path):
+                    # 目录：遍历所有文件
+                    for root, dirs, files in os.walk(account_path):
+                        for file in files:
+                            file_path = os.path.join(root, file)
+                            # 使用手机号作为前缀，确保唯一
+                            # 计算相对于账号目录的路径
+                            rel_path = os.path.relpath(file_path, account_path)
+                            arc_name = f"{phone}/{rel_path}"
+                            
+                            if arc_name not in added_paths:
+                                added_paths.add(arc_name)
+                                zf.write(file_path, arc_name)
+                                logger.debug(f"添加文件到ZIP: {arc_name}")
+                else:
+                    # 单文件
+                    filename = os.path.basename(account_path)
+                    arc_name = f"{phone}/{filename}"
+                    
+                    if arc_name not in added_paths:
+                        added_paths.add(arc_name)
+                        zf.write(account_path, arc_name)
+                        logger.debug(f"添加文件到ZIP: {arc_name}")
+        
+        logger.info(f"ZIP创建成功: {output_path}，共 {len(added_paths)} 个文件")
+        return True
+    except Exception as e:
+        logger.error(f"创建ZIP失败: {e}")
+        return False
 
 # ================================
 # 设备参数管理器（新增）
@@ -7509,8 +7635,33 @@ class Forget2FAManager:
                 now = datetime.now(timezone.utc) if until_date.tzinfo else datetime.now(BEIJING_TZ).replace(tzinfo=None)
                 time_remaining = until_date - now
                 
-                # 7天 = 604800秒，如果剩余时间少于6天23小时(约604000秒)，说明是已在冷却期
-                if time_remaining.total_seconds() < 604000:  # 约6天23小时
+                # 7天 = 604800秒，如果剩余时间少于6天23小时，说明是已在冷却期
+                # 但是如果时间已经过期（负数），则冷却期已结束
+                remaining_seconds = time_remaining.total_seconds()
+                
+                if remaining_seconds <= 0:
+                    # 冷却期已过，需要再次请求完成重置
+                    # 根据 Telegram 官方规则，7天后需要手动再点一次忘记密码才会真正重置
+                    logger.info("冷却期已过，自动发起第二次重置请求...")
+                    try:
+                        second_result = await asyncio.wait_for(
+                            client(ResetPasswordRequest()),
+                            timeout=15
+                        )
+                        second_result_type = type(second_result).__name__
+                        
+                        if second_result_type == 'ResetPasswordOk':
+                            return True, "密码已成功重置（冷却期结束后完成）", None
+                        elif hasattr(second_result, 'until_date'):
+                            # 仍然有冷却期（不太可能，但需要处理）
+                            return False, "第二次请求仍在冷却期中", second_result.until_date
+                        else:
+                            return True, "密码重置请求已提交（冷却期结束后）", None
+                    except Exception as e2:
+                        logger.warning(f"第二次重置请求失败: {e2}")
+                        # 即使第二次请求失败，也返回成功，因为冷却期确实已过
+                        return True, f"冷却期已结束，第二次请求遇到问题: {str(e2)[:30]}", None
+                elif remaining_seconds < COOLDOWN_THRESHOLD_SECONDS:
                     days_remaining = time_remaining.days
                     hours_remaining = time_remaining.seconds // 3600
                     return False, f"已在冷却期中 (剩余约{days_remaining}天{hours_remaining}小时)", until_date
@@ -21746,6 +21897,9 @@ admin3</code>
                                 tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession, proxy=proxy_dict),
                                 timeout=30  # 30秒超时
                             )
+                            # 重要：TData转Session后必须显式连接
+                            if client and not client.is_connected():
+                                await client.connect()
                             used_proxy = proxy_dict
                             logger.info(f"[{file_name}] 代理连接成功")
                         except asyncio.TimeoutError:
@@ -21759,6 +21913,9 @@ admin3</code>
                 if not client:
                     logger.info(f"[{file_name}] 使用本地连接")
                     client = await tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession)
+                    # 重要：TData转Session后必须显式连接
+                    if not client.is_connected():
+                        await client.connect()
                 
                 session_path = temp_session_path
                 
@@ -22231,33 +22388,50 @@ admin3</code>
             
             try:
                 with zipfile.ZipFile(success_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                    added_paths = set()  # 追踪已添加的文件路径，避免重复
+                    
                     for file_path, file_name, detail in results['success']:
                         original_file_path = detail.get('file_path', file_path)
+                        # 提取手机号作为前缀
+                        phone = extract_phone_from_path(original_file_path) or extract_phone_from_path(file_name) or file_name.replace('.session', '').replace('.json', '')
                         
                         try:
                             # 判断文件类型
                             if os.path.isdir(original_file_path):
-                                # TData格式：打包整个目录
+                                # TData格式：打包整个目录，使用手机号作为前缀
                                 for root, dirs, files in os.walk(original_file_path):
                                     for file in files:
                                         file_full_path = os.path.join(root, file)
-                                        rel_path = os.path.relpath(file_full_path, os.path.dirname(original_file_path))
-                                        zipf.write(file_full_path, rel_path)
+                                        rel_path = os.path.relpath(file_full_path, original_file_path)
+                                        arc_name = f"{phone}/{rel_path}"
+                                        
+                                        if arc_name not in added_paths:
+                                            added_paths.add(arc_name)
+                                            zipf.write(file_full_path, arc_name)
                             else:
-                                # Session格式：打包session文件及相关文件
+                                # Session格式：打包session文件及相关文件，使用手机号作为前缀
                                 if os.path.exists(original_file_path):
-                                    zipf.write(original_file_path, file_name)
+                                    arc_name = f"{phone}/{file_name}"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(original_file_path, arc_name)
                                 
                                 # Journal文件
                                 journal_path = original_file_path + '-journal'
                                 if os.path.exists(journal_path):
-                                    zipf.write(journal_path, file_name + '-journal')
+                                    arc_name = f"{phone}/{file_name}-journal"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(journal_path, arc_name)
                                 
                                 # JSON文件
                                 json_path = os.path.splitext(original_file_path)[0] + '.json'
                                 if os.path.exists(json_path):
                                     json_name = os.path.splitext(file_name)[0] + '.json'
-                                    zipf.write(json_path, json_name)
+                                    arc_name = f"{phone}/{json_name}"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(json_path, arc_name)
                         except Exception as e:
                             logger.warning(f"⚠️ 打包文件失败 {file_name}: {e}")
                 
@@ -22276,33 +22450,50 @@ admin3</code>
             
             try:
                 with zipfile.ZipFile(failed_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                    added_paths = set()  # 追踪已添加的文件路径，避免重复
+                    
                     for file_path, file_name, detail in results['failed']:
                         original_file_path = detail.get('file_path', file_path)
+                        # 提取手机号作为前缀
+                        phone = extract_phone_from_path(original_file_path) or extract_phone_from_path(file_name) or file_name.replace('.session', '').replace('.json', '')
                         
                         try:
                             # 判断文件类型
                             if os.path.isdir(original_file_path):
-                                # TData格式：打包整个目录
+                                # TData格式：打包整个目录，使用手机号作为前缀
                                 for root, dirs, files in os.walk(original_file_path):
                                     for file in files:
                                         file_full_path = os.path.join(root, file)
-                                        rel_path = os.path.relpath(file_full_path, os.path.dirname(original_file_path))
-                                        zipf.write(file_full_path, rel_path)
+                                        rel_path = os.path.relpath(file_full_path, original_file_path)
+                                        arc_name = f"{phone}/{rel_path}"
+                                        
+                                        if arc_name not in added_paths:
+                                            added_paths.add(arc_name)
+                                            zipf.write(file_full_path, arc_name)
                             else:
-                                # Session格式：打包session文件及相关文件
+                                # Session格式：打包session文件及相关文件，使用手机号作为前缀
                                 if os.path.exists(original_file_path):
-                                    zipf.write(original_file_path, file_name)
+                                    arc_name = f"{phone}/{file_name}"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(original_file_path, arc_name)
                                 
                                 # Journal文件
                                 journal_path = original_file_path + '-journal'
                                 if os.path.exists(journal_path):
-                                    zipf.write(journal_path, file_name + '-journal')
+                                    arc_name = f"{phone}/{file_name}-journal"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(journal_path, arc_name)
                                 
                                 # JSON文件
                                 json_path = os.path.splitext(original_file_path)[0] + '.json'
                                 if os.path.exists(json_path):
                                     json_name = os.path.splitext(file_name)[0] + '.json'
-                                    zipf.write(json_path, json_name)
+                                    arc_name = f"{phone}/{json_name}"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(json_path, arc_name)
                         except Exception as e:
                             logger.warning(f"⚠️ 打包文件失败 {file_name}: {e}")
                 
