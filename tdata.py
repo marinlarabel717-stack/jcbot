@@ -1080,12 +1080,13 @@ def copy_session_to_temp(session_path: str) -> Tuple[str, str]:
         session_path: 原始session文件路径
         
     Returns:
-        (temp_session_path, temp_dir): 临时session路径和临时目录路径
+        (temp_session_base, temp_dir): 临时session路径（不含.session后缀）和临时目录路径
+        注意：返回的路径不包含.session后缀，与TelegramClient的使用方式一致
     """
     # 创建临时目录
     temp_dir = tempfile.mkdtemp(prefix="session_temp_")
     
-    # 生成唯一的session文件名
+    # 生成唯一的session文件名（已包含.session后缀）
     temp_session_name = f"{uuid.uuid4().hex}.session"
     temp_session_path = os.path.join(temp_dir, temp_session_name)
     
@@ -1096,7 +1097,8 @@ def copy_session_to_temp(session_path: str) -> Tuple[str, str]:
     else:
         session_base = session_path
     
-    temp_session_base = temp_session_path.rsplit('.session', 1)[0]
+    # temp_session_path 一定以 .session 结尾（见1089行），所以直接移除
+    temp_session_base = temp_session_path[:-8]  # 移除 '.session' (8个字符)
     
     try:
         # 复制主session文件
@@ -1130,7 +1132,7 @@ def cleanup_temp_session(temp_dir: Optional[str]):
         try:
             shutil.rmtree(temp_dir, ignore_errors=True)
             logger.debug(f"已清理临时目录: {temp_dir}")
-        except (OSError, IOError) as e:
+        except (OSError, IOError, PermissionError) as e:
             logger.warning(f"清理临时目录失败: {e}")
 
 def process_accounts_with_dedup(accounts: List[Tuple[str, str]]) -> List[Tuple[str, str]]:
@@ -1592,10 +1594,10 @@ class Config:
         self.CHECK_TIMEOUT = int(os.getenv("CHECK_TIMEOUT", "15"))
         self.SPAMBOT_WAIT_TIME = float(os.getenv("SPAMBOT_WAIT_TIME", "2.0"))
         
-        # 账号处理速度优化配置
-        self.MAX_CONCURRENT = int(os.getenv("MAX_CONCURRENT", "15"))  # 并发账号处理数：从3提高到15
-        self.DELAY_BETWEEN_ACCOUNTS = float(os.getenv("DELAY_BETWEEN_ACCOUNTS", "0.3"))  # 账号间隔：从2秒减少到0.3秒
-        self.CONNECTION_TIMEOUT = int(os.getenv("CONNECTION_TIMEOUT", "10"))  # 连接超时：从30秒减少到10秒
+        # 账号处理速度优化配置（带验证）
+        self.MAX_CONCURRENT = max(1, min(50, int(os.getenv("MAX_CONCURRENT", "15"))))  # 限制在1-50之间
+        self.DELAY_BETWEEN_ACCOUNTS = max(0.1, min(10.0, float(os.getenv("DELAY_BETWEEN_ACCOUNTS", "0.3"))))  # 限制在0.1-10秒之间
+        self.CONNECTION_TIMEOUT = max(5, min(60, int(os.getenv("CONNECTION_TIMEOUT", "10"))))  # 限制在5-60秒之间
         
         # 代理配置
         self.USE_PROXY = os.getenv("USE_PROXY", "true").lower() == "true"
