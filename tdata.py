@@ -24906,7 +24906,7 @@ admin3</code>
                     'phone': phone
                 }
     
-    async def safe_check_contact_limit(self, account_path, api_id, api_hash, proxy):
+    async def safe_check_contact_limit(self, account_path, api_id, api_hash, proxy_info):
         """安全检测单个账号（带 session 隔离）"""
         temp_dir = None
         try:
@@ -24945,12 +24945,17 @@ admin3</code>
             # 获取手机号
             phone = extract_phone_from_path(account_path)
             
+            # 转换代理格式为TelegramClient所需格式
+            proxy_dict = None
+            if proxy_info:
+                proxy_dict = self.checker.create_proxy_dict(proxy_info)
+            
             # 连接并检测
             client = TelegramClient(
                 temp_session,
                 api_id,
                 api_hash,
-                proxy=proxy,
+                proxy=proxy_dict,
                 timeout=10,
                 connection_retries=3
             )
