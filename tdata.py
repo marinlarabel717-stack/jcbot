@@ -29,6 +29,7 @@ import re
 import secrets
 import csv
 import traceback
+import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional, Tuple, Any, NamedTuple
 from dataclasses import dataclass, field, asdict
@@ -1072,6 +1073,68 @@ def detect_tdata_structure(account_path: str) -> Optional[Tuple]:
     logger.warning(f"未找到有效的TData结构 - {account_path}")
     return None
 
+def copy_session_to_temp(session_path: str) -> Tuple[str, str]:
+    """复制session文件到临时目录避免并发冲突
+    
+    Args:
+        session_path: 原始session文件路径
+        
+    Returns:
+        (temp_session_base, temp_dir): 临时session路径（不含.session后缀）和临时目录路径
+        注意：返回的路径不包含.session后缀，与TelegramClient的使用方式一致
+    """
+    # 创建临时目录
+    temp_dir = tempfile.mkdtemp(prefix="session_temp_")
+    
+    # 生成唯一的session文件名（已包含.session后缀）
+    temp_session_name = f"{uuid.uuid4().hex}.session"
+    temp_session_path = os.path.join(temp_dir, temp_session_name)
+    
+    # 移除.session后缀（如果存在）因为我们需要复制所有相关文件
+    # 使用rsplit来处理边缘情况
+    if session_path.endswith('.session'):
+        session_base = session_path.rsplit('.session', 1)[0]
+    else:
+        session_base = session_path
+    
+    # temp_session_path 一定以 .session 结尾（见1089行），所以直接移除
+    temp_session_base = temp_session_path[:-8]  # 移除 '.session' (8个字符)
+    
+    try:
+        # 复制主session文件
+        if os.path.exists(f"{session_base}.session"):
+            shutil.copy2(f"{session_base}.session", f"{temp_session_base}.session")
+        
+        # 复制journal文件（如果存在）
+        if os.path.exists(f"{session_base}.session-journal"):
+            shutil.copy2(f"{session_base}.session-journal", f"{temp_session_base}.session-journal")
+        
+        # 返回临时session路径（不含.session后缀）
+        return temp_session_base, temp_dir
+    except (OSError, IOError) as e:
+        logger.error(f"复制session文件失败: {e}")
+        # 如果复制失败，清理临时目录并返回原始路径
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        return session_base, None
+    except Exception as e:
+        # 记录意外错误并重新抛出
+        logger.error(f"复制session文件时发生意外错误: {e}")
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        raise
+
+def cleanup_temp_session(temp_dir: Optional[str]):
+    """清理临时session文件
+    
+    Args:
+        temp_dir: 临时目录路径
+    """
+    if temp_dir and os.path.exists(temp_dir):
+        try:
+            shutil.rmtree(temp_dir, ignore_errors=True)
+            logger.debug(f"已清理临时目录: {temp_dir}")
+        except (OSError, IOError, PermissionError) as e:
+            logger.warning(f"清理临时目录失败: {e}")
+
 def process_accounts_with_dedup(accounts: List[Tuple[str, str]]) -> List[Tuple[str, str]]:
     """处理账号列表并去重
     
@@ -1531,6 +1594,11 @@ class Config:
         self.CHECK_TIMEOUT = int(os.getenv("CHECK_TIMEOUT", "15"))
         self.SPAMBOT_WAIT_TIME = float(os.getenv("SPAMBOT_WAIT_TIME", "2.0"))
         
+        # 账号处理速度优化配置（带验证）
+        self.MAX_CONCURRENT = max(1, min(50, int(os.getenv("MAX_CONCURRENT", "15"))))  # 限制在1-50之间
+        self.DELAY_BETWEEN_ACCOUNTS = max(0.1, min(10.0, float(os.getenv("DELAY_BETWEEN_ACCOUNTS", "0.3"))))  # 限制在0.1-10秒之间
+        self.CONNECTION_TIMEOUT = max(5, min(60, int(os.getenv("CONNECTION_TIMEOUT", "10"))))  # 限制在5-60秒之间
+        
         # 代理配置
         self.USE_PROXY = os.getenv("USE_PROXY", "true").lower() == "true"
         self.PROXY_TIMEOUT = int(os.getenv("PROXY_TIMEOUT", "10"))
@@ -1647,6 +1715,10 @@ TRIAL_DURATION_UNIT=minutes
 MAX_CONCURRENT_CHECKS=20
 CHECK_TIMEOUT=15
 SPAMBOT_WAIT_TIME=2.0
+# 账号处理速度优化配置
+MAX_CONCURRENT=15  # 并发账号处理数：从3提高到15
+DELAY_BETWEEN_ACCOUNTS=0.3  # 账号间隔：从2秒减少到0.3秒
+CONNECTION_TIMEOUT=10  # 连接超时：从30秒减少到10秒
 USE_PROXY=true
 PROXY_TIMEOUT=10
 PROXY_FILE=proxy.txt
@@ -5281,8 +5353,8 @@ class TwoFactorManager:
                     session_base,
                     int(config.API_ID),
                     str(config.API_HASH),
-                    timeout=30,
-                    connection_retries=2,
+                    timeout=config.CONNECTION_TIMEOUT,
+                    connection_retries=3,
                     retry_delay=1,
                     proxy=proxy_dict
                 )
@@ -5451,8 +5523,8 @@ class TwoFactorManager:
                     session_base,
                     int(config.API_ID),
                     str(config.API_HASH),
-                    timeout=30,
-                    connection_retries=2,
+                    timeout=config.CONNECTION_TIMEOUT,
+                    connection_retries=3,
                     retry_delay=1,
                     proxy=proxy_dict
                 )
@@ -20464,8 +20536,8 @@ admin3</code>
                 session_base,
                 int(old_api_id),
                 str(old_api_hash),
-                timeout=30,
-                connection_retries=2,
+                timeout=config.CONNECTION_TIMEOUT,
+                connection_retries=3,
                 retry_delay=1,
                 proxy=proxy_dict
             )
@@ -20476,7 +20548,7 @@ admin3</code>
             # 强制代理优先逻辑：只有代理超时才回退到本地
             connect_success = False
             try:
-                await asyncio.wait_for(client.connect(), timeout=30)
+                await asyncio.wait_for(client.connect(), timeout=config.CONNECTION_TIMEOUT)
                 logger.info(f"✅ [{file_name}] 旧会话连接成功（使用{'代理' if proxy_dict else '本地'}）")
                 print(f"✅ [{file_name}] 旧会话连接成功（使用{'代理' if proxy_dict else '本地'}）", flush=True)
                 connect_success = True
@@ -20564,7 +20636,7 @@ admin3</code>
                 new_session_path,
                 int(new_api_id),
                 str(new_api_hash),
-                timeout=30,
+                timeout=config.CONNECTION_TIMEOUT,
                 proxy=proxy_dict,
                 # 添加随机设备参数（如果有）
                 device_model=random_device_params.get('device_model', 'Desktop') if random_device_params else 'Desktop',
@@ -20579,7 +20651,7 @@ admin3</code>
             
             # 连接新客户端（强制代理优先）
             try:
-                await asyncio.wait_for(new_client.connect(), timeout=30)
+                await asyncio.wait_for(new_client.connect(), timeout=config.CONNECTION_TIMEOUT)
                 logger.info(f"✅ [{file_name}] 新会话连接成功（使用{'代理' if proxy_dict else '本地'}）")
                 print(f"✅ [{file_name}] 新会话连接成功（使用{'代理' if proxy_dict else '本地'}）", flush=True)
             except asyncio.TimeoutError:
@@ -20595,7 +20667,7 @@ admin3</code>
                         new_session_path,
                         int(new_api_id),
                         str(new_api_hash),
-                        timeout=30,
+                        timeout=config.CONNECTION_TIMEOUT,
                         device_model=random_device_params.get('device_model', 'Desktop') if random_device_params else 'Desktop',
                         system_version=random_device_params.get('system_version', 'Windows 10') if random_device_params else 'Windows 10',
                         app_version=random_device_params.get('app_version', '3.2.8 x64') if random_device_params else '3.2.8 x64',
@@ -21867,11 +21939,12 @@ admin3</code>
         # 清理
         self.cleanup_profile_update_task(user_id)
     
-    async def _update_single_profile(self, idx: int, file_path: str, file_name: str, file_type: str, config: ProfileUpdateConfig) -> Dict:
+    async def _update_single_profile(self, idx: int, file_path: str, file_name: str, file_type: str, profile_config: ProfileUpdateConfig) -> Dict:
         """更新单个账号资料"""
         client = None
         session_path = None
         temp_session_path = None
+        temp_session_dir = None
         used_proxy = None
         
         try:
@@ -21884,74 +21957,111 @@ admin3</code>
                 from opentele.td import TDesktop
                 from opentele.api import UseCurrentSession
                 
+                print(f"📂 [{file_name}] 格式: TData - 正在转换为Session进行资料修改...")
+                logger.info(f"[{file_name}] 开始TData转Session转换")
+                
                 tdesk = TDesktop(file_path)
                 temp_session_path = f"/tmp/profile_{secrets.token_hex(8)}.session"
                 
                 # 先尝试使用代理连接
+                proxy_info = None
+                proxy_dict = None
                 if self.proxy_manager.is_proxy_mode_active(self.db):
-                    proxy_dict = self.proxy_manager.get_random_proxy()
-                    if proxy_dict:
-                        try:
-                            logger.info(f"[{file_name}] 使用代理连接: {proxy_dict['type']}://{proxy_dict['host']}:{proxy_dict['port']}")
-                            client = await asyncio.wait_for(
-                                tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession, proxy=proxy_dict),
-                                timeout=30  # 30秒超时
-                            )
-                            # 重要：TData转Session后必须显式连接
-                            if client and not client.is_connected():
-                                await client.connect()
-                            used_proxy = proxy_dict
-                            logger.info(f"[{file_name}] 代理连接成功")
-                        except asyncio.TimeoutError:
-                            logger.warning(f"[{file_name}] 代理连接超时，退回本地连接")
-                            client = None
-                        except Exception as e:
-                            logger.warning(f"[{file_name}] 代理连接失败: {e}，退回本地连接")
-                            client = None
+                    proxy_info = self.proxy_manager.get_random_proxy()
+                    if proxy_info:
+                        # 使用checker的create_proxy_dict转换代理信息
+                        proxy_dict = self.checker.create_proxy_dict(proxy_info)
+                        if proxy_dict:
+                            try:
+                                proxy_type = proxy_info.get('type', 'http').upper()
+                                print(f"🌐 [{file_name}] 使用{proxy_type}代理连接...")
+                                logger.info(f"[{file_name}] 使用代理连接: {proxy_type}://{proxy_info['host']}:{proxy_info['port']}")
+                                client = await asyncio.wait_for(
+                                    tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession, proxy=proxy_dict),
+                                    timeout=config.CONNECTION_TIMEOUT
+                                )
+                                # 重要：TData转Session后必须显式连接
+                                if client and not client.is_connected():
+                                    await client.connect()
+                                used_proxy = proxy_info
+                                print(f"✅ [{file_name}] TData转Session成功，代理连接成功")
+                                logger.info(f"[{file_name}] TData转Session成功，代理连接成功")
+                            except asyncio.TimeoutError:
+                                print(f"⏱️ [{file_name}] 代理连接超时，退回本地连接")
+                                logger.warning(f"[{file_name}] 代理连接超时，退回本地连接")
+                                client = None
+                            except Exception as e:
+                                print(f"⚠️ [{file_name}] 代理连接失败: {e}，退回本地连接")
+                                logger.warning(f"[{file_name}] 代理连接失败: {e}，退回本地连接")
+                                client = None
                 
                 # 如果代理失败或未启用，使用本地连接
                 if not client:
-                    logger.info(f"[{file_name}] 使用本地连接")
+                    print(f"🏠 [{file_name}] 使用本地连接进行TData转Session...")
+                    logger.info(f"[{file_name}] 使用本地连接进行TData转Session")
                     client = await tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession)
                     # 重要：TData转Session后必须显式连接
                     if not client.is_connected():
                         await client.connect()
+                    print(f"✅ [{file_name}] TData转Session成功，本地连接成功")
+                    logger.info(f"[{file_name}] TData转Session成功，本地连接成功")
                 
                 session_path = temp_session_path
                 
             elif file_type in ['session', 'session-json']:
-                # 直接使用Session
+                # 使用session临时副本避免database locked
+                print(f"📋 [{file_name}] 格式: Session - 正在复制到临时目录...")
+                logger.info(f"[{file_name}] 复制session到临时目录避免database locked")
+                
+                temp_session_path, temp_session_dir = copy_session_to_temp(file_path)
+                
+                print(f"✅ [{file_name}] Session已复制到临时目录")
+                logger.info(f"[{file_name}] Session已复制到临时目录: {temp_session_dir}")
+                
                 # 先尝试使用代理连接
+                proxy_info = None
+                proxy_dict = None
                 if self.proxy_manager.is_proxy_mode_active(self.db):
-                    proxy_dict = self.proxy_manager.get_random_proxy()
-                    if proxy_dict:
-                        try:
-                            logger.info(f"[{file_name}] 使用代理连接: {proxy_dict['type']}://{proxy_dict['host']}:{proxy_dict['port']}")
-                            client = TelegramClient(file_path, api_id, api_hash, proxy=proxy_dict)
-                            await asyncio.wait_for(client.connect(), timeout=30)  # 30秒超时
-                            used_proxy = proxy_dict
-                            logger.info(f"[{file_name}] 代理连接成功")
-                        except asyncio.TimeoutError:
-                            logger.warning(f"[{file_name}] 代理连接超时，退回本地连接")
-                            if client:
-                                await client.disconnect()
-                            client = None
-                        except Exception as e:
-                            logger.warning(f"[{file_name}] 代理连接失败: {e}，退回本地连接")
-                            if client:
-                                try:
+                    proxy_info = self.proxy_manager.get_random_proxy()
+                    if proxy_info:
+                        # 使用checker的create_proxy_dict转换代理信息
+                        proxy_dict = self.checker.create_proxy_dict(proxy_info)
+                        if proxy_dict:
+                            try:
+                                proxy_type = proxy_info.get('type', 'http').upper()
+                                print(f"🌐 [{file_name}] 使用{proxy_type}代理连接...")
+                                logger.info(f"[{file_name}] 使用代理连接: {proxy_type}://{proxy_info['host']}:{proxy_info['port']}")
+                                client = TelegramClient(temp_session_path, api_id, api_hash, proxy=proxy_dict)
+                                await asyncio.wait_for(client.connect(), timeout=config.CONNECTION_TIMEOUT)
+                                used_proxy = proxy_info
+                                print(f"✅ [{file_name}] 代理连接成功")
+                                logger.info(f"[{file_name}] 代理连接成功")
+                            except asyncio.TimeoutError:
+                                print(f"⏱️ [{file_name}] 代理连接超时，退回本地连接")
+                                logger.warning(f"[{file_name}] 代理连接超时，退回本地连接")
+                                if client:
                                     await client.disconnect()
-                                except:
-                                    pass
-                            client = None
+                                client = None
+                            except Exception as e:
+                                print(f"⚠️ [{file_name}] 代理连接失败: {e}，退回本地连接")
+                                logger.warning(f"[{file_name}] 代理连接失败: {e}，退回本地连接")
+                                if client:
+                                    try:
+                                        await client.disconnect()
+                                    except:
+                                        pass
+                                client = None
                 
                 # 如果代理失败或未启用，使用本地连接
                 if not client:
+                    print(f"🏠 [{file_name}] 使用本地连接...")
                     logger.info(f"[{file_name}] 使用本地连接")
-                    client = TelegramClient(file_path, api_id, api_hash)
+                    client = TelegramClient(temp_session_path, api_id, api_hash)
                     await client.connect()
+                    print(f"✅ [{file_name}] 本地连接成功")
+                    logger.info(f"[{file_name}] 本地连接成功")
                 
-                session_path = file_path
+                session_path = temp_session_path
             
             if not client or not await client.is_user_authorized():
                 error_type = 'AuthKeyUnregisteredError'
@@ -21970,6 +22080,12 @@ admin3</code>
             phone = me.phone if hasattr(me, 'phone') else None
             country = self.profile_manager.get_country_from_phone(phone) if phone else 'US'
             
+            # 构建代理信息字符串
+            proxy_str = '本地连接'
+            if used_proxy:
+                proxy_type = used_proxy.get('type', 'http').upper()
+                proxy_str = f"{proxy_type}://{used_proxy['host']}:{used_proxy['port']}"
+            
             detail = {
                 'success': True,
                 'account': file_name,
@@ -21977,7 +22093,7 @@ admin3</code>
                 'file_name': file_name,
                 'file_path': file_path,
                 'country': country,
-                'proxy': f"{used_proxy['type']}://{used_proxy['host']}:{used_proxy['port']}" if used_proxy else '本地连接',
+                'proxy': proxy_str,
                 'changes': {},
                 'actions': []
             }
@@ -21986,15 +22102,15 @@ admin3</code>
             await asyncio.sleep(random.uniform(2, 5))
             
             # 1. 更新姓名
-            if config.update_name:
+            if profile_config.update_name:
                 first_name = None
                 last_name = ''
                 
-                if config.mode == 'random':
+                if profile_config.mode == 'random':
                     first_name, last_name = self.profile_manager.generate_random_name(country)
-                elif config.custom_names:
+                elif profile_config.custom_names:
                     # 循环使用自定义姓名列表
-                    full_name = config.custom_names[idx % len(config.custom_names)]
+                    full_name = profile_config.custom_names[idx % len(profile_config.custom_names)]
                     parts = full_name.split(' ', 1)
                     first_name = parts[0]
                     last_name = parts[1] if len(parts) > 1 else ''
@@ -22017,8 +22133,8 @@ admin3</code>
                     await asyncio.sleep(1)
             
             # 2. 处理头像
-            if config.update_photo:
-                if config.photo_action == 'delete_all':
+            if profile_config.update_photo:
+                if profile_config.photo_action == 'delete_all':
                     try:
                         if await self.profile_manager.delete_profile_photos(client):
                             detail['actions'].append("✅ 删除所有头像")
@@ -22030,9 +22146,9 @@ admin3</code>
                         detail['actions'].append(f"❌ 删除头像失败: {str(e)}")
                         detail['changes']['photo'] = {'action': 'deleted', 'success': False, 'error': str(e)}
                     await asyncio.sleep(1)
-                elif config.photo_action == 'custom' and config.custom_photos:
+                elif profile_config.photo_action == 'custom' and profile_config.custom_photos:
                     # 循环使用自定义头像列表
-                    photo_path = config.custom_photos[idx % len(config.custom_photos)]
+                    photo_path = profile_config.custom_photos[idx % len(profile_config.custom_photos)]
                     try:
                         if await self.profile_manager.update_profile_photo(client, photo_path):
                             detail['actions'].append(f"✅ 上传头像")
@@ -22046,15 +22162,15 @@ admin3</code>
                     await asyncio.sleep(1)
             
             # 3. 更新简介
-            if config.update_bio:
+            if profile_config.update_bio:
                 bio = ''
-                if config.bio_action == 'clear':
+                if profile_config.bio_action == 'clear':
                     bio = ''
-                elif config.bio_action == 'random':
+                elif profile_config.bio_action == 'random':
                     bio = self.profile_manager.generate_random_bio(country)
-                elif config.bio_action == 'custom' and config.custom_bios:
+                elif profile_config.bio_action == 'custom' and profile_config.custom_bios:
                     # 循环使用自定义简介列表
-                    bio = config.custom_bios[idx % len(config.custom_bios)]
+                    bio = profile_config.custom_bios[idx % len(profile_config.custom_bios)]
                 
                 try:
                     # 获取当前简介
@@ -22082,9 +22198,9 @@ admin3</code>
                 await asyncio.sleep(1)
             
             # 4. 更新用户名
-            if config.update_username:
+            if profile_config.update_username:
                 old_username = me.username if hasattr(me, 'username') else None
-                if config.username_action == 'random':
+                if profile_config.username_action == 'random':
                     # 尝试3次生成不重复的用户名
                     success_flag = False
                     new_username = ''
@@ -22111,7 +22227,7 @@ admin3</code>
                     if not success_flag and 'username' not in detail['changes']:
                         detail['actions'].append("❌ 用户名更新失败（可能已被占用）")
                         detail['changes']['username'] = {'success': False, 'error': '用户名已被占用', 'error_type': 'UsernameOccupiedError'}
-                elif config.username_action == 'delete':
+                elif profile_config.username_action == 'delete':
                     try:
                         if await self.profile_manager.update_profile_username(client, ''):
                             detail['actions'].append("✅ 用户名: 已删除")
@@ -22126,9 +22242,9 @@ admin3</code>
                     except Exception as e:
                         detail['actions'].append(f"❌ 用户名删除失败: {str(e)}")
                         detail['changes']['username'] = {'success': False, 'error': str(e)}
-                elif config.username_action == 'custom' and config.custom_usernames:
+                elif profile_config.username_action == 'custom' and profile_config.custom_usernames:
                     # 循环使用自定义用户名列表
-                    username = config.custom_usernames[idx % len(config.custom_usernames)]
+                    username = profile_config.custom_usernames[idx % len(profile_config.custom_usernames)]
                     try:
                         if await self.profile_manager.update_profile_username(client, username):
                             detail['actions'].append(f"✅ 用户名: {username}")
@@ -22230,7 +22346,12 @@ admin3</code>
                     await client.disconnect()
                 except:
                     pass
-            # 清理临时session文件
+            
+            # 清理临时session目录（避免database locked）
+            if temp_session_dir:
+                cleanup_temp_session(temp_session_dir)
+            
+            # 清理临时session文件（TData转换的）
             if temp_session_path and os.path.exists(temp_session_path):
                 try:
                     os.remove(temp_session_path)
@@ -22399,11 +22520,15 @@ admin3</code>
                             # 判断文件类型
                             if os.path.isdir(original_file_path):
                                 # TData格式：打包整个目录，使用手机号作为前缀
+                                # 获取目录名（通常是tdata）
+                                tdata_dirname = os.path.basename(original_file_path)
+                                
                                 for root, dirs, files in os.walk(original_file_path):
                                     for file in files:
                                         file_full_path = os.path.join(root, file)
                                         rel_path = os.path.relpath(file_full_path, original_file_path)
-                                        arc_name = f"{phone}/{rel_path}"
+                                        # 包含tdata目录名在路径中: 手机号/tdata/D877F783D5D3EF8C/...
+                                        arc_name = f"{phone}/{tdata_dirname}/{rel_path}"
                                         
                                         if arc_name not in added_paths:
                                             added_paths.add(arc_name)
@@ -22461,11 +22586,15 @@ admin3</code>
                             # 判断文件类型
                             if os.path.isdir(original_file_path):
                                 # TData格式：打包整个目录，使用手机号作为前缀
+                                # 获取目录名（通常是tdata）
+                                tdata_dirname = os.path.basename(original_file_path)
+                                
                                 for root, dirs, files in os.walk(original_file_path):
                                     for file in files:
                                         file_full_path = os.path.join(root, file)
                                         rel_path = os.path.relpath(file_full_path, original_file_path)
-                                        arc_name = f"{phone}/{rel_path}"
+                                        # 包含tdata目录名在路径中: 手机号/tdata/D877F783D5D3EF8C/...
+                                        arc_name = f"{phone}/{tdata_dirname}/{rel_path}"
                                         
                                         if arc_name not in added_paths:
                                             added_paths.add(arc_name)
@@ -22859,33 +22988,33 @@ admin3</code>
                 session_base,
                 int(api_id),
                 str(api_hash),
-                timeout=30,
-                connection_retries=2,
+                timeout=config.CONNECTION_TIMEOUT,
+                connection_retries=3,
                 retry_delay=1,
                 proxy=proxy_dict
             )
             logger.info(f"[{file_name}]   ✅ 客户端已创建")
             logger.info(f"[{file_name}]   Session: {session_base}")
-            logger.info(f"[{file_name}]   超时设置: 30秒")
-            logger.info(f"[{file_name}]   重试次数: 2次")
+            logger.info(f"[{file_name}]   超时设置: {config.CONNECTION_TIMEOUT}秒")
+            logger.info(f"[{file_name}]   重试次数: 3次")
             
             # 连接 - 先尝试代理，超时后回退到本地连接
             logger.info(f"[{file_name}] ━━━ 步骤1.9: 建立Telegram连接 ━━━")
             connection_method = "proxy" if use_proxy else "local"
             try:
                 if use_proxy:
-                    logger.info(f"[{file_name}]   🔄 尝试使用代理连接(30秒超时)...")
+                    logger.info(f"[{file_name}]   🔄 尝试使用代理连接({config.CONNECTION_TIMEOUT}秒超时)...")
                 else:
-                    logger.info(f"[{file_name}]   🔄 尝试本地连接(30秒超时)...")
+                    logger.info(f"[{file_name}]   🔄 尝试本地连接({config.CONNECTION_TIMEOUT}秒超时)...")
                 
                 connection_start = time.time()
-                await asyncio.wait_for(client.connect(), timeout=30)
+                await asyncio.wait_for(client.connect(), timeout=config.CONNECTION_TIMEOUT)
                 connection_elapsed = time.time() - connection_start
                 logger.info(f"[{file_name}]   ✅ 连接成功（{connection_method}，耗时{connection_elapsed:.2f}秒）")
             except asyncio.TimeoutError:
                 if use_proxy:
                     # 代理超时，尝试回退到本地连接
-                    logger.warning(f"[{file_name}]   ⏱️ 代理连接超时(30秒)")
+                    logger.warning(f"[{file_name}]   ⏱️ 代理连接超时({config.CONNECTION_TIMEOUT}秒)")
                     logger.info(f"[{file_name}]   🔄 回退到本地连接...")
                     try:
                         # 断开之前的连接
@@ -22900,22 +23029,22 @@ admin3</code>
                         session_base,
                         int(api_id),
                         str(api_hash),
-                        timeout=30,
-                        connection_retries=2,
+                        timeout=config.CONNECTION_TIMEOUT,
+                        connection_retries=3,
                         retry_delay=1,
                         proxy=None  # 不使用代理
                     )
                     logger.info(f"[{file_name}]   ✅ 客户端已重建")
                     
                     try:
-                        logger.info(f"[{file_name}]   🔄 尝试本地连接(30秒超时)...")
+                        logger.info(f"[{file_name}]   🔄 尝试本地连接({config.CONNECTION_TIMEOUT}秒超时)...")
                         connection_start = time.time()
-                        await asyncio.wait_for(client.connect(), timeout=30)
+                        await asyncio.wait_for(client.connect(), timeout=config.CONNECTION_TIMEOUT)
                         connection_elapsed = time.time() - connection_start
                         connection_method = "local"
                         logger.info(f"[{file_name}]   ✅ 本地连接成功（耗时{connection_elapsed:.2f}秒）")
                     except asyncio.TimeoutError:
-                        logger.error(f"[{file_name}]   ❌ 本地连接也超时(30秒)")
+                        logger.error(f"[{file_name}]   ❌ 本地连接也超时({config.CONNECTION_TIMEOUT}秒)")
                         logger.error(f"[{file_name}]   💡 代理和本地连接均失败")
                         return {
                             'status': 'error',
