@@ -877,6 +877,9 @@ class ProfileManager:
                     
                     # 1. 更新姓名
                     if config.update_name:
+                        first_name = None
+                        last_name = ''
+                        
                         if config.mode == 'random':
                             first_name, last_name = self.generate_random_name(country)
                         elif config.custom_names:
@@ -886,10 +889,11 @@ class ProfileManager:
                             first_name = parts[0]
                             last_name = parts[1] if len(parts) > 1 else ''
                         
-                        if await self.update_profile_name(client, first_name, last_name):
-                            detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
-                        else:
-                            detail['actions'].append(f"❌ 姓名更新失败")
+                        if first_name:
+                            if await self.update_profile_name(client, first_name, last_name):
+                                detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
+                            else:
+                                detail['actions'].append(f"❌ 姓名更新失败")
                     
                     # 2. 处理头像
                     if config.update_photo:
@@ -9222,6 +9226,10 @@ class EnhancedBot:
         # 资料修改待处理任务
         self.pending_profile_update: Dict[int, Dict[str, Any]] = {}
         
+        # 常量定义
+        self.MAX_DISPLAY_ITEMS = 20  # 配置预览最大显示条目数
+        self.ALERT_TEXT_MAX_LENGTH = 200  # 弹出提示最大文本长度
+        
         # 初始化设备参数加载器
         self.device_loader = DeviceParamsLoader()
         
@@ -11796,7 +11804,7 @@ class EnhancedBot:
             conn.close()
 
             # 放行的状态，新增 waiting_api_file, waiting_rename_file, waiting_merge_files, waiting_cleanup_file, batch_create_upload, reauthorize_upload, registration_check_upload, profile_update_upload
-            if not row or row[0] not in [
+            allowed_states = [
                 "waiting_file",
                 "waiting_convert_tdata",
                 "waiting_convert_session",
@@ -11815,7 +11823,13 @@ class EnhancedBot:
                 "reauthorize_upload",
                 "registration_check_upload",
                 "profile_update_upload",
-            ]:
+            ]
+            
+            # 添加自定义资料上传状态
+            if row and row[0].startswith("profile_custom_upload_"):
+                allowed_states.append(row[0])
+            
+            if not row or row[0] not in allowed_states:
                 self.safe_send_message(update, "❌ 请先点击相应的功能按钮")
                 return
 
@@ -12025,6 +12039,10 @@ class EnhancedBot:
                     traceback.print_exc()
             thread = threading.Thread(target=process_profile_update, daemon=True)
             thread.start()
+        elif user_status.startswith("profile_custom_upload_"):
+            # 自定义资料文件上传
+            field_name = user_status.replace("profile_custom_upload_", "")
+            self.handle_profile_custom_file_upload(update, context, user_id, field_name, document)
         # 清空用户状态
         self.db.save_user(
             user_id,
@@ -13338,6 +13356,11 @@ class EnhancedBot:
                     return
                 elif user_status == "reauthorize_new_password":
                     self.handle_reauthorize_new_password_input(update, context, user_id, text)
+                    return
+                # 自定义资料输入状态
+                elif user_status.startswith("profile_custom_input_"):
+                    field_name = user_status.replace("profile_custom_input_", "")
+                    self.handle_profile_custom_text_input(update, context, user_id, field_name, text)
                     return
         except Exception as e:
             print(f"❌ 检查广播状态失败: {e}")
@@ -21465,26 +21488,52 @@ admin3</code>
             task['progress_msg'] = progress_msg
             
             # 显示确认信息
-            config_text = "├ 姓名: ✅ 随机生成（按国家）\n"
+            config_text = ""
+            
+            # 姓名配置
+            if config.mode == 'random':
+                config_text += "├ 姓名: ✅ 随机生成（按国家）\n"
+            elif config.update_name and config.custom_names:
+                config_text += f"├ 姓名: ✅ 自定义（{len(config.custom_names)}个）\n"
+            elif config.update_name:
+                config_text += "├ 姓名: ⏳ 待配置\n"
+            else:
+                config_text += "├ 姓名: ⏩ 不修改\n"
+            
+            # 头像配置
             if config.update_photo:
                 if config.photo_action == 'delete_all':
                     config_text += "├ 头像: 🗑️ 删除所有历史\n"
+                elif config.photo_action == 'custom' and config.custom_photos:
+                    config_text += f"├ 头像: ✅ 自定义（{len(config.custom_photos)}个）\n"
+                elif config.photo_action == 'custom':
+                    config_text += "├ 头像: ⏳ 待配置\n"
             else:
                 config_text += "├ 头像: ⏩ 不修改\n"
             
+            # 简介配置
             if config.update_bio:
                 if config.bio_action == 'clear':
                     config_text += "├ 简介: 📝 清空\n"
                 elif config.bio_action == 'random':
                     config_text += "├ 简介: 🎲 随机生成\n"
+                elif config.bio_action == 'custom' and config.custom_bios:
+                    config_text += f"├ 简介: ✅ 自定义（{len(config.custom_bios)}个）\n"
+                elif config.bio_action == 'custom':
+                    config_text += "├ 简介: ⏳ 待配置\n"
             else:
                 config_text += "├ 简介: ⏩ 不修改\n"
             
+            # 用户名配置
             if config.update_username:
                 if config.username_action == 'delete':
                     config_text += "└ 用户名: 🗑️ 删除\n"
                 elif config.username_action == 'random':
                     config_text += "└ 用户名: 🎲 随机生成\n"
+                elif config.username_action == 'custom' and config.custom_usernames:
+                    config_text += f"└ 用户名: ✅ 自定义（{len(config.custom_usernames)}个）\n"
+                elif config.username_action == 'custom':
+                    config_text += "└ 用户名: ⏳ 待配置\n"
             else:
                 config_text += "└ 用户名: ⏩ 不修改\n"
             
@@ -21622,7 +21671,7 @@ admin3</code>
         # 使用信号量控制并发
         semaphore = asyncio.Semaphore(3)  # 最多3个并发（避免限流）
         
-        async def update_single_account(file_path, file_name):
+        async def update_single_account(idx, file_path, file_name):
             nonlocal processed, current_account_info
             async with semaphore:
                 try:
@@ -21630,7 +21679,7 @@ admin3</code>
                     current_account_info = f"🔄 当前处理: {file_name}"
                     await update_progress_display()
                     
-                    result = await self._update_single_profile(file_path, file_name, file_type, config)
+                    result = await self._update_single_profile(idx, file_path, file_name, file_type, config)
                     
                     if result['success']:
                         results['success'].append((file_path, file_name, result))
@@ -21658,7 +21707,7 @@ admin3</code>
         await update_progress_display(force=True)
         
         # 执行所有修改
-        tasks = [update_single_account(file_path, file_name) for file_path, file_name in files]
+        tasks = [update_single_account(idx, file_path, file_name) for idx, (file_path, file_name) in enumerate(files)]
         await asyncio.gather(*tasks, return_exceptions=True)
         
         # 生成报告
@@ -21667,7 +21716,7 @@ admin3</code>
         # 清理
         self.cleanup_profile_update_task(user_id)
     
-    async def _update_single_profile(self, file_path: str, file_name: str, file_type: str, config: ProfileUpdateConfig) -> Dict:
+    async def _update_single_profile(self, idx: int, file_path: str, file_name: str, file_type: str, config: ProfileUpdateConfig) -> Dict:
         """更新单个账号资料"""
         client = None
         session_path = None
@@ -21780,37 +21829,64 @@ admin3</code>
             await asyncio.sleep(random.uniform(2, 5))
             
             # 1. 更新姓名
-            if config.update_name and config.mode == 'random':
-                first_name, last_name = self.profile_manager.generate_random_name(country)
-                try:
-                    if await self.profile_manager.update_profile_name(client, first_name, last_name):
-                        detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
-                        detail['changes']['name'] = {
-                            'old': f"{me.first_name or ''} {me.last_name or ''}".strip(),
-                            'new': f"{first_name} {last_name}".strip(),
-                            'success': True
-                        }
-                    else:
-                        detail['actions'].append("❌ 姓名更新失败")
-                        detail['changes']['name'] = {'success': False}
-                except Exception as e:
-                    detail['actions'].append(f"❌ 姓名更新失败: {str(e)}")
-                    detail['changes']['name'] = {'success': False, 'error': str(e)}
-                await asyncio.sleep(1)
+            if config.update_name:
+                first_name = None
+                last_name = ''
+                
+                if config.mode == 'random':
+                    first_name, last_name = self.profile_manager.generate_random_name(country)
+                elif config.custom_names:
+                    # 循环使用自定义姓名列表
+                    full_name = config.custom_names[idx % len(config.custom_names)]
+                    parts = full_name.split(' ', 1)
+                    first_name = parts[0]
+                    last_name = parts[1] if len(parts) > 1 else ''
+                
+                if first_name:
+                    try:
+                        if await self.profile_manager.update_profile_name(client, first_name, last_name):
+                            detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
+                            detail['changes']['name'] = {
+                                'old': f"{me.first_name or ''} {me.last_name or ''}".strip(),
+                                'new': f"{first_name} {last_name}".strip(),
+                                'success': True
+                            }
+                        else:
+                            detail['actions'].append("❌ 姓名更新失败")
+                            detail['changes']['name'] = {'success': False}
+                    except Exception as e:
+                        detail['actions'].append(f"❌ 姓名更新失败: {str(e)}")
+                        detail['changes']['name'] = {'success': False, 'error': str(e)}
+                    await asyncio.sleep(1)
             
             # 2. 处理头像
-            if config.update_photo and config.photo_action == 'delete_all':
-                try:
-                    if await self.profile_manager.delete_profile_photos(client):
-                        detail['actions'].append("✅ 删除所有头像")
-                        detail['changes']['photo'] = {'action': 'deleted', 'success': True}
-                    else:
-                        detail['actions'].append("❌ 删除头像失败")
-                        detail['changes']['photo'] = {'action': 'deleted', 'success': False}
-                except Exception as e:
-                    detail['actions'].append(f"❌ 删除头像失败: {str(e)}")
-                    detail['changes']['photo'] = {'action': 'deleted', 'success': False, 'error': str(e)}
-                await asyncio.sleep(1)
+            if config.update_photo:
+                if config.photo_action == 'delete_all':
+                    try:
+                        if await self.profile_manager.delete_profile_photos(client):
+                            detail['actions'].append("✅ 删除所有头像")
+                            detail['changes']['photo'] = {'action': 'deleted', 'success': True}
+                        else:
+                            detail['actions'].append("❌ 删除头像失败")
+                            detail['changes']['photo'] = {'action': 'deleted', 'success': False}
+                    except Exception as e:
+                        detail['actions'].append(f"❌ 删除头像失败: {str(e)}")
+                        detail['changes']['photo'] = {'action': 'deleted', 'success': False, 'error': str(e)}
+                    await asyncio.sleep(1)
+                elif config.photo_action == 'custom' and config.custom_photos:
+                    # 循环使用自定义头像列表
+                    photo_path = config.custom_photos[idx % len(config.custom_photos)]
+                    try:
+                        if await self.profile_manager.update_profile_photo(client, photo_path):
+                            detail['actions'].append(f"✅ 上传头像")
+                            detail['changes']['photo'] = {'action': 'uploaded', 'success': True}
+                        else:
+                            detail['actions'].append("❌ 上传头像失败")
+                            detail['changes']['photo'] = {'action': 'uploaded', 'success': False}
+                    except Exception as e:
+                        detail['actions'].append(f"❌ 上传头像失败: {str(e)}")
+                        detail['changes']['photo'] = {'action': 'uploaded', 'success': False, 'error': str(e)}
+                    await asyncio.sleep(1)
             
             # 3. 更新简介
             if config.update_bio:
@@ -21819,6 +21895,9 @@ admin3</code>
                     bio = ''
                 elif config.bio_action == 'random':
                     bio = self.profile_manager.generate_random_bio(country)
+                elif config.bio_action == 'custom' and config.custom_bios:
+                    # 循环使用自定义简介列表
+                    bio = config.custom_bios[idx % len(config.custom_bios)]
                 
                 try:
                     # 获取当前简介
@@ -21889,6 +21968,26 @@ admin3</code>
                             detail['changes']['username'] = {'success': False}
                     except Exception as e:
                         detail['actions'].append(f"❌ 用户名删除失败: {str(e)}")
+                        detail['changes']['username'] = {'success': False, 'error': str(e)}
+                elif config.username_action == 'custom' and config.custom_usernames:
+                    # 循环使用自定义用户名列表
+                    username = config.custom_usernames[idx % len(config.custom_usernames)]
+                    try:
+                        if await self.profile_manager.update_profile_username(client, username):
+                            detail['actions'].append(f"✅ 用户名: {username}")
+                            detail['changes']['username'] = {
+                                'old': f"@{old_username}" if old_username else '无',
+                                'new': f"@{username}",
+                                'success': True
+                            }
+                        else:
+                            detail['actions'].append(f"❌ 用户名更新失败")
+                            detail['changes']['username'] = {'success': False}
+                    except UsernameOccupiedError:
+                        detail['actions'].append(f"❌ 用户名已被占用: {username}")
+                        detail['changes']['username'] = {'success': False, 'error': '用户名已被占用', 'error_type': 'UsernameOccupiedError'}
+                    except Exception as e:
+                        detail['actions'].append(f"❌ 用户名更新失败: {str(e)}")
                         detail['changes']['username'] = {'success': False, 'error': str(e)}
                 await asyncio.sleep(1)
             
@@ -23068,6 +23167,13 @@ admin3</code>
             self.handle_profile_random_mode(query, user_id)
         elif data == "profile_mode_custom":
             self.handle_profile_custom_mode(query, user_id)
+        elif data == "profile_custom_back":
+            # 返回自定义配置菜单
+            if user_id in self.pending_profile_update:
+                config = self.pending_profile_update[user_id]['config']
+                self._show_custom_config_menu(query, user_id, config)
+            else:
+                query.answer("❌ 会话已过期")
         elif data.startswith("profile_random_"):
             self.handle_profile_random_config(update, context, query, data, user_id)
         elif data.startswith("profile_custom_"):
@@ -23215,17 +23321,577 @@ admin3</code>
     def handle_profile_custom_mode(self, query, user_id: int):
         """处理自定义生成模式"""
         query.answer()
+        
+        # 初始化配置
+        config = ProfileUpdateConfig(mode='custom')
+        config.update_name = False
+        config.update_photo = False
+        config.update_bio = False
+        config.update_username = False
+        
+        self.pending_profile_update[user_id] = {
+            'config': config,
+            'status': 'configuring',
+            'custom_input_field': None  # 当前正在配置的字段
+        }
+        
+        self._show_custom_config_menu(query, user_id, config)
+    
+    def _show_custom_config_menu(self, query, user_id: int, config: ProfileUpdateConfig):
+        """显示自定义模式配置菜单"""
+        # 姓名状态显示
+        if config.update_name and config.custom_names:
+            name_status = f"✅ 已设置 ({len(config.custom_names)}个)"
+        elif config.update_name:
+            name_status = "⏳ 待设置"
+        else:
+            name_status = "⏩ 不修改"
+        
+        # 头像状态显示
+        if config.update_photo:
+            if config.photo_action == 'delete_all':
+                photo_status = "🗑 删除所有"
+            elif config.photo_action == 'custom' and config.custom_photos:
+                photo_status = f"✅ 已设置 ({len(config.custom_photos)}个)"
+            elif config.photo_action == 'custom':
+                photo_status = "⏳ 待设置"
+            else:
+                photo_status = "⏩ 不修改"
+        else:
+            photo_status = "⏩ 不修改"
+        
+        # 简介状态显示
+        if config.update_bio:
+            if config.bio_action == 'clear':
+                bio_status = "📝 清空"
+            elif config.bio_action == 'custom' and config.custom_bios:
+                bio_status = f"✅ 已设置 ({len(config.custom_bios)}个)"
+            elif config.bio_action == 'custom':
+                bio_status = "⏳ 待设置"
+            else:
+                bio_status = "⏩ 不修改"
+        else:
+            bio_status = "⏩ 不修改"
+        
+        # 用户名状态显示
+        if config.update_username:
+            if config.username_action == 'delete':
+                username_status = "🗑 删除"
+            elif config.username_action == 'custom' and config.custom_usernames:
+                username_status = f"✅ 已设置 ({len(config.custom_usernames)}个)"
+            elif config.username_action == 'custom':
+                username_status = "⏳ 待设置"
+            else:
+                username_status = "⏩ 不修改"
+        else:
+            username_status = "⏩ 不修改"
+        
+        text = f"""
+<b>✏️ 自定义生成模式</b>
+
+<b>当前配置：</b>
+
+• 姓名: {name_status}
+• 头像: {photo_status}
+• 简介: {bio_status}
+• 用户名: {username_status}
+
+<b>💡 配置方式：</b>
+1. 点击按钮配置各项内容
+2. 支持上传txt文件或手动输入
+3. 可选择不修改某项（留空）
+
+<b>📊 智能分配规则：</b>
+• 1个内容 + N个账号 = 所有账号使用同一内容
+• M个内容 + N个账号 (M&lt;N) = 循环使用
+• M个内容 + N个账号 (M≥N) = 一一对应
+
+<b>请选择要配置的项目：</b>
+        """
+        
+        keyboard = InlineKeyboardMarkup([
+            [
+                InlineKeyboardButton(f"姓名: {name_status}", callback_data="profile_custom_name"),
+            ],
+            [
+                InlineKeyboardButton(f"头像: {photo_status}", callback_data="profile_custom_photo"),
+            ],
+            [
+                InlineKeyboardButton(f"简介: {bio_status}", callback_data="profile_custom_bio"),
+            ],
+            [
+                InlineKeyboardButton(f"用户名: {username_status}", callback_data="profile_custom_username"),
+            ],
+            [
+                InlineKeyboardButton("📤 上传账号文件开始处理", callback_data="profile_execute")
+            ],
+            [
+                InlineKeyboardButton("🔙 返回", callback_data="profile_update_start"),
+                InlineKeyboardButton("❌ 取消", callback_data="profile_cancel")
+            ]
+        ])
+        
         query.edit_message_text(
-            text="⚠️ 自定义模式开发中，请使用随机生成模式",
-            reply_markup=InlineKeyboardMarkup([[
-                InlineKeyboardButton("🔙 返回", callback_data="profile_update_start")
-            ]]),
+            text=text,
+            reply_markup=keyboard,
             parse_mode='HTML'
         )
+        
+        # 设置用户状态
+        self.db.save_user(user_id, "", "", "profile_custom_config")
     
     def handle_profile_custom_config(self, update: Update, context: CallbackContext, query, data: str, user_id: int):
         """处理自定义模式配置选项"""
-        query.answer("⚠️ 自定义模式开发中")
+        query.answer()
+        
+        if user_id not in self.pending_profile_update:
+            query.answer("❌ 会话已过期")
+            return
+        
+        config = self.pending_profile_update[user_id]['config']
+        task = self.pending_profile_update[user_id]
+        
+        if data == "profile_custom_name":
+            # 配置姓名
+            self._show_custom_field_config(query, user_id, 'name', '姓名')
+        elif data == "profile_custom_photo":
+            # 配置头像
+            self._show_custom_field_config(query, user_id, 'photo', '头像')
+        elif data == "profile_custom_bio":
+            # 配置简介
+            self._show_custom_field_config(query, user_id, 'bio', '简介')
+        elif data == "profile_custom_username":
+            # 配置用户名
+            self._show_custom_field_config(query, user_id, 'username', '用户名')
+        elif data.startswith("profile_custom_field_"):
+            # 处理字段配置选项
+            self._handle_custom_field_action(update, context, query, data, user_id)
+    
+    def _show_custom_field_config(self, query, user_id: int, field: str, field_name: str):
+        """显示字段配置选项"""
+        if user_id not in self.pending_profile_update:
+            query.answer("❌ 会话已过期")
+            return
+        
+        config = self.pending_profile_update[user_id]['config']
+        task = self.pending_profile_update[user_id]
+        
+        # 记录当前正在配置的字段
+        task['custom_input_field'] = field
+        
+        # 根据字段类型显示不同的选项
+        text = f"<b>📝 配置{field_name}</b>\n\n请选择操作："
+        
+        keyboard_buttons = []
+        
+        if field == 'name':
+            keyboard_buttons = [
+                [InlineKeyboardButton("📄 上传txt文件", callback_data=f"profile_custom_field_{field}_upload")],
+                [InlineKeyboardButton("✍️ 手动输入", callback_data=f"profile_custom_field_{field}_manual")],
+                [InlineKeyboardButton("⏩ 不修改此项", callback_data=f"profile_custom_field_{field}_skip")],
+            ]
+            if config.custom_names:
+                keyboard_buttons.insert(0, [InlineKeyboardButton(f"📊 查看已设置 ({len(config.custom_names)}个)", callback_data=f"profile_custom_field_{field}_view")])
+                keyboard_buttons.insert(1, [InlineKeyboardButton("🗑 清除设置", callback_data=f"profile_custom_field_{field}_clear")])
+        
+        elif field == 'photo':
+            keyboard_buttons = [
+                [InlineKeyboardButton("🖼 上传图片文件/ZIP", callback_data=f"profile_custom_field_{field}_upload")],
+                [InlineKeyboardButton("🗑 删除所有头像", callback_data=f"profile_custom_field_{field}_delete")],
+                [InlineKeyboardButton("⏩ 不修改此项", callback_data=f"profile_custom_field_{field}_skip")],
+            ]
+            if config.custom_photos:
+                keyboard_buttons.insert(0, [InlineKeyboardButton(f"📊 查看已设置 ({len(config.custom_photos)}个)", callback_data=f"profile_custom_field_{field}_view")])
+                keyboard_buttons.insert(1, [InlineKeyboardButton("🗑 清除设置", callback_data=f"profile_custom_field_{field}_clear")])
+        
+        elif field == 'bio':
+            keyboard_buttons = [
+                [InlineKeyboardButton("📄 上传txt文件", callback_data=f"profile_custom_field_{field}_upload")],
+                [InlineKeyboardButton("✍️ 手动输入", callback_data=f"profile_custom_field_{field}_manual")],
+                [InlineKeyboardButton("📝 清空简介", callback_data=f"profile_custom_field_{field}_clear_bio")],
+                [InlineKeyboardButton("⏩ 不修改此项", callback_data=f"profile_custom_field_{field}_skip")],
+            ]
+            if config.custom_bios:
+                keyboard_buttons.insert(0, [InlineKeyboardButton(f"📊 查看已设置 ({len(config.custom_bios)}个)", callback_data=f"profile_custom_field_{field}_view")])
+                keyboard_buttons.insert(1, [InlineKeyboardButton("🗑 清除设置", callback_data=f"profile_custom_field_{field}_clear")])
+        
+        elif field == 'username':
+            keyboard_buttons = [
+                [InlineKeyboardButton("📄 上传txt文件", callback_data=f"profile_custom_field_{field}_upload")],
+                [InlineKeyboardButton("✍️ 手动输入", callback_data=f"profile_custom_field_{field}_manual")],
+                [InlineKeyboardButton("🗑 删除用户名", callback_data=f"profile_custom_field_{field}_delete_username")],
+                [InlineKeyboardButton("⏩ 不修改此项", callback_data=f"profile_custom_field_{field}_skip")],
+            ]
+            if config.custom_usernames:
+                keyboard_buttons.insert(0, [InlineKeyboardButton(f"📊 查看已设置 ({len(config.custom_usernames)}个)", callback_data=f"profile_custom_field_{field}_view")])
+                keyboard_buttons.insert(1, [InlineKeyboardButton("🗑 清除设置", callback_data=f"profile_custom_field_{field}_clear")])
+        
+        keyboard_buttons.append([InlineKeyboardButton("🔙 返回配置菜单", callback_data="profile_custom_back")])
+        
+        keyboard = InlineKeyboardMarkup(keyboard_buttons)
+        
+        query.edit_message_text(
+            text=text,
+            reply_markup=keyboard,
+            parse_mode='HTML'
+        )
+    
+    def _handle_custom_field_action(self, update: Update, context: CallbackContext, query, data: str, user_id: int):
+        """处理字段配置动作"""
+        if user_id not in self.pending_profile_update:
+            query.answer("❌ 会话已过期")
+            return
+        
+        config = self.pending_profile_update[user_id]['config']
+        task = self.pending_profile_update[user_id]
+        field = task.get('custom_input_field', '')
+        
+        # 解析动作
+        parts = data.replace("profile_custom_field_", "").split("_", 1)
+        if len(parts) < 2:
+            return
+        
+        field_name, action = parts[0], parts[1]
+        
+        if action == "upload":
+            # 请求用户上传文件
+            field_display = {'name': '姓名', 'photo': '头像', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+            
+            if field_name == 'photo':
+                text = f"""
+<b>📤 上传{field_display}文件</b>
+
+<b>支持的格式：</b>
+• 单个图片：jpg、png、jpeg、webp
+• 多个图片：打包成zip文件
+• 每个图片会按顺序分配给账号
+
+<b>💡 注意：</b>
+• 图片建议尺寸：640x640 或更高
+• 文件大小建议不超过5MB
+
+⏱ 请在5分钟内上传文件...
+"""
+            else:
+                text = f"""
+<b>📤 上传{field_display}txt文件</b>
+
+<b>文件格式：</b>
+• 每行一个{field_display}
+• UTF-8编码
+• 支持空行（将被跳过）
+
+<b>示例：</b>
+<code>张三
+李四
+王五</code>
+
+⏱ 请在5分钟内上传文件...
+"""
+            
+            query.edit_message_text(text=text, parse_mode='HTML')
+            
+            # 设置用户状态为等待文件上传
+            self.db.save_user(user_id, "", "", f"profile_custom_upload_{field_name}")
+            task['status'] = 'waiting_file_upload'
+            task['upload_field'] = field_name
+        
+        elif action == "manual":
+            # 请求用户手动输入
+            field_display = {'name': '姓名', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+            
+            text = f"""
+<b>✍️ 手动输入{field_display}</b>
+
+<b>输入格式：</b>
+• 每行一个{field_display}
+• 可以输入多个，用换行分隔
+• 支持空行（将被跳过）
+
+<b>示例：</b>
+<code>张三
+李四
+王五</code>
+
+⏱ 请在5分钟内发送内容...
+"""
+            
+            query.edit_message_text(text=text, parse_mode='HTML')
+            
+            # 设置用户状态为等待文本输入
+            self.db.save_user(user_id, "", "", f"profile_custom_input_{field_name}")
+            task['status'] = 'waiting_text_input'
+            task['input_field'] = field_name
+        
+        elif action == "skip":
+            # 不修改此项
+            if field_name == 'name':
+                config.update_name = False
+                config.custom_names = []
+            elif field_name == 'photo':
+                config.update_photo = False
+                config.photo_action = 'keep'
+                config.custom_photos = []
+            elif field_name == 'bio':
+                config.update_bio = False
+                config.bio_action = 'keep'
+                config.custom_bios = []
+            elif field_name == 'username':
+                config.update_username = False
+                config.username_action = 'keep'
+                config.custom_usernames = []
+            
+            # 返回配置菜单
+            self._show_custom_config_menu(query, user_id, config)
+        
+        elif action == "clear":
+            # 清除设置
+            if field_name == 'name':
+                config.custom_names = []
+            elif field_name == 'photo':
+                config.custom_photos = []
+            elif field_name == 'bio':
+                config.custom_bios = []
+            elif field_name == 'username':
+                config.custom_usernames = []
+            
+            query.answer("✅ 已清除设置")
+            self._show_custom_field_config(query, user_id, field_name, 
+                                          {'name': '姓名', 'photo': '头像', 'bio': '简介', 'username': '用户名'}[field_name])
+        
+        elif action == "view":
+            # 查看已设置的内容
+            field_display = {'name': '姓名', 'photo': '头像', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+            
+            items = []
+            if field_name == 'name':
+                items = config.custom_names
+            elif field_name == 'photo':
+                items = [os.path.basename(p) for p in config.custom_photos]
+            elif field_name == 'bio':
+                items = config.custom_bios
+            elif field_name == 'username':
+                items = config.custom_usernames
+            
+            # 只显示前N个（使用常量）
+            display_items = items[:self.MAX_DISPLAY_ITEMS]
+            text = f"<b>📊 已设置的{field_display} ({len(items)}个)</b>\n\n"
+            
+            for i, item in enumerate(display_items, 1):
+                text += f"{i}. {item}\n"
+            
+            if len(items) > self.MAX_DISPLAY_ITEMS:
+                text += f"\n... 还有 {len(items) - self.MAX_DISPLAY_ITEMS} 个"
+            
+            query.answer(text[:self.ALERT_TEXT_MAX_LENGTH], show_alert=True)
+        
+        elif action == "delete":
+            # 删除头像
+            if field_name == 'photo':
+                config.update_photo = True
+                config.photo_action = 'delete_all'
+                config.custom_photos = []
+                self._show_custom_config_menu(query, user_id, config)
+        
+        elif action == "clear_bio":
+            # 清空简介
+            config.update_bio = True
+            config.bio_action = 'clear'
+            config.custom_bios = []
+            self._show_custom_config_menu(query, user_id, config)
+        
+        elif action == "delete_username":
+            # 删除用户名
+            config.update_username = True
+            config.username_action = 'delete'
+            config.custom_usernames = []
+            self._show_custom_config_menu(query, user_id, config)
+    
+    def handle_profile_custom_text_input(self, update: Update, context: CallbackContext, user_id: int, field_name: str, text: str):
+        """处理自定义资料的文本输入"""
+        if user_id not in self.pending_profile_update:
+            self.safe_send_message(update, "❌ 会话已过期，请重新开始", 'HTML')
+            return
+        
+        config = self.pending_profile_update[user_id]['config']
+        
+        # 解析输入的文本（按行分割）
+        lines = [line.strip() for line in text.split('\n') if line.strip()]
+        
+        if not lines:
+            self.safe_send_message(update, "❌ 输入为空，请重新输入", 'HTML')
+            return
+        
+        # 根据字段类型保存
+        field_display = {'name': '姓名', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+        
+        if field_name == 'name':
+            config.custom_names = lines
+            config.update_name = True
+        elif field_name == 'bio':
+            config.custom_bios = lines
+            config.update_bio = True
+            config.bio_action = 'custom'
+        elif field_name == 'username':
+            config.custom_usernames = lines
+            config.update_username = True
+            config.username_action = 'custom'
+        
+        # 清除用户状态
+        self.db.save_user(user_id, "", "", "profile_custom_config")
+        
+        # 发送确认消息和返回按钮
+        keyboard = InlineKeyboardMarkup([[
+            InlineKeyboardButton("🔙 返回配置菜单", callback_data="profile_custom_back")
+        ]])
+        
+        self.safe_send_message(
+            update,
+            f"✅ 已设置 {len(lines)} 个{field_display}",
+            'HTML',
+            reply_markup=keyboard
+        )
+    
+    def _create_avatar_upload_dir(self, user_id: int) -> str:
+        """创建头像上传目录并返回路径"""
+        upload_dir = os.path.join(config.UPLOADS_DIR, f"avatars_{user_id}_{int(time.time())}")
+        os.makedirs(upload_dir, exist_ok=True)
+        return upload_dir
+    
+    def handle_profile_custom_file_upload(self, update: Update, context: CallbackContext, user_id: int, field_name: str, document):
+        """处理自定义资料的文件上传"""
+        if user_id not in self.pending_profile_update:
+            self.safe_send_message(update, "❌ 会话已过期，请重新开始", 'HTML')
+            return
+        
+        config = self.pending_profile_update[user_id]['config']
+        
+        progress_msg = self.safe_send_message(update, "📥 <b>正在处理文件...</b>", 'HTML')
+        if not progress_msg:
+            return
+        
+        try:
+            # 创建临时目录
+            temp_dir = tempfile.mkdtemp(prefix=f"profile_custom_{field_name}_")
+            temp_file = os.path.join(temp_dir, document.file_name)
+            
+            # 下载文件
+            document.get_file().download(temp_file)
+            
+            field_display = {'name': '姓名', 'photo': '头像', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+            
+            if field_name == 'photo':
+                # 处理图片文件
+                items = []
+                
+                # 检查是否是图片文件
+                if temp_file.lower().endswith(('.jpg', '.jpeg', '.png', '.webp', '.gif')):
+                    # 单个图片文件
+                    upload_dir = self._create_avatar_upload_dir(user_id)
+                    dest_path = os.path.join(upload_dir, document.file_name)
+                    shutil.copy(temp_file, dest_path)
+                    items.append(dest_path)
+                    
+                elif temp_file.lower().endswith('.zip'):
+                    # ZIP文件，解压并提取图片
+                    extract_dir = os.path.join(temp_dir, "extracted")
+                    os.makedirs(extract_dir, exist_ok=True)
+                    
+                    with zipfile.ZipFile(temp_file, 'r') as zip_ref:
+                        zip_ref.extractall(extract_dir)
+                    
+                    # 查找所有图片文件
+                    upload_dir = self._create_avatar_upload_dir(user_id)
+                    for root, dirs, files in os.walk(extract_dir):
+                        for file in files:
+                            if file.lower().endswith(('.jpg', '.jpeg', '.png', '.webp', '.gif')):
+                                file_path = os.path.join(root, file)
+                                dest_path = os.path.join(upload_dir, file)
+                                shutil.copy(file_path, dest_path)
+                                items.append(dest_path)
+                
+                if not items:
+                    self.safe_edit_message_text(
+                        progress_msg,
+                        "❌ 未找到有效的图片文件\n\n支持格式：jpg、png、jpeg、webp、gif",
+                        parse_mode='HTML'
+                    )
+                    return
+                
+                config.custom_photos = items
+                config.update_photo = True
+                config.photo_action = 'custom'
+                
+            else:
+                # 处理文本文件（姓名、简介、用户名）
+                try:
+                    with open(temp_file, 'r', encoding='utf-8') as f:
+                        lines = [line.strip() for line in f if line.strip()]
+                except UnicodeDecodeError:
+                    # 尝试其他编码
+                    try:
+                        with open(temp_file, 'r', encoding='gbk') as f:
+                            lines = [line.strip() for line in f if line.strip()]
+                    except:
+                        self.safe_edit_message_text(
+                            progress_msg,
+                            "❌ 文件编码错误\n\n请使用UTF-8编码保存文件",
+                            parse_mode='HTML'
+                        )
+                        return
+                
+                if not lines:
+                    self.safe_edit_message_text(
+                        progress_msg,
+                        "❌ 文件内容为空",
+                        parse_mode='HTML'
+                    )
+                    return
+                
+                # 根据字段类型保存
+                if field_name == 'name':
+                    config.custom_names = lines
+                    config.update_name = True
+                elif field_name == 'bio':
+                    config.custom_bios = lines
+                    config.update_bio = True
+                    config.bio_action = 'custom'
+                elif field_name == 'username':
+                    config.custom_usernames = lines
+                    config.update_username = True
+                    config.username_action = 'custom'
+                
+                items = lines
+            
+            # 清除用户状态
+            self.db.save_user(user_id, "", "", "profile_custom_config")
+            
+            # 显示确认消息
+            keyboard = InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔙 返回配置菜单", callback_data="profile_custom_back")
+            ]])
+            
+            self.safe_edit_message_text(
+                progress_msg,
+                f"✅ 已设置 {len(items)} 个{field_display}",
+                reply_markup=keyboard,
+                parse_mode='HTML'
+            )
+            
+        except Exception as e:
+            logger.error(f"处理自定义资料文件上传失败: {e}")
+            import traceback
+            traceback.print_exc()
+            
+            self.safe_edit_message_text(
+                progress_msg,
+                f"❌ <b>处理失败</b>\n\n错误: {str(e)}",
+                parse_mode='HTML'
+            )
+        finally:
+            # 清理临时文件
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir, ignore_errors=True)
     
     def handle_profile_confirm_execute(self, update: Update, context: CallbackContext, query, user_id: int):
         """处理确认执行资料修改"""
