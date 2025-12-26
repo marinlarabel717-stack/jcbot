@@ -877,6 +877,9 @@ class ProfileManager:
                     
                     # 1. 更新姓名
                     if config.update_name:
+                        first_name = None
+                        last_name = None
+                        
                         if config.mode == 'random':
                             first_name, last_name = self.generate_random_name(country)
                         elif config.custom_names:
@@ -886,9 +889,9 @@ class ProfileManager:
                             first_name = parts[0]
                             last_name = parts[1] if len(parts) > 1 else ''
                         
-                        if await self.update_profile_name(client, first_name, last_name):
+                        if first_name and await self.update_profile_name(client, first_name, last_name):
                             detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
-                        else:
+                        elif first_name:
                             detail['actions'].append(f"❌ 姓名更新失败")
                     
                     # 2. 处理头像
