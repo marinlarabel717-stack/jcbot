@@ -7640,8 +7640,27 @@ class Forget2FAManager:
                 remaining_seconds = time_remaining.total_seconds()
                 
                 if remaining_seconds <= 0:
-                    # 冷却期已过，可以重新请求
-                    return True, "冷却期已结束，可重新请求", None
+                    # 冷却期已过，需要再次请求完成重置
+                    # 根据 Telegram 官方规则，7天后需要手动再点一次忘记密码才会真正重置
+                    logger.info("冷却期已过，自动发起第二次重置请求...")
+                    try:
+                        second_result = await asyncio.wait_for(
+                            client(ResetPasswordRequest()),
+                            timeout=15
+                        )
+                        second_result_type = type(second_result).__name__
+                        
+                        if second_result_type == 'ResetPasswordOk':
+                            return True, "密码已成功重置（冷却期结束后完成）", None
+                        elif hasattr(second_result, 'until_date'):
+                            # 仍然有冷却期（不太可能，但需要处理）
+                            return False, "第二次请求仍在冷却期中", second_result.until_date
+                        else:
+                            return True, "密码重置请求已提交（冷却期结束后）", None
+                    except Exception as e2:
+                        logger.warning(f"第二次重置请求失败: {e2}")
+                        # 即使第二次请求失败，也返回成功，因为冷却期确实已过
+                        return True, f"冷却期已结束，第二次请求遇到问题: {str(e2)[:30]}", None
                 elif remaining_seconds < COOLDOWN_THRESHOLD_SECONDS:
                     days_remaining = time_remaining.days
                     hours_remaining = time_remaining.seconds // 3600
