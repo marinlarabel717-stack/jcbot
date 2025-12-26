@@ -43,6 +43,10 @@ from collections import deque, namedtuple
 # 定义北京时区常量
 BEIJING_TZ = timezone(timedelta(hours=8))
 
+# 冷却期判断阈值（6天23小时，单位：秒）
+# Telegram密码重置冷却期为7天，如果剩余时间少于6天23小时，说明是已在冷却期
+COOLDOWN_THRESHOLD_SECONDS = 6 * 24 * 3600 + 23 * 3600  # 604800秒 - 3600秒 = 604000秒
+
 print("🔍 Telegram账号检测机器人 V8.0")
 print(f"📅 当前时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}")
 
@@ -1033,12 +1037,11 @@ def extract_phone_from_path(path: str) -> Optional[str]:
     Returns:
         提取的手机号，如果未找到则返回None
     """
-    import re
     basename = os.path.basename(path.rstrip('/\\'))
     # 移除扩展名
     name = os.path.splitext(basename)[0]
-    # 提取数字（手机号通常10-15位）
-    match = re.search(r'\d{10,15}', name)
+    # 提取数字（手机号通常10-15位，使用单词边界确保匹配完整数字）
+    match = re.search(r'\b\d{10,15}\b', name)
     return match.group() if match else None
 
 def detect_tdata_structure(account_path: str) -> Optional[Tuple]:
@@ -1116,7 +1119,8 @@ def create_zip_with_unique_paths(accounts: List[Tuple[str, str]], output_path: s
                         for file in files:
                             file_path = os.path.join(root, file)
                             # 使用手机号作为前缀，确保唯一
-                            rel_path = os.path.relpath(file_path, os.path.dirname(account_path))
+                            # 计算相对于账号目录的路径
+                            rel_path = os.path.relpath(file_path, account_path)
                             arc_name = f"{phone}/{rel_path}"
                             
                             if arc_name not in added_paths:
@@ -7631,14 +7635,14 @@ class Forget2FAManager:
                 now = datetime.now(timezone.utc) if until_date.tzinfo else datetime.now(BEIJING_TZ).replace(tzinfo=None)
                 time_remaining = until_date - now
                 
-                # 7天 = 604800秒，如果剩余时间少于6天23小时(约604000秒)，说明是已在冷却期
+                # 7天 = 604800秒，如果剩余时间少于6天23小时，说明是已在冷却期
                 # 但是如果时间已经过期（负数），则冷却期已结束
                 remaining_seconds = time_remaining.total_seconds()
                 
                 if remaining_seconds <= 0:
                     # 冷却期已过，可以重新请求
                     return True, "冷却期已结束，可重新请求", None
-                elif remaining_seconds < 604000:  # 约6天23小时
+                elif remaining_seconds < COOLDOWN_THRESHOLD_SECONDS:
                     days_remaining = time_remaining.days
                     hours_remaining = time_remaining.seconds // 3600
                     return False, f"已在冷却期中 (剩余约{days_remaining}天{hours_remaining}小时)", until_date
