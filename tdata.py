@@ -25059,28 +25059,33 @@ admin3</code>
         if not progress_msg:
             return
         
+        temp_zip = None
+        temp_dir = None
+        
         # 下载文件
         try:
-            file = await context.bot.get_file(document.file_id)
-            temp_zip = tempfile.NamedTemporaryFile(delete=False, suffix='.zip')
-            await file.download(custom_path=temp_zip.name)
-            temp_zip.close()
+            temp_dir = tempfile.mkdtemp(prefix="temp_contact_check_")
+            temp_zip = os.path.join(temp_dir, document.file_name)
+            document.get_file().download(temp_zip)
         except Exception as e:
             self.safe_edit_message_text(progress_msg, f"❌ 文件下载失败: {e}")
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir, ignore_errors=True)
             return
         
         # 解压文件
         extract_dir = tempfile.mkdtemp()
         try:
-            with zipfile.ZipFile(temp_zip.name, 'r') as zip_ref:
+            with zipfile.ZipFile(temp_zip, 'r') as zip_ref:
                 zip_ref.extractall(extract_dir)
         except Exception as e:
             self.safe_edit_message_text(progress_msg, f"❌ 文件解压失败: {e}")
-            os.unlink(temp_zip.name)
+            shutil.rmtree(temp_dir, ignore_errors=True)
             shutil.rmtree(extract_dir, ignore_errors=True)
             return
         finally:
-            os.unlink(temp_zip.name)
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir, ignore_errors=True)
         
         # 扫描账号文件
         accounts = []
