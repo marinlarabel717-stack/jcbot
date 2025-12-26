@@ -21944,6 +21944,7 @@ admin3</code>
         client = None
         session_path = None
         temp_session_path = None
+        temp_session_dir = None
         used_proxy = None
         
         try:
@@ -21956,74 +21957,111 @@ admin3</code>
                 from opentele.td import TDesktop
                 from opentele.api import UseCurrentSession
                 
+                print(f"📂 [{file_name}] 格式: TData - 正在转换为Session进行资料修改...")
+                logger.info(f"[{file_name}] 开始TData转Session转换")
+                
                 tdesk = TDesktop(file_path)
                 temp_session_path = f"/tmp/profile_{secrets.token_hex(8)}.session"
                 
                 # 先尝试使用代理连接
+                proxy_info = None
+                proxy_dict = None
                 if self.proxy_manager.is_proxy_mode_active(self.db):
-                    proxy_dict = self.proxy_manager.get_random_proxy()
-                    if proxy_dict:
-                        try:
-                            logger.info(f"[{file_name}] 使用代理连接: {proxy_dict['type']}://{proxy_dict['host']}:{proxy_dict['port']}")
-                            client = await asyncio.wait_for(
-                                tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession, proxy=proxy_dict),
-                                timeout=30  # 30秒超时
-                            )
-                            # 重要：TData转Session后必须显式连接
-                            if client and not client.is_connected():
-                                await client.connect()
-                            used_proxy = proxy_dict
-                            logger.info(f"[{file_name}] 代理连接成功")
-                        except asyncio.TimeoutError:
-                            logger.warning(f"[{file_name}] 代理连接超时，退回本地连接")
-                            client = None
-                        except Exception as e:
-                            logger.warning(f"[{file_name}] 代理连接失败: {e}，退回本地连接")
-                            client = None
+                    proxy_info = self.proxy_manager.get_random_proxy()
+                    if proxy_info:
+                        # 使用checker的create_proxy_dict转换代理信息
+                        proxy_dict = self.checker.create_proxy_dict(proxy_info)
+                        if proxy_dict:
+                            try:
+                                proxy_type = proxy_info.get('type', 'http').upper()
+                                print(f"🌐 [{file_name}] 使用{proxy_type}代理连接...")
+                                logger.info(f"[{file_name}] 使用代理连接: {proxy_type}://{proxy_info['host']}:{proxy_info['port']}")
+                                client = await asyncio.wait_for(
+                                    tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession, proxy=proxy_dict),
+                                    timeout=config.CONNECTION_TIMEOUT
+                                )
+                                # 重要：TData转Session后必须显式连接
+                                if client and not client.is_connected():
+                                    await client.connect()
+                                used_proxy = proxy_info
+                                print(f"✅ [{file_name}] TData转Session成功，代理连接成功")
+                                logger.info(f"[{file_name}] TData转Session成功，代理连接成功")
+                            except asyncio.TimeoutError:
+                                print(f"⏱️ [{file_name}] 代理连接超时，退回本地连接")
+                                logger.warning(f"[{file_name}] 代理连接超时，退回本地连接")
+                                client = None
+                            except Exception as e:
+                                print(f"⚠️ [{file_name}] 代理连接失败: {e}，退回本地连接")
+                                logger.warning(f"[{file_name}] 代理连接失败: {e}，退回本地连接")
+                                client = None
                 
                 # 如果代理失败或未启用，使用本地连接
                 if not client:
-                    logger.info(f"[{file_name}] 使用本地连接")
+                    print(f"🏠 [{file_name}] 使用本地连接进行TData转Session...")
+                    logger.info(f"[{file_name}] 使用本地连接进行TData转Session")
                     client = await tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession)
                     # 重要：TData转Session后必须显式连接
                     if not client.is_connected():
                         await client.connect()
+                    print(f"✅ [{file_name}] TData转Session成功，本地连接成功")
+                    logger.info(f"[{file_name}] TData转Session成功，本地连接成功")
                 
                 session_path = temp_session_path
                 
             elif file_type in ['session', 'session-json']:
-                # 直接使用Session
+                # 使用session临时副本避免database locked
+                print(f"📋 [{file_name}] 格式: Session - 正在复制到临时目录...")
+                logger.info(f"[{file_name}] 复制session到临时目录避免database locked")
+                
+                temp_session_path, temp_session_dir = copy_session_to_temp(file_path)
+                
+                print(f"✅ [{file_name}] Session已复制到临时目录")
+                logger.info(f"[{file_name}] Session已复制到临时目录: {temp_session_dir}")
+                
                 # 先尝试使用代理连接
+                proxy_info = None
+                proxy_dict = None
                 if self.proxy_manager.is_proxy_mode_active(self.db):
-                    proxy_dict = self.proxy_manager.get_random_proxy()
-                    if proxy_dict:
-                        try:
-                            logger.info(f"[{file_name}] 使用代理连接: {proxy_dict['type']}://{proxy_dict['host']}:{proxy_dict['port']}")
-                            client = TelegramClient(file_path, api_id, api_hash, proxy=proxy_dict)
-                            await asyncio.wait_for(client.connect(), timeout=30)  # 30秒超时
-                            used_proxy = proxy_dict
-                            logger.info(f"[{file_name}] 代理连接成功")
-                        except asyncio.TimeoutError:
-                            logger.warning(f"[{file_name}] 代理连接超时，退回本地连接")
-                            if client:
-                                await client.disconnect()
-                            client = None
-                        except Exception as e:
-                            logger.warning(f"[{file_name}] 代理连接失败: {e}，退回本地连接")
-                            if client:
-                                try:
+                    proxy_info = self.proxy_manager.get_random_proxy()
+                    if proxy_info:
+                        # 使用checker的create_proxy_dict转换代理信息
+                        proxy_dict = self.checker.create_proxy_dict(proxy_info)
+                        if proxy_dict:
+                            try:
+                                proxy_type = proxy_info.get('type', 'http').upper()
+                                print(f"🌐 [{file_name}] 使用{proxy_type}代理连接...")
+                                logger.info(f"[{file_name}] 使用代理连接: {proxy_type}://{proxy_info['host']}:{proxy_info['port']}")
+                                client = TelegramClient(temp_session_path, api_id, api_hash, proxy=proxy_dict)
+                                await asyncio.wait_for(client.connect(), timeout=config.CONNECTION_TIMEOUT)
+                                used_proxy = proxy_info
+                                print(f"✅ [{file_name}] 代理连接成功")
+                                logger.info(f"[{file_name}] 代理连接成功")
+                            except asyncio.TimeoutError:
+                                print(f"⏱️ [{file_name}] 代理连接超时，退回本地连接")
+                                logger.warning(f"[{file_name}] 代理连接超时，退回本地连接")
+                                if client:
                                     await client.disconnect()
-                                except:
-                                    pass
-                            client = None
+                                client = None
+                            except Exception as e:
+                                print(f"⚠️ [{file_name}] 代理连接失败: {e}，退回本地连接")
+                                logger.warning(f"[{file_name}] 代理连接失败: {e}，退回本地连接")
+                                if client:
+                                    try:
+                                        await client.disconnect()
+                                    except:
+                                        pass
+                                client = None
                 
                 # 如果代理失败或未启用，使用本地连接
                 if not client:
+                    print(f"🏠 [{file_name}] 使用本地连接...")
                     logger.info(f"[{file_name}] 使用本地连接")
-                    client = TelegramClient(file_path, api_id, api_hash)
+                    client = TelegramClient(temp_session_path, api_id, api_hash)
                     await client.connect()
+                    print(f"✅ [{file_name}] 本地连接成功")
+                    logger.info(f"[{file_name}] 本地连接成功")
                 
-                session_path = file_path
+                session_path = temp_session_path
             
             if not client or not await client.is_user_authorized():
                 error_type = 'AuthKeyUnregisteredError'
@@ -22042,6 +22080,12 @@ admin3</code>
             phone = me.phone if hasattr(me, 'phone') else None
             country = self.profile_manager.get_country_from_phone(phone) if phone else 'US'
             
+            # 构建代理信息字符串
+            proxy_str = '本地连接'
+            if used_proxy:
+                proxy_type = used_proxy.get('type', 'http').upper()
+                proxy_str = f"{proxy_type}://{used_proxy['host']}:{used_proxy['port']}"
+            
             detail = {
                 'success': True,
                 'account': file_name,
@@ -22049,7 +22093,7 @@ admin3</code>
                 'file_name': file_name,
                 'file_path': file_path,
                 'country': country,
-                'proxy': f"{used_proxy['type']}://{used_proxy['host']}:{used_proxy['port']}" if used_proxy else '本地连接',
+                'proxy': proxy_str,
                 'changes': {},
                 'actions': []
             }
@@ -22302,7 +22346,12 @@ admin3</code>
                     await client.disconnect()
                 except:
                     pass
-            # 清理临时session文件
+            
+            # 清理临时session目录（避免database locked）
+            if temp_session_dir:
+                cleanup_temp_session(temp_session_dir)
+            
+            # 清理临时session文件（TData转换的）
             if temp_session_path and os.path.exists(temp_session_path):
                 try:
                     os.remove(temp_session_path)
