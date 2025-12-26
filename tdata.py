@@ -48,6 +48,12 @@ BEIJING_TZ = timezone(timedelta(hours=8))
 # Telegram密码重置冷却期为7天，如果剩余时间少于6天23小时，说明是已在冷却期
 COOLDOWN_THRESHOLD_SECONDS = 6 * 24 * 3600 + 23 * 3600  # 604800秒 - 3600秒 = 604000秒
 
+# 测试号码配置（用于检测通讯录限制）
+TEST_CONTACT_PHONES = [
+    '+213540775893',
+    '+254771625090'
+]
+
 print("🔍 Telegram账号检测机器人 V8.0")
 print(f"📅 当前时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}")
 
@@ -120,11 +126,12 @@ try:
         PasswordHashInvalidError, PhoneCodeInvalidError, AuthRestartError,
         UsernameOccupiedError, UsernameInvalidError
     )
-    from telethon.tl.types import User, CodeSettings
+    from telethon.tl.types import User, CodeSettings, InputPhoneContact
     from telethon.tl.functions.messages import SendMessageRequest, GetHistoryRequest
     from telethon.tl.functions.account import GetPasswordRequest, GetAuthorizationsRequest
     from telethon.tl.functions.auth import ResetAuthorizationsRequest, SendCodeRequest
     from telethon.tl.functions.users import GetFullUserRequest
+    from telethon.tl.functions.contacts import ImportContactsRequest, DeleteContactsRequest
     TELETHON_AVAILABLE = True
     print("✅ telethon库导入成功")
 except ImportError:
@@ -9862,6 +9869,9 @@ class EnhancedBot:
         # 资料修改待处理任务
         self.pending_profile_update: Dict[int, Dict[str, Any]] = {}
         
+        # 通讯录限制检测待处理任务
+        self.pending_contact_limit_check: Dict[int, Dict[str, Any]] = {}
+        
         # 常量定义
         self.MAX_DISPLAY_ITEMS = 20  # 配置预览最大显示条目数
         self.ALERT_TEXT_MAX_LENGTH = 200  # 弹出提示最大文本长度
@@ -10306,6 +10316,9 @@ class EnhancedBot:
             ],
             [
                 InlineKeyboardButton("📝 修改资料", callback_data="profile_update_start"),
+                InlineKeyboardButton("🔍 检查通讯录限制", callback_data="check_contact_limit")
+            ],
+            [
                 InlineKeyboardButton("💳 开通/兑换会员", callback_data="vip_menu")
             ]
         ]
@@ -11425,6 +11438,8 @@ class EnhancedBot:
             self.handle_profile_update_start(query)
         elif data.startswith("profile_"):
             self.handle_profile_update_callbacks(update, context, query, data)
+        elif data == "check_contact_limit":
+            self.handle_check_contact_limit(query)
         elif query.data == "back_to_main":
             self.show_main_menu(update, user_id)
             # 返回主菜单 - 横排2x2布局
@@ -11486,6 +11501,10 @@ class EnhancedBot:
                 [
                     InlineKeyboardButton("🔑 重新授权", callback_data="reauthorize_start"),
                     InlineKeyboardButton("🕰️ 查询注册时间", callback_data="check_registration_start")
+                ],
+                [
+                    InlineKeyboardButton("📝 修改资料", callback_data="profile_update_start"),
+                    InlineKeyboardButton("🔍 检查通讯录限制", callback_data="check_contact_limit")
                 ],
                 [
                     InlineKeyboardButton("💳 开通/兑换会员", callback_data="vip_menu")
@@ -12439,7 +12458,7 @@ class EnhancedBot:
             row = c.fetchone()
             conn.close()
 
-            # 放行的状态，新增 waiting_api_file, waiting_rename_file, waiting_merge_files, waiting_cleanup_file, batch_create_upload, reauthorize_upload, registration_check_upload, profile_update_upload
+            # 放行的状态，新增 waiting_api_file, waiting_rename_file, waiting_merge_files, waiting_cleanup_file, batch_create_upload, reauthorize_upload, registration_check_upload, profile_update_upload, waiting_contact_check_file
             allowed_states = [
                 "waiting_file",
                 "waiting_convert_tdata",
@@ -12459,6 +12478,7 @@ class EnhancedBot:
                 "reauthorize_upload",
                 "registration_check_upload",
                 "profile_update_upload",
+                "waiting_contact_check_file",
             ]
             
             # 添加自定义资料上传状态
@@ -12674,6 +12694,19 @@ class EnhancedBot:
                     import traceback
                     traceback.print_exc()
             thread = threading.Thread(target=process_profile_update, daemon=True)
+            thread.start()
+        elif user_status == "waiting_contact_check_file":
+            # 通讯录限制检测处理
+            def process_contact_limit_check():
+                try:
+                    asyncio.run(self.process_contact_limit_check(update, context, document))
+                except asyncio.CancelledError:
+                    print(f"[process_contact_limit_check] 任务被取消")
+                except Exception as e:
+                    print(f"[process_contact_limit_check] 处理异常: {e}")
+                    import traceback
+                    traceback.print_exc()
+            thread = threading.Thread(target=process_contact_limit_check, daemon=True)
             thread.start()
         elif user_status.startswith("profile_custom_upload_"):
             # 自定义资料文件上传
@@ -24705,6 +24738,444 @@ admin3</code>
         
         # 清除用户状态
         self.db.save_user(user_id, "", "", "")
+    
+    # ================================
+    # 通讯录限制检测功能
+    # ================================
+    
+    def handle_check_contact_limit(self, query):
+        """处理检查通讯录限制按钮"""
+        query.answer()
+        user_id = query.from_user.id
+        
+        # 检查会员权限
+        if not self.db.is_admin(user_id):
+            is_member, level, expiry = self.db.check_membership(user_id)
+            if not is_member:
+                query.edit_message_text(
+                    text="❌ 通讯录限制检测功能需要会员权限\n\n请先开通会员",
+                    reply_markup=InlineKeyboardMarkup([[
+                        InlineKeyboardButton("💳 开通会员", callback_data="vip_menu"),
+                        InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")
+                    ]]),
+                    parse_mode='HTML'
+                )
+                return
+        
+        text = """
+<b>🔍 检查通讯录限制</b>
+
+📤 <b>请上传包含 Session 或 TData 的 ZIP 文件</b>
+
+<b>支持格式：</b>
+• Session 文件 (.session)
+• TData 文件夹
+
+<b>检测原理：</b>
+• 尝试添加测试联系人
+• 根据结果判断账号状态
+• 自动删除测试联系人
+
+<b>⏳ 检测过程中请耐心等待...</b>
+
+💡 如需取消，请点击 /start 返回主菜单
+        """
+        
+        query.edit_message_text(
+            text=text,
+            parse_mode='HTML'
+        )
+        
+        # 设置用户状态为等待上传
+        self.db.save_user(user_id, query.from_user.username or "", 
+                        query.from_user.first_name or "", "waiting_contact_check_file")
+    
+    async def check_contact_limit(self, client, phone):
+        """检查账号是否被通讯录限制"""
+        test_phone = TEST_CONTACT_PHONES[0]  # 使用第一个测试号码
+        
+        try:
+            # 1. 尝试添加测试联系人
+            result = await client(ImportContactsRequest([
+                InputPhoneContact(
+                    client_id=0,
+                    phone=test_phone,
+                    first_name="Test",
+                    last_name="CheckLimit"
+                )
+            ]))
+            
+            # 2. 判断结果
+            if result.users:
+                # 成功添加，账号正常
+                status = "normal"
+                
+                # 3. 清理：删除测试联系人
+                try:
+                    await client(DeleteContactsRequest(id=result.users))
+                except:
+                    pass
+                    
+                return {
+                    'status': status,
+                    'message': '✅ 正常',
+                    'phone': phone
+                }
+            else:
+                # 无法添加用户，可能受限
+                return {
+                    'status': 'limited',
+                    'message': '⚠️ 通讯录受限',
+                    'phone': phone
+                }
+                
+        except Exception as e:
+            error_msg = str(e).lower()
+            
+            if 'flood' in error_msg:
+                return {
+                    'status': 'limited',
+                    'message': '⚠️ 通讯录受限 (FloodWait)',
+                    'phone': phone
+                }
+            elif 'banned' in error_msg or 'deactivated' in error_msg:
+                return {
+                    'status': 'banned',
+                    'message': '❌ 已封号',
+                    'phone': phone
+                }
+            else:
+                return {
+                    'status': 'error',
+                    'message': f'❌ 检测失败: {str(e)[:50]}',
+                    'phone': phone
+                }
+    
+    async def safe_check_contact_limit(self, account_path, api_id, api_hash, proxy):
+        """安全检测单个账号（带 session 隔离）"""
+        temp_dir = None
+        try:
+            # 复制 session 到临时目录避免 database locked
+            temp_dir = tempfile.mkdtemp()
+            temp_session = os.path.join(temp_dir, f"{uuid.uuid4().hex}.session")
+            
+            # 判断是 session 还是 tdata
+            if account_path.endswith('.session'):
+                shutil.copy(account_path, temp_session)
+            else:
+                # TData 先转换为 session
+                if OPENTELE_AVAILABLE:
+                    try:
+                        tdesk = TDesktop(account_path)
+                        temp_session = os.path.join(temp_dir, f"{uuid.uuid4().hex}.session")
+                        client = await tdesk.ToTelethon(session=temp_session, flag=UseCurrentSession)
+                        await client.disconnect()
+                    except Exception as e:
+                        phone = extract_phone_from_path(account_path)
+                        return {
+                            'status': 'error',
+                            'message': f'❌ TData转换失败: {str(e)[:30]}',
+                            'phone': phone,
+                            'path': account_path
+                        }
+                else:
+                    phone = extract_phone_from_path(account_path)
+                    return {
+                        'status': 'error',
+                        'message': '❌ TData转换功能不可用',
+                        'phone': phone,
+                        'path': account_path
+                    }
+            
+            # 获取手机号
+            phone = extract_phone_from_path(account_path)
+            
+            # 连接并检测
+            client = TelegramClient(
+                temp_session,
+                api_id,
+                api_hash,
+                proxy=proxy,
+                timeout=10,
+                connection_retries=3
+            )
+            
+            await client.connect()
+            
+            if not await client.is_user_authorized():
+                return {
+                    'status': 'unauthorized',
+                    'message': '❌ 未授权/已失效',
+                    'phone': phone,
+                    'path': account_path
+                }
+            
+            # 检测通讯录限制
+            result = await self.check_contact_limit(client, phone)
+            result['path'] = account_path
+            
+            await client.disconnect()
+            
+            return result
+            
+        except Exception as e:
+            phone = extract_phone_from_path(account_path)
+            return {
+                'status': 'error',
+                'message': f'❌ 检测失败: {str(e)[:50]}',
+                'phone': phone,
+                'path': account_path
+            }
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir, ignore_errors=True)
+    
+    async def batch_check_contact_limit(self, accounts, api_id, api_hash, proxies):
+        """并发检测通讯录限制"""
+        MAX_CONCURRENT = 15
+        DELAY_BETWEEN = 0.3
+        
+        semaphore = asyncio.Semaphore(MAX_CONCURRENT)
+        
+        async def check_with_limit(account, proxy):
+            async with semaphore:
+                await asyncio.sleep(DELAY_BETWEEN)
+                return await self.safe_check_contact_limit(account, api_id, api_hash, proxy)
+        
+        # 分配代理
+        if proxies:
+            proxy_cycle = (proxies * (len(accounts) // len(proxies) + 1))[:len(accounts)]
+        else:
+            proxy_cycle = [None] * len(accounts)
+        
+        tasks = [check_with_limit(acc, proxy) for acc, proxy in zip(accounts, proxy_cycle)]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        return results
+    
+    async def generate_contact_limit_report(self, results, output_dir):
+        """生成通讯录限制检测报告"""
+        
+        # 分类统计
+        normal = [r for r in results if r.get('status') == 'normal']
+        limited = [r for r in results if r.get('status') == 'limited']
+        banned = [r for r in results if r.get('status') == 'banned']
+        failed = [r for r in results if r.get('status') in ['error', 'unauthorized']]
+        
+        # 生成报告文本
+        report = f"""
+📊 通讯录限制检测报告
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+检测时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S')} (北京时间)
+总计检测: {len(results)} 个账号
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ 正常账号: {len(normal)} 个
+⚠️ 通讯录受限: {len(limited)} 个
+❌ 已封号: {len(banned)} 个
+❌ 检测失败: {len(failed)} 个
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 详细列表
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【✅ 正常账号】
+{chr(10).join([f"  • {r['phone']}" for r in normal]) or '  无'}
+
+【⚠️ 通讯录受限】
+{chr(10).join([f"  • {r['phone']}" for r in limited]) or '  无'}
+
+【❌ 已封号】
+{chr(10).join([f"  • {r['phone']}" for r in banned]) or '  无'}
+
+【❌ 检测失败】
+{chr(10).join([f"  • {r['phone']} - {r['message']}" for r in failed]) or '  无'}
+"""
+        
+        # 保存报告
+        timestamp = datetime.now(BEIJING_TZ).strftime('%Y%m%d_%H%M%S')
+        report_path = os.path.join(output_dir, f'contact_limit_report_{timestamp}.txt')
+        with open(report_path, 'w', encoding='utf-8') as f:
+            f.write(report)
+        
+        return report_path, {
+            'normal': normal,
+            'limited': limited,
+            'banned': banned,
+            'failed': failed
+        }
+    
+    async def pack_contact_limit_results(self, results_dict, output_dir):
+        """分类打包检测结果"""
+        timestamp = datetime.now(BEIJING_TZ).strftime('%Y%m%d_%H%M%S')
+        zip_files = {}
+        
+        categories = {
+            'normal': ('正常', results_dict['normal']),
+            'limited': ('通讯录受限', results_dict['limited']),
+            'banned': ('已封号', results_dict['banned']),
+            'failed': ('检测失败', results_dict['failed'])
+        }
+        
+        for key, (name, items) in categories.items():
+            if items:
+                zip_path = os.path.join(output_dir, f'contact_{key}_{len(items)}_{timestamp}.zip')
+                
+                with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+                    added_paths = set()
+                    
+                    for item in items:
+                        account_path = item.get('path')
+                        if account_path and os.path.exists(account_path):
+                            phone = item.get('phone', 'unknown')
+                            
+                            if os.path.isfile(account_path):
+                                # Session 文件
+                                arc_name = f"{phone}/{os.path.basename(account_path)}"
+                                if arc_name not in added_paths:
+                                    added_paths.add(arc_name)
+                                    zf.write(account_path, arc_name)
+                            else:
+                                # TData 目录
+                                for root, dirs, files in os.walk(account_path):
+                                    for file in files:
+                                        file_path = os.path.join(root, file)
+                                        rel_path = os.path.relpath(file_path, os.path.dirname(account_path))
+                                        arc_name = f"{phone}/{rel_path}"
+                                        if arc_name not in added_paths:
+                                            added_paths.add(arc_name)
+                                            zf.write(file_path, arc_name)
+                
+                zip_files[key] = zip_path
+        
+        return zip_files
+    
+    async def process_contact_limit_check(self, update, context, document):
+        """处理通讯录限制检测"""
+        user_id = update.effective_user.id
+        start_time = time.time()
+        
+        progress_msg = self.safe_send_message(update, "📥 <b>正在处理您的文件...</b>", 'HTML')
+        if not progress_msg:
+            return
+        
+        # 下载文件
+        try:
+            file = await context.bot.get_file(document.file_id)
+            temp_zip = tempfile.NamedTemporaryFile(delete=False, suffix='.zip')
+            await file.download(custom_path=temp_zip.name)
+            temp_zip.close()
+        except Exception as e:
+            self.safe_edit_message_text(progress_msg, f"❌ 文件下载失败: {e}")
+            return
+        
+        # 解压文件
+        extract_dir = tempfile.mkdtemp()
+        try:
+            with zipfile.ZipFile(temp_zip.name, 'r') as zip_ref:
+                zip_ref.extractall(extract_dir)
+        except Exception as e:
+            self.safe_edit_message_text(progress_msg, f"❌ 文件解压失败: {e}")
+            os.unlink(temp_zip.name)
+            shutil.rmtree(extract_dir, ignore_errors=True)
+            return
+        finally:
+            os.unlink(temp_zip.name)
+        
+        # 扫描账号文件
+        accounts = []
+        for root, dirs, files in os.walk(extract_dir):
+            # 查找 session 文件
+            for file in files:
+                if file.endswith('.session') and not file.endswith('.session-journal'):
+                    accounts.append(os.path.join(root, file))
+            
+            # 查找 tdata 目录
+            if 'tdata' in [d.lower() for d in dirs]:
+                for d in dirs:
+                    if d.lower() == 'tdata':
+                        accounts.append(os.path.join(root, d))
+        
+        if not accounts:
+            self.safe_edit_message_text(progress_msg, "❌ 未找到有效的账号文件")
+            shutil.rmtree(extract_dir, ignore_errors=True)
+            return
+        
+        # 更新进度
+        self.safe_edit_message_text(
+            progress_msg,
+            f"📊 <b>找到 {len(accounts)} 个账号，开始检测...</b>\n\n"
+            f"⏳ 预计需要 {len(accounts) * 2 // 60 + 1} 分钟",
+            'HTML'
+        )
+        
+        # 获取API凭证
+        api_id = config.API_ID
+        api_hash = config.API_HASH
+        
+        # 获取代理列表
+        proxies = []
+        if config.USE_PROXY and self.proxy_manager.proxies:
+            for proxy_str in self.proxy_manager.proxies:
+                proxy_dict = self.proxy_manager.parse_proxy(proxy_str)
+                if proxy_dict:
+                    proxies.append(proxy_dict)
+        
+        # 并发检测
+        try:
+            results = await self.batch_check_contact_limit(accounts, api_id, api_hash, proxies)
+        except Exception as e:
+            self.safe_edit_message_text(progress_msg, f"❌ 检测失败: {e}")
+            shutil.rmtree(extract_dir, ignore_errors=True)
+            return
+        
+        # 生成报告
+        output_dir = tempfile.mkdtemp()
+        try:
+            report_path, results_dict = await self.generate_contact_limit_report(results, output_dir)
+            
+            # 发送报告文件
+            with open(report_path, 'rb') as f:
+                context.bot.send_document(
+                    chat_id=update.effective_chat.id,
+                    document=f,
+                    filename=os.path.basename(report_path),
+                    caption=f"📊 通讯录限制检测报告\n\n"
+                           f"✅ 正常: {len(results_dict['normal'])} 个\n"
+                           f"⚠️ 受限: {len(results_dict['limited'])} 个\n"
+                           f"❌ 封号: {len(results_dict['banned'])} 个\n"
+                           f"❌ 失败: {len(results_dict['failed'])} 个"
+                )
+            
+            # 打包分类结果
+            zip_files = await self.pack_contact_limit_results(results_dict, output_dir)
+            
+            # 发送分类打包文件
+            for key, zip_path in zip_files.items():
+                if os.path.exists(zip_path):
+                    with open(zip_path, 'rb') as f:
+                        context.bot.send_document(
+                            chat_id=update.effective_chat.id,
+                            document=f,
+                            filename=os.path.basename(zip_path),
+                            caption=f"📦 {os.path.basename(zip_path)}"
+                        )
+            
+            # 完成提示
+            elapsed = time.time() - start_time
+            self.safe_edit_message_text(
+                progress_msg,
+                f"✅ <b>检测完成！</b>\n\n"
+                f"⏱️ 用时: {elapsed:.1f}秒\n"
+                f"📊 已发送检测报告和分类打包文件",
+                'HTML'
+            )
+            
+        except Exception as e:
+            self.safe_edit_message_text(progress_msg, f"❌ 报告生成失败: {e}")
+        finally:
+            shutil.rmtree(extract_dir, ignore_errors=True)
+            shutil.rmtree(output_dir, ignore_errors=True)
     
     def _generate_registration_report(self, context: CallbackContext, user_id: int, results: Dict, progress_msg):
         """生成注册时间查询报告和打包结果（按年-月-日分类）"""
