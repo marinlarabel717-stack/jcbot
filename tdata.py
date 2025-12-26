@@ -60,6 +60,13 @@ TEST_CONTACT_PHONES = [
 CONTACT_CHECK_MAX_CONCURRENT = 15  # 最大并发检测数
 CONTACT_CHECK_DELAY_BETWEEN = 0.3  # 检测之间的延迟（秒）
 
+# 通讯录限制检测状态常量
+CONTACT_STATUS_NORMAL = 'normal'
+CONTACT_STATUS_LIMITED = 'limited'
+CONTACT_STATUS_BANNED = 'banned'
+CONTACT_STATUS_ERROR = 'error'
+CONTACT_STATUS_UNAUTHORIZED = 'unauthorized'
+
 print("🔍 Telegram账号检测机器人 V8.0")
 print(f"📅 当前时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}")
 
@@ -24832,7 +24839,7 @@ admin3</code>
             # 2. 判断结果 - 根据细化的检测逻辑
             if result.users and len(result.users) > 0:
                 # 能找到用户 → 正常（无限制）
-                status = "normal"
+                status = CONTACT_STATUS_NORMAL
                 message = '✅ 正常'
                 
                 # 3. 清理：删除测试联系人
@@ -24850,14 +24857,14 @@ admin3</code>
             elif result.imported > 0:
                 # 导入计数显示成功，但找不到用户 → 受限
                 return {
-                    'status': 'limited',
+                    'status': CONTACT_STATUS_LIMITED,
                     'message': '⚠️ 通讯录受限 (导入成功但找不到用户)',
                     'phone': phone
                 }
             else:
                 # 导入失败或静默失败（无报错但联系人不出现）→ 受限
                 return {
-                    'status': 'limited',
+                    'status': CONTACT_STATUS_LIMITED,
                     'message': '⚠️ 通讯录受限 (导入失败)',
                     'phone': phone
                 }
@@ -24865,14 +24872,14 @@ admin3</code>
         except (PeerFloodError, FloodWaitError) as e:
             # 明确的 Flood 错误 → 受限
             return {
-                'status': 'limited',
+                'status': CONTACT_STATUS_LIMITED,
                 'message': '⚠️ 通讯录受限 (FloodWait)',
                 'phone': phone
             }
         except (UserDeactivatedBanError, UserDeactivatedError, PhoneNumberBannedError) as e:
             # 账号被封禁
             return {
-                'status': 'banned',
+                'status': CONTACT_STATUS_BANNED,
                 'message': '❌ 已封号',
                 'phone': phone
             }
@@ -24882,19 +24889,19 @@ admin3</code>
             # 通过关键词判断错误类型
             if 'flood' in error_msg or 'peerflood' in error_msg:
                 return {
-                    'status': 'limited',
+                    'status': CONTACT_STATUS_LIMITED,
                     'message': '⚠️ 通讯录受限 (FloodWait)',
                     'phone': phone
                 }
             elif 'banned' in error_msg or 'deactivated' in error_msg:
                 return {
-                    'status': 'banned',
+                    'status': CONTACT_STATUS_BANNED,
                     'message': '❌ 已封号',
                     'phone': phone
                 }
             else:
                 return {
-                    'status': 'error',
+                    'status': CONTACT_STATUS_ERROR,
                     'message': f'❌ 检测失败: {str(e)[:50]}',
                     'phone': phone
                 }
@@ -24921,7 +24928,7 @@ admin3</code>
                     except Exception as e:
                         phone = extract_phone_from_path(account_path)
                         return {
-                            'status': 'error',
+                            'status': CONTACT_STATUS_ERROR,
                             'message': f'❌ TData转换失败: {str(e)[:30]}',
                             'phone': phone,
                             'path': account_path
@@ -24929,7 +24936,7 @@ admin3</code>
                 else:
                     phone = extract_phone_from_path(account_path)
                     return {
-                        'status': 'error',
+                        'status': CONTACT_STATUS_ERROR,
                         'message': '❌ TData转换功能不可用',
                         'phone': phone,
                         'path': account_path
@@ -24952,7 +24959,7 @@ admin3</code>
             
             if not await client.is_user_authorized():
                 return {
-                    'status': 'unauthorized',
+                    'status': CONTACT_STATUS_UNAUTHORIZED,
                     'message': '❌ 未授权/已失效',
                     'phone': phone,
                     'path': account_path
@@ -24969,7 +24976,7 @@ admin3</code>
         except Exception as e:
             phone = extract_phone_from_path(account_path)
             return {
-                'status': 'error',
+                'status': CONTACT_STATUS_ERROR,
                 'message': f'❌ 检测失败: {str(e)[:50]}',
                 'phone': phone,
                 'path': account_path
@@ -24980,6 +24987,8 @@ admin3</code>
     
     async def batch_check_contact_limit(self, accounts, api_id, api_hash, proxies):
         """并发检测通讯录限制"""
+        from itertools import cycle
+        
         semaphore = asyncio.Semaphore(CONTACT_CHECK_MAX_CONCURRENT)
         
         async def check_with_limit(account, proxy):
@@ -24987,25 +24996,41 @@ admin3</code>
                 await asyncio.sleep(CONTACT_CHECK_DELAY_BETWEEN)
                 return await self.safe_check_contact_limit(account, api_id, api_hash, proxy)
         
-        # 分配代理
+        # 分配代理 - 使用 cycle 更节省内存
         if proxies:
-            proxy_cycle = (proxies * (len(accounts) // len(proxies) + 1))[:len(accounts)]
+            proxy_cycle = cycle(proxies)
+            proxy_list = [next(proxy_cycle) for _ in accounts]
         else:
-            proxy_cycle = [None] * len(accounts)
+            proxy_list = [None] * len(accounts)
         
-        tasks = [check_with_limit(acc, proxy) for acc, proxy in zip(accounts, proxy_cycle)]
+        tasks = [check_with_limit(acc, proxy) for acc, proxy in zip(accounts, proxy_list)]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
-        return results
+        # 处理异常结果 - 将异常对象转换为错误字典
+        processed_results = []
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                # 如果返回的是异常对象，转换为错误字典
+                phone = extract_phone_from_path(accounts[i]) if i < len(accounts) else 'unknown'
+                processed_results.append({
+                    'status': CONTACT_STATUS_ERROR,
+                    'message': f'❌ 检测异常: {str(result)[:50]}',
+                    'phone': phone,
+                    'path': accounts[i] if i < len(accounts) else ''
+                })
+            else:
+                processed_results.append(result)
+        
+        return processed_results
     
     async def generate_contact_limit_report(self, results, output_dir):
         """生成通讯录限制检测报告"""
         
-        # 分类统计
-        normal = [r for r in results if r.get('status') == 'normal']
-        limited = [r for r in results if r.get('status') == 'limited']
-        banned = [r for r in results if r.get('status') == 'banned']
-        failed = [r for r in results if r.get('status') in ['error', 'unauthorized']]
+        # 分类统计 - 使用常量
+        normal = [r for r in results if r.get('status') == CONTACT_STATUS_NORMAL]
+        limited = [r for r in results if r.get('status') == CONTACT_STATUS_LIMITED]
+        banned = [r for r in results if r.get('status') == CONTACT_STATUS_BANNED]
+        failed = [r for r in results if r.get('status') in [CONTACT_STATUS_ERROR, CONTACT_STATUS_UNAUTHORIZED]]
         
         # 生成报告文本
         report = f"""
