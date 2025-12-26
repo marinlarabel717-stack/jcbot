@@ -849,6 +849,9 @@ class ProfileManager:
                         tdesk = TDesktop(file_path)
                         session_path = f"/tmp/profile_update_{secrets.token_hex(8)}.session"
                         client = await tdesk.ToTelethon(session_path, flag=UseCurrentSession)
+                        # 重要：TData转Session后必须显式连接
+                        if not client.is_connected():
+                            await client.connect()
                     elif file_type in ['session', 'session-json']:
                         session_path = file_path
                         # 从session文件创建客户端
@@ -1016,6 +1019,125 @@ def format_time(seconds: float) -> str:
         return f"{hours:02d}:{minutes:02d}:{secs:02d}"
     else:
         return f"{minutes:02d}:{secs:02d}"
+
+# ================================
+# TData 处理辅助函数
+# ================================
+
+def extract_phone_from_path(path: str) -> Optional[str]:
+    """从路径中提取手机号
+    
+    Args:
+        path: 文件或目录路径
+        
+    Returns:
+        提取的手机号，如果未找到则返回None
+    """
+    import re
+    basename = os.path.basename(path.rstrip('/\\'))
+    # 移除扩展名
+    name = os.path.splitext(basename)[0]
+    # 提取数字（手机号通常10-15位）
+    match = re.search(r'\d{10,15}', name)
+    return match.group() if match else None
+
+def detect_tdata_structure(account_path: str) -> Optional[Tuple]:
+    """检测 TData 目录结构类型
+    
+    Args:
+        account_path: 账号目录路径
+        
+    Returns:
+        ('type1', tdata_path) - key_datas在tdata目录内
+        ('type2', tdata_path, key_datas_path) - key_datas与tdata同级
+        None - 未找到有效的TData结构
+    """
+    tdata_path = os.path.join(account_path, 'tdata')
+    
+    # 方式1: key_datas 在 tdata 目录内
+    key_in_tdata = os.path.join(tdata_path, 'key_datas')
+    if os.path.exists(key_in_tdata):
+        logger.info(f"检测到TData结构类型1: key_datas在tdata内 - {account_path}")
+        return ('type1', tdata_path)
+    
+    # 方式2: key_datas 与 tdata 同级
+    key_beside_tdata = os.path.join(account_path, 'key_datas')
+    if os.path.exists(key_beside_tdata) and os.path.exists(tdata_path):
+        logger.info(f"检测到TData结构类型2: key_datas与tdata同级 - {account_path}")
+        return ('type2', tdata_path, key_beside_tdata)
+    
+    logger.warning(f"未找到有效的TData结构 - {account_path}")
+    return None
+
+def process_accounts_with_dedup(accounts: List[Tuple[str, str]]) -> List[Tuple[str, str]]:
+    """处理账号列表并去重
+    
+    Args:
+        accounts: 账号列表 [(账号名, 路径), ...]
+        
+    Returns:
+        去重后的账号列表
+    """
+    processed_phones = set()
+    unique_accounts = []
+    
+    for account_name, account_path in accounts:
+        phone = extract_phone_from_path(account_path)
+        if phone and phone not in processed_phones:
+            processed_phones.add(phone)
+            unique_accounts.append((account_name, account_path))
+            logger.info(f"添加账号: {phone}")
+        else:
+            logger.info(f"跳过重复手机号: {phone or account_name}")
+    
+    logger.info(f"去重完成: 原始 {len(accounts)} 个，去重后 {len(unique_accounts)} 个")
+    return unique_accounts
+
+def create_zip_with_unique_paths(accounts: List[Tuple[str, str]], output_path: str) -> bool:
+    """创建ZIP，使用手机号作为前缀避免重名
+    
+    Args:
+        accounts: 账号列表 [(账号名, 路径), ...]
+        output_path: 输出ZIP文件路径
+        
+    Returns:
+        是否成功
+    """
+    try:
+        with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+            added_paths = set()
+            
+            for account_name, account_path in accounts:
+                phone = extract_phone_from_path(account_path) or account_name
+                
+                if os.path.isdir(account_path):
+                    # 目录：遍历所有文件
+                    for root, dirs, files in os.walk(account_path):
+                        for file in files:
+                            file_path = os.path.join(root, file)
+                            # 使用手机号作为前缀，确保唯一
+                            rel_path = os.path.relpath(file_path, os.path.dirname(account_path))
+                            arc_name = f"{phone}/{rel_path}"
+                            
+                            if arc_name not in added_paths:
+                                added_paths.add(arc_name)
+                                zf.write(file_path, arc_name)
+                                logger.debug(f"添加文件到ZIP: {arc_name}")
+                else:
+                    # 单文件
+                    filename = os.path.basename(account_path)
+                    arc_name = f"{phone}/{filename}"
+                    
+                    if arc_name not in added_paths:
+                        added_paths.add(arc_name)
+                        zf.write(account_path, arc_name)
+                        logger.debug(f"添加文件到ZIP: {arc_name}")
+        
+        logger.info(f"ZIP创建成功: {output_path}，共 {len(added_paths)} 个文件")
+        return True
+    except Exception as e:
+        logger.error(f"创建ZIP失败: {e}")
+        return False
 
 # ================================
 # 设备参数管理器（新增）
@@ -7510,7 +7632,13 @@ class Forget2FAManager:
                 time_remaining = until_date - now
                 
                 # 7天 = 604800秒，如果剩余时间少于6天23小时(约604000秒)，说明是已在冷却期
-                if time_remaining.total_seconds() < 604000:  # 约6天23小时
+                # 但是如果时间已经过期（负数），则冷却期已结束
+                remaining_seconds = time_remaining.total_seconds()
+                
+                if remaining_seconds <= 0:
+                    # 冷却期已过，可以重新请求
+                    return True, "冷却期已结束，可重新请求", None
+                elif remaining_seconds < 604000:  # 约6天23小时
                     days_remaining = time_remaining.days
                     hours_remaining = time_remaining.seconds // 3600
                     return False, f"已在冷却期中 (剩余约{days_remaining}天{hours_remaining}小时)", until_date
