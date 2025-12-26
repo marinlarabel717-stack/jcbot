@@ -22520,11 +22520,15 @@ admin3</code>
                             # 判断文件类型
                             if os.path.isdir(original_file_path):
                                 # TData格式：打包整个目录，使用手机号作为前缀
+                                # 获取目录名（通常是tdata）
+                                tdata_dirname = os.path.basename(original_file_path)
+                                
                                 for root, dirs, files in os.walk(original_file_path):
                                     for file in files:
                                         file_full_path = os.path.join(root, file)
                                         rel_path = os.path.relpath(file_full_path, original_file_path)
-                                        arc_name = f"{phone}/{rel_path}"
+                                        # 包含tdata目录名在路径中: 手机号/tdata/D877F783D5D3EF8C/...
+                                        arc_name = f"{phone}/{tdata_dirname}/{rel_path}"
                                         
                                         if arc_name not in added_paths:
                                             added_paths.add(arc_name)
@@ -22582,11 +22586,15 @@ admin3</code>
                             # 判断文件类型
                             if os.path.isdir(original_file_path):
                                 # TData格式：打包整个目录，使用手机号作为前缀
+                                # 获取目录名（通常是tdata）
+                                tdata_dirname = os.path.basename(original_file_path)
+                                
                                 for root, dirs, files in os.walk(original_file_path):
                                     for file in files:
                                         file_full_path = os.path.join(root, file)
                                         rel_path = os.path.relpath(file_full_path, original_file_path)
-                                        arc_name = f"{phone}/{rel_path}"
+                                        # 包含tdata目录名在路径中: 手机号/tdata/D877F783D5D3EF8C/...
+                                        arc_name = f"{phone}/{tdata_dirname}/{rel_path}"
                                         
                                         if arc_name not in added_paths:
                                             added_paths.add(arc_name)
