@@ -21939,7 +21939,7 @@ admin3</code>
         # 清理
         self.cleanup_profile_update_task(user_id)
     
-    async def _update_single_profile(self, idx: int, file_path: str, file_name: str, file_type: str, config: ProfileUpdateConfig) -> Dict:
+    async def _update_single_profile(self, idx: int, file_path: str, file_name: str, file_type: str, profile_config: ProfileUpdateConfig) -> Dict:
         """更新单个账号资料"""
         client = None
         session_path = None
@@ -22102,15 +22102,15 @@ admin3</code>
             await asyncio.sleep(random.uniform(2, 5))
             
             # 1. 更新姓名
-            if config.update_name:
+            if profile_config.update_name:
                 first_name = None
                 last_name = ''
                 
-                if config.mode == 'random':
+                if profile_config.mode == 'random':
                     first_name, last_name = self.profile_manager.generate_random_name(country)
-                elif config.custom_names:
+                elif profile_config.custom_names:
                     # 循环使用自定义姓名列表
-                    full_name = config.custom_names[idx % len(config.custom_names)]
+                    full_name = profile_config.custom_names[idx % len(profile_config.custom_names)]
                     parts = full_name.split(' ', 1)
                     first_name = parts[0]
                     last_name = parts[1] if len(parts) > 1 else ''
@@ -22133,8 +22133,8 @@ admin3</code>
                     await asyncio.sleep(1)
             
             # 2. 处理头像
-            if config.update_photo:
-                if config.photo_action == 'delete_all':
+            if profile_config.update_photo:
+                if profile_config.photo_action == 'delete_all':
                     try:
                         if await self.profile_manager.delete_profile_photos(client):
                             detail['actions'].append("✅ 删除所有头像")
@@ -22146,9 +22146,9 @@ admin3</code>
                         detail['actions'].append(f"❌ 删除头像失败: {str(e)}")
                         detail['changes']['photo'] = {'action': 'deleted', 'success': False, 'error': str(e)}
                     await asyncio.sleep(1)
-                elif config.photo_action == 'custom' and config.custom_photos:
+                elif profile_config.photo_action == 'custom' and profile_config.custom_photos:
                     # 循环使用自定义头像列表
-                    photo_path = config.custom_photos[idx % len(config.custom_photos)]
+                    photo_path = profile_config.custom_photos[idx % len(profile_config.custom_photos)]
                     try:
                         if await self.profile_manager.update_profile_photo(client, photo_path):
                             detail['actions'].append(f"✅ 上传头像")
@@ -22162,15 +22162,15 @@ admin3</code>
                     await asyncio.sleep(1)
             
             # 3. 更新简介
-            if config.update_bio:
+            if profile_config.update_bio:
                 bio = ''
-                if config.bio_action == 'clear':
+                if profile_config.bio_action == 'clear':
                     bio = ''
-                elif config.bio_action == 'random':
+                elif profile_config.bio_action == 'random':
                     bio = self.profile_manager.generate_random_bio(country)
-                elif config.bio_action == 'custom' and config.custom_bios:
+                elif profile_config.bio_action == 'custom' and profile_config.custom_bios:
                     # 循环使用自定义简介列表
-                    bio = config.custom_bios[idx % len(config.custom_bios)]
+                    bio = profile_config.custom_bios[idx % len(profile_config.custom_bios)]
                 
                 try:
                     # 获取当前简介
@@ -22198,9 +22198,9 @@ admin3</code>
                 await asyncio.sleep(1)
             
             # 4. 更新用户名
-            if config.update_username:
+            if profile_config.update_username:
                 old_username = me.username if hasattr(me, 'username') else None
-                if config.username_action == 'random':
+                if profile_config.username_action == 'random':
                     # 尝试3次生成不重复的用户名
                     success_flag = False
                     new_username = ''
@@ -22227,7 +22227,7 @@ admin3</code>
                     if not success_flag and 'username' not in detail['changes']:
                         detail['actions'].append("❌ 用户名更新失败（可能已被占用）")
                         detail['changes']['username'] = {'success': False, 'error': '用户名已被占用', 'error_type': 'UsernameOccupiedError'}
-                elif config.username_action == 'delete':
+                elif profile_config.username_action == 'delete':
                     try:
                         if await self.profile_manager.update_profile_username(client, ''):
                             detail['actions'].append("✅ 用户名: 已删除")
@@ -22242,9 +22242,9 @@ admin3</code>
                     except Exception as e:
                         detail['actions'].append(f"❌ 用户名删除失败: {str(e)}")
                         detail['changes']['username'] = {'success': False, 'error': str(e)}
-                elif config.username_action == 'custom' and config.custom_usernames:
+                elif profile_config.username_action == 'custom' and profile_config.custom_usernames:
                     # 循环使用自定义用户名列表
-                    username = config.custom_usernames[idx % len(config.custom_usernames)]
+                    username = profile_config.custom_usernames[idx % len(profile_config.custom_usernames)]
                     try:
                         if await self.profile_manager.update_profile_username(client, username):
                             detail['actions'].append(f"✅ 用户名: {username}")
