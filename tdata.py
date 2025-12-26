@@ -22382,33 +22382,50 @@ admin3</code>
             
             try:
                 with zipfile.ZipFile(success_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                    added_paths = set()  # 追踪已添加的文件路径，避免重复
+                    
                     for file_path, file_name, detail in results['success']:
                         original_file_path = detail.get('file_path', file_path)
+                        # 提取手机号作为前缀
+                        phone = extract_phone_from_path(original_file_path) or extract_phone_from_path(file_name) or file_name.replace('.session', '').replace('.json', '')
                         
                         try:
                             # 判断文件类型
                             if os.path.isdir(original_file_path):
-                                # TData格式：打包整个目录
+                                # TData格式：打包整个目录，使用手机号作为前缀
                                 for root, dirs, files in os.walk(original_file_path):
                                     for file in files:
                                         file_full_path = os.path.join(root, file)
-                                        rel_path = os.path.relpath(file_full_path, os.path.dirname(original_file_path))
-                                        zipf.write(file_full_path, rel_path)
+                                        rel_path = os.path.relpath(file_full_path, original_file_path)
+                                        arc_name = f"{phone}/{rel_path}"
+                                        
+                                        if arc_name not in added_paths:
+                                            added_paths.add(arc_name)
+                                            zipf.write(file_full_path, arc_name)
                             else:
-                                # Session格式：打包session文件及相关文件
+                                # Session格式：打包session文件及相关文件，使用手机号作为前缀
                                 if os.path.exists(original_file_path):
-                                    zipf.write(original_file_path, file_name)
+                                    arc_name = f"{phone}/{file_name}"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(original_file_path, arc_name)
                                 
                                 # Journal文件
                                 journal_path = original_file_path + '-journal'
                                 if os.path.exists(journal_path):
-                                    zipf.write(journal_path, file_name + '-journal')
+                                    arc_name = f"{phone}/{file_name}-journal"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(journal_path, arc_name)
                                 
                                 # JSON文件
                                 json_path = os.path.splitext(original_file_path)[0] + '.json'
                                 if os.path.exists(json_path):
                                     json_name = os.path.splitext(file_name)[0] + '.json'
-                                    zipf.write(json_path, json_name)
+                                    arc_name = f"{phone}/{json_name}"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(json_path, arc_name)
                         except Exception as e:
                             logger.warning(f"⚠️ 打包文件失败 {file_name}: {e}")
                 
@@ -22427,33 +22444,50 @@ admin3</code>
             
             try:
                 with zipfile.ZipFile(failed_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                    added_paths = set()  # 追踪已添加的文件路径，避免重复
+                    
                     for file_path, file_name, detail in results['failed']:
                         original_file_path = detail.get('file_path', file_path)
+                        # 提取手机号作为前缀
+                        phone = extract_phone_from_path(original_file_path) or extract_phone_from_path(file_name) or file_name.replace('.session', '').replace('.json', '')
                         
                         try:
                             # 判断文件类型
                             if os.path.isdir(original_file_path):
-                                # TData格式：打包整个目录
+                                # TData格式：打包整个目录，使用手机号作为前缀
                                 for root, dirs, files in os.walk(original_file_path):
                                     for file in files:
                                         file_full_path = os.path.join(root, file)
-                                        rel_path = os.path.relpath(file_full_path, os.path.dirname(original_file_path))
-                                        zipf.write(file_full_path, rel_path)
+                                        rel_path = os.path.relpath(file_full_path, original_file_path)
+                                        arc_name = f"{phone}/{rel_path}"
+                                        
+                                        if arc_name not in added_paths:
+                                            added_paths.add(arc_name)
+                                            zipf.write(file_full_path, arc_name)
                             else:
-                                # Session格式：打包session文件及相关文件
+                                # Session格式：打包session文件及相关文件，使用手机号作为前缀
                                 if os.path.exists(original_file_path):
-                                    zipf.write(original_file_path, file_name)
+                                    arc_name = f"{phone}/{file_name}"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(original_file_path, arc_name)
                                 
                                 # Journal文件
                                 journal_path = original_file_path + '-journal'
                                 if os.path.exists(journal_path):
-                                    zipf.write(journal_path, file_name + '-journal')
+                                    arc_name = f"{phone}/{file_name}-journal"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(journal_path, arc_name)
                                 
                                 # JSON文件
                                 json_path = os.path.splitext(original_file_path)[0] + '.json'
                                 if os.path.exists(json_path):
                                     json_name = os.path.splitext(file_name)[0] + '.json'
-                                    zipf.write(json_path, json_name)
+                                    arc_name = f"{phone}/{json_name}"
+                                    if arc_name not in added_paths:
+                                        added_paths.add(arc_name)
+                                        zipf.write(json_path, arc_name)
                         except Exception as e:
                             logger.warning(f"⚠️ 打包文件失败 {file_name}: {e}")
                 
