@@ -979,6 +979,10 @@ def generate_progress_bar(current: int, total: int, width: int = 20) -> str:
     if total == 0:
         return "░" * width + " 0.0%"
     
+    # 输入验证
+    if current < 0:
+        current = 0
+    
     percentage = current / total
     filled = int(width * percentage)
     empty = width - filled
@@ -9126,6 +9130,10 @@ class EnhancedBot:
     # 消息发送重试相关常量
     MESSAGE_RETRY_MAX = 3       # 默认最大重试次数
     MESSAGE_RETRY_BACKOFF = 2   # 指数退避基数
+    
+    # 资料修改进度更新相关常量
+    PROGRESS_UPDATE_INTERVAL = 2.0  # 最小刷新间隔（秒）
+    MAX_ERROR_DISPLAY_LENGTH = 30   # 错误消息最大显示长度
     
     def _is_network_error(self, error: Exception) -> bool:
         """判断异常是否是网络相关的错误
@@ -21547,9 +21555,6 @@ admin3</code>
         last_update_time = 0
         current_account_info = ""
         
-        # 进度更新间隔（秒）
-        PROGRESS_UPDATE_INTERVAL = 2.0
-        
         async def update_progress_display(force=False):
             """更新进度显示"""
             nonlocal last_update_time
@@ -21558,7 +21563,7 @@ admin3</code>
             
             # 控制刷新频率（除非强制更新或已完成）
             if not force and processed < total:
-                if current_time - last_update_time < PROGRESS_UPDATE_INTERVAL:
+                if current_time - last_update_time < self.PROGRESS_UPDATE_INTERVAL:
                     return
             
             last_update_time = current_time
@@ -21569,8 +21574,8 @@ admin3</code>
             remaining = total - processed
             elapsed = current_time - start_time
             
-            # 计算速度和预估时间
-            speed = processed / elapsed if elapsed > 0 else 0
+            # 计算速度和预估时间（添加除零保护）
+            speed = processed / elapsed if elapsed > 0 and processed > 0 else 0
             eta = remaining / speed if speed > 0 else 0
             
             # 生成进度条
@@ -21630,11 +21635,11 @@ admin3</code>
                     if result['success']:
                         results['success'].append((file_path, file_name, result))
                         # 更新当前账号处理结果
-                        action_summary = result.get('actions', ['✅ 处理完成'])[0] if result.get('actions') else '✅ 处理完成'
+                        action_summary = result.get('actions', ['✅ 处理完成'])[0]
                         current_account_info = f"🔄 当前处理: {file_name}\n   {action_summary}"
                     else:
                         results['failed'].append((file_path, file_name, result))
-                        error_msg = result.get('error', '未知错误')[:30]
+                        error_msg = result.get('error', '未知错误')[:self.MAX_ERROR_DISPLAY_LENGTH]
                         current_account_info = f"🔄 当前处理: {file_name}\n   ❌ 失败: {error_msg}..."
                     
                     results['details'].append(result)
