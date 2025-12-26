@@ -49,6 +49,8 @@ BEIJING_TZ = timezone(timedelta(hours=8))
 COOLDOWN_THRESHOLD_SECONDS = 6 * 24 * 3600 + 23 * 3600  # 604800秒 - 3600秒 = 604000秒
 
 # 测试号码配置（用于检测通讯录限制）
+# 注意：这些是实际注册的测试账号，用于检测目的
+# 来源：需求文档中指定的测试号码
 TEST_CONTACT_PHONES = [
     '+213540775893',
     '+254771625090'
@@ -179,6 +181,16 @@ except ImportError:
     print("⚠️ opentele未安装，格式转换功能不可用")
     print("💡 请安装: pip install opentele")
     OPENTELE_AVAILABLE = False
+
+# Define fallback classes for when opentele is not available
+if not OPENTELE_AVAILABLE:
+    class TDesktop:
+        """Fallback class when opentele not available"""
+        pass
+    
+    class UseCurrentSession:
+        """Fallback class when opentele not available"""
+        pass
 
 try:
     from account_classifier import AccountClassifier
@@ -24813,7 +24825,7 @@ admin3</code>
                 # 3. 清理：删除测试联系人
                 try:
                     await client(DeleteContactsRequest(id=result.users))
-                except:
+                except Exception:
                     pass
                     
                 return {
