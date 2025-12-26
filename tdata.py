@@ -25198,13 +25198,10 @@ admin3</code>
         api_id = config.API_ID
         api_hash = config.API_HASH
         
-        # 获取代理列表
+        # 获取代理列表（proxies已经是解析好的字典列表）
         proxies = []
         if config.USE_PROXY and self.proxy_manager.proxies:
-            for proxy_str in self.proxy_manager.proxies:
-                proxy_dict = self.proxy_manager.parse_proxy(proxy_str)
-                if proxy_dict:
-                    proxies.append(proxy_dict)
+            proxies = self.proxy_manager.proxies
         
         # 并发检测
         try:
