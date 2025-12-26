@@ -1072,6 +1072,58 @@ def detect_tdata_structure(account_path: str) -> Optional[Tuple]:
     logger.warning(f"未找到有效的TData结构 - {account_path}")
     return None
 
+def copy_session_to_temp(session_path: str) -> Tuple[str, str]:
+    """复制session文件到临时目录避免并发冲突
+    
+    Args:
+        session_path: 原始session文件路径
+        
+    Returns:
+        (temp_session_path, temp_dir): 临时session路径和临时目录路径
+    """
+    import uuid
+    
+    # 创建临时目录
+    temp_dir = tempfile.mkdtemp(prefix="session_temp_")
+    
+    # 生成唯一的session文件名
+    temp_session_name = f"{uuid.uuid4().hex}.session"
+    temp_session_path = os.path.join(temp_dir, temp_session_name)
+    
+    # 移除.session后缀（如果存在）因为我们需要复制所有相关文件
+    session_base = session_path.replace('.session', '') if session_path.endswith('.session') else session_path
+    temp_session_base = temp_session_path.replace('.session', '')
+    
+    try:
+        # 复制主session文件
+        if os.path.exists(f"{session_base}.session"):
+            shutil.copy2(f"{session_base}.session", f"{temp_session_base}.session")
+        
+        # 复制journal文件（如果存在）
+        if os.path.exists(f"{session_base}.session-journal"):
+            shutil.copy2(f"{session_base}.session-journal", f"{temp_session_base}.session-journal")
+        
+        # 返回临时session路径（不含.session后缀）
+        return temp_session_base, temp_dir
+    except Exception as e:
+        logger.error(f"复制session文件失败: {e}")
+        # 如果复制失败，清理临时目录并返回原始路径
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        return session_base, None
+
+def cleanup_temp_session(temp_dir: Optional[str]):
+    """清理临时session文件
+    
+    Args:
+        temp_dir: 临时目录路径
+    """
+    if temp_dir and os.path.exists(temp_dir):
+        try:
+            shutil.rmtree(temp_dir, ignore_errors=True)
+            logger.debug(f"已清理临时目录: {temp_dir}")
+        except Exception as e:
+            logger.warning(f"清理临时目录失败: {e}")
+
 def process_accounts_with_dedup(accounts: List[Tuple[str, str]]) -> List[Tuple[str, str]]:
     """处理账号列表并去重
     
@@ -1531,6 +1583,11 @@ class Config:
         self.CHECK_TIMEOUT = int(os.getenv("CHECK_TIMEOUT", "15"))
         self.SPAMBOT_WAIT_TIME = float(os.getenv("SPAMBOT_WAIT_TIME", "2.0"))
         
+        # 账号处理速度优化配置
+        self.MAX_CONCURRENT = int(os.getenv("MAX_CONCURRENT", "15"))  # 并发账号处理数：从3提高到15
+        self.DELAY_BETWEEN_ACCOUNTS = float(os.getenv("DELAY_BETWEEN_ACCOUNTS", "0.3"))  # 账号间隔：从2秒减少到0.3秒
+        self.CONNECTION_TIMEOUT = int(os.getenv("CONNECTION_TIMEOUT", "10"))  # 连接超时：从30秒减少到10秒
+        
         # 代理配置
         self.USE_PROXY = os.getenv("USE_PROXY", "true").lower() == "true"
         self.PROXY_TIMEOUT = int(os.getenv("PROXY_TIMEOUT", "10"))
@@ -1647,6 +1704,10 @@ TRIAL_DURATION_UNIT=minutes
 MAX_CONCURRENT_CHECKS=20
 CHECK_TIMEOUT=15
 SPAMBOT_WAIT_TIME=2.0
+# 账号处理速度优化配置
+MAX_CONCURRENT=15  # 并发账号处理数：从3提高到15
+DELAY_BETWEEN_ACCOUNTS=0.3  # 账号间隔：从2秒减少到0.3秒
+CONNECTION_TIMEOUT=10  # 连接超时：从30秒减少到10秒
 USE_PROXY=true
 PROXY_TIMEOUT=10
 PROXY_FILE=proxy.txt
