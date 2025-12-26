@@ -130,7 +130,7 @@ try:
         UserDeactivatedBanError, UserDeactivatedError, AuthKeyUnregisteredError,
         PhoneNumberBannedError, UserBannedInChannelError,
         PasswordHashInvalidError, PhoneCodeInvalidError, AuthRestartError,
-        UsernameOccupiedError, UsernameInvalidError
+        UsernameOccupiedError, UsernameInvalidError, PeerFloodError
     )
     from telethon.tl.types import User, CodeSettings, InputPhoneContact
     from telethon.tl.functions.messages import SendMessageRequest, GetHistoryRequest
@@ -24807,7 +24807,14 @@ admin3</code>
                         query.from_user.first_name or "", "waiting_contact_check_file")
     
     async def check_contact_limit(self, client, phone):
-        """检查账号是否被通讯录限制"""
+        """检查账号是否被通讯录限制
+        
+        检测逻辑：
+        1. 尝试导入真实存在的手机号，能找到用户 → ✅ 无限制
+        2. 导入成功但找不到用户 → ⚠️ 受限
+        3. 触发 PeerFloodError / FloodWaitError → ⚠️ 受限
+        4. 导入后静默失败（无报错但联系人不出现）→ ⚠️ 受限
+        """
         # 使用第一个测试号码（多个号码是为了冗余备份，单个号码足够检测）
         test_phone = TEST_CONTACT_PHONES[0]
         
@@ -24822,10 +24829,11 @@ admin3</code>
                 )
             ]))
             
-            # 2. 判断结果
-            if result.users:
-                # 成功添加，账号正常
+            # 2. 判断结果 - 根据细化的检测逻辑
+            if result.users and len(result.users) > 0:
+                # 能找到用户 → 正常（无限制）
                 status = "normal"
+                message = '✅ 正常'
                 
                 # 3. 清理：删除测试联系人
                 try:
@@ -24833,25 +24841,46 @@ admin3</code>
                 except Exception as e:
                     # 清理失败不影响检测结果，只记录日志
                     logger.warning(f"清理测试联系人失败: {e}")
-                    pass
                     
                 return {
                     'status': status,
-                    'message': '✅ 正常',
+                    'message': message,
+                    'phone': phone
+                }
+            elif result.imported > 0:
+                # 导入计数显示成功，但找不到用户 → 受限
+                return {
+                    'status': 'limited',
+                    'message': '⚠️ 通讯录受限 (导入成功但找不到用户)',
                     'phone': phone
                 }
             else:
-                # 无法添加用户，可能受限
+                # 导入失败或静默失败（无报错但联系人不出现）→ 受限
                 return {
                     'status': 'limited',
-                    'message': '⚠️ 通讯录受限',
+                    'message': '⚠️ 通讯录受限 (导入失败)',
                     'phone': phone
                 }
                 
+        except (PeerFloodError, FloodWaitError) as e:
+            # 明确的 Flood 错误 → 受限
+            return {
+                'status': 'limited',
+                'message': '⚠️ 通讯录受限 (FloodWait)',
+                'phone': phone
+            }
+        except (UserDeactivatedBanError, UserDeactivatedError, PhoneNumberBannedError) as e:
+            # 账号被封禁
+            return {
+                'status': 'banned',
+                'message': '❌ 已封号',
+                'phone': phone
+            }
         except Exception as e:
             error_msg = str(e).lower()
             
-            if 'flood' in error_msg:
+            # 通过关键词判断错误类型
+            if 'flood' in error_msg or 'peerflood' in error_msg:
                 return {
                     'status': 'limited',
                     'message': '⚠️ 通讯录受限 (FloodWait)',
@@ -24986,6 +25015,16 @@ admin3</code>
 总计检测: {len(results)} 个账号
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+检测原理说明：
+✅ 正常：能成功导入测试联系人并找到用户
+⚠️ 受限：导入成功但找不到用户 / 触发FloodWait / 导入失败
+❌ 封号：账号被封禁或停用
+❌ 失败：检测过程出错或未授权
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+统计结果
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 ✅ 正常账号: {len(normal)} 个
 ⚠️ 通讯录受限: {len(limited)} 个
 ❌ 已封号: {len(banned)} 个
@@ -24999,7 +25038,7 @@ admin3</code>
 {chr(10).join([f"  • {r['phone']}" for r in normal]) or '  无'}
 
 【⚠️ 通讯录受限】
-{chr(10).join([f"  • {r['phone']}" for r in limited]) or '  无'}
+{chr(10).join([f"  • {r['phone']} - {r.get('message', '受限')}" for r in limited]) or '  无'}
 
 【❌ 已封号】
 {chr(10).join([f"  • {r['phone']}" for r in banned]) or '  无'}
