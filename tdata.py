@@ -56,6 +56,10 @@ TEST_CONTACT_PHONES = [
     '+254771625090'
 ]
 
+# 通讯录限制检测配置
+CONTACT_CHECK_MAX_CONCURRENT = 15  # 最大并发检测数
+CONTACT_CHECK_DELAY_BETWEEN = 0.3  # 检测之间的延迟（秒）
+
 print("🔍 Telegram账号检测机器人 V8.0")
 print(f"📅 当前时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}")
 
@@ -24804,7 +24808,8 @@ admin3</code>
     
     async def check_contact_limit(self, client, phone):
         """检查账号是否被通讯录限制"""
-        test_phone = TEST_CONTACT_PHONES[0]  # 使用第一个测试号码
+        # 使用第一个测试号码（多个号码是为了冗余备份，单个号码足够检测）
+        test_phone = TEST_CONTACT_PHONES[0]
         
         try:
             # 1. 尝试添加测试联系人
@@ -24825,7 +24830,9 @@ admin3</code>
                 # 3. 清理：删除测试联系人
                 try:
                     await client(DeleteContactsRequest(id=result.users))
-                except Exception:
+                except Exception as e:
+                    # 清理失败不影响检测结果，只记录日志
+                    logger.warning(f"清理测试联系人失败: {e}")
                     pass
                     
                 return {
@@ -24944,14 +24951,11 @@ admin3</code>
     
     async def batch_check_contact_limit(self, accounts, api_id, api_hash, proxies):
         """并发检测通讯录限制"""
-        MAX_CONCURRENT = 15
-        DELAY_BETWEEN = 0.3
-        
-        semaphore = asyncio.Semaphore(MAX_CONCURRENT)
+        semaphore = asyncio.Semaphore(CONTACT_CHECK_MAX_CONCURRENT)
         
         async def check_with_limit(account, proxy):
             async with semaphore:
-                await asyncio.sleep(DELAY_BETWEEN)
+                await asyncio.sleep(CONTACT_CHECK_DELAY_BETWEEN)
                 return await self.safe_check_contact_limit(account, api_id, api_hash, proxy)
         
         # 分配代理
