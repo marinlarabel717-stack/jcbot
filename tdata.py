@@ -21897,6 +21897,9 @@ admin3</code>
                                 tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession, proxy=proxy_dict),
                                 timeout=30  # 30秒超时
                             )
+                            # 重要：TData转Session后必须显式连接
+                            if client and not client.is_connected():
+                                await client.connect()
                             used_proxy = proxy_dict
                             logger.info(f"[{file_name}] 代理连接成功")
                         except asyncio.TimeoutError:
@@ -21910,6 +21913,9 @@ admin3</code>
                 if not client:
                     logger.info(f"[{file_name}] 使用本地连接")
                     client = await tdesk.ToTelethon(temp_session_path, flag=UseCurrentSession)
+                    # 重要：TData转Session后必须显式连接
+                    if not client.is_connected():
+                        await client.connect()
                 
                 session_path = temp_session_path
                 
