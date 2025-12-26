@@ -962,6 +962,58 @@ class ProfileManager:
         return results
 
 # ================================
+# 资料修改辅助函数
+# ================================
+
+def generate_progress_bar(current: int, total: int, width: int = 20) -> str:
+    """生成文本进度条
+    
+    Args:
+        current: 当前进度
+        total: 总数
+        width: 进度条宽度（字符数）
+        
+    Returns:
+        格式化的进度条字符串
+    """
+    if total == 0:
+        return "░" * width + " 0.0%"
+    
+    # 输入验证
+    if current < 0:
+        current = 0
+    
+    percentage = current / total
+    filled = int(width * percentage)
+    empty = width - filled
+    
+    bar = "▓" * filled + "░" * empty
+    percent_text = f"{percentage * 100:.1f}%"
+    
+    return f"{bar} {percent_text}"
+
+def format_time(seconds: float) -> str:
+    """格式化时间显示
+    
+    Args:
+        seconds: 秒数
+        
+    Returns:
+        格式化的时间字符串 (HH:MM:SS 或 MM:SS)
+    """
+    if seconds < 0:
+        return "00:00"
+    
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    secs = int(seconds % 60)
+    
+    if hours > 0:
+        return f"{hours:02d}:{minutes:02d}:{secs:02d}"
+    else:
+        return f"{minutes:02d}:{secs:02d}"
+
+# ================================
 # 设备参数管理器（新增）
 # ================================
 
@@ -9078,6 +9130,10 @@ class EnhancedBot:
     # 消息发送重试相关常量
     MESSAGE_RETRY_MAX = 3       # 默认最大重试次数
     MESSAGE_RETRY_BACKOFF = 2   # 指数退避基数
+    
+    # 资料修改进度更新相关常量
+    PROGRESS_UPDATE_INTERVAL = 2.0  # 最小刷新间隔（秒）
+    MAX_ERROR_DISPLAY_LENGTH = 30   # 错误消息最大显示长度
     
     def _is_network_error(self, error: Exception) -> bool:
         """判断异常是否是网络相关的错误
@@ -21409,46 +21465,66 @@ admin3</code>
             task['progress_msg'] = progress_msg
             
             # 显示确认信息
-            config_text = "• 姓名: ✅ 根据国家自动生成\n"
+            config_text = "├ 姓名: ✅ 随机生成（按国家）\n"
             if config.update_photo:
                 if config.photo_action == 'delete_all':
-                    config_text += "• 头像: 🗑 删除所有\n"
+                    config_text += "├ 头像: 🗑️ 删除所有历史\n"
+            else:
+                config_text += "├ 头像: ⏩ 不修改\n"
+            
             if config.update_bio:
                 if config.bio_action == 'clear':
-                    config_text += "• 简介: 📝 留空\n"
+                    config_text += "├ 简介: 📝 清空\n"
                 elif config.bio_action == 'random':
-                    config_text += "• 简介: 🎲 随机生成\n"
+                    config_text += "├ 简介: 🎲 随机生成\n"
+            else:
+                config_text += "├ 简介: ⏩ 不修改\n"
+            
             if config.update_username:
                 if config.username_action == 'delete':
-                    config_text += "• 用户名: 🗑 删除\n"
+                    config_text += "└ 用户名: 🗑️ 删除\n"
                 elif config.username_action == 'random':
-                    config_text += "• 用户名: 🎲 随机生成\n"
+                    config_text += "└ 用户名: 🎲 随机生成\n"
+            else:
+                config_text += "└ 用户名: ⏩ 不修改\n"
             
-            text = f"""✅ <b>找到 {len(files)} 个账号文件</b>
+            text = f"""📝 <b>准备开始修改资料</b>
 
-<b>文件类型：</b>{file_type.upper()}
+━━━━━━━━━━━━━━━━━━━━
 
-<b>修改配置：</b>
+📁 <b>文件信息:</b>
+├ 类型: {file_type.upper()}
+└ 数量: {len(files)} 个账号
+
+⚙️ <b>修改配置:</b>
 {config_text}
 
-<b>⚠️ 注意事项：</b>
-• 姓名会根据手机号自动识别国家生成对应语言
-• 每个姓名都是随机生成，绝不重复
-• 系统会自动添加延迟避免触发限流
-• 用户名会自动检查是否可用
+━━━━━━━━━━━━━━━━━━━━
 
-准备开始修改吗？
+⚠️ <b>注意事项:</b>
+• 修改后无法自动恢复原始资料
+• 系统会自动控制频率避免触发限制
+• 用户名会自动检查可用性
+
+━━━━━━━━━━━━━━━━━━━━
+
+确认开始修改吗？
 """
+            
+            # 添加确认按钮
+            keyboard = InlineKeyboardMarkup([
+                [
+                    InlineKeyboardButton("✅ 确认开始修改", callback_data="profile_confirm_execute"),
+                    InlineKeyboardButton("❌ 取消", callback_data="profile_cancel")
+                ]
+            ])
             
             self.safe_edit_message_text(
                 progress_msg,
                 text,
-                parse_mode='HTML'
+                parse_mode='HTML',
+                reply_markup=keyboard
             )
-            
-            # 直接开始执行（不需要额外确认）
-            await asyncio.sleep(1)
-            await self._execute_profile_update(user_id, files, file_type, config, context, progress_msg)
             
         except Exception as e:
             logger.error(f"Profile update upload failed: {e}")
@@ -21475,49 +21551,111 @@ admin3</code>
         
         total = len(files)
         processed = 0
+        start_time = time.time()
+        last_update_time = 0
+        current_account_info = ""
+        
+        async def update_progress_display(force=False):
+            """更新进度显示"""
+            nonlocal last_update_time
+            
+            current_time = time.time()
+            
+            # 控制刷新频率（除非强制更新或已完成）
+            if not force and processed < total:
+                if current_time - last_update_time < self.PROGRESS_UPDATE_INTERVAL:
+                    return
+            
+            last_update_time = current_time
+            
+            # 计算统计信息
+            success_count = len(results['success'])
+            failed_count = len(results['failed'])
+            remaining = total - processed
+            elapsed = current_time - start_time
+            
+            # 计算速度和预估时间（添加除零保护）
+            speed = processed / elapsed if elapsed > 0 and processed > 0 else 0
+            eta = remaining / speed if speed > 0 else 0
+            
+            # 生成进度条
+            progress_bar = generate_progress_bar(processed, total)
+            
+            # 格式化时间
+            elapsed_str = format_time(elapsed)
+            eta_str = format_time(eta)
+            
+            # 构建进度显示文本
+            progress_text = f"""📝 <b>资料修改进度</b>
+
+━━━━━━━━━━━━━━━━━━━━
+{progress_bar}
+━━━━━━━━━━━━━━━━━━━━
+
+📊 <b>统计信息:</b>
+├ 📦 总数: {total}
+├ ✅ 成功: {success_count}
+├ ❌ 失败: {failed_count}
+├ ⏳ 处理中: {1 if processed < total else 0}
+└ 📋 剩余: {remaining}
+
+⚡ 处理速度: {speed:.1f} 个/秒
+⏱️ 已用时间: {elapsed_str}
+⏳ 预计剩余: {eta_str}
+
+{current_account_info}
+
+━━━━━━━━━━━━━━━━━━━━
+💡 提示: 请耐心等待，不要关闭对话
+"""
+            
+            try:
+                context.bot.edit_message_text(
+                    chat_id=user_id,
+                    message_id=progress_msg.message_id,
+                    text=progress_text,
+                    parse_mode='HTML'
+                )
+            except Exception as e:
+                logger.warning(f"Failed to update progress: {e}")
         
         # 使用信号量控制并发
         semaphore = asyncio.Semaphore(3)  # 最多3个并发（避免限流）
         
         async def update_single_account(file_path, file_name):
-            nonlocal processed
+            nonlocal processed, current_account_info
             async with semaphore:
                 try:
+                    # 更新当前处理账号信息
+                    current_account_info = f"🔄 当前处理: {file_name}"
+                    await update_progress_display()
+                    
                     result = await self._update_single_profile(file_path, file_name, file_type, config)
                     
                     if result['success']:
                         results['success'].append((file_path, file_name, result))
+                        # 更新当前账号处理结果
+                        action_summary = result.get('actions', ['✅ 处理完成'])[0]
+                        current_account_info = f"🔄 当前处理: {file_name}\n   {action_summary}"
                     else:
                         results['failed'].append((file_path, file_name, result))
+                        error_msg = result.get('error', '未知错误')[:self.MAX_ERROR_DISPLAY_LENGTH]
+                        current_account_info = f"🔄 当前处理: {file_name}\n   ❌ 失败: {error_msg}..."
                     
                     results['details'].append(result)
                     processed += 1
                     
-                    # 每处理5个更新一次进度
-                    if processed % 5 == 0 or processed == total:
-                        try:
-                            progress_text = f"""🔄 <b>修改进度</b>
-
-• 总数：{total}
-• 已处理：{processed}
-• 成功：{len(results['success'])}
-• 失败：{len(results['failed'])}
-
-⏳ 请稍候...
-"""
-                            context.bot.edit_message_text(
-                                chat_id=user_id,
-                                message_id=progress_msg.message_id,
-                                text=progress_text,
-                                parse_mode='HTML'
-                            )
-                        except Exception as e:
-                            logger.warning(f"Failed to update progress: {e}")
+                    # 更新进度
+                    await update_progress_display()
                     
                 except Exception as e:
                     logger.error(f"Failed to update {file_name}: {e}")
                     results['failed'].append((file_path, file_name, {'success': False, 'error': str(e)}))
                     processed += 1
+                    await update_progress_display()
+        
+        # 初始显示
+        await update_progress_display(force=True)
         
         # 执行所有修改
         tasks = [update_single_account(file_path, file_name) for file_path, file_name in files]
@@ -22936,6 +23074,8 @@ admin3</code>
             self.handle_profile_custom_config(update, context, query, data, user_id)
         elif data == "profile_execute":
             self.handle_profile_update_execute(update, context, query, user_id)
+        elif data == "profile_confirm_execute":
+            self.handle_profile_confirm_execute(update, context, query, user_id)
         elif data == "profile_cancel":
             query.answer()
             if user_id in self.pending_profile_update:
@@ -23086,6 +23226,40 @@ admin3</code>
     def handle_profile_custom_config(self, update: Update, context: CallbackContext, query, data: str, user_id: int):
         """处理自定义模式配置选项"""
         query.answer("⚠️ 自定义模式开发中")
+    
+    def handle_profile_confirm_execute(self, update: Update, context: CallbackContext, query, user_id: int):
+        """处理确认执行资料修改"""
+        query.answer()
+        
+        if user_id not in self.pending_profile_update:
+            self.safe_edit_message(query, "❌ 任务已过期，请重新上传文件")
+            return
+        
+        task = self.pending_profile_update[user_id]
+        
+        # 检查是否有文件信息
+        if 'files' not in task or 'file_type' not in task or 'progress_msg' not in task:
+            self.safe_edit_message(query, "❌ 任务信息不完整，请重新上传文件")
+            return
+        
+        files = task['files']
+        file_type = task['file_type']
+        config = task['config']
+        progress_msg = task['progress_msg']
+        
+        # 开始执行（使用线程运行异步任务，避免事件循环错误）
+        def execute_profile_update():
+            try:
+                asyncio.run(self._execute_profile_update(user_id, files, file_type, config, context, progress_msg))
+            except asyncio.CancelledError:
+                logger.info(f"[profile_update] 任务被取消")
+            except Exception as e:
+                logger.error(f"[profile_update] 处理异常: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        thread = threading.Thread(target=execute_profile_update, daemon=True)
+        thread.start()
     
     def handle_profile_update_execute(self, update: Update, context: CallbackContext, query, user_id: int):
         """开始执行资料修改"""
