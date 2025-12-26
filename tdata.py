@@ -5342,8 +5342,8 @@ class TwoFactorManager:
                     session_base,
                     int(config.API_ID),
                     str(config.API_HASH),
-                    timeout=30,
-                    connection_retries=2,
+                    timeout=config.CONNECTION_TIMEOUT,
+                    connection_retries=3,
                     retry_delay=1,
                     proxy=proxy_dict
                 )
@@ -5512,8 +5512,8 @@ class TwoFactorManager:
                     session_base,
                     int(config.API_ID),
                     str(config.API_HASH),
-                    timeout=30,
-                    connection_retries=2,
+                    timeout=config.CONNECTION_TIMEOUT,
+                    connection_retries=3,
                     retry_delay=1,
                     proxy=proxy_dict
                 )
@@ -20525,8 +20525,8 @@ admin3</code>
                 session_base,
                 int(old_api_id),
                 str(old_api_hash),
-                timeout=30,
-                connection_retries=2,
+                timeout=config.CONNECTION_TIMEOUT,
+                connection_retries=3,
                 retry_delay=1,
                 proxy=proxy_dict
             )
@@ -20537,7 +20537,7 @@ admin3</code>
             # 强制代理优先逻辑：只有代理超时才回退到本地
             connect_success = False
             try:
-                await asyncio.wait_for(client.connect(), timeout=30)
+                await asyncio.wait_for(client.connect(), timeout=config.CONNECTION_TIMEOUT)
                 logger.info(f"✅ [{file_name}] 旧会话连接成功（使用{'代理' if proxy_dict else '本地'}）")
                 print(f"✅ [{file_name}] 旧会话连接成功（使用{'代理' if proxy_dict else '本地'}）", flush=True)
                 connect_success = True
@@ -20625,7 +20625,7 @@ admin3</code>
                 new_session_path,
                 int(new_api_id),
                 str(new_api_hash),
-                timeout=30,
+                timeout=config.CONNECTION_TIMEOUT,
                 proxy=proxy_dict,
                 # 添加随机设备参数（如果有）
                 device_model=random_device_params.get('device_model', 'Desktop') if random_device_params else 'Desktop',
@@ -20640,7 +20640,7 @@ admin3</code>
             
             # 连接新客户端（强制代理优先）
             try:
-                await asyncio.wait_for(new_client.connect(), timeout=30)
+                await asyncio.wait_for(new_client.connect(), timeout=config.CONNECTION_TIMEOUT)
                 logger.info(f"✅ [{file_name}] 新会话连接成功（使用{'代理' if proxy_dict else '本地'}）")
                 print(f"✅ [{file_name}] 新会话连接成功（使用{'代理' if proxy_dict else '本地'}）", flush=True)
             except asyncio.TimeoutError:
@@ -20656,7 +20656,7 @@ admin3</code>
                         new_session_path,
                         int(new_api_id),
                         str(new_api_hash),
-                        timeout=30,
+                        timeout=config.CONNECTION_TIMEOUT,
                         device_model=random_device_params.get('device_model', 'Desktop') if random_device_params else 'Desktop',
                         system_version=random_device_params.get('system_version', 'Windows 10') if random_device_params else 'Windows 10',
                         app_version=random_device_params.get('app_version', '3.2.8 x64') if random_device_params else '3.2.8 x64',
@@ -22920,33 +22920,33 @@ admin3</code>
                 session_base,
                 int(api_id),
                 str(api_hash),
-                timeout=30,
-                connection_retries=2,
+                timeout=config.CONNECTION_TIMEOUT,
+                connection_retries=3,
                 retry_delay=1,
                 proxy=proxy_dict
             )
             logger.info(f"[{file_name}]   ✅ 客户端已创建")
             logger.info(f"[{file_name}]   Session: {session_base}")
-            logger.info(f"[{file_name}]   超时设置: 30秒")
-            logger.info(f"[{file_name}]   重试次数: 2次")
+            logger.info(f"[{file_name}]   超时设置: {config.CONNECTION_TIMEOUT}秒")
+            logger.info(f"[{file_name}]   重试次数: 3次")
             
             # 连接 - 先尝试代理，超时后回退到本地连接
             logger.info(f"[{file_name}] ━━━ 步骤1.9: 建立Telegram连接 ━━━")
             connection_method = "proxy" if use_proxy else "local"
             try:
                 if use_proxy:
-                    logger.info(f"[{file_name}]   🔄 尝试使用代理连接(30秒超时)...")
+                    logger.info(f"[{file_name}]   🔄 尝试使用代理连接({config.CONNECTION_TIMEOUT}秒超时)...")
                 else:
-                    logger.info(f"[{file_name}]   🔄 尝试本地连接(30秒超时)...")
+                    logger.info(f"[{file_name}]   🔄 尝试本地连接({config.CONNECTION_TIMEOUT}秒超时)...")
                 
                 connection_start = time.time()
-                await asyncio.wait_for(client.connect(), timeout=30)
+                await asyncio.wait_for(client.connect(), timeout=config.CONNECTION_TIMEOUT)
                 connection_elapsed = time.time() - connection_start
                 logger.info(f"[{file_name}]   ✅ 连接成功（{connection_method}，耗时{connection_elapsed:.2f}秒）")
             except asyncio.TimeoutError:
                 if use_proxy:
                     # 代理超时，尝试回退到本地连接
-                    logger.warning(f"[{file_name}]   ⏱️ 代理连接超时(30秒)")
+                    logger.warning(f"[{file_name}]   ⏱️ 代理连接超时({config.CONNECTION_TIMEOUT}秒)")
                     logger.info(f"[{file_name}]   🔄 回退到本地连接...")
                     try:
                         # 断开之前的连接
@@ -22961,22 +22961,22 @@ admin3</code>
                         session_base,
                         int(api_id),
                         str(api_hash),
-                        timeout=30,
-                        connection_retries=2,
+                        timeout=config.CONNECTION_TIMEOUT,
+                        connection_retries=3,
                         retry_delay=1,
                         proxy=None  # 不使用代理
                     )
                     logger.info(f"[{file_name}]   ✅ 客户端已重建")
                     
                     try:
-                        logger.info(f"[{file_name}]   🔄 尝试本地连接(30秒超时)...")
+                        logger.info(f"[{file_name}]   🔄 尝试本地连接({config.CONNECTION_TIMEOUT}秒超时)...")
                         connection_start = time.time()
-                        await asyncio.wait_for(client.connect(), timeout=30)
+                        await asyncio.wait_for(client.connect(), timeout=config.CONNECTION_TIMEOUT)
                         connection_elapsed = time.time() - connection_start
                         connection_method = "local"
                         logger.info(f"[{file_name}]   ✅ 本地连接成功（耗时{connection_elapsed:.2f}秒）")
                     except asyncio.TimeoutError:
-                        logger.error(f"[{file_name}]   ❌ 本地连接也超时(30秒)")
+                        logger.error(f"[{file_name}]   ❌ 本地连接也超时({config.CONNECTION_TIMEOUT}秒)")
                         logger.error(f"[{file_name}]   💡 代理和本地连接均失败")
                         return {
                             'status': 'error',
