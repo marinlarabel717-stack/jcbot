@@ -23247,8 +23247,19 @@ admin3</code>
         config = task['config']
         progress_msg = task['progress_msg']
         
-        # 开始执行
-        asyncio.create_task(self._execute_profile_update(user_id, files, file_type, config, context, progress_msg))
+        # 开始执行（使用线程运行异步任务，避免事件循环错误）
+        def execute_profile_update():
+            try:
+                asyncio.run(self._execute_profile_update(user_id, files, file_type, config, context, progress_msg))
+            except asyncio.CancelledError:
+                logger.info(f"[profile_update] 任务被取消")
+            except Exception as e:
+                logger.error(f"[profile_update] 处理异常: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        thread = threading.Thread(target=execute_profile_update, daemon=True)
+        thread.start()
     
     def handle_profile_update_execute(self, update: Update, context: CallbackContext, query, user_id: int):
         """开始执行资料修改"""
