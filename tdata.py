@@ -57,7 +57,7 @@ TEST_CONTACT_PHONES = [
 ]
 
 # 通讯录限制检测配置
-CONTACT_CHECK_MAX_CONCURRENT = 15  # 最大并发检测数
+CONTACT_CHECK_MAX_CONCURRENT = 30  # 最大并发检测数
 CONTACT_CHECK_DELAY_BETWEEN = 0.3  # 检测之间的延迟（秒）
 SINGLE_ACCOUNT_TIMEOUT = 30  # 单个账号检测超时（秒）
 BATCH_TIMEOUT = 30 * 60  # 批量检测总超时（秒）- 30分钟
@@ -1078,6 +1078,45 @@ def extract_phone_from_path(path: str) -> Optional[str]:
     match = re.search(r'\b\d{10,15}\b', name)
     return match.group() if match else None
 
+def extract_phone_from_tdata_path(tdata_path: str) -> Optional[str]:
+    """从 TData 路径提取手机号
+    
+    支持的路径结构：
+    - /tmp/xxx/+8613812345678/tdata/D877F783D5D3EF8C
+    - /tmp/xxx/+8613812345678/tdata
+    - /tmp/xxx/8613812345678/tdata/D877F783D5D3EF8C
+    
+    Args:
+        tdata_path: TData 路径（可能是 tdata 目录或其子目录）
+        
+    Returns:
+        手机号（带+前缀），如果未找到则返回None
+    """
+    try:
+        # 标准化路径分隔符
+        path_parts = tdata_path.replace('\\', '/').split('/')
+        
+        # 从路径各部分查找手机号
+        for part in path_parts:
+            if not part:
+                continue
+            
+            # 查找以 + 开头的文件夹名（手机号）
+            if part.startswith('+') and len(part) > 5:
+                # 验证去掉+后是否全是数字
+                phone_digits = part[1:]
+                if phone_digits.isdigit() and len(phone_digits) >= 10:
+                    return part
+            
+            # 也支持纯数字格式（不带+）
+            if part.isdigit() and len(part) >= 10:
+                return '+' + part
+        
+        return None
+    except Exception as e:
+        logger.warning(f"从TData路径提取手机号失败: {e}")
+        return None
+
 def detect_tdata_structure(account_path: str) -> Optional[Tuple]:
     """检测 TData 目录结构类型
     
@@ -1188,6 +1227,29 @@ def process_accounts_with_dedup(accounts: List[Tuple[str, str]]) -> List[Tuple[s
             logger.info(f"添加账号: {phone}")
         else:
             logger.info(f"跳过重复手机号: {phone or account_name}")
+    
+    logger.info(f"去重完成: 原始 {len(accounts)} 个，去重后 {len(unique_accounts)} 个")
+    return unique_accounts
+
+def deduplicate_accounts_by_phone(accounts: List[Dict]) -> List[Dict]:
+    """按手机号去重账号列表
+    
+    Args:
+        accounts: 账号字典列表，每个字典包含 phone, session_path, original_path, format 等字段
+        
+    Returns:
+        去重后的账号列表
+    """
+    seen_phones = set()
+    unique_accounts = []
+    
+    for account in accounts:
+        phone = account.get('phone')
+        if phone and phone not in seen_phones:
+            seen_phones.add(phone)
+            unique_accounts.append(account)
+        else:
+            logger.warning(f"⚠️ 重复账号已跳过: {phone}")
     
     logger.info(f"去重完成: 原始 {len(accounts)} 个，去重后 {len(unique_accounts)} 个")
     return unique_accounts
@@ -24937,7 +24999,15 @@ admin3</code>
         """安全检测单个账号（带 session 隔离）"""
         temp_dir = None
         client = None
-        phone = extract_phone_from_path(account_path)
+        
+        # 判断是 session 还是 tdata，并提取手机号
+        is_tdata = not account_path.endswith('.session')
+        if is_tdata:
+            phone = extract_phone_from_tdata_path(account_path)
+            account_format = 'tdata'
+        else:
+            phone = extract_phone_from_path(account_path)
+            account_format = 'session'
         
         try:
             # 复制 session 到临时目录避免 database locked
@@ -24961,14 +25031,18 @@ admin3</code>
                             'status': CONTACT_STATUS_ERROR,
                             'message': f'❌ TData转换失败: {str(e)[:30]}',
                             'phone': phone,
-                            'path': account_path
+                            'path': account_path,
+                            'original_path': account_path,
+                            'format': account_format
                         }
                 else:
                     return {
                         'status': CONTACT_STATUS_ERROR,
                         'message': '❌ TData转换功能不可用',
                         'phone': phone,
-                        'path': account_path
+                        'path': account_path,
+                        'original_path': account_path,
+                        'format': account_format
                     }
             
             # 转换代理格式为TelegramClient所需格式
@@ -24996,12 +25070,16 @@ admin3</code>
                         'status': CONTACT_STATUS_UNAUTHORIZED,
                         'message': '❌ 未授权/已失效',
                         'phone': phone,
-                        'path': account_path
+                        'path': account_path,
+                        'original_path': account_path,
+                        'format': account_format
                     }
                 
                 # 检测通讯录限制
                 result = await self.check_contact_limit(client, phone)
                 result['path'] = account_path
+                result['original_path'] = account_path
+                result['format'] = account_format
                 
                 await client.disconnect()
                 
@@ -25020,7 +25098,9 @@ admin3</code>
                     'status': CONTACT_STATUS_ERROR,
                     'message': f'⏱️ 检测超时（{SINGLE_ACCOUNT_TIMEOUT}秒），已跳过',
                     'phone': phone,
-                    'path': account_path
+                    'path': account_path,
+                    'original_path': account_path,
+                    'format': account_format
                 }
             
         except (ConnectionError, TimeoutError, OSError) as e:
@@ -25030,7 +25110,9 @@ admin3</code>
                 'status': CONTACT_STATUS_ERROR,
                 'message': f'⚠️ 连接错误: {str(e)[:30]}',
                 'phone': phone,
-                'path': account_path
+                'path': account_path,
+                'original_path': account_path,
+                'format': account_format
             }
         except Exception as e:
             logger.error(f"❌ 未知错误，跳过账号 {phone}: {e}")
@@ -25038,7 +25120,9 @@ admin3</code>
                 'status': CONTACT_STATUS_ERROR,
                 'message': f'❌ 检测失败: {str(e)[:50]}',
                 'phone': phone,
-                'path': account_path
+                'path': account_path,
+                'original_path': account_path,
+                'format': account_format
             }
         finally:
             # 确保清理资源
@@ -25121,12 +25205,23 @@ admin3</code>
         for i, result in enumerate(results):
             if isinstance(result, Exception):
                 # 如果返回的是异常对象，转换为错误字典
-                phone = extract_phone_from_path(accounts[i]) if i < len(accounts) else 'unknown'
+                account_path = accounts[i] if i < len(accounts) else ''
+                # 判断是 tdata 还是 session
+                is_tdata = not account_path.endswith('.session')
+                if is_tdata:
+                    phone = extract_phone_from_tdata_path(account_path)
+                    account_format = 'tdata'
+                else:
+                    phone = extract_phone_from_path(account_path)
+                    account_format = 'session'
+                
                 processed_results.append({
                     'status': CONTACT_STATUS_ERROR,
                     'message': f'❌ 检测异常: {str(result)[:50]}',
                     'phone': phone,
-                    'path': accounts[i] if i < len(accounts) else ''
+                    'path': account_path,
+                    'original_path': account_path,
+                    'format': account_format
                 })
             else:
                 processed_results.append(result)
@@ -25196,7 +25291,7 @@ admin3</code>
         }
     
     async def pack_contact_limit_results(self, results_dict, output_dir):
-        """分类打包检测结果"""
+        """分类打包检测结果 - 每个分类单独一个ZIP，保留原始文件结构"""
         timestamp = datetime.now(BEIJING_TZ).strftime('%Y%m%d_%H%M%S')
         zip_files = {}
         
@@ -25223,27 +25318,72 @@ admin3</code>
                     added_paths = set()
                     
                     for item in items:
-                        account_path = item.get('path')
-                        if account_path and os.path.exists(account_path):
+                        original_path = item.get('original_path') or item.get('path')
+                        if original_path and os.path.exists(original_path):
                             phone = item.get('phone', 'unknown')
+                            account_format = item.get('format', 'session')
                             
-                            if os.path.isfile(account_path):
-                                # Session 文件
-                                arc_name = f"{phone}/{os.path.basename(account_path)}"
-                                if arc_name not in added_paths:
-                                    added_paths.add(arc_name)
-                                    zf.write(account_path, arc_name)
+                            if account_format == 'tdata':
+                                # TData 格式：保留原始文件夹结构
+                                # 原始结构: +8613812345678/tdata/D877F783D5D3EF8C/...
+                                # 需要找到包含手机号的根目录
+                                
+                                # 从路径中找到以 + 或纯数字开头的目录作为根目录
+                                path_parts = original_path.replace('\\', '/').split('/')
+                                base_folder = None
+                                
+                                # 查找手机号目录
+                                for i, part in enumerate(path_parts):
+                                    if part.startswith('+') or (part.isdigit() and len(part) >= 10):
+                                        # 找到手机号目录，构建到这个目录的完整路径
+                                        base_folder = '/'.join(path_parts[:i+1])
+                                        break
+                                
+                                # 如果没找到手机号目录，使用 tdata 的父目录
+                                if not base_folder:
+                                    # 查找 tdata 目录
+                                    for i, part in enumerate(path_parts):
+                                        if part.lower() == 'tdata':
+                                            # 使用 tdata 的父目录
+                                            base_folder = '/'.join(path_parts[:i])
+                                            break
+                                
+                                # 如果还是没找到，使用 original_path 的父目录
+                                if not base_folder:
+                                    base_folder = os.path.dirname(original_path)
+                                
+                                # 遍历整个目录树并保留原始结构
+                                if os.path.isdir(base_folder):
+                                    for root, dirs, files in os.walk(base_folder):
+                                        for file in files:
+                                            file_path = os.path.join(root, file)
+                                            # 计算相对于 base_folder 父目录的路径，这样会包含手机号文件夹
+                                            rel_path = os.path.relpath(file_path, os.path.dirname(base_folder))
+                                            
+                                            if rel_path not in added_paths:
+                                                added_paths.add(rel_path)
+                                                zf.write(file_path, rel_path)
+                                                logger.debug(f"添加TData文件到ZIP: {rel_path}")
+                                else:
+                                    logger.warning(f"TData目录不存在: {base_folder}")
                             else:
-                                # TData 目录
-                                for root, dirs, files in os.walk(account_path):
-                                    for file in files:
-                                        file_path = os.path.join(root, file)
-                                        rel_path = os.path.relpath(file_path, os.path.dirname(account_path))
-                                        arc_name = f"{phone}/{rel_path}"
-                                        if arc_name not in added_paths:
-                                            added_paths.add(arc_name)
-                                            zf.write(file_path, arc_name)
+                                # Session 格式：直接添加 session 文件（不带手机号子文件夹）
+                                session_basename = os.path.basename(original_path)
+                                if session_basename not in added_paths:
+                                    added_paths.add(session_basename)
+                                    zf.write(original_path, session_basename)
+                                    logger.debug(f"添加Session文件到ZIP: {session_basename}")
+                                
+                                # 同时添加 journal 文件（如果存在）
+                                journal_path = original_path + '-journal'
+                                if os.path.exists(journal_path):
+                                    journal_basename = session_basename + '-journal'
+                                    if journal_basename not in added_paths:
+                                        added_paths.add(journal_basename)
+                                        zf.write(journal_path, journal_basename)
+                                        logger.debug(f"添加Journal文件到ZIP: {journal_basename}")
                 
+                logger.info(f"✅ 创建ZIP文件: {os.path.basename(zip_path)}，共 {len(added_paths)} 个文件")
                 zip_files[key] = zip_path
         
         return zip_files
@@ -25304,11 +25444,38 @@ admin3</code>
             shutil.rmtree(extract_dir, ignore_errors=True)
             return
         
+        # 构建账号字典列表用于去重
+        logger.info(f"📊 扫描到 {len(accounts)} 个账号文件，开始去重...")
+        account_list = []
+        for account_path in accounts:
+            # 判断是 tdata 还是 session
+            is_tdata = not account_path.endswith('.session')
+            if is_tdata:
+                phone = extract_phone_from_tdata_path(account_path)
+                account_format = 'tdata'
+            else:
+                phone = extract_phone_from_path(account_path)
+                account_format = 'session'
+            
+            account_list.append({
+                'phone': phone,
+                'session_path': account_path,  # 这将在处理时转换为session
+                'original_path': account_path,
+                'format': account_format
+            })
+        
+        # 去重：按手机号去重
+        unique_accounts = deduplicate_accounts_by_phone(account_list)
+        logger.info(f"✅ 去重完成：原始 {len(account_list)} 个，去重后 {len(unique_accounts)} 个")
+        
+        # 提取去重后的路径列表用于检测
+        deduplicated_paths = [acc['original_path'] for acc in unique_accounts]
+        
         # 更新进度
         self.safe_edit_message_text(
             progress_msg,
-            f"📊 <b>找到 {len(accounts)} 个账号，开始检测...</b>\n\n"
-            f"⏳ 预计需要 {len(accounts) * 2 // 60 + 1} 分钟",
+            f"📊 <b>找到 {len(accounts)} 个账号，去重后 {len(deduplicated_paths)} 个，开始检测...</b>\n\n"
+            f"⏳ 预计需要 {len(deduplicated_paths) * 2 // 60 + 1} 分钟",
             'HTML'
         )
         
@@ -25360,7 +25527,7 @@ admin3</code>
         try:
             results = await asyncio.wait_for(
                 self.batch_check_contact_limit(
-                    accounts, api_id, api_hash, proxies, progress_callback
+                    deduplicated_paths, api_id, api_hash, proxies, progress_callback
                 ),
                 timeout=BATCH_TIMEOUT
             )
