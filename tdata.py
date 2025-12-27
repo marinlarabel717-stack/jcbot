@@ -59,6 +59,9 @@ TEST_CONTACT_PHONES = [
 # 通讯录限制检测配置
 CONTACT_CHECK_MAX_CONCURRENT = 15  # 最大并发检测数
 CONTACT_CHECK_DELAY_BETWEEN = 0.3  # 检测之间的延迟（秒）
+SINGLE_ACCOUNT_TIMEOUT = 30  # 单个账号检测超时（秒）
+BATCH_TIMEOUT = 30 * 60  # 批量检测总超时（秒）- 30分钟
+UPDATE_INTERVAL = 5  # 进度消息更新间隔（秒）
 
 # 通讯录限制检测状态常量
 CONTACT_STATUS_NORMAL = 'normal'
@@ -24933,6 +24936,9 @@ admin3</code>
     async def safe_check_contact_limit(self, account_path, api_id, api_hash, proxy_info):
         """安全检测单个账号（带 session 隔离）"""
         temp_dir = None
+        client = None
+        phone = extract_phone_from_path(account_path)
+        
         try:
             # 复制 session 到临时目录避免 database locked
             temp_dir = tempfile.mkdtemp()
@@ -24949,8 +24955,8 @@ admin3</code>
                         temp_session = os.path.join(temp_dir, f"{uuid.uuid4().hex}.session")
                         client = await tdesk.ToTelethon(session=temp_session, flag=UseCurrentSession)
                         await client.disconnect()
+                        # Don't set client to None here - will be overwritten in _check_with_timeout()
                     except Exception as e:
-                        phone = extract_phone_from_path(account_path)
                         return {
                             'status': CONTACT_STATUS_ERROR,
                             'message': f'❌ TData转换失败: {str(e)[:30]}',
@@ -24958,7 +24964,6 @@ admin3</code>
                             'path': account_path
                         }
                 else:
-                    phone = extract_phone_from_path(account_path)
                     return {
                         'status': CONTACT_STATUS_ERROR,
                         'message': '❌ TData转换功能不可用',
@@ -24966,44 +24971,69 @@ admin3</code>
                         'path': account_path
                     }
             
-            # 获取手机号
-            phone = extract_phone_from_path(account_path)
-            
             # 转换代理格式为TelegramClient所需格式
             proxy_dict = None
             if proxy_info:
                 proxy_dict = self.checker.create_proxy_dict(proxy_info)
             
-            # 连接并检测
-            client = TelegramClient(
-                temp_session,
-                api_id,
-                api_hash,
-                proxy=proxy_dict,
-                timeout=10,
-                connection_retries=3
-            )
+            # 连接并检测 - 添加超时保护
+            async def _check_with_timeout():
+                nonlocal client
+                # 连接并检测
+                client = TelegramClient(
+                    temp_session,
+                    api_id,
+                    api_hash,
+                    proxy=proxy_dict,
+                    timeout=10,
+                    connection_retries=3
+                )
+                
+                await client.connect()
+                
+                if not await client.is_user_authorized():
+                    return {
+                        'status': CONTACT_STATUS_UNAUTHORIZED,
+                        'message': '❌ 未授权/已失效',
+                        'phone': phone,
+                        'path': account_path
+                    }
+                
+                # 检测通讯录限制
+                result = await self.check_contact_limit(client, phone)
+                result['path'] = account_path
+                
+                await client.disconnect()
+                
+                return result
             
-            await client.connect()
-            
-            if not await client.is_user_authorized():
+            # 添加单个账号超时保护
+            try:
+                result = await asyncio.wait_for(
+                    _check_with_timeout(),
+                    timeout=SINGLE_ACCOUNT_TIMEOUT
+                )
+                return result
+            except asyncio.TimeoutError:
+                logger.warning(f"⏱️ 账号 {phone} 检测超时（{SINGLE_ACCOUNT_TIMEOUT}秒），跳过")
                 return {
-                    'status': CONTACT_STATUS_UNAUTHORIZED,
-                    'message': '❌ 未授权/已失效',
+                    'status': CONTACT_STATUS_ERROR,
+                    'message': f'⏱️ 检测超时（{SINGLE_ACCOUNT_TIMEOUT}秒），已跳过',
                     'phone': phone,
                     'path': account_path
                 }
             
-            # 检测通讯录限制
-            result = await self.check_contact_limit(client, phone)
-            result['path'] = account_path
-            
-            await client.disconnect()
-            
-            return result
-            
+        except (ConnectionError, TimeoutError, OSError) as e:
+            # 连接错误直接跳过
+            logger.warning(f"⚠️ 连接错误，跳过账号 {phone}: {e}")
+            return {
+                'status': CONTACT_STATUS_ERROR,
+                'message': f'⚠️ 连接错误: {str(e)[:30]}',
+                'phone': phone,
+                'path': account_path
+            }
         except Exception as e:
-            phone = extract_phone_from_path(account_path)
+            logger.error(f"❌ 未知错误，跳过账号 {phone}: {e}")
             return {
                 'status': CONTACT_STATUS_ERROR,
                 'message': f'❌ 检测失败: {str(e)[:50]}',
@@ -25011,6 +25041,16 @@ admin3</code>
                 'path': account_path
             }
         finally:
+            # 确保清理资源
+            if client:
+                try:
+                    await client.disconnect()
+                except (ConnectionError, AttributeError, RuntimeError) as e:
+                    # 忽略断开连接时的常见错误
+                    logger.debug(f"断开连接失败（可忽略）: {e}")
+                except Exception as e:
+                    # 记录其他意外错误
+                    logger.warning(f"断开连接时发生意外错误: {e}")
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir, ignore_errors=True)
     
@@ -25285,10 +25325,10 @@ admin3</code>
         last_update_time = [time.time()]  # 使用列表以便在闭包中修改
         
         async def progress_callback(current, total, phone, icon, message):
-            """更新进度显示"""
+            """更新进度显示 - 限制更新频率避免被Telegram限流"""
             # 限制更新频率，避免被Telegram限流
             now = time.time()
-            if now - last_update_time[0] < 1:  # 至少间隔1秒
+            if now - last_update_time[0] < UPDATE_INTERVAL:  # 使用配置的更新间隔
                 return
             last_update_time[0] = now
             
@@ -25313,20 +25353,34 @@ admin3</code>
                     'HTML'
                 )
             except Exception as e:
-                # 忽略编辑消息失败的错误（可能是因为内容未改变）
+                # 忽略编辑消息失败的错误（可能是因为内容未改变或FloodWait）
                 logger.debug(f"更新进度显示失败: {e}")
         
-        # 并发检测
+        # 并发检测 - 添加整体超时保护
         try:
-            results = await self.batch_check_contact_limit(
-                accounts, api_id, api_hash, proxies, progress_callback
+            results = await asyncio.wait_for(
+                self.batch_check_contact_limit(
+                    accounts, api_id, api_hash, proxies, progress_callback
+                ),
+                timeout=BATCH_TIMEOUT
             )
+        except asyncio.TimeoutError:
+            logger.error(f"⏱️ 批量检测超时（{BATCH_TIMEOUT // 60}分钟），强制结束")
+            self.safe_edit_message_text(
+                progress_msg,
+                f"⚠️ <b>检测超时（{BATCH_TIMEOUT // 60}分钟），强制结束</b>\n\n"
+                f"已完成部分结果将发送...",
+                'HTML'
+            )
+            # 创建空结果列表，确保后续代码能继续执行
+            results = []
         except Exception as e:
+            logger.error(f"❌ 检测失败: {e}")
             self.safe_edit_message_text(progress_msg, f"❌ 检测失败: {e}")
             shutil.rmtree(extract_dir, ignore_errors=True)
             return
         
-        # 生成报告
+        # 生成报告 - 确保无论如何都发送结果文件
         output_dir = tempfile.mkdtemp()
         try:
             report_path, results_dict = await self.generate_contact_limit_report(results, output_dir)
