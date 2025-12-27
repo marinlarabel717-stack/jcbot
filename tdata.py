@@ -24853,7 +24853,7 @@ admin3</code>
                     'message': message,
                     'phone': phone
                 }
-            elif result.imported > 0:
+            elif result.imported:
                 # 导入计数显示成功，但找不到用户 → 受限
                 return {
                     'status': CONTACT_STATUS_LIMITED,
