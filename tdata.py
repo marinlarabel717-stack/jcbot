@@ -25160,17 +25160,24 @@ admin3</code>
         timestamp = datetime.now(BEIJING_TZ).strftime('%Y%m%d_%H%M%S')
         zip_files = {}
         
-        # 文件命名：检查通讯录{类型}-{编号}_{时间戳}.zip
+        # 文件命名：检查通讯录{类型}-{账号数量}_{时间戳}.zip
         categories = {
-            'normal': ('检查通讯录正常-1', results_dict['normal']),
-            'limited': ('检查通讯录受限-2', results_dict['limited']),
-            'banned': ('检查通讯录受限-2', results_dict['banned']),  # banned 归类为受限
-            'failed': ('检查通讯录失败-3', results_dict['failed'])
+            'normal': ('检查通讯录正常', results_dict['normal']),
+            'limited': ('检查通讯录受限', results_dict['limited']),
+            'banned': ('检查通讯录受限', results_dict['banned']),  # banned 归类为受限
+            'failed': ('检查通讯录失败', results_dict['failed'])
         }
+        
+        # 合并 limited 和 banned
+        combined_limited = results_dict['limited'] + results_dict['banned']
+        if combined_limited:
+            categories['limited'] = ('检查通讯录受限', combined_limited)
+            categories.pop('banned', None)
         
         for key, (name, items) in categories.items():
             if items:
-                zip_path = os.path.join(output_dir, f'{name}_{timestamp}.zip')
+                count = len(items)
+                zip_path = os.path.join(output_dir, f'{name}-{count}_{timestamp}.zip')
                 
                 with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
                     added_paths = set()
