@@ -24955,7 +24955,7 @@ admin3</code>
                         temp_session = os.path.join(temp_dir, f"{uuid.uuid4().hex}.session")
                         client = await tdesk.ToTelethon(session=temp_session, flag=UseCurrentSession)
                         await client.disconnect()
-                        client = None  # Reset to create new client below
+                        # Don't set client to None here - will be overwritten in _check_with_timeout
                     except Exception as e:
                         return {
                             'status': CONTACT_STATUS_ERROR,
@@ -25046,8 +25046,12 @@ admin3</code>
             if client:
                 try:
                     await client.disconnect()
-                except:
-                    pass
+                except (ConnectionError, AttributeError, RuntimeError) as e:
+                    # 忽略断开连接时的常见错误
+                    logger.debug(f"断开连接失败（可忽略）: {e}")
+                except Exception as e:
+                    # 记录其他意外错误
+                    logger.warning(f"断开连接时发生意外错误: {e}")
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir, ignore_errors=True)
     
