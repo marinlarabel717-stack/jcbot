@@ -24816,10 +24816,12 @@ admin3</code>
         """检查账号是否被通讯录限制
         
         检测逻辑：
-        1. 尝试导入真实存在的手机号，能找到用户 → ✅ 无限制
-        2. 导入成功但找不到用户 → ⚠️ 受限
-        3. 触发 PeerFloodError / FloodWaitError → ⚠️ 受限
-        4. 导入后静默失败（无报错但联系人不出现）→ ⚠️ 受限
+        1. 使用 ImportContactsRequest 导入真实存在的 Telegram 测试号码
+        2. 如果 result.users 有用户 → ✅ 账号正常（能看到联系人）
+        3. 如果 result.users 为空 → ⚠️ 账号受限（无法查看联系人，显示"not on Telegram"）
+        4. 触发 PeerFloodError / FloodWaitError → ⚠️ 受限
+        
+        注意：result.imported 不能作为判断依据，核心只看 result.users 是否为空
         """
         # 使用第一个测试号码（多个号码是为了冗余备份，单个号码足够检测）
         test_phone = TEST_CONTACT_PHONES[0]
@@ -24844,13 +24846,14 @@ admin3</code>
             # API 调用结果记录日志
             users_count = len(result.users) if result.users else 0
             imported_count = len(result.imported) if result.imported else 0
-            logger.info(f"📊 ImportContactsRequest 结果: users={users_count}, imported={imported_count}")
+            logger.info(f"📊 API响应: users={users_count}, imported={imported_count}")
+            logger.info(f"📊 用户详情: {[u.first_name for u in result.users] if result.users else '无'}")
             
-            # 2. 判断结果 - 根据细化的检测逻辑
+            # 2. 判断结果 - 核心逻辑：只看 result.users 是否为空
             if result.users and len(result.users) > 0:
                 # 能找到用户 → 正常（无限制）
                 status = CONTACT_STATUS_NORMAL
-                message = '✅ 正常'
+                message = '✅ 通讯录正常，能正常添加联系人'
                 
                 # 3. 清理：删除测试联系人
                 try:
@@ -24868,20 +24871,10 @@ admin3</code>
                     'message': message,
                     'phone': phone
                 }
-            elif result.imported:
-                # 导入计数显示成功，但找不到用户 → 受限
-                status = CONTACT_STATUS_LIMITED
-                message = '⚠️ 通讯录受限 (导入成功但找不到用户)'
-                logger.info(f"✅ 检测完成 [{phone}]: {status} - {message}")
-                return {
-                    'status': status,
-                    'message': message,
-                    'phone': phone
-                }
             else:
-                # 导入失败或静默失败（无报错但联系人不出现）→ 受限
+                # 找不到用户（即使测试号码实际存在）→ 通讯录受限
                 status = CONTACT_STATUS_LIMITED
-                message = '⚠️ 通讯录受限 (导入失败)'
+                message = '⚠️ 通讯录受限，无法查看联系人'
                 logger.info(f"✅ 检测完成 [{phone}]: {status} - {message}")
                 return {
                     'status': status,
