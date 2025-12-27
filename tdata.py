@@ -24824,7 +24824,13 @@ admin3</code>
         # 使用第一个测试号码（多个号码是为了冗余备份，单个号码足够检测）
         test_phone = TEST_CONTACT_PHONES[0]
         
+        # 开始检测时记录日志
+        logger.info(f"🔍 开始检测通讯录限制: {phone}")
+        
         try:
+            # 导入测试联系人时记录日志
+            logger.info(f"📥 正在导入测试联系人: {test_phone}")
+            
             # 1. 尝试添加测试联系人
             result = await client(ImportContactsRequest([
                 InputPhoneContact(
@@ -24835,6 +24841,11 @@ admin3</code>
                 )
             ]))
             
+            # API 调用结果记录日志
+            users_count = len(result.users) if result.users else 0
+            imported_count = len(result.imported) if result.imported else 0
+            logger.info(f"📊 ImportContactsRequest 结果: users={users_count}, imported={imported_count}")
+            
             # 2. 判断结果 - 根据细化的检测逻辑
             if result.users and len(result.users) > 0:
                 # 能找到用户 → 正常（无限制）
@@ -24843,10 +24854,14 @@ admin3</code>
                 
                 # 3. 清理：删除测试联系人
                 try:
+                    logger.info(f"🧹 清理测试联系人: {test_phone}")
                     await client(DeleteContactsRequest(id=result.users))
                 except Exception as e:
                     # 清理失败不影响检测结果，只记录日志
                     logger.warning(f"清理测试联系人失败: {e}")
+                
+                # 检测结果记录日志
+                logger.info(f"✅ 检测完成 [{phone}]: {status} - {message}")
                     
                 return {
                     'status': status,
@@ -24855,21 +24870,30 @@ admin3</code>
                 }
             elif result.imported:
                 # 导入计数显示成功，但找不到用户 → 受限
+                status = CONTACT_STATUS_LIMITED
+                message = '⚠️ 通讯录受限 (导入成功但找不到用户)'
+                logger.info(f"✅ 检测完成 [{phone}]: {status} - {message}")
                 return {
-                    'status': CONTACT_STATUS_LIMITED,
-                    'message': '⚠️ 通讯录受限 (导入成功但找不到用户)',
+                    'status': status,
+                    'message': message,
                     'phone': phone
                 }
             else:
                 # 导入失败或静默失败（无报错但联系人不出现）→ 受限
+                status = CONTACT_STATUS_LIMITED
+                message = '⚠️ 通讯录受限 (导入失败)'
+                logger.info(f"✅ 检测完成 [{phone}]: {status} - {message}")
                 return {
-                    'status': CONTACT_STATUS_LIMITED,
-                    'message': '⚠️ 通讯录受限 (导入失败)',
+                    'status': status,
+                    'message': message,
                     'phone': phone
                 }
                 
         except (PeerFloodError, FloodWaitError) as e:
             # 明确的 Flood 错误 → 受限
+            error_type = type(e).__name__
+            logger.error(f"❌ 检测失败 [{phone}]: {error_type} - {str(e)}")
+            logger.debug(f"📋 完整错误堆栈:\n{traceback.format_exc()}")
             return {
                 'status': CONTACT_STATUS_LIMITED,
                 'message': '⚠️ 通讯录受限 (FloodWait)',
@@ -24877,6 +24901,9 @@ admin3</code>
             }
         except (UserDeactivatedBanError, UserDeactivatedError, PhoneNumberBannedError) as e:
             # 账号被封禁
+            error_type = type(e).__name__
+            logger.error(f"❌ 检测失败 [{phone}]: {error_type} - {str(e)}")
+            logger.debug(f"📋 完整错误堆栈:\n{traceback.format_exc()}")
             return {
                 'status': CONTACT_STATUS_BANNED,
                 'message': '❌ 已封号',
@@ -24884,6 +24911,11 @@ admin3</code>
             }
         except Exception as e:
             error_msg = str(e).lower()
+            error_type = type(e).__name__
+            
+            # 记录错误日志
+            logger.error(f"❌ 检测失败 [{phone}]: {error_type} - {str(e)}")
+            logger.debug(f"📋 完整错误堆栈:\n{traceback.format_exc()}")
             
             # 通过关键词判断错误类型
             if 'flood' in error_msg or 'peerflood' in error_msg:
@@ -24989,16 +25021,57 @@ admin3</code>
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir, ignore_errors=True)
     
-    async def batch_check_contact_limit(self, accounts, api_id, api_hash, proxies):
-        """并发检测通讯录限制"""
+    async def batch_check_contact_limit(self, accounts, api_id, api_hash, proxies, progress_callback=None):
+        """并发检测通讯录限制
+        
+        Args:
+            accounts: 账号列表
+            api_id: API ID
+            api_hash: API Hash
+            proxies: 代理列表
+            progress_callback: 进度回调函数，接收(current, total, phone, status, message)参数
+        """
         from itertools import cycle
         
         semaphore = asyncio.Semaphore(CONTACT_CHECK_MAX_CONCURRENT)
+        total = len(accounts)
+        completed = [0]  # 使用列表以便在闭包中修改
         
-        async def check_with_limit(account, proxy):
+        async def check_with_limit(index, account, proxy):
             async with semaphore:
                 await asyncio.sleep(CONTACT_CHECK_DELAY_BETWEEN)
-                return await self.safe_check_contact_limit(account, api_id, api_hash, proxy)
+                result = await self.safe_check_contact_limit(account, api_id, api_hash, proxy)
+                
+                # 更新进度
+                completed[0] += 1
+                if progress_callback:
+                    phone = result.get('phone', 'unknown')
+                    # 格式化手机号显示（脱敏）
+                    if phone and phone != 'unknown' and len(phone) > 7:
+                        masked_phone = phone[:5] + '****' + phone[-4:]
+                    else:
+                        masked_phone = phone
+                    
+                    status = result.get('status', CONTACT_STATUS_ERROR)
+                    message = result.get('message', '未知')
+                    
+                    # 根据状态选择图标
+                    icon = '🔍'
+                    if status == CONTACT_STATUS_NORMAL:
+                        icon = '✅'
+                    elif status == CONTACT_STATUS_LIMITED:
+                        icon = '⚠️'
+                    elif status == CONTACT_STATUS_BANNED:
+                        icon = '❌'
+                    elif status == CONTACT_STATUS_ERROR:
+                        icon = '❌'
+                    
+                    try:
+                        await progress_callback(completed[0], total, masked_phone, icon, message)
+                    except Exception as e:
+                        logger.warning(f"进度回调失败: {e}")
+                
+                return result
         
         # 分配代理 - 使用 cycle 更节省内存
         if proxies:
@@ -25007,7 +25080,7 @@ admin3</code>
         else:
             proxy_list = [None] * len(accounts)
         
-        tasks = [check_with_limit(acc, proxy) for acc, proxy in zip(accounts, proxy_list)]
+        tasks = [check_with_limit(i, acc, proxy) for i, (acc, proxy) in enumerate(zip(accounts, proxy_list))]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
         # 处理异常结果 - 将异常对象转换为错误字典
@@ -25207,9 +25280,46 @@ admin3</code>
         if config.USE_PROXY and self.proxy_manager.proxies:
             proxies = self.proxy_manager.proxies
         
+        # 定义进度回调函数
+        last_update_time = [time.time()]  # 使用列表以便在闭包中修改
+        
+        async def progress_callback(current, total, phone, icon, message):
+            """更新进度显示"""
+            # 限制更新频率，避免被Telegram限流
+            now = time.time()
+            if now - last_update_time[0] < 1:  # 至少间隔1秒
+                return
+            last_update_time[0] = now
+            
+            progress_text = f"""
+<b>📊 检测进度: [{current}/{total}]</b>
+
+{icon} <b>当前:</b> {phone}
+<b>状态:</b> {message}
+
+<b>统计:</b>
+• 已完成: {current}
+• 剩余: {total - current}
+• 进度: {current * 100 // total}%
+
+⏱️ 已用时: {int(now - start_time)}秒
+"""
+            
+            try:
+                self.safe_edit_message_text(
+                    progress_msg,
+                    progress_text,
+                    'HTML'
+                )
+            except Exception as e:
+                # 忽略编辑消息失败的错误（可能是因为内容未改变）
+                logger.debug(f"更新进度显示失败: {e}")
+        
         # 并发检测
         try:
-            results = await self.batch_check_contact_limit(accounts, api_id, api_hash, proxies)
+            results = await self.batch_check_contact_limit(
+                accounts, api_id, api_hash, proxies, progress_callback
+            )
         except Exception as e:
             self.safe_edit_message_text(progress_msg, f"❌ 检测失败: {e}")
             shutil.rmtree(extract_dir, ignore_errors=True)
