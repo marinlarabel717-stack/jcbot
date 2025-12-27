@@ -25164,14 +25164,14 @@ admin3</code>
         categories = {
             'normal': ('检查通讯录正常', results_dict['normal']),
             'limited': ('检查通讯录受限', results_dict['limited']),
-            'banned': ('检查通讯录受限', results_dict['banned']),  # banned 归类为受限
+            'banned': ('检查通讯录失败', results_dict['banned']),  # banned 归类为失败
             'failed': ('检查通讯录失败', results_dict['failed'])
         }
         
-        # 合并 limited 和 banned
-        combined_limited = results_dict['limited'] + results_dict['banned']
-        if combined_limited:
-            categories['limited'] = ('检查通讯录受限', combined_limited)
+        # 合并 banned 和 failed
+        combined_failed = results_dict['banned'] + results_dict['failed']
+        if combined_failed:
+            categories['failed'] = ('检查通讯录失败', combined_failed)
             categories.pop('banned', None)
         
         for key, (name, items) in categories.items():
