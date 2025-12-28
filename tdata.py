@@ -18974,7 +18974,7 @@ class EnhancedBot:
             
             # 进度更新节流（避免触发 Telegram 限制）
             last_updated_idx = {'value': 0}
-            UPDATE_BATCH = 50  # 每完成50个账户更新一次
+            UPDATE_BATCH = 100  # 每完成100个账户更新一次，避免频繁刷新触发限流
             
             # 创建进度回调函数
             async def update_progress(status_text):
@@ -18984,7 +18984,7 @@ class EnhancedBot:
                     return
                 
                 # 节流逻辑：只在以下情况更新
-                # 1. 每完成50个账户
+                # 1. 每完成100个账户
                 # 2. 是第一个账户
                 # 3. 是最后一个账户
                 accounts_since_last_update = current_idx - last_updated_idx['value']
@@ -19038,21 +19038,10 @@ class EnhancedBot:
                             f"🔄 状态: {status_text}"
                         )
                         
-                        keyboard = InlineKeyboardMarkup([
-                            [InlineKeyboardButton(
-                                f"⏳ 进度: {progress_percent}% ({current_idx}/{all_files_count})",
-                                callback_data="progress_info"
-                            )],
-                            [InlineKeyboardButton(
-                                f"🔄 {status_display}",
-                                callback_data="status_info"
-                            )]
-                        ])
-                        
+                        # 移除按钮，直接显示进度信息，减少刷新频率避免限流
                         progress_msg.edit_text(
                             message_text,
-                            parse_mode='HTML',
-                            reply_markup=keyboard
+                            parse_mode='HTML'
                         )
                     except Exception as e:
                         # 如果是限流错误，静默处理
