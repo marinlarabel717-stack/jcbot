@@ -9862,7 +9862,7 @@ async def maybe_update_cleanup_progress(message, text, user_id, parse_mode='HTML
     if user_id not in _last_cleanup_update_time or \
        current_time - _last_cleanup_update_time[user_id] >= CLEANUP_UPDATE_INTERVAL:
         try:
-            message.edit_text(text, parse_mode=parse_mode)
+            await message.edit_text(text, parse_mode=parse_mode)
             _last_cleanup_update_time[user_id] = current_time
             return True
         except Exception as e:
@@ -9880,11 +9880,13 @@ async def safe_convert_tdata(tdata_path, phone_for_log=None):
     Returns:
         成功返回 (session_path, None)，失败返回 (None, error_message)
     """
+    # 初始化 phone_str，确保在所有路径中都可用
+    phone_str = phone_for_log or tdata_path
+    
     try:
         from opentele.api import API, UseCurrentSession
         from opentele.td import TDesktop
         
-        phone_str = phone_for_log or tdata_path
         logger.info(f"🔄 开始转换 TData [{phone_str}]")
         
         # 使用 asyncio.wait_for 添加超时机制
@@ -19117,6 +19119,10 @@ class EnhancedBot:
             'detailed_results': []
         }
         
+        # 初始化变量，确保在 finally 块中可用
+        summary_report_path = None
+        result_zips = []
+        
         try:
             # 创建信号量控制并发数
             semaphore = asyncio.Semaphore(config.CLEANUP_ACCOUNT_CONCURRENCY)
@@ -19356,7 +19362,7 @@ class EnhancedBot:
                 )
                 
                 # 发送汇总报告（如果存在）
-                if 'summary_report_path' in locals() and os.path.exists(summary_report_path):
+                if summary_report_path and os.path.exists(summary_report_path):
                     try:
                         with open(summary_report_path, 'rb') as f:
                             context.bot.send_document(
