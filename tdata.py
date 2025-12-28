@@ -63,6 +63,10 @@ SINGLE_ACCOUNT_TIMEOUT = 30  # 单个账号检测超时（秒）
 BATCH_TIMEOUT = 30 * 60  # 批量检测总超时（秒）- 30分钟
 UPDATE_INTERVAL = 5  # 进度消息更新间隔（秒）
 
+# 一键清理功能配置
+CLEANUP_UPDATE_INTERVAL = 5  # 一键清理进度刷新间隔（秒），避免触发 Telegram 限流
+TDATA_CONVERT_TIMEOUT = 30  # TData 转换超时（秒）
+
 # 通讯录限制检测状态常量
 CONTACT_STATUS_NORMAL = 'normal'
 CONTACT_STATUS_LIMITED = 'limited'
@@ -9843,6 +9847,84 @@ class BatchCreatorService:
 
 
 # ================================
+# 一键清理辅助函数
+# ================================
+
+# 全局变量用于追踪上次更新时间
+_last_cleanup_update_time = {}
+
+async def maybe_update_cleanup_progress(message, text, user_id, parse_mode='HTML'):
+    """限制一键清理进度刷新频率，避免触发 Telegram FloodWait"""
+    global _last_cleanup_update_time
+    current_time = time.time()
+    
+    # 检查是否需要更新（距离上次更新至少 CLEANUP_UPDATE_INTERVAL 秒）
+    if user_id not in _last_cleanup_update_time or \
+       current_time - _last_cleanup_update_time[user_id] >= CLEANUP_UPDATE_INTERVAL:
+        try:
+            message.edit_text(text, parse_mode=parse_mode)
+            _last_cleanup_update_time[user_id] = current_time
+            return True
+        except Exception as e:
+            logger.warning(f"更新进度消息失败: {e}")
+            return False
+    return False
+
+async def safe_convert_tdata(tdata_path, phone_for_log=None):
+    """安全转换 TData，带超时和错误处理
+    
+    Args:
+        tdata_path: TData 路径
+        phone_for_log: 用于日志的手机号（可选）
+        
+    Returns:
+        成功返回 (session_path, None)，失败返回 (None, error_message)
+    """
+    try:
+        from opentele.api import API, UseCurrentSession
+        from opentele.td import TDesktop
+        
+        phone_str = phone_for_log or tdata_path
+        logger.info(f"🔄 开始转换 TData [{phone_str}]")
+        
+        # 使用 asyncio.wait_for 添加超时机制
+        async def _convert():
+            tdesk = TDesktop(tdata_path)
+            session_path = tdata_path.replace('tdata', 'session').replace('.zip', '.session')
+            
+            # 转换 TData 到 Session
+            temp_client = await tdesk.ToTelethon(
+                session=session_path,
+                flag=UseCurrentSession,
+                api=API.TelegramDesktop
+            )
+            
+            # 测试连接
+            await temp_client.connect()
+            await temp_client.disconnect()
+            
+            return session_path
+        
+        # 添加超时保护
+        session_path = await asyncio.wait_for(
+            _convert(),
+            timeout=TDATA_CONVERT_TIMEOUT
+        )
+        
+        logger.info(f"✅ TData转换成功 [{phone_str}]")
+        return (session_path, None)
+        
+    except asyncio.TimeoutError:
+        error_msg = f"⏱️ TData转换超时（{TDATA_CONVERT_TIMEOUT}秒）"
+        logger.error(f"{error_msg} [{phone_str}]")
+        return (None, error_msg)
+    except Exception as e:
+        error_msg = f"❌ TData转换失败: {str(e)[:100]}"
+        logger.error(f"{error_msg} [{phone_str}]")
+        return (None, error_msg)
+
+
+# ================================
 # 增强版机器人
 # ================================
 
@@ -18804,36 +18886,22 @@ class EnhancedBot:
         try:
             # 如果是TData，需要先转换为Session
             if file_type == 'tdata':
+                # 提取手机号用于日志
+                phone_for_log = extract_phone_from_tdata_path(file_path) or file_name
+                
+                # 使用安全转换函数，带超时和错误处理
+                session_path, error_msg = await safe_convert_tdata(file_path, phone_for_log)
+                
+                if session_path is None:
+                    # 转换失败，跳过该账号
+                    logger.warning(f"⚠️ 跳过账号 {phone_for_log}，转换失败: {error_msg}")
+                    result_data['error'] = error_msg
+                    result_data['error_details'].append(error_msg)
+                    return result_data
+                
+                # 使用转换后的session创建不接收更新的客户端以提升清理速度
                 try:
-                    from opentele.api import API, UseCurrentSession
-                    from opentele.td import TDesktop
                     from telethon import TelegramClient as TelethonClient
-                    
-                    tdesk = TDesktop(file_path)
-                    session_path = file_path.replace('tdata', 'session').replace('.zip', '.session')
-                    
-                    # 先转换session
-                    try:
-                        temp_client = await tdesk.ToTelethon(
-                            session=session_path,
-                            flag=UseCurrentSession,
-                            api=API.TelegramDesktop
-                        )
-                        await temp_client.connect()
-                        await temp_client.disconnect()
-                    except Exception as conv_error:
-                        logger.error(f"TData session conversion failed for {file_name}: {conv_error}")
-                        # 检查是否为冻结账户错误
-                        if self._is_frozen_error(conv_error):
-                            result_data['error'] = 'FROZEN_ACCOUNT'
-                            result_data['error_message'] = f"账户已冻结: {str(conv_error)}"
-                            result_data['is_frozen'] = True
-                            logger.info(f"❄️ TData Session转换时检测到冻结账户: {file_name}")
-                        else:
-                            result_data['error'] = f"TData转换失败: {str(conv_error)}"
-                        return result_data
-                    
-                    # 使用转换后的session创建不接收更新的客户端以提升清理速度
                     client = TelethonClient(
                         os.path.splitext(session_path)[0],
                         int(config.API_ID),
@@ -18842,16 +18910,23 @@ class EnhancedBot:
                     )
                     await client.connect()
                     
+                    # 检查授权
+                    if not await client.is_user_authorized():
+                        logger.warning(f"Session not authorized after conversion: {file_name}")
+                        result_data['error'] = "转换后Session未授权"
+                        await client.disconnect()
+                        return result_data
+                        
                 except Exception as e:
-                    logger.error(f"TData conversion failed for {file_name}: {e}")
+                    logger.error(f"Failed to connect after TData conversion for {file_name}: {e}")
                     # 检查是否为冻结账户错误
                     if self._is_frozen_error(e):
                         result_data['error'] = 'FROZEN_ACCOUNT'
                         result_data['error_message'] = f"账户已冻结: {str(e)}"
                         result_data['is_frozen'] = True
-                        logger.info(f"❄️ TData转换时检测到冻结账户: {file_name}")
+                        logger.info(f"❄️ 转换后连接时检测到冻结账户: {file_name}")
                     else:
-                        result_data['error'] = f"TData转换失败: {str(e)}"
+                        result_data['error'] = f"转换后连接失败: {str(e)}"
                     return result_data
             else:
                 # 直接使用Session
@@ -19227,9 +19302,39 @@ class EnhancedBot:
                 
                 result_zips.append(('failed', failed_zip_path, len(results_summary['failed_files'])))
             
-            # 发送完成消息
-            frozen_rate = (results_summary['frozen'] / results_summary['total'] * 100) if results_summary['total'] > 0 else 0
-            final_text = f"""
+        except Exception as e:
+            logger.error(f"Cleanup execution failed: {e}")
+            import traceback
+            traceback.print_exc()
+            
+            # 标记清理过程失败
+            results_summary['cleanup_error'] = str(e)
+        
+        finally:
+            # 无论如何都要发送清理结果
+            try:
+                # 发送完成消息
+                success_rate = (results_summary['success'] / results_summary['total'] * 100) if results_summary['total'] > 0 else 0
+                frozen_rate = (results_summary['frozen'] / results_summary['total'] * 100) if results_summary['total'] > 0 else 0
+                
+                if results_summary.get('cleanup_error'):
+                    # 清理过程出错，发送错误消息但仍尝试发送已有的结果
+                    final_text = f"""
+⚠️ <b>清理部分完成（出现错误）</b>
+
+<b>📊 已处理统计</b>
+• 总账号数: {results_summary['total']}
+• ✅ 成功: {results_summary['success']} ({success_rate:.1f}%)
+• ❄️ 冻结: {results_summary['frozen']} ({frozen_rate:.1f}%)
+• ❌ 失败: {results_summary['failed']}
+
+⚠️ <b>错误信息：</b> {results_summary['cleanup_error'][:200]}
+
+<b>📦 正在发送已处理的结果...</b>
+                    """
+                else:
+                    # 清理正常完成
+                    final_text = f"""
 ✅ <b>并发清理完成！</b>
 
 <b>⚡ 并发模式</b>
@@ -19242,52 +19347,55 @@ class EnhancedBot:
 • ❌ 失败: {results_summary['failed']}
 
 <b>📦 正在打包账户文件...</b>
-            """
-            
-            context.bot.send_message(
-                chat_id=user_id,
-                text=final_text,
-                parse_mode='HTML'
-            )
-            
-            # 发送汇总报告
-            try:
-                with open(summary_report_path, 'rb') as f:
-                    context.bot.send_document(
-                        chat_id=user_id,
-                        document=f,
-                        caption=f"📋 清理汇总报告",
-                        filename=os.path.basename(summary_report_path)
-                    )
-            except Exception as e:
-                logger.error(f"Failed to send summary report: {e}")
-            
-            # 发送账户ZIP文件
-            for zip_type, zip_path, count in result_zips:
+                    """
+                
+                context.bot.send_message(
+                    chat_id=user_id,
+                    text=final_text,
+                    parse_mode='HTML'
+                )
+                
+                # 发送汇总报告（如果存在）
+                if 'summary_report_path' in locals() and os.path.exists(summary_report_path):
+                    try:
+                        with open(summary_report_path, 'rb') as f:
+                            context.bot.send_document(
+                                chat_id=user_id,
+                                document=f,
+                                caption=f"📋 清理汇总报告",
+                                filename=os.path.basename(summary_report_path)
+                            )
+                    except Exception as e:
+                        logger.error(f"Failed to send summary report: {e}")
+                
+                # 发送账户ZIP文件
+                for zip_type, zip_path, count in result_zips:
+                    try:
+                        caption = f"📦 清理{'成功' if zip_type == 'success' else '失败'}的账户 ({count} 个)"
+                        with open(zip_path, 'rb') as f:
+                            context.bot.send_document(
+                                chat_id=user_id,
+                                document=f,
+                                caption=caption,
+                                filename=os.path.basename(zip_path)
+                            )
+                    except Exception as e:
+                        logger.error(f"Failed to send {zip_type} accounts ZIP: {e}")
+                
+                logger.info("✅ 清理结果已发送")
+                
+            except Exception as send_error:
+                logger.error(f"Failed to send cleanup results: {send_error}")
+                # 尝试至少发送一个错误消息
                 try:
-                    caption = f"📦 清理{'成功' if zip_type == 'success' else '失败'}的账户 ({count} 个)"
-                    with open(zip_path, 'rb') as f:
-                        context.bot.send_document(
-                            chat_id=user_id,
-                            document=f,
-                            caption=caption,
-                            filename=os.path.basename(zip_path)
-                        )
-                except Exception as e:
-                    logger.error(f"Failed to send {zip_type} accounts ZIP: {e}")
+                    context.bot.send_message(
+                        chat_id=user_id,
+                        text=f"❌ <b>清理结果发送失败</b>\n\n错误: {str(send_error)[:200]}",
+                        parse_mode='HTML'
+                    )
+                except:
+                    pass
             
-        except Exception as e:
-            logger.error(f"Cleanup execution failed: {e}")
-            import traceback
-            traceback.print_exc()
-            
-            context.bot.send_message(
-                chat_id=user_id,
-                text=f"❌ <b>清理失败</b>\n\n错误: {str(e)}",
-                parse_mode='HTML'
-            )
-        
-        finally:
             # 清理任务
             self.cleanup_cleanup_task(user_id)
     
