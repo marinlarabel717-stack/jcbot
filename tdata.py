@@ -18877,6 +18877,8 @@ class EnhancedBot:
         result_data = {
             'file_path': file_path,
             'file_name': file_name,
+            'original_path': file_path,  # 保存原始文件路径用于打包
+            'file_type': file_type,  # 保存文件类型
             'success': False,
             'error': None,
             'is_frozen': False,
@@ -19135,7 +19137,8 @@ class EnhancedBot:
                 if isinstance(result, BaseException):
                     logger.error(f"处理异常: {result}")
                     results_summary['failed'] += 1
-                    results_summary['failed_files'].append((files[idx-1][0], files[idx-1][1]))
+                    # 从原始files列表获取文件信息，包含file_type
+                    results_summary['failed_files'].append((files[idx-1][0], files[idx-1][1], files[idx-1][0], file_type))
                     results_summary['detailed_results'].append({
                         'file_name': files[idx-1][1],
                         'status': 'failed',
@@ -19159,18 +19162,18 @@ class EnhancedBot:
                 # - failed_files用于将冻结账户打包到失败账户zip中
                 if result.get('is_frozen'):
                     results_summary['frozen'] += 1
-                    results_summary['frozen_files'].append((result['file_path'], result['file_name']))
+                    results_summary['frozen_files'].append((result['file_path'], result['file_name'], result.get('original_path'), result.get('file_type')))
                     # 冻结账户同时加入失败列表，以便打包到失败zip中
                     results_summary['failed'] += 1
-                    results_summary['failed_files'].append((result['file_path'], result['file_name']))
+                    results_summary['failed_files'].append((result['file_path'], result['file_name'], result.get('original_path'), result.get('file_type')))
                     logger.info(f"❄️ 冻结账户（归类为失败）: {result['file_name']}")
                 elif result.get('success'):
                     results_summary['success'] += 1
-                    results_summary['success_files'].append((result['file_path'], result['file_name']))
+                    results_summary['success_files'].append((result['file_path'], result['file_name'], result.get('original_path'), result.get('file_type')))
                     logger.info(f"✅ 清理成功: {result['file_name']}")
                 else:
                     results_summary['failed'] += 1
-                    results_summary['failed_files'].append((result['file_path'], result['file_name']))
+                    results_summary['failed_files'].append((result['file_path'], result['file_name'], result.get('original_path'), result.get('file_type')))
                     logger.info(f"❌ 清理失败: {result['file_name']}")
             
             # 生成详细的TXT报告
@@ -19231,7 +19234,8 @@ class EnhancedBot:
                     f.write("-" * 80 + "\n")
                     f.write(f"成功清理的账户 / Successfully Cleaned ({len(results_summary['success_files'])})\n")
                     f.write("-" * 80 + "\n")
-                    for idx, (_, fname) in enumerate(results_summary['success_files'], 1):
+                    for idx, file_info in enumerate(results_summary['success_files'], 1):
+                        fname = file_info[1] if len(file_info) > 1 else file_info[0]
                         f.write(f"{idx}. ✅ {fname}\n")
                     f.write("\n")
                 
@@ -19239,7 +19243,8 @@ class EnhancedBot:
                     f.write("-" * 80 + "\n")
                     f.write(f"冻结的账户 / Frozen Accounts ({len(results_summary['frozen_files'])})\n")
                     f.write("-" * 80 + "\n")
-                    for idx, (_, fname) in enumerate(results_summary['frozen_files'], 1):
+                    for idx, file_info in enumerate(results_summary['frozen_files'], 1):
+                        fname = file_info[1] if len(file_info) > 1 else file_info[0]
                         f.write(f"{idx}. ❄️ {fname}\n")
                     f.write("\n")
                 
@@ -19247,7 +19252,8 @@ class EnhancedBot:
                     f.write("-" * 80 + "\n")
                     f.write(f"清理失败的账户 / Failed to Clean ({len(results_summary['failed_files'])})\n")
                     f.write("-" * 80 + "\n")
-                    for idx, (_, fname) in enumerate(results_summary['failed_files'], 1):
+                    for idx, file_info in enumerate(results_summary['failed_files'], 1):
+                        fname = file_info[1] if len(file_info) > 1 else file_info[0]
                         f.write(f"{idx}. ❌ {fname}\n")
                     f.write("\n")
                 
@@ -19263,18 +19269,34 @@ class EnhancedBot:
             if results_summary['success_files']:
                 success_zip_path = os.path.join(config.CLEANUP_REPORTS_DIR, f"cleaned_success_{timestamp}.zip")
                 with zipfile.ZipFile(success_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                    for file_path, file_name in results_summary['success_files']:
-                        # 添加session文件
-                        if os.path.exists(file_path):
-                            zipf.write(file_path, file_name)
-                        # 如果有对应的session-journal文件也添加
-                        journal_path = file_path + '-journal'
-                        if os.path.exists(journal_path):
-                            zipf.write(journal_path, file_name + '-journal')
-                        # 如果有对应的json文件也添加
-                        json_path = os.path.splitext(file_path)[0] + '.json'
-                        if os.path.exists(json_path):
-                            zipf.write(json_path, os.path.splitext(file_name)[0] + '.json')
+                    for file_info in results_summary['success_files']:
+                        file_path = file_info[0]
+                        file_name = file_info[1]
+                        original_path = file_info[2] if len(file_info) > 2 else file_path
+                        item_file_type = file_info[3] if len(file_info) > 3 else 'session'
+                        
+                        if item_file_type == 'tdata':
+                            # TData格式：打包整个原始TData目录
+                            if os.path.isdir(original_path):
+                                # 遍历TData目录下的所有文件
+                                for root, dirs, files_in_dir in os.walk(original_path):
+                                    for file in files_in_dir:
+                                        file_full_path = os.path.join(root, file)
+                                        # 计算相对路径，保留目录结构
+                                        rel_path = os.path.relpath(file_full_path, os.path.dirname(original_path))
+                                        zipf.write(file_full_path, rel_path)
+                        else:
+                            # Session格式：添加session文件及相关文件
+                            if os.path.exists(file_path):
+                                zipf.write(file_path, file_name)
+                            # 如果有对应的session-journal文件也添加
+                            journal_path = file_path + '-journal'
+                            if os.path.exists(journal_path):
+                                zipf.write(journal_path, file_name + '-journal')
+                            # 如果有对应的json文件也添加
+                            json_path = os.path.splitext(file_path)[0] + '.json'
+                            if os.path.exists(json_path):
+                                zipf.write(json_path, os.path.splitext(file_name)[0] + '.json')
                 
                 result_zips.append(('success', success_zip_path, len(results_summary['success_files'])))
             
@@ -19282,18 +19304,34 @@ class EnhancedBot:
             if results_summary['failed_files']:
                 failed_zip_path = os.path.join(config.CLEANUP_REPORTS_DIR, f"cleaned_failed_{timestamp}.zip")
                 with zipfile.ZipFile(failed_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                    for file_path, file_name in results_summary['failed_files']:
-                        # 添加session文件
-                        if os.path.exists(file_path):
-                            zipf.write(file_path, file_name)
-                        # 如果有对应的session-journal文件也添加
-                        journal_path = file_path + '-journal'
-                        if os.path.exists(journal_path):
-                            zipf.write(journal_path, file_name + '-journal')
-                        # 如果有对应的json文件也添加
-                        json_path = os.path.splitext(file_path)[0] + '.json'
-                        if os.path.exists(json_path):
-                            zipf.write(json_path, os.path.splitext(file_name)[0] + '.json')
+                    for file_info in results_summary['failed_files']:
+                        file_path = file_info[0]
+                        file_name = file_info[1]
+                        original_path = file_info[2] if len(file_info) > 2 else file_path
+                        item_file_type = file_info[3] if len(file_info) > 3 else 'session'
+                        
+                        if item_file_type == 'tdata':
+                            # TData格式：打包整个原始TData目录
+                            if os.path.isdir(original_path):
+                                # 遍历TData目录下的所有文件
+                                for root, dirs, files_in_dir in os.walk(original_path):
+                                    for file in files_in_dir:
+                                        file_full_path = os.path.join(root, file)
+                                        # 计算相对路径，保留目录结构
+                                        rel_path = os.path.relpath(file_full_path, os.path.dirname(original_path))
+                                        zipf.write(file_full_path, rel_path)
+                        else:
+                            # Session格式：添加session文件及相关文件
+                            if os.path.exists(file_path):
+                                zipf.write(file_path, file_name)
+                            # 如果有对应的session-journal文件也添加
+                            journal_path = file_path + '-journal'
+                            if os.path.exists(journal_path):
+                                zipf.write(journal_path, file_name + '-journal')
+                            # 如果有对应的json文件也添加
+                            json_path = os.path.splitext(file_path)[0] + '.json'
+                            if os.path.exists(json_path):
+                                zipf.write(json_path, os.path.splitext(file_name)[0] + '.json')
                 
                 result_zips.append(('failed', failed_zip_path, len(results_summary['failed_files'])))
             
