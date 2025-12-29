@@ -10475,64 +10475,69 @@ class EnhancedBot:
         is_member, level, expiry = self.db.check_membership(user_id)
         
         if self.db.is_admin(user_id):
-            member_status = "👑 管理员"
+            member_status = t(user_id, 'status_admin')
         elif is_member:
             member_status = f"🎁 {level}"
         else:
-            member_status = "❌ 无会员"
+            member_status = t(user_id, 'status_no_member')
+        
+        # 构建翻译后的欢迎文本
+        proxy_mode_text = t(user_id, 'proxy_mode_enabled') if self.proxy_manager.is_proxy_mode_active(self.db) else t(user_id, 'proxy_mode_local')
+        proxy_count_text = t(user_id, 'proxy_count_value').format(count=len(self.proxy_manager.proxies))
         
         welcome_text = f"""
 <b>🔍 Telegram账号机器人 V8.0</b>
 
-👤 <b>用户信息</b>
-• 昵称: {first_name}
-• ID: <code>{user_id}</code>
-• 会员: {member_status}
-• 到期: {expiry}
+👤 <b>{t(user_id, 'user_info')}</b>
+• {t(user_id, 'user_nickname')}: {first_name}
+• {t(user_id, 'user_id')}: <code>{user_id}</code>
+• {t(user_id, 'user_membership')}: {member_status}
+• {t(user_id, 'user_expiry')}: {expiry}
 
-📡 <b>代理状态</b>
-• 代理模式: {'🟢启用' if self.proxy_manager.is_proxy_mode_active(self.db) else '🔴本地连接'}
-• 代理数量: {len(self.proxy_manager.proxies)}个
-• 当前时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
+📡 <b>{t(user_id, 'proxy_status')}</b>
+• {t(user_id, 'proxy_mode')}: {proxy_mode_text}
+• {t(user_id, 'proxy_count_label')}: {proxy_count_text}
+• {t(user_id, 'current_time')}: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
         """
+        
         
 
         # 创建横排2x2布局的主菜单按钮（在原有两行后新增一行"🔗 API转换"）
         buttons = [
             [
-                InlineKeyboardButton("🚀 账号检测", callback_data="start_check"),
-                InlineKeyboardButton("🔄 格式转换", callback_data="format_conversion")
+                InlineKeyboardButton(t(user_id, 'btn_account_check'), callback_data="start_check"),
+                InlineKeyboardButton(t(user_id, 'btn_format_conversion'), callback_data="format_conversion")
             ],
             [
-                InlineKeyboardButton("🔐 修改2FA", callback_data="change_2fa"),
-                InlineKeyboardButton("📦 批量创建", callback_data="batch_create_start")
+                InlineKeyboardButton(t(user_id, 'btn_change_2fa'), callback_data="change_2fa"),
+                InlineKeyboardButton(t(user_id, 'btn_batch_create'), callback_data="batch_create_start")
             ],
             [
-                InlineKeyboardButton("🔓 忘记2FA", callback_data="forget_2fa"),
-                InlineKeyboardButton("❌ 删除2FA", callback_data="remove_2fa")
+                InlineKeyboardButton(t(user_id, 'btn_forget_2fa'), callback_data="forget_2fa"),
+                InlineKeyboardButton(t(user_id, 'btn_remove_2fa'), callback_data="remove_2fa")
             ],
             [
-                InlineKeyboardButton("➕ 添加2FA", callback_data="add_2fa"),
-                InlineKeyboardButton("📦 账号拆分", callback_data="classify_menu")
+                InlineKeyboardButton(t(user_id, 'btn_add_2fa'), callback_data="add_2fa"),
+                InlineKeyboardButton(t(user_id, 'btn_classify_menu'), callback_data="classify_menu")
             ],
             [
-                InlineKeyboardButton("🔗 API转换", callback_data="api_conversion"),
-                InlineKeyboardButton("📝 文件重命名", callback_data="rename_start")
+                InlineKeyboardButton(t(user_id, 'btn_api_conversion'), callback_data="api_conversion"),
+                InlineKeyboardButton(t(user_id, 'btn_rename_file'), callback_data="rename_start")
             ],
             [
-                InlineKeyboardButton("🧩 账户合并", callback_data="merge_start"),
-                InlineKeyboardButton("🧹 一键清理", callback_data="cleanup_start")
+                InlineKeyboardButton(t(user_id, 'btn_merge_account'), callback_data="merge_start"),
+                InlineKeyboardButton(t(user_id, 'btn_cleanup'), callback_data="cleanup_start")
             ],
             [
-                InlineKeyboardButton("🔑 重新授权", callback_data="reauthorize_start"),
-                InlineKeyboardButton("🕰️ 查询注册时间", callback_data="check_registration_start")
+                InlineKeyboardButton(t(user_id, 'btn_reauthorize'), callback_data="reauthorize_start"),
+                InlineKeyboardButton(t(user_id, 'btn_check_registration'), callback_data="check_registration_start")
             ],
             [
-                InlineKeyboardButton("📝 修改资料", callback_data="profile_update_start"),
-                InlineKeyboardButton("🔍 检查通讯录限制", callback_data="check_contact_limit")
+                InlineKeyboardButton(t(user_id, 'btn_profile_update'), callback_data="profile_update_start"),
+                InlineKeyboardButton(t(user_id, 'btn_check_contact_limit'), callback_data="check_contact_limit")
             ],
             [
-                InlineKeyboardButton("💳 开通/兑换会员", callback_data="vip_menu")
+                InlineKeyboardButton(t(user_id, 'btn_vip_menu'), callback_data="vip_menu")
             ]
         ]
 
@@ -10540,16 +10545,14 @@ class EnhancedBot:
         # 管理员按钮
         if self.db.is_admin(user_id):
             buttons.append([
-                InlineKeyboardButton("👑 管理员面板", callback_data="admin_panel"),
-                InlineKeyboardButton("📡 代理管理", callback_data="proxy_panel")
+                InlineKeyboardButton(t(user_id, 'btn_admin_panel'), callback_data="admin_panel"),
+                InlineKeyboardButton(t(user_id, 'btn_proxy_panel'), callback_data="proxy_panel")
             ])
 
-        # 语言切换按钮
+        # 语言切换按钮（改为打开语言选择菜单）
         if I18N_AVAILABLE:
-            current_lang = get_user_language(user_id)
-            lang_button_text = t(user_id, 'btn_switch_language')
             buttons.append([
-                InlineKeyboardButton(lang_button_text, callback_data="switch_language")
+                InlineKeyboardButton(t(user_id, 'btn_language_menu'), callback_data="language_menu")
             ])
 
 
@@ -10569,6 +10572,32 @@ class EnhancedBot:
                 print(f"⚠️ 编辑消息失败: {e}")
         else:
             self.safe_send_message(update, welcome_text, 'HTML', keyboard)
+    
+    def show_language_menu(self, update: Update, user_id: int):
+        """显示语言选择菜单"""
+        query = update.callback_query
+        if query:
+            query.answer()
+        
+        # 构建语言选择菜单
+        menu_text = t(user_id, 'language_menu_title')
+        
+        buttons = [
+            [InlineKeyboardButton(t(user_id, 'language_chinese'), callback_data="set_language_zh")],
+            [InlineKeyboardButton(t(user_id, 'language_english'), callback_data="set_language_en")],
+            [InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_main")]
+        ]
+        
+        keyboard = InlineKeyboardMarkup(buttons)
+        
+        try:
+            query.edit_message_text(
+                text=menu_text,
+                reply_markup=keyboard,
+                parse_mode='HTML'
+            )
+        except Exception as e:
+            print(f"⚠️ 编辑语言菜单失败: {e}")
     
     def api_command(self, update: Update, context: CallbackContext):
         """API格式转换命令"""
@@ -11657,14 +11686,16 @@ class EnhancedBot:
             self.handle_profile_update_callbacks(update, context, query, data)
         elif data == "check_contact_limit":
             self.handle_check_contact_limit(query)
-        elif data == "switch_language":
-            # 处理语言切换
+        elif data == "language_menu":
+            # 显示语言选择菜单
+            self.show_language_menu(update, user_id)
+        elif data.startswith("set_language_"):
+            # 设置语言
             query.answer()
             if I18N_AVAILABLE:
-                current_lang = get_user_language(user_id)
-                new_lang = "en" if current_lang == "zh" else "zh"
-                set_user_language(user_id, new_lang)
-                # 刷新主菜单以显示新语言
+                lang = data.replace("set_language_", "")
+                set_user_language(user_id, lang)
+                # 显示语言切换成功消息并刷新主菜单
                 self.show_main_menu(update, user_id)
         elif query.data == "back_to_main":
             self.show_main_menu(update, user_id)
