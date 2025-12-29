@@ -10351,14 +10351,10 @@ class EnhancedBot:
         return None
     
     def sanitize_filename(self, filename: str) -> str:
-        """清理文件名，移除非法字符并限制长度"""
-        # 移除或替换非法字符
-        invalid_chars = '<>:"/\\|?*'
-        for char in invalid_chars:
-            filename = filename.replace(char, '_')
-        
-        # 移除控制字符
-        filename = ''.join(char for char in filename if ord(char) >= 32)
+        """清理文件名，保留 Emoji 和括号"""
+        # 只移除文件系统不允许的字符: \ / : * ? " < > |
+        invalid_chars = r'[\\/:*?"<>|]'
+        filename = re.sub(invalid_chars, '', filename)
         
         # 限制长度（保留扩展名空间）
         max_length = 200
