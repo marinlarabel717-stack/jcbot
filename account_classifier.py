@@ -184,7 +184,8 @@ class AccountClassifier:
                                 zf.write(full, arcname=arcname)
                                 written.add(arcname)
                 else:
-                    # Session 格式：直接放在 ZIP 根目录，不创建手机号文件夹
+                    # Session 格式：直接放在 ZIP 根目录（扁平结构），不创建手机号文件夹
+                    # 这样避免了多余的嵌套层级，session文件和json文件都在ZIP根目录
                     base_name = os.path.basename(it.path)
                     name_lower = base_name.lower()
 
