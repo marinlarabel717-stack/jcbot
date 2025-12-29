@@ -41,6 +41,22 @@ from pathlib import Path
 from dataclasses import dataclass
 from collections import deque, namedtuple
 
+# 导入i18n模块用于多语言支持
+try:
+    from i18n import get_text as t, set_user_language, get_user_language
+    I18N_AVAILABLE = True
+    print("✅ i18n module loaded successfully")
+except ImportError:
+    print("⚠️ i18n module not available, using Chinese only")
+    I18N_AVAILABLE = False
+    # Fallback functions if i18n is not available
+    def t(user_id, key):
+        return key
+    def set_user_language(user_id, lang):
+        pass
+    def get_user_language(user_id):
+        return 'zh'
+
 # 定义北京时区常量
 BEIJING_TZ = timezone(timedelta(hours=8))
 
@@ -10528,10 +10544,14 @@ class EnhancedBot:
                 InlineKeyboardButton("📡 代理管理", callback_data="proxy_panel")
             ])
 
-        # 底部功能按钮（如果已把“帮助”放到第三行左侧，可将这里的帮助去掉或改为“⚙️ 状态”）
-        buttons.append([
-            InlineKeyboardButton("⚙️ 状态", callback_data="status")
-        ])
+        # 语言切换按钮
+        if I18N_AVAILABLE:
+            current_lang = get_user_language(user_id)
+            lang_button_text = t(user_id, 'btn_switch_language')
+            buttons.append([
+                InlineKeyboardButton(lang_button_text, callback_data="switch_language")
+            ])
+
 
         
         keyboard = InlineKeyboardMarkup(buttons)
@@ -11637,6 +11657,15 @@ class EnhancedBot:
             self.handle_profile_update_callbacks(update, context, query, data)
         elif data == "check_contact_limit":
             self.handle_check_contact_limit(query)
+        elif data == "switch_language":
+            # 处理语言切换
+            query.answer()
+            if I18N_AVAILABLE:
+                current_lang = get_user_language(user_id)
+                new_lang = "en" if current_lang == "zh" else "zh"
+                set_user_language(user_id, new_lang)
+                # 刷新主菜单以显示新语言
+                self.show_main_menu(update, user_id)
         elif query.data == "back_to_main":
             self.show_main_menu(update, user_id)
             # 返回主菜单 - 横排2x2布局
