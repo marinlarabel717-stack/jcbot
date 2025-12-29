@@ -150,4 +150,9 @@ TEXTS = {
     'performance_stats': '⚡ 性能统计',
     'average_speed': '平均速度',
     'sending_files': '🚀 正在自动发送分类文件，请稍等...',
+    'processing_file': '📥 正在处理您的文件...',
+    'accounts_unit': '个',
+    'seconds_unit': '秒',
+    'minutes_unit': '分钟',
+    'accounts_per_second': '账号/秒',
 }

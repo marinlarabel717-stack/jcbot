@@ -13390,7 +13390,7 @@ class EnhancedBot:
         # 安全发送进度消息
         progress_msg = self.safe_send_message(
             update,
-            "📥 <b>正在处理您的文件...</b>",
+            f"<b>{t(user_id, 'processing_file')}</b>",
             'HTML'
         )
         
@@ -13521,30 +13521,37 @@ class EnhancedBot:
             if config.USE_PROXY:
                 stats = self.checker.get_proxy_usage_stats()
                 if stats['total'] > 0:
-                    proxy_stats = f"\n\n<b>{t(user_id, 'proxy_usage_stats')}</b>\n• {t(user_id, 'proxies_used_stat')}: {stats['proxy_success']}个\n• {t(user_id, 'fallback_local_stat')}: {stats['local_fallback']}个\n• {t(user_id, 'failed_proxies_stat')}: {stats['proxy_failed']}个\n• {t(user_id, 'local_only_stat')}: {stats['local_only']}个"
+                    unit = t(user_id, 'accounts_unit')
+                    proxy_stats = f"\n\n<b>{t(user_id, 'proxy_usage_stats')}</b>\n• {t(user_id, 'proxies_used_stat')}: {stats['proxy_success']}{unit}\n• {t(user_id, 'fallback_local_stat')}: {stats['local_fallback']}{unit}\n• {t(user_id, 'failed_proxies_stat')}: {stats['proxy_failed']}{unit}\n• {t(user_id, 'local_only_stat')}: {stats['local_only']}{unit}"
                 else:
                     # 回退到简单统计
                     proxy_used_count = sum(1 for _, _, info in sum(results.values(), []) if "代理" in info)
                     local_used_count = total_accounts - proxy_used_count
-                    proxy_stats = f"\n\n{t(user_id, 'proxy_connection')}: {proxy_used_count}个\n{t(user_id, 'local_connection')}: {local_used_count}个"
+                    unit = t(user_id, 'accounts_unit')
+                    proxy_stats = f"\n\n{t(user_id, 'proxy_connection')}: {proxy_used_count}{unit}\n{t(user_id, 'local_connection')}: {local_used_count}{unit}"
             
             # 格式化检测时间
-            check_time_text = t(user_id, 'check_time').format(time=f'{int(total_time)}秒 ({total_time/60:.1f}分钟)')
+            seconds_unit = t(user_id, 'seconds_unit')
+            minutes_unit = t(user_id, 'minutes_unit')
+            check_time_text = t(user_id, 'check_time').format(time=f'{int(total_time)}{seconds_unit} ({total_time/60:.1f}{minutes_unit})')
+            
+            accounts_unit = t(user_id, 'accounts_unit')
+            accounts_per_sec = t(user_id, 'accounts_per_second')
             
             final_text = f"""
 ✅ <b>{t(user_id, 'all_files_sent')}</b>
 
 <b>{t(user_id, 'send_summary')}</b>
-• {t(user_id, 'total_accounts')}: {total_accounts}个
-• 🟢 {t(user_id, 'status_no_restriction')}: {len(results['无限制'])}个
-• 🟡 {t(user_id, 'status_spambot')}: {len(results['垃圾邮件'])}个
-• 🔴 {t(user_id, 'status_frozen')}: {len(results['冻结'])}个
-• 🟠 {t(user_id, 'status_banned')}: {len(results['封禁'])}个
-• ⚫ {t(user_id, 'status_connection_error')}: {len(results['连接错误'])}个{proxy_stats}
+• {t(user_id, 'total_accounts')}: {total_accounts}{accounts_unit}
+• 🟢 {t(user_id, 'status_no_restriction')}: {len(results['无限制'])}{accounts_unit}
+• 🟡 {t(user_id, 'status_spambot')}: {len(results['垃圾邮件'])}{accounts_unit}
+• 🔴 {t(user_id, 'status_frozen')}: {len(results['冻结'])}{accounts_unit}
+• 🟠 {t(user_id, 'status_banned')}: {len(results['封禁'])}{accounts_unit}
+• ⚫ {t(user_id, 'status_connection_error')}: {len(results['连接错误'])}{accounts_unit}{proxy_stats}
 
 <b>{t(user_id, 'performance_stats')}</b>
 • {check_time_text}
-• {t(user_id, 'average_speed')}: {final_speed:.1f} 账号/秒
+• {t(user_id, 'average_speed')}: {final_speed:.1f} {accounts_per_sec}
 
 {t(user_id, 'sending_files')}
             """

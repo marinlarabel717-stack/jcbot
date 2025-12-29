@@ -150,4 +150,9 @@ TEXTS = {
     'performance_stats': '⚡ Performance Stats',
     'average_speed': 'Average Speed',
     'sending_files': '🚀 Sending classified files, please wait...',
+    'processing_file': '📥 Processing your file...',
+    'accounts_unit': '',
+    'seconds_unit': 's',
+    'minutes_unit': 'min',
+    'accounts_per_second': 'accounts/s',
 }
