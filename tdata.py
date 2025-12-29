@@ -10149,6 +10149,29 @@ class EnhancedBot:
         }
         return desc_map.get(status, "file_desc_no_restriction")
     
+    def get_translated_file_info(self, user_id: int, status: str, count: int) -> tuple:
+        """Get translated filename and caption for a status file
+        
+        Args:
+            user_id: User ID for language selection
+            status: Internal status name (Chinese)
+            count: Number of accounts
+            
+        Returns:
+            Tuple of (filename, caption_text, check_time_display, check_mode)
+        """
+        zip_name_key = self.get_zip_name_translation_key(status)
+        file_desc_key = self.get_file_desc_translation_key(status)
+        
+        zip_filename = f"{t(user_id, zip_name_key).format(count=count)}.zip"
+        file_caption_text = t(user_id, file_desc_key).format(count=count)
+        
+        actual_proxy_mode = self.proxy_manager.is_proxy_mode_active(self.db)
+        check_mode = t(user_id, 'check_mode_proxy') if actual_proxy_mode else t(user_id, 'check_mode_local')
+        check_time_display = datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')
+        
+        return zip_filename, file_caption_text, check_time_display, check_mode
+    
     def setup_handlers(self):
         self.dp.add_handler(CommandHandler("start", self.start_command))
         self.dp.add_handler(CommandHandler("help", self.help_command))
@@ -13533,18 +13556,8 @@ class EnhancedBot:
                     try:
                         print(f"📤 正在发送: {status}_{count}个.zip")
                         
-                        # 获取翻译后的状态名称和文件名
-                        status_text = t(user_id, self.get_status_translation_key(status))
-                        zip_name_key = self.get_zip_name_translation_key(status)
-                        file_desc_key = self.get_file_desc_translation_key(status)
-                        
-                        zip_filename = f"{t(user_id, zip_name_key).format(count=count)}.zip"
-                        file_caption_text = t(user_id, file_desc_key).format(count=count)
-                        
-                        # 检查实际的代理模式状态
-                        actual_proxy_mode = self.proxy_manager.is_proxy_mode_active(self.db)
-                        check_mode = t(user_id, 'check_mode_proxy') if actual_proxy_mode else t(user_id, 'check_mode_local')
-                        check_time_display = datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')
+                        # 获取翻译后的文件信息
+                        zip_filename, file_caption_text, check_time_display, check_mode = self.get_translated_file_info(user_id, status, count)
                         
                         with open(file_path, 'rb') as f:
                             context.bot.send_document(
@@ -13568,11 +13581,7 @@ class EnhancedBot:
                         await asyncio.sleep(e.retry_after + 1)
                         # 重试发送
                         try:
-                            status_text = t(user_id, self.get_status_translation_key(status))
-                            zip_name_key = self.get_zip_name_translation_key(status)
-                            file_desc_key = self.get_file_desc_translation_key(status)
-                            zip_filename = f"{t(user_id, zip_name_key).format(count=count)}.zip"
-                            file_caption_text = t(user_id, file_desc_key).format(count=count)
+                            zip_filename, file_caption_text, _, _ = self.get_translated_file_info(user_id, status, count)
                             
                             with open(file_path, 'rb') as f:
                                 context.bot.send_document(
