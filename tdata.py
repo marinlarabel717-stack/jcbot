@@ -1078,14 +1078,22 @@ def format_time(seconds: float) -> str:
     else:
         return f"{minutes:02d}:{secs:02d}"
 
-def get_back_to_menu_keyboard():
+def get_back_to_menu_keyboard(user_id: int = None):
     """返回主菜单按钮
+    
+    Args:
+        user_id: User ID for language selection (optional)
     
     Returns:
         InlineKeyboardMarkup: 包含"返回主菜单"按钮的键盘布局
     """
+    if user_id:
+        button_text = t(user_id, 'btn_back_to_menu')
+    else:
+        button_text = "返回主菜单"  # Fallback to Chinese
+    
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("返回主菜单", callback_data="back_to_main")]
+        [InlineKeyboardButton(button_text, callback_data="back_to_main")]
     ])
 
 # ================================
@@ -10095,6 +10103,83 @@ class EnhancedBot:
         
         print("✅ 增强版机器人初始化完成")
     
+    def get_status_translation_key(self, status: str) -> str:
+        """Map internal status to translation key
+        
+        Args:
+            status: Internal status name (Chinese)
+            
+        Returns:
+            Translation key for the status
+        """
+        status_map = {
+            "无限制": "status_no_restriction",
+            "垃圾邮件": "status_spambot",
+            "冻结": "status_frozen",
+            "封禁": "status_banned",
+            "连接错误": "status_connection_error",
+        }
+        return status_map.get(status, "status_no_restriction")
+    
+    def get_zip_name_translation_key(self, status: str) -> str:
+        """Map internal status to ZIP file name translation key
+        
+        Args:
+            status: Internal status name (Chinese)
+            
+        Returns:
+            Translation key for ZIP file naming
+        """
+        zip_map = {
+            "无限制": "zip_no_restriction",
+            "垃圾邮件": "zip_spambot",
+            "冻结": "zip_frozen",
+            "封禁": "zip_banned",
+            "连接错误": "zip_connection_error",
+        }
+        return zip_map.get(status, "zip_no_restriction")
+    
+    def get_file_desc_translation_key(self, status: str) -> str:
+        """Map internal status to file description translation key
+        
+        Args:
+            status: Internal status name (Chinese)
+            
+        Returns:
+            Translation key for file description
+        """
+        desc_map = {
+            "无限制": "file_desc_no_restriction",
+            "垃圾邮件": "file_desc_spambot",
+            "冻结": "file_desc_frozen",
+            "封禁": "file_desc_banned",
+            "连接错误": "file_desc_connection_error",
+        }
+        return desc_map.get(status, "file_desc_no_restriction")
+    
+    def get_translated_file_info(self, user_id: int, status: str, count: int) -> tuple:
+        """Get translated filename and caption for a status file
+        
+        Args:
+            user_id: User ID for language selection
+            status: Internal status name (Chinese)
+            count: Number of accounts
+            
+        Returns:
+            Tuple of (filename, caption_text, check_time_display, check_mode)
+        """
+        zip_name_key = self.get_zip_name_translation_key(status)
+        file_desc_key = self.get_file_desc_translation_key(status)
+        
+        zip_filename = f"{t(user_id, zip_name_key).format(count=count)}.zip"
+        file_caption_text = t(user_id, file_desc_key).format(count=count)
+        
+        actual_proxy_mode = self.proxy_manager.is_proxy_mode_active(self.db)
+        check_mode = t(user_id, 'check_mode_proxy') if actual_proxy_mode else t(user_id, 'check_mode_local')
+        check_time_display = datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')
+        
+        return zip_filename, file_caption_text, check_time_display, check_mode
+    
     def setup_handlers(self):
         self.dp.add_handler(CommandHandler("start", self.start_command))
         self.dp.add_handler(CommandHandler("help", self.help_command))
@@ -10431,10 +10516,11 @@ class EnhancedBot:
         
         return False
     
-    def create_status_count_separate_buttons(self, results: Dict[str, List], processed: int, total: int) -> InlineKeyboardMarkup:
+    def create_status_count_separate_buttons(self, results: Dict[str, List], processed: int, total: int, user_id: int = None) -> InlineKeyboardMarkup:
         """创建状态|数量分离按钮布局"""
         buttons = []
         
+        # Status names for results dictionary (internal keys, keep in Chinese for compatibility)
         status_info = [
             ("无限制", "🟢", len(results['无限制'])),
             ("垃圾邮件", "🟡", len(results['垃圾邮件'])),
@@ -10445,8 +10531,15 @@ class EnhancedBot:
         
         # 每一行显示：状态名称 | 数量
         for status, emoji, count in status_info:
+            # Translate status text for display if user_id is provided
+            if user_id:
+                status_key = self.get_status_translation_key(status)
+                status_display = t(user_id, status_key)
+            else:
+                status_display = status  # Fallback to Chinese if no user_id
+            
             row = [
-                InlineKeyboardButton(f"{emoji} {status}", callback_data=f"status_{status}"),
+                InlineKeyboardButton(f"{emoji} {status_display}", callback_data=f"status_{status}"),
                 InlineKeyboardButton(f"{count}", callback_data=f"count_{status}")
             ]
             buttons.append(row)
@@ -10467,9 +10560,9 @@ class EnhancedBot:
         """显示主菜单（统一方法）"""
         # 获取用户信息
         if update.callback_query:
-            first_name = update.callback_query.from_user.first_name or "用户"
+            first_name = update.callback_query.from_user.first_name or t(user_id, 'default_user')
         else:
-            first_name = update.effective_user.first_name or "用户"
+            first_name = update.effective_user.first_name or t(user_id, 'default_user')
         
         # 获取会员状态（使用 check_membership 方法）
         is_member, level, expiry = self.db.check_membership(user_id)
@@ -10481,12 +10574,16 @@ class EnhancedBot:
         else:
             member_status = t(user_id, 'status_no_member')
         
+        # 翻译到期时间
+        if expiry == "永久有效":
+            expiry = t(user_id, 'expiry_permanent')
+        
         # 构建翻译后的欢迎文本
         proxy_mode_text = t(user_id, 'proxy_mode_enabled') if self.proxy_manager.is_proxy_mode_active(self.db) else t(user_id, 'proxy_mode_local')
         proxy_count_text = t(user_id, 'proxy_count_value').format(count=len(self.proxy_manager.proxies))
         
         welcome_text = f"""
-<b>🔍 Telegram账号机器人 V8.0</b>
+<b>{t(user_id, 'bot_title')}</b>
 
 👤 <b>{t(user_id, 'user_info')}</b>
 • {t(user_id, 'user_nickname')}: {first_name}
@@ -11703,57 +11800,62 @@ class EnhancedBot:
             query.answer()
             user = query.from_user
             user_id = user.id
-            first_name = user.first_name or "用户"
+            first_name = user.first_name or t(user_id, 'default_user')
             is_member, level, expiry = self.db.check_membership(user_id)
             
             if self.db.is_admin(user_id):
-                member_status = "👑 管理员"
+                member_status = t(user_id, 'status_admin')
             elif is_member:
                 member_status = f"🎁 {level}"
             else:
-                member_status = "❌ 无会员"
+                member_status = t(user_id, 'status_no_member')
+            
+            # 翻译到期时间
+            if expiry == "永久有效":
+                expiry = t(user_id, 'expiry_permanent')
+            
+            proxy_mode_text = t(user_id, 'proxy_mode_enabled') if self.proxy_manager.is_proxy_mode_active(self.db) else t(user_id, 'proxy_mode_local')
+            proxy_count_text = t(user_id, 'proxy_count_value').format(count=len(self.proxy_manager.proxies))
             
             welcome_text = f"""
-<b>🔍 Telegram账号机器人 V8.0</b>
+<b>{t(user_id, 'bot_title')}</b>
 
-👤 <b>用户信息</b>
-• 昵称: {first_name}
-• ID: <code>{user_id}</code>
-• 会员: {member_status}
-• 到期: {expiry}
-
-📡 <b>代理状态</b>
-• 代理模式: {'🟢启用' if self.proxy_manager.is_proxy_mode_active(self.db) else '🔴本地连接'}
-• 代理数量: {len(self.proxy_manager.proxies)}个
-• 快速模式: {'🟢开启' if config.PROXY_FAST_MODE else '🔴关闭'}
-• 当前时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
+👤 <b>{t(user_id, 'user_info')}</b>
+• {t(user_id, 'user_nickname')}: {first_name}
+• {t(user_id, 'user_id')}: <code>{user_id}</code>
+• {t(user_id, 'user_membership')}: {member_status}
+• {t(user_id, 'user_expiry')}: {expiry}
+📡 <b>{t(user_id, 'proxy_status')}</b>
+• {t(user_id, 'proxy_mode')}: {proxy_mode_text}
+• {t(user_id, 'proxy_count_label')}: {proxy_count_text}
+• {t(user_id, 'current_time')}: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
             """
             
             # 创建横排2x2布局的主菜单按钮
             buttons = [
                 [
-                    InlineKeyboardButton("🚀 账号检测", callback_data="start_check"),
-                    InlineKeyboardButton("🔄 格式转换", callback_data="format_conversion")
+                    InlineKeyboardButton(t(user_id, 'btn_account_check'), callback_data="start_check"),
+                    InlineKeyboardButton(t(user_id, 'btn_format_conversion'), callback_data="format_conversion")
                 ],
                 [
-                    InlineKeyboardButton("🔐 修改2FA", callback_data="change_2fa"),
-                    InlineKeyboardButton("📦 批量创建", callback_data="batch_create_start")
+                    InlineKeyboardButton(t(user_id, 'btn_change_2fa'), callback_data="change_2fa"),
+                    InlineKeyboardButton(t(user_id, 'btn_batch_create'), callback_data="batch_create_start")
                 ],
                 [
-                    InlineKeyboardButton("🔓 忘记2FA", callback_data="forget_2fa"),
-                    InlineKeyboardButton("❌ 删除2FA", callback_data="remove_2fa")
+                    InlineKeyboardButton(t(user_id, 'btn_forget_2fa'), callback_data="forget_2fa"),
+                    InlineKeyboardButton(t(user_id, 'btn_remove_2fa'), callback_data="remove_2fa")
                 ],
                 [
-                    InlineKeyboardButton("➕ 添加2FA", callback_data="add_2fa"),
-                    InlineKeyboardButton("🔗 API转换", callback_data="api_conversion")
+                    InlineKeyboardButton(t(user_id, 'btn_add_2fa'), callback_data="add_2fa"),
+                    InlineKeyboardButton(t(user_id, 'btn_api_conversion'), callback_data="api_conversion")
                 ],
                 [
-                    InlineKeyboardButton("📦 账号拆分", callback_data="classify_menu"),
-                    InlineKeyboardButton("📝 文件重命名", callback_data="rename_start")
+                    InlineKeyboardButton(t(user_id, 'btn_classify_menu'), callback_data="classify_menu"),
+                    InlineKeyboardButton(t(user_id, 'btn_rename_file'), callback_data="rename_start")
                 ],
                 [
-                    InlineKeyboardButton("🧩 账户合并", callback_data="merge_start"),
-                    InlineKeyboardButton("🧹 一键清理", callback_data="cleanup_start")
+                    InlineKeyboardButton(t(user_id, 'btn_merge_account'), callback_data="merge_start"),
+                    InlineKeyboardButton(t(user_id, 'btn_cleanup'), callback_data="cleanup_start")
                 ],
                 [
                     InlineKeyboardButton("🔑 重新授权", callback_data="reauthorize_start"),
@@ -11874,21 +11976,23 @@ class EnhancedBot:
         proxy_info = ""
         if config.USE_PROXY:
             proxy_count = len(self.proxy_manager.proxies)
-            proxy_info = f"\n📡 代理模式: 启用 ({proxy_count}个代理)"
+            proxy_info = f"\n{t(user_id, 'account_check_proxy_enabled').format(count=proxy_count)}"
+        else:
+            proxy_info = f"\n{t(user_id, 'account_check_proxy_disabled')}"
         
         text = f"""
-📤 <b>请上传您的账号文件</b>
+{t(user_id, 'account_check_upload_title')}
 
-📁 <b>支持格式</b>
-• ZIP压缩包 (推荐)
-• 包含 Session 文件 (.session)
-• 包含 Session+JSON 文件 (.session + .json)
-• 包含 TData 文件夹{proxy_info}
+{t(user_id, 'account_check_supported_formats')}
+{t(user_id, 'account_check_format_zip')}
+{t(user_id, 'account_check_format_session')}
+{t(user_id, 'account_check_format_session_json')}
+{t(user_id, 'account_check_format_tdata')}{proxy_info}
 
-请选择您的ZIP文件并上传...
+{t(user_id, 'account_check_upload_hint')}
         """
         
-        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard(user_id))
         
         # 设置用户状态
         self.db.save_user(user_id, query.from_user.username or "", 
@@ -13295,7 +13399,7 @@ class EnhancedBot:
         # 安全发送进度消息
         progress_msg = self.safe_send_message(
             update,
-            "📥 <b>正在处理您的文件...</b>",
+            f"<b>{t(user_id, 'processing_file')}</b>",
             'HTML'
         )
         
@@ -13331,17 +13435,17 @@ class EnhancedBot:
                 return
             
             total_accounts = len(files)
-            proxy_status = f"📡 {'代理模式' if config.USE_PROXY else '本地模式'}"
+            proxy_mode_text = t(user_id, 'account_check_proxy_mode') if config.USE_PROXY else t(user_id, 'account_check_local_mode')
             print(f"📊 找到 {total_accounts} 个账号文件，类型: {file_type}")
             
             # 开始检测提示
             try:
                 progress_msg.edit_text(
-                    f"🔍 <b>开始检测 {total_accounts} 个账号...</b>\n\n"
-                    f"📊 文件类型: {file_type.upper()}\n"
-                    f"{proxy_status}\n"
-                    f"⚡ 并发线程: {config.MAX_CONCURRENT_CHECKS}个\n\n"
-                    f"请稍等，实时显示检测进度...",
+                    f"{t(user_id, 'account_check_starting').format(count=total_accounts)}\n\n"
+                    f"{t(user_id, 'account_check_file_type').format(type=file_type.upper())}\n"
+                    f"{proxy_mode_text}\n"
+                    f"{t(user_id, 'account_check_threads').format(count=config.MAX_CONCURRENT_CHECKS)}\n\n"
+                    f"{t(user_id, 'account_check_please_wait')}",
                     parse_mode='HTML'
                 )
             except:
@@ -13358,30 +13462,33 @@ class EnhancedBot:
                     if config.USE_PROXY and self.checker.proxy_manager.is_proxy_mode_active(self.db):
                         stats = self.checker.get_proxy_usage_stats()
                         proxy_stats_text = f"""
-📡 <b>代理使用统计</b>
-• 已使用代理: {stats['proxy_success']}
-• 回退本地: {stats['local_fallback']}
-• 失败代理: {stats['proxy_failed']}
+{t(user_id, 'account_check_proxy_stats')}
+{t(user_id, 'account_check_proxies_used').format(count=stats['proxy_success'])}
+{t(user_id, 'account_check_fallback_local').format(count=stats['local_fallback'])}
+{t(user_id, 'account_check_failed_proxies').format(count=stats['proxy_failed'])}
 """
                     
+                    mode_text = t(user_id, 'account_check_proxy_mode') if config.USE_PROXY else t(user_id, 'account_check_local_mode')
+                    fast_mode_status = t(user_id, 'account_check_fast_mode_on') if config.PROXY_FAST_MODE else t(user_id, 'account_check_fast_mode_off')
+                    
                     text = f"""
-⚡ <b>检测进行中...</b>
+{t(user_id, 'account_check_in_progress')}
 
-📊 <b>检测进度</b>
-• 进度: {progress}% ({processed}/{total})
-• 格式: {file_type.upper()}
-• 模式: {'📡代理模式' if config.USE_PROXY else '🏠本地模式'}
-• 速度: {speed:.1f} 账号/秒
-• 预计剩余: {remaining_time/60:.1f} 分钟
+{t(user_id, 'account_check_progress_title')}
+{t(user_id, 'account_check_progress_percent').format(percent=progress, done=processed, total=total)}
+{t(user_id, 'account_check_format').format(format=file_type.upper())}
+{t(user_id, 'account_check_mode').format(mode=mode_text)}
+{t(user_id, 'account_check_speed').format(speed=f'{speed:.1f}')}
+{t(user_id, 'account_check_remaining').format(time=f'{remaining_time/60:.1f}')}
 {proxy_stats_text}
-⚡ <b>优化状态</b>
-• 快速模式: {'🟢开启' if config.PROXY_FAST_MODE else '🔴关闭'}
-• 并发数: {config.PROXY_CHECK_CONCURRENT if config.PROXY_FAST_MODE else config.MAX_CONCURRENT_CHECKS}
-• 检测超时: {config.PROXY_CHECK_TIMEOUT if config.PROXY_FAST_MODE else config.CHECK_TIMEOUT}秒
+{t(user_id, 'account_check_optimization')}
+{t(user_id, 'account_check_fast_mode').format(status=fast_mode_status)}
+{t(user_id, 'account_check_concurrency').format(count=config.PROXY_CHECK_CONCURRENT if config.PROXY_FAST_MODE else config.MAX_CONCURRENT_CHECKS)}
+{t(user_id, 'account_check_timeout').format(seconds=config.PROXY_CHECK_TIMEOUT if config.PROXY_FAST_MODE else config.CHECK_TIMEOUT)}
                     """
                     
                     # 创建状态|数量分离按钮
-                    keyboard = self.create_status_count_separate_buttons(results, processed, total)
+                    keyboard = self.create_status_count_separate_buttons(results, processed, total, user_id)
                     
                     # 安全编辑消息
                     try:
@@ -13423,33 +13530,43 @@ class EnhancedBot:
             if config.USE_PROXY:
                 stats = self.checker.get_proxy_usage_stats()
                 if stats['total'] > 0:
-                    proxy_stats = f"\n\n📡 <b>代理使用统计</b>\n• 已使用代理: {stats['proxy_success']}个\n• 回退本地: {stats['local_fallback']}个\n• 失败代理: {stats['proxy_failed']}个\n• 仅本地: {stats['local_only']}个"
+                    unit = t(user_id, 'accounts_unit')
+                    proxy_stats = f"\n\n<b>{t(user_id, 'proxy_usage_stats')}</b>\n• {t(user_id, 'proxies_used_stat')}: {stats['proxy_success']}{unit}\n• {t(user_id, 'fallback_local_stat')}: {stats['local_fallback']}{unit}\n• {t(user_id, 'failed_proxies_stat')}: {stats['proxy_failed']}{unit}\n• {t(user_id, 'local_only_stat')}: {stats['local_only']}{unit}"
                 else:
                     # 回退到简单统计
                     proxy_used_count = sum(1 for _, _, info in sum(results.values(), []) if "代理" in info)
                     local_used_count = total_accounts - proxy_used_count
-                    proxy_stats = f"\n\n📡 代理连接: {proxy_used_count}个\n🏠 本地连接: {local_used_count}个"
+                    unit = t(user_id, 'accounts_unit')
+                    proxy_stats = f"\n\n{t(user_id, 'proxy_connection')}: {proxy_used_count}{unit}\n{t(user_id, 'local_connection')}: {local_used_count}{unit}"
+            
+            # 格式化检测时间
+            seconds_unit = t(user_id, 'seconds_unit')
+            minutes_unit = t(user_id, 'minutes_unit')
+            check_time_text = t(user_id, 'check_time').format(time=f'{int(total_time)}{seconds_unit} ({total_time/60:.1f}{minutes_unit})')
+            
+            accounts_unit = t(user_id, 'accounts_unit')
+            accounts_per_sec = t(user_id, 'accounts_per_second')
             
             final_text = f"""
-✅ <b>检测完成！正在自动发送文件...</b>
+✅ <b>{t(user_id, 'all_files_sent')}</b>
 
-📊 <b>最终结果</b>
-• 总计账号: {total_accounts}个
-• 🟢 无限制: {len(results['无限制'])}个
-• 🟡 垃圾邮件: {len(results['垃圾邮件'])}个
-• 🔴 冻结: {len(results['冻结'])}个
-• 🟠 封禁: {len(results['封禁'])}个
-• ⚫ 连接错误: {len(results['连接错误'])}个{proxy_stats}
+<b>{t(user_id, 'send_summary')}</b>
+• {t(user_id, 'total_accounts')}: {total_accounts}{accounts_unit}
+• 🟢 {t(user_id, 'status_no_restriction')}: {len(results['无限制'])}{accounts_unit}
+• 🟡 {t(user_id, 'status_spambot')}: {len(results['垃圾邮件'])}{accounts_unit}
+• 🔴 {t(user_id, 'status_frozen')}: {len(results['冻结'])}{accounts_unit}
+• 🟠 {t(user_id, 'status_banned')}: {len(results['封禁'])}{accounts_unit}
+• ⚫ {t(user_id, 'status_connection_error')}: {len(results['连接错误'])}{accounts_unit}{proxy_stats}
 
-⚡ <b>性能统计</b>
-• 检测时间: {int(total_time)}秒 ({total_time/60:.1f}分钟)
-• 平均速度: {final_speed:.1f} 账号/秒
+<b>{t(user_id, 'performance_stats')}</b>
+• {check_time_text}
+• {t(user_id, 'average_speed')}: {final_speed:.1f} {accounts_per_sec}
 
-🚀 正在自动发送分类文件，请稍等...
+{t(user_id, 'sending_files')}
             """
             
             # 最终状态按钮
-            final_keyboard = self.create_status_count_separate_buttons(results, total_accounts, total_accounts)
+            final_keyboard = self.create_status_count_separate_buttons(results, total_accounts, total_accounts, user_id)
             
             try:
                 progress_msg.edit_text(final_text, parse_mode='HTML', reply_markup=final_keyboard)
@@ -13463,21 +13580,22 @@ class EnhancedBot:
                     try:
                         print(f"📤 正在发送: {status}_{count}个.zip")
                         
-                        # 检查实际的代理模式状态
-                        actual_proxy_mode = self.proxy_manager.is_proxy_mode_active(self.db)
+                        # 获取翻译后的文件信息
+                        zip_filename, file_caption_text, check_time_display, check_mode = self.get_translated_file_info(user_id, status, count)
+                        
                         with open(file_path, 'rb') as f:
                             context.bot.send_document(
                                 chat_id=update.effective_chat.id,
                                 document=f,
-                                filename=f"{status}_{count}个.zip",
-                                caption=f"📋 <b>{status}</b> - {count}个账号\n\n"
-                                       f"⏰ 检测时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n"
-                                       f"🔧 检测模式: {'代理模式' if actual_proxy_mode else '本地模式'}",
+                                filename=zip_filename,
+                                caption=f"{file_caption_text}\n\n"
+                                       f"{t(user_id, 'check_time').format(time=check_time_display)}\n"
+                                       f"{t(user_id, 'check_mode_label').format(mode=check_mode)}",
                                 parse_mode='HTML'
                             )
                         
                         sent_count += 1
-                        print(f"✅ 发送成功: {status}_{count}个.zip")
+                        print(f"✅ 发送成功: {zip_filename}")
                         
                         # 延迟避免发送过快
                         await asyncio.sleep(1.0)
@@ -13487,12 +13605,14 @@ class EnhancedBot:
                         await asyncio.sleep(e.retry_after + 1)
                         # 重试发送
                         try:
+                            zip_filename, file_caption_text, _, _ = self.get_translated_file_info(user_id, status, count)
+                            
                             with open(file_path, 'rb') as f:
                                 context.bot.send_document(
                                     chat_id=update.effective_chat.id,
                                     document=f,
-                                    filename=f"{status}_{count}个.zip",
-                                    caption=f"📋 <b>{status}</b> - {count}个账号",
+                                    filename=zip_filename,
+                                    caption=file_caption_text,
                                     parse_mode='HTML'
                                 )
                             sent_count += 1
@@ -13505,15 +13625,17 @@ class EnhancedBot:
             if sent_count > 0:
                 # 检查实际的代理模式状态
                 actual_proxy_mode = self.proxy_manager.is_proxy_mode_active(self.db)
+                check_mode = t(user_id, 'check_mode_proxy') if actual_proxy_mode else t(user_id, 'check_mode_local')
+                
                 summary_text = f"""
-🎉 <b>所有文件发送完成！</b>
+🎉 <b>{t(user_id, 'all_files_sent')}</b>
 
-📋 <b>发送总结</b>
-• 成功发送: {sent_count} 个文件
-• 检测模式: {'📡代理模式' if actual_proxy_mode else '🏠本地模式'}
-• 检测时间: {int(total_time)}秒
+{t(user_id, 'send_summary')}
+{t(user_id, 'files_sent_count').format(count=sent_count)}
+{t(user_id, 'check_mode_summary').format(mode=check_mode)}
+{t(user_id, 'check_duration').format(seconds=int(total_time))}
 
-感谢使用增强版机器人！如需再次检测，请点击 /start
+{t(user_id, 'thanks_message')}
                 """
                 
                 try:
