@@ -10351,8 +10351,27 @@ class EnhancedBot:
         return None
     
     def sanitize_filename(self, filename: str) -> str:
-        """清理文件名，保留 Emoji 和括号"""
-        # 只移除文件系统不允许的字符: \ / : * ? " < > |
+        """清理文件名，保留 Emoji 和括号
+        
+        只移除文件系统不允许的字符，保留所有Unicode字符包括Emoji。
+        
+        移除的字符（Windows和Unix文件系统不允许）:
+        - 反斜杠 (\)、正斜杠 (/)、冒号 (:)
+        - 星号 (*)、问号 (?)、引号 (")
+        - 小于号 (<)、大于号 (>)、竖线 (|)
+        
+        保留的字符:
+        - Emoji (如 🇮🇳, 🎉)
+        - 中文括号 （）
+        - 所有Unicode字符（中文、日文、俄文等）
+        - 加号 (+)、下划线 (_)、连字符 (-) 等
+        
+        示例:
+        - '🇮🇳 随机混合国家（有密码）' -> '🇮🇳 随机混合国家（有密码）'
+        - 'test/file:name' -> 'testfilename'
+        """
+        # 只移除文件系统不允许的字符
+        # Windows和Unix都不允许这些字符: \ / : * ? " < > |
         invalid_chars = r'[\\/:*?"<>|]'
         filename = re.sub(invalid_chars, '', filename)
         
@@ -17820,12 +17839,12 @@ class EnhancedBot:
         task = self.pending_rename[user_id]
         
         # 调试日志：记录原始输入
-        print(f"🔍 重命名输入 - 原始文本: {repr(text)}")
-        print(f"🔍 重命名输入 - text.strip(): {repr(text.strip())}")
+        logger.debug(f"重命名输入 - 用户{user_id} - 原始文本: {repr(text)}")
+        logger.debug(f"重命名输入 - 用户{user_id} - text.strip(): {repr(text.strip())}")
         
         # 清理并验证新文件名
         new_name = self.sanitize_filename(text.strip())
-        print(f"🔍 重命名输入 - 清理后: {repr(new_name)}")
+        logger.debug(f"重命名输入 - 用户{user_id} - 清理后: {repr(new_name)}")
         
         if not new_name:
             self.safe_send_message(update, "❌ 文件名无效，请重新输入")
