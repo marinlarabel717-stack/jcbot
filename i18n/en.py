@@ -1,5 +1,6 @@
 TEXTS = {
     # ===== Main Menu =====
+    'bot_title': '🔍 Telegram Account Bot V8.0',
     'main_menu_title': '🏠 Main Menu',
     'main_menu_welcome': '👋 Welcome to Telegram Account Manager Bot!',
     'main_menu_select': 'Please select a function:',
@@ -12,6 +13,9 @@ TEXTS = {
     'user_expiry': 'Expiry',
     'status_admin': '👑 Administrator',
     'status_no_member': '❌ No Membership',
+    'expiry_permanent': 'Permanent',
+    'membership_admin': 'Administrator',
+    'default_user': 'User',
     
     # Proxy status
     'proxy_status': 'Proxy Status',

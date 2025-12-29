@@ -10560,9 +10560,9 @@ class EnhancedBot:
         """显示主菜单（统一方法）"""
         # 获取用户信息
         if update.callback_query:
-            first_name = update.callback_query.from_user.first_name or "用户"
+            first_name = update.callback_query.from_user.first_name or t(user_id, 'default_user')
         else:
-            first_name = update.effective_user.first_name or "用户"
+            first_name = update.effective_user.first_name or t(user_id, 'default_user')
         
         # 获取会员状态（使用 check_membership 方法）
         is_member, level, expiry = self.db.check_membership(user_id)
@@ -10574,12 +10574,16 @@ class EnhancedBot:
         else:
             member_status = t(user_id, 'status_no_member')
         
+        # 翻译到期时间
+        if expiry == "永久有效":
+            expiry = t(user_id, 'expiry_permanent')
+        
         # 构建翻译后的欢迎文本
         proxy_mode_text = t(user_id, 'proxy_mode_enabled') if self.proxy_manager.is_proxy_mode_active(self.db) else t(user_id, 'proxy_mode_local')
         proxy_count_text = t(user_id, 'proxy_count_value').format(count=len(self.proxy_manager.proxies))
         
         welcome_text = f"""
-<b>🔍 Telegram账号机器人 V8.0</b>
+<b>{t(user_id, 'bot_title')}</b>
 
 👤 <b>{t(user_id, 'user_info')}</b>
 • {t(user_id, 'user_nickname')}: {first_name}
@@ -11796,57 +11800,62 @@ class EnhancedBot:
             query.answer()
             user = query.from_user
             user_id = user.id
-            first_name = user.first_name or "用户"
+            first_name = user.first_name or t(user_id, 'default_user')
             is_member, level, expiry = self.db.check_membership(user_id)
             
             if self.db.is_admin(user_id):
-                member_status = "👑 管理员"
+                member_status = t(user_id, 'status_admin')
             elif is_member:
                 member_status = f"🎁 {level}"
             else:
-                member_status = "❌ 无会员"
+                member_status = t(user_id, 'status_no_member')
+            
+            # 翻译到期时间
+            if expiry == "永久有效":
+                expiry = t(user_id, 'expiry_permanent')
+            
+            proxy_mode_text = t(user_id, 'proxy_mode_enabled') if self.proxy_manager.is_proxy_mode_active(self.db) else t(user_id, 'proxy_mode_local')
+            proxy_count_text = t(user_id, 'proxy_count_value').format(count=len(self.proxy_manager.proxies))
             
             welcome_text = f"""
-<b>🔍 Telegram账号机器人 V8.0</b>
+<b>{t(user_id, 'bot_title')}</b>
 
-👤 <b>用户信息</b>
-• 昵称: {first_name}
-• ID: <code>{user_id}</code>
-• 会员: {member_status}
-• 到期: {expiry}
-
-📡 <b>代理状态</b>
-• 代理模式: {'🟢启用' if self.proxy_manager.is_proxy_mode_active(self.db) else '🔴本地连接'}
-• 代理数量: {len(self.proxy_manager.proxies)}个
-• 快速模式: {'🟢开启' if config.PROXY_FAST_MODE else '🔴关闭'}
-• 当前时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
+👤 <b>{t(user_id, 'user_info')}</b>
+• {t(user_id, 'user_nickname')}: {first_name}
+• {t(user_id, 'user_id')}: <code>{user_id}</code>
+• {t(user_id, 'user_membership')}: {member_status}
+• {t(user_id, 'user_expiry')}: {expiry}
+📡 <b>{t(user_id, 'proxy_status')}</b>
+• {t(user_id, 'proxy_mode')}: {proxy_mode_text}
+• {t(user_id, 'proxy_count_label')}: {proxy_count_text}
+• {t(user_id, 'current_time')}: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
             """
             
             # 创建横排2x2布局的主菜单按钮
             buttons = [
                 [
-                    InlineKeyboardButton("🚀 账号检测", callback_data="start_check"),
-                    InlineKeyboardButton("🔄 格式转换", callback_data="format_conversion")
+                    InlineKeyboardButton(t(user_id, 'btn_account_check'), callback_data="start_check"),
+                    InlineKeyboardButton(t(user_id, 'btn_format_conversion'), callback_data="format_conversion")
                 ],
                 [
-                    InlineKeyboardButton("🔐 修改2FA", callback_data="change_2fa"),
-                    InlineKeyboardButton("📦 批量创建", callback_data="batch_create_start")
+                    InlineKeyboardButton(t(user_id, 'btn_change_2fa'), callback_data="change_2fa"),
+                    InlineKeyboardButton(t(user_id, 'btn_batch_create'), callback_data="batch_create_start")
                 ],
                 [
-                    InlineKeyboardButton("🔓 忘记2FA", callback_data="forget_2fa"),
-                    InlineKeyboardButton("❌ 删除2FA", callback_data="remove_2fa")
+                    InlineKeyboardButton(t(user_id, 'btn_forget_2fa'), callback_data="forget_2fa"),
+                    InlineKeyboardButton(t(user_id, 'btn_remove_2fa'), callback_data="remove_2fa")
                 ],
                 [
-                    InlineKeyboardButton("➕ 添加2FA", callback_data="add_2fa"),
-                    InlineKeyboardButton("🔗 API转换", callback_data="api_conversion")
+                    InlineKeyboardButton(t(user_id, 'btn_add_2fa'), callback_data="add_2fa"),
+                    InlineKeyboardButton(t(user_id, 'btn_api_conversion'), callback_data="api_conversion")
                 ],
                 [
-                    InlineKeyboardButton("📦 账号拆分", callback_data="classify_menu"),
-                    InlineKeyboardButton("📝 文件重命名", callback_data="rename_start")
+                    InlineKeyboardButton(t(user_id, 'btn_classify_menu'), callback_data="classify_menu"),
+                    InlineKeyboardButton(t(user_id, 'btn_rename_file'), callback_data="rename_start")
                 ],
                 [
-                    InlineKeyboardButton("🧩 账户合并", callback_data="merge_start"),
-                    InlineKeyboardButton("🧹 一键清理", callback_data="cleanup_start")
+                    InlineKeyboardButton(t(user_id, 'btn_merge_account'), callback_data="merge_start"),
+                    InlineKeyboardButton(t(user_id, 'btn_cleanup'), callback_data="cleanup_start")
                 ],
                 [
                     InlineKeyboardButton("🔑 重新授权", callback_data="reauthorize_start"),

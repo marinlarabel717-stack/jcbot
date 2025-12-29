@@ -1,5 +1,6 @@
 TEXTS = {
     # ===== 主菜单 =====
+    'bot_title': '🔍 Telegram账号机器人 V8.0',
     'main_menu_title': '🏠 主菜单',
     'main_menu_welcome': '👋 欢迎使用 Telegram 账号管理机器人！',
     'main_menu_select': '请选择功能：',
@@ -12,6 +13,9 @@ TEXTS = {
     'user_expiry': '到期',
     'status_admin': '👑 管理员',
     'status_no_member': '❌ 无会员',
+    'expiry_permanent': '永久有效',
+    'membership_admin': '管理员',
+    'default_user': '用户',
     
     # 代理状态
     'proxy_status': '代理状态',
