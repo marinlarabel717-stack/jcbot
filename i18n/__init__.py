@@ -30,8 +30,11 @@ def load_user_languages():
 
 def save_user_languages(data):
     """保存用户语言设置"""
-    with open(USER_LANGUAGE_FILE, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    try:
+        with open(USER_LANGUAGE_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except (FileNotFoundError, PermissionError, OSError) as e:
+        print(f"⚠️ Failed to save user_language.json: {e}")
 
 def get_user_language(user_id):
     """获取用户语言设置"""
