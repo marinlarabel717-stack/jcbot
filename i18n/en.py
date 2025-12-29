@@ -111,21 +111,21 @@ TEXTS = {
     
     # Account status categories
     'status_no_restriction': 'No Restriction',
-    'status_spambot': 'Spambot',
+    'status_spam': 'spam',
     'status_frozen': 'Frozen',
     'status_banned': 'Banned',
     'status_connection_error': 'Connection Error',
     
     # Result file ZIP naming
     'zip_no_restriction': 'NoRestriction_{count}',
-    'zip_spambot': 'Spambot_{count}',
+    'zip_spam': 'spam_{count}',
     'zip_frozen': 'Frozen_{count}',
     'zip_banned': 'Banned_{count}',
     'zip_connection_error': 'ConnectionError_{count}',
     
     # File descriptions
     'file_desc_no_restriction': '📦 No Restriction - {count} accounts',
-    'file_desc_spambot': '📦 Spambot - {count} accounts',
+    'file_desc_spam': '📦 spam - {count} accounts',
     'file_desc_frozen': '📦 Frozen - {count} accounts',
     'file_desc_banned': '📦 Banned - {count} accounts',
     'file_desc_connection_error': '📦 Connection Error - {count} accounts',
