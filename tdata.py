@@ -10351,14 +10351,29 @@ class EnhancedBot:
         return None
     
     def sanitize_filename(self, filename: str) -> str:
-        """清理文件名，移除非法字符并限制长度"""
-        # 移除或替换非法字符
-        invalid_chars = '<>:"/\\|?*'
-        for char in invalid_chars:
-            filename = filename.replace(char, '_')
+        """清理文件名，保留 Emoji 和括号
         
-        # 移除控制字符
-        filename = ''.join(char for char in filename if ord(char) >= 32)
+        只移除文件系统不允许的字符，保留所有Unicode字符包括Emoji。
+        
+        移除的字符（Windows和Unix文件系统不允许）:
+        - 反斜杠 (\)、正斜杠 (/)、冒号 (:)
+        - 星号 (*)、问号 (?)、引号 (")
+        - 小于号 (<)、大于号 (>)、竖线 (|)
+        
+        保留的字符:
+        - Emoji (如 🇮🇳, 🎉)
+        - 中文括号 （）
+        - 所有Unicode字符（中文、日文、俄文等）
+        - 加号 (+)、下划线 (_)、连字符 (-) 等
+        
+        示例:
+        - '🇮🇳 随机混合国家（有密码）' -> '🇮🇳 随机混合国家（有密码）'
+        - 'test/file:name' -> 'testfilename'
+        """
+        # 只移除文件系统不允许的字符
+        # Windows和Unix都不允许这些字符: \ / : * ? " < > |
+        invalid_chars = r'[\\/:*?"<>|]'
+        filename = re.sub(invalid_chars, '', filename)
         
         # 限制长度（保留扩展名空间）
         max_length = 200
@@ -17823,8 +17838,13 @@ class EnhancedBot:
         
         task = self.pending_rename[user_id]
         
+        # 调试日志：记录原始输入
+        logger.debug(f"重命名输入 - 用户{user_id} - 原始文本: {repr(text)}")
+        logger.debug(f"重命名输入 - 用户{user_id} - text.strip(): {repr(text.strip())}")
+        
         # 清理并验证新文件名
         new_name = self.sanitize_filename(text.strip())
+        logger.debug(f"重命名输入 - 用户{user_id} - 清理后: {repr(new_name)}")
         
         if not new_name:
             self.safe_send_message(update, "❌ 文件名无效，请重新输入")
@@ -17843,7 +17863,14 @@ class EnhancedBot:
             return
         
         # 发送重命名后的文件
-        caption = f"✅ <b>文件重命名成功</b>\n\n原文件名: <code>{task['orig_name']}</code>\n新文件名: <code>{new_filename}</code>"
+        # 注意：显式指定filename参数以确保Telegram使用正确的文件名
+        caption = (
+            f"✅ <b>文件重命名成功</b>\n\n"
+            f"原文件名: <code>{task['orig_name']}</code>\n"
+            f"新文件名: <code>{new_filename}</code>\n\n"
+            f"💡 如果下载时文件名不正确，可能是Telegram客户端限制\n"
+            f"实际文件包含所有字符，包括Emoji和特殊括号"
+        )
         
         if self.send_document_safely(user_id, new_file_path, caption, new_filename):
             self.safe_send_message(update, "✅ <b>文件已发送！</b>", 'HTML')

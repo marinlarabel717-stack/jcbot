@@ -153,6 +153,7 @@ class AccountClassifier:
         将传入的账号条目打成一个 zip 包
         修复点：
         - 保留 tdata 完整目录结构：手机号/tdata/Dxxxxxx/...
+        - Session 格式：直接放在 ZIP 根目录（扁平结构）
         - 对于 .session 同时打入同名 .json（同目录优先，找不到回退 sessions/）
         """
         os.makedirs(out_dir, exist_ok=True)
@@ -165,6 +166,7 @@ class AccountClassifier:
                 account_root = (it.phone or it.display_name or "").strip() or "account"
 
                 if os.path.isdir(it.path):
+                    # TData 格式：保留文件夹结构
                     base = it.path
                     base_is_tdata = os.path.basename(base).lower() == "tdata"
 
@@ -182,11 +184,13 @@ class AccountClassifier:
                                 zf.write(full, arcname=arcname)
                                 written.add(arcname)
                 else:
-                    # 单文件：写入账号根目录
+                    # Session 格式：直接放在 ZIP 根目录（扁平结构），不创建手机号文件夹
+                    # 这样避免了多余的嵌套层级，session文件和json文件都在ZIP根目录
                     base_name = os.path.basename(it.path)
                     name_lower = base_name.lower()
 
-                    arc_file = os.path.join(account_root, base_name)
+                    # Session 文件直接放在根目录
+                    arc_file = base_name
                     if arc_file not in written:
                         zf.write(it.path, arcname=arc_file)
                         written.add(arc_file)
@@ -200,7 +204,7 @@ class AccountClassifier:
                         ]
                         for cand in json_candidates:
                             if os.path.exists(cand):
-                                arc_json = os.path.join(account_root, json_name)
+                                arc_json = json_name
                                 if arc_json not in written:
                                     zf.write(cand, arcname=arc_json)
                                     written.add(arc_json)
@@ -214,7 +218,7 @@ class AccountClassifier:
                         ]
                         for cand in ses_candidates:
                             if os.path.exists(cand):
-                                arc_ses = os.path.join(account_root, ses_name)
+                                arc_ses = ses_name
                                 if arc_ses not in written:
                                     zf.write(cand, arcname=arc_ses)
                                     written.add(arc_ses)
