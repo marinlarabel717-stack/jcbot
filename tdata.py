@@ -63,6 +63,10 @@ SINGLE_ACCOUNT_TIMEOUT = 30  # 单个账号检测超时（秒）
 BATCH_TIMEOUT = 30 * 60  # 批量检测总超时（秒）- 30分钟
 UPDATE_INTERVAL = 5  # 进度消息更新间隔（秒）
 
+# 一键清理功能配置
+CLEANUP_UPDATE_INTERVAL = 5  # 一键清理进度刷新间隔（秒），避免触发 Telegram 限流
+TDATA_CONVERT_TIMEOUT = 30  # TData 转换超时（秒）
+
 # 通讯录限制检测状态常量
 CONTACT_STATUS_NORMAL = 'normal'
 CONTACT_STATUS_LIMITED = 'limited'
@@ -9843,6 +9847,86 @@ class BatchCreatorService:
 
 
 # ================================
+# 一键清理辅助函数
+# ================================
+
+# 全局变量用于追踪上次更新时间
+_last_cleanup_update_time = {}
+
+async def maybe_update_cleanup_progress(message, text, user_id, parse_mode='HTML'):
+    """限制一键清理进度刷新频率，避免触发 Telegram FloodWait"""
+    global _last_cleanup_update_time
+    current_time = time.time()
+    
+    # 检查是否需要更新（距离上次更新至少 CLEANUP_UPDATE_INTERVAL 秒）
+    if user_id not in _last_cleanup_update_time or \
+       current_time - _last_cleanup_update_time[user_id] >= CLEANUP_UPDATE_INTERVAL:
+        try:
+            await message.edit_text(text, parse_mode=parse_mode)
+            _last_cleanup_update_time[user_id] = current_time
+            return True
+        except Exception as e:
+            logger.warning(f"更新进度消息失败: {e}")
+            return False
+    return False
+
+async def safe_convert_tdata(tdata_path, phone_for_log=None):
+    """安全转换 TData，带超时和错误处理
+    
+    Args:
+        tdata_path: TData 路径
+        phone_for_log: 用于日志的手机号（可选）
+        
+    Returns:
+        成功返回 (session_path, None)，失败返回 (None, error_message)
+    """
+    # 初始化 phone_str，确保在所有路径中都可用
+    phone_str = phone_for_log or tdata_path
+    
+    try:
+        from opentele.api import API, UseCurrentSession
+        from opentele.td import TDesktop
+        
+        logger.info(f"🔄 开始转换 TData [{phone_str}]")
+        
+        # 使用 asyncio.wait_for 添加超时机制
+        async def _convert():
+            tdesk = TDesktop(tdata_path)
+            session_path = tdata_path.replace('tdata', 'session').replace('.zip', '.session')
+            
+            # 转换 TData 到 Session
+            temp_client = await tdesk.ToTelethon(
+                session=session_path,
+                flag=UseCurrentSession,
+                api=API.TelegramDesktop
+            )
+            
+            # 测试连接
+            await temp_client.connect()
+            await temp_client.disconnect()
+            
+            return session_path
+        
+        # 添加超时保护
+        session_path = await asyncio.wait_for(
+            _convert(),
+            timeout=TDATA_CONVERT_TIMEOUT
+        )
+        
+        logger.info(f"✅ TData转换成功 [{phone_str}]")
+        return (session_path, None)
+        
+    except asyncio.TimeoutError:
+        error_msg = f"⏱️ TData转换超时（{TDATA_CONVERT_TIMEOUT}秒）"
+        logger.error(f"{error_msg} [{phone_str}]")
+        return (None, error_msg)
+    except Exception as e:
+        error_msg = f"❌ TData转换失败: {str(e)[:100]}"
+        logger.error(f"{error_msg} [{phone_str}]")
+        return (None, error_msg)
+
+
+# ================================
 # 增强版机器人
 # ================================
 
@@ -18793,6 +18877,8 @@ class EnhancedBot:
         result_data = {
             'file_path': file_path,
             'file_name': file_name,
+            'original_path': file_path,  # 保存原始文件路径用于打包
+            'file_type': file_type,  # 保存文件类型
             'success': False,
             'error': None,
             'is_frozen': False,
@@ -18804,36 +18890,22 @@ class EnhancedBot:
         try:
             # 如果是TData，需要先转换为Session
             if file_type == 'tdata':
+                # 提取手机号用于日志
+                phone_for_log = extract_phone_from_tdata_path(file_path) or file_name
+                
+                # 使用安全转换函数，带超时和错误处理
+                session_path, error_msg = await safe_convert_tdata(file_path, phone_for_log)
+                
+                if session_path is None:
+                    # 转换失败，跳过该账号
+                    logger.warning(f"⚠️ 跳过账号 {phone_for_log}，转换失败: {error_msg}")
+                    result_data['error'] = error_msg
+                    result_data['error_details'].append(error_msg)
+                    return result_data
+                
+                # 使用转换后的session创建不接收更新的客户端以提升清理速度
                 try:
-                    from opentele.api import API, UseCurrentSession
-                    from opentele.td import TDesktop
                     from telethon import TelegramClient as TelethonClient
-                    
-                    tdesk = TDesktop(file_path)
-                    session_path = file_path.replace('tdata', 'session').replace('.zip', '.session')
-                    
-                    # 先转换session
-                    try:
-                        temp_client = await tdesk.ToTelethon(
-                            session=session_path,
-                            flag=UseCurrentSession,
-                            api=API.TelegramDesktop
-                        )
-                        await temp_client.connect()
-                        await temp_client.disconnect()
-                    except Exception as conv_error:
-                        logger.error(f"TData session conversion failed for {file_name}: {conv_error}")
-                        # 检查是否为冻结账户错误
-                        if self._is_frozen_error(conv_error):
-                            result_data['error'] = 'FROZEN_ACCOUNT'
-                            result_data['error_message'] = f"账户已冻结: {str(conv_error)}"
-                            result_data['is_frozen'] = True
-                            logger.info(f"❄️ TData Session转换时检测到冻结账户: {file_name}")
-                        else:
-                            result_data['error'] = f"TData转换失败: {str(conv_error)}"
-                        return result_data
-                    
-                    # 使用转换后的session创建不接收更新的客户端以提升清理速度
                     client = TelethonClient(
                         os.path.splitext(session_path)[0],
                         int(config.API_ID),
@@ -18842,16 +18914,23 @@ class EnhancedBot:
                     )
                     await client.connect()
                     
+                    # 检查授权
+                    if not await client.is_user_authorized():
+                        logger.warning(f"Session not authorized after conversion: {file_name}")
+                        result_data['error'] = "转换后Session未授权"
+                        await client.disconnect()
+                        return result_data
+                        
                 except Exception as e:
-                    logger.error(f"TData conversion failed for {file_name}: {e}")
+                    logger.error(f"Failed to connect after TData conversion for {file_name}: {e}")
                     # 检查是否为冻结账户错误
                     if self._is_frozen_error(e):
                         result_data['error'] = 'FROZEN_ACCOUNT'
                         result_data['error_message'] = f"账户已冻结: {str(e)}"
                         result_data['is_frozen'] = True
-                        logger.info(f"❄️ TData转换时检测到冻结账户: {file_name}")
+                        logger.info(f"❄️ 转换后连接时检测到冻结账户: {file_name}")
                     else:
-                        result_data['error'] = f"TData转换失败: {str(e)}"
+                        result_data['error'] = f"转换后连接失败: {str(e)}"
                     return result_data
             else:
                 # 直接使用Session
@@ -18897,7 +18976,7 @@ class EnhancedBot:
             
             # 进度更新节流（避免触发 Telegram 限制）
             last_updated_idx = {'value': 0}
-            UPDATE_BATCH = 50  # 每完成50个账户更新一次
+            UPDATE_BATCH = 100  # 每完成100个账户更新一次，避免频繁刷新触发限流
             
             # 创建进度回调函数
             async def update_progress(status_text):
@@ -18907,7 +18986,7 @@ class EnhancedBot:
                     return
                 
                 # 节流逻辑：只在以下情况更新
-                # 1. 每完成50个账户
+                # 1. 每完成100个账户
                 # 2. 是第一个账户
                 # 3. 是最后一个账户
                 accounts_since_last_update = current_idx - last_updated_idx['value']
@@ -18961,21 +19040,10 @@ class EnhancedBot:
                             f"🔄 状态: {status_text}"
                         )
                         
-                        keyboard = InlineKeyboardMarkup([
-                            [InlineKeyboardButton(
-                                f"⏳ 进度: {progress_percent}% ({current_idx}/{all_files_count})",
-                                callback_data="progress_info"
-                            )],
-                            [InlineKeyboardButton(
-                                f"🔄 {status_display}",
-                                callback_data="status_info"
-                            )]
-                        ])
-                        
+                        # 移除按钮，直接显示进度信息，减少刷新频率避免限流
                         progress_msg.edit_text(
                             message_text,
-                            parse_mode='HTML',
-                            reply_markup=keyboard
+                            parse_mode='HTML'
                         )
                     except Exception as e:
                         # 如果是限流错误，静默处理
@@ -19042,6 +19110,10 @@ class EnhancedBot:
             'detailed_results': []
         }
         
+        # 初始化变量，确保在 finally 块中可用
+        summary_report_path = None
+        result_zips = []
+        
         try:
             # 创建信号量控制并发数
             semaphore = asyncio.Semaphore(config.CLEANUP_ACCOUNT_CONCURRENCY)
@@ -19065,7 +19137,8 @@ class EnhancedBot:
                 if isinstance(result, BaseException):
                     logger.error(f"处理异常: {result}")
                     results_summary['failed'] += 1
-                    results_summary['failed_files'].append((files[idx-1][0], files[idx-1][1]))
+                    # 从原始files列表获取文件信息，包含file_type
+                    results_summary['failed_files'].append((files[idx-1][0], files[idx-1][1], files[idx-1][0], file_type))
                     results_summary['detailed_results'].append({
                         'file_name': files[idx-1][1],
                         'status': 'failed',
@@ -19089,18 +19162,18 @@ class EnhancedBot:
                 # - failed_files用于将冻结账户打包到失败账户zip中
                 if result.get('is_frozen'):
                     results_summary['frozen'] += 1
-                    results_summary['frozen_files'].append((result['file_path'], result['file_name']))
+                    results_summary['frozen_files'].append((result['file_path'], result['file_name'], result.get('original_path'), result.get('file_type')))
                     # 冻结账户同时加入失败列表，以便打包到失败zip中
                     results_summary['failed'] += 1
-                    results_summary['failed_files'].append((result['file_path'], result['file_name']))
+                    results_summary['failed_files'].append((result['file_path'], result['file_name'], result.get('original_path'), result.get('file_type')))
                     logger.info(f"❄️ 冻结账户（归类为失败）: {result['file_name']}")
                 elif result.get('success'):
                     results_summary['success'] += 1
-                    results_summary['success_files'].append((result['file_path'], result['file_name']))
+                    results_summary['success_files'].append((result['file_path'], result['file_name'], result.get('original_path'), result.get('file_type')))
                     logger.info(f"✅ 清理成功: {result['file_name']}")
                 else:
                     results_summary['failed'] += 1
-                    results_summary['failed_files'].append((result['file_path'], result['file_name']))
+                    results_summary['failed_files'].append((result['file_path'], result['file_name'], result.get('original_path'), result.get('file_type')))
                     logger.info(f"❌ 清理失败: {result['file_name']}")
             
             # 生成详细的TXT报告
@@ -19161,7 +19234,8 @@ class EnhancedBot:
                     f.write("-" * 80 + "\n")
                     f.write(f"成功清理的账户 / Successfully Cleaned ({len(results_summary['success_files'])})\n")
                     f.write("-" * 80 + "\n")
-                    for idx, (_, fname) in enumerate(results_summary['success_files'], 1):
+                    for idx, file_info in enumerate(results_summary['success_files'], 1):
+                        fname = file_info[1] if len(file_info) > 1 else file_info[0]
                         f.write(f"{idx}. ✅ {fname}\n")
                     f.write("\n")
                 
@@ -19169,7 +19243,8 @@ class EnhancedBot:
                     f.write("-" * 80 + "\n")
                     f.write(f"冻结的账户 / Frozen Accounts ({len(results_summary['frozen_files'])})\n")
                     f.write("-" * 80 + "\n")
-                    for idx, (_, fname) in enumerate(results_summary['frozen_files'], 1):
+                    for idx, file_info in enumerate(results_summary['frozen_files'], 1):
+                        fname = file_info[1] if len(file_info) > 1 else file_info[0]
                         f.write(f"{idx}. ❄️ {fname}\n")
                     f.write("\n")
                 
@@ -19177,7 +19252,8 @@ class EnhancedBot:
                     f.write("-" * 80 + "\n")
                     f.write(f"清理失败的账户 / Failed to Clean ({len(results_summary['failed_files'])})\n")
                     f.write("-" * 80 + "\n")
-                    for idx, (_, fname) in enumerate(results_summary['failed_files'], 1):
+                    for idx, file_info in enumerate(results_summary['failed_files'], 1):
+                        fname = file_info[1] if len(file_info) > 1 else file_info[0]
                         f.write(f"{idx}. ❌ {fname}\n")
                     f.write("\n")
                 
@@ -19193,18 +19269,41 @@ class EnhancedBot:
             if results_summary['success_files']:
                 success_zip_path = os.path.join(config.CLEANUP_REPORTS_DIR, f"cleaned_success_{timestamp}.zip")
                 with zipfile.ZipFile(success_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                    for file_path, file_name in results_summary['success_files']:
-                        # 添加session文件
-                        if os.path.exists(file_path):
-                            zipf.write(file_path, file_name)
-                        # 如果有对应的session-journal文件也添加
-                        journal_path = file_path + '-journal'
-                        if os.path.exists(journal_path):
-                            zipf.write(journal_path, file_name + '-journal')
-                        # 如果有对应的json文件也添加
-                        json_path = os.path.splitext(file_path)[0] + '.json'
-                        if os.path.exists(json_path):
-                            zipf.write(json_path, os.path.splitext(file_name)[0] + '.json')
+                    for file_info in results_summary['success_files']:
+                        file_path = file_info[0]
+                        file_name = file_info[1]
+                        original_path = file_info[2] if len(file_info) > 2 else file_path
+                        item_file_type = file_info[3] if len(file_info) > 3 else 'session'
+                        
+                        if item_file_type == 'tdata':
+                            # TData格式：每个账号独立打包到 手机号/tdata/... 结构
+                            # 提取手机号作为账号标识
+                            phone = extract_phone_from_tdata_path(original_path) or file_name
+                            # 去除特殊字符，确保是有效的目录名
+                            phone = str(phone).replace('.zip', '').replace('/', '_').replace('\\', '_')
+                            
+                            if os.path.isdir(original_path):
+                                # 遍历TData目录下的所有文件
+                                for root, dirs, files_in_dir in os.walk(original_path):
+                                    for file in files_in_dir:
+                                        file_full_path = os.path.join(root, file)
+                                        # 计算相对路径，保留TData目录结构
+                                        rel_path = os.path.relpath(file_full_path, os.path.dirname(original_path))
+                                        # 添加手机号前缀，格式：手机号/tdata/...
+                                        arc_path = os.path.join(phone, rel_path)
+                                        zipf.write(file_full_path, arc_path)
+                        else:
+                            # Session格式：添加session文件及相关文件
+                            if os.path.exists(file_path):
+                                zipf.write(file_path, file_name)
+                            # 如果有对应的session-journal文件也添加
+                            journal_path = file_path + '-journal'
+                            if os.path.exists(journal_path):
+                                zipf.write(journal_path, file_name + '-journal')
+                            # 如果有对应的json文件也添加
+                            json_path = os.path.splitext(file_path)[0] + '.json'
+                            if os.path.exists(json_path):
+                                zipf.write(json_path, os.path.splitext(file_name)[0] + '.json')
                 
                 result_zips.append(('success', success_zip_path, len(results_summary['success_files'])))
             
@@ -19212,24 +19311,77 @@ class EnhancedBot:
             if results_summary['failed_files']:
                 failed_zip_path = os.path.join(config.CLEANUP_REPORTS_DIR, f"cleaned_failed_{timestamp}.zip")
                 with zipfile.ZipFile(failed_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                    for file_path, file_name in results_summary['failed_files']:
-                        # 添加session文件
-                        if os.path.exists(file_path):
-                            zipf.write(file_path, file_name)
-                        # 如果有对应的session-journal文件也添加
-                        journal_path = file_path + '-journal'
-                        if os.path.exists(journal_path):
-                            zipf.write(journal_path, file_name + '-journal')
-                        # 如果有对应的json文件也添加
-                        json_path = os.path.splitext(file_path)[0] + '.json'
-                        if os.path.exists(json_path):
-                            zipf.write(json_path, os.path.splitext(file_name)[0] + '.json')
+                    for file_info in results_summary['failed_files']:
+                        file_path = file_info[0]
+                        file_name = file_info[1]
+                        original_path = file_info[2] if len(file_info) > 2 else file_path
+                        item_file_type = file_info[3] if len(file_info) > 3 else 'session'
+                        
+                        if item_file_type == 'tdata':
+                            # TData格式：每个账号独立打包到 手机号/tdata/... 结构
+                            # 提取手机号作为账号标识
+                            phone = extract_phone_from_tdata_path(original_path) or file_name
+                            # 去除特殊字符，确保是有效的目录名
+                            phone = str(phone).replace('.zip', '').replace('/', '_').replace('\\', '_')
+                            
+                            if os.path.isdir(original_path):
+                                # 遍历TData目录下的所有文件
+                                for root, dirs, files_in_dir in os.walk(original_path):
+                                    for file in files_in_dir:
+                                        file_full_path = os.path.join(root, file)
+                                        # 计算相对路径，保留TData目录结构
+                                        rel_path = os.path.relpath(file_full_path, os.path.dirname(original_path))
+                                        # 添加手机号前缀，格式：手机号/tdata/...
+                                        arc_path = os.path.join(phone, rel_path)
+                                        zipf.write(file_full_path, arc_path)
+                        else:
+                            # Session格式：添加session文件及相关文件
+                            if os.path.exists(file_path):
+                                zipf.write(file_path, file_name)
+                            # 如果有对应的session-journal文件也添加
+                            journal_path = file_path + '-journal'
+                            if os.path.exists(journal_path):
+                                zipf.write(journal_path, file_name + '-journal')
+                            # 如果有对应的json文件也添加
+                            json_path = os.path.splitext(file_path)[0] + '.json'
+                            if os.path.exists(json_path):
+                                zipf.write(json_path, os.path.splitext(file_name)[0] + '.json')
                 
                 result_zips.append(('failed', failed_zip_path, len(results_summary['failed_files'])))
             
-            # 发送完成消息
-            frozen_rate = (results_summary['frozen'] / results_summary['total'] * 100) if results_summary['total'] > 0 else 0
-            final_text = f"""
+        except Exception as e:
+            logger.error(f"Cleanup execution failed: {e}")
+            import traceback
+            traceback.print_exc()
+            
+            # 标记清理过程失败
+            results_summary['cleanup_error'] = str(e)
+        
+        finally:
+            # 无论如何都要发送清理结果
+            try:
+                # 发送完成消息
+                success_rate = (results_summary['success'] / results_summary['total'] * 100) if results_summary['total'] > 0 else 0
+                frozen_rate = (results_summary['frozen'] / results_summary['total'] * 100) if results_summary['total'] > 0 else 0
+                
+                if results_summary.get('cleanup_error'):
+                    # 清理过程出错，发送错误消息但仍尝试发送已有的结果
+                    final_text = f"""
+⚠️ <b>清理部分完成（出现错误）</b>
+
+<b>📊 已处理统计</b>
+• 总账号数: {results_summary['total']}
+• ✅ 成功: {results_summary['success']} ({success_rate:.1f}%)
+• ❄️ 冻结: {results_summary['frozen']} ({frozen_rate:.1f}%)
+• ❌ 失败: {results_summary['failed']}
+
+⚠️ <b>错误信息：</b> {results_summary['cleanup_error'][:200]}
+
+<b>📦 正在发送已处理的结果...</b>
+                    """
+                else:
+                    # 清理正常完成
+                    final_text = f"""
 ✅ <b>并发清理完成！</b>
 
 <b>⚡ 并发模式</b>
@@ -19242,52 +19394,55 @@ class EnhancedBot:
 • ❌ 失败: {results_summary['failed']}
 
 <b>📦 正在打包账户文件...</b>
-            """
-            
-            context.bot.send_message(
-                chat_id=user_id,
-                text=final_text,
-                parse_mode='HTML'
-            )
-            
-            # 发送汇总报告
-            try:
-                with open(summary_report_path, 'rb') as f:
-                    context.bot.send_document(
-                        chat_id=user_id,
-                        document=f,
-                        caption=f"📋 清理汇总报告",
-                        filename=os.path.basename(summary_report_path)
-                    )
-            except Exception as e:
-                logger.error(f"Failed to send summary report: {e}")
-            
-            # 发送账户ZIP文件
-            for zip_type, zip_path, count in result_zips:
+                    """
+                
+                context.bot.send_message(
+                    chat_id=user_id,
+                    text=final_text,
+                    parse_mode='HTML'
+                )
+                
+                # 发送汇总报告（如果存在）
+                if summary_report_path and os.path.exists(summary_report_path):
+                    try:
+                        with open(summary_report_path, 'rb') as f:
+                            context.bot.send_document(
+                                chat_id=user_id,
+                                document=f,
+                                caption=f"📋 清理汇总报告",
+                                filename=os.path.basename(summary_report_path)
+                            )
+                    except Exception as e:
+                        logger.error(f"Failed to send summary report: {e}")
+                
+                # 发送账户ZIP文件
+                for zip_type, zip_path, count in result_zips:
+                    try:
+                        caption = f"📦 清理{'成功' if zip_type == 'success' else '失败'}的账户 ({count} 个)"
+                        with open(zip_path, 'rb') as f:
+                            context.bot.send_document(
+                                chat_id=user_id,
+                                document=f,
+                                caption=caption,
+                                filename=os.path.basename(zip_path)
+                            )
+                    except Exception as e:
+                        logger.error(f"Failed to send {zip_type} accounts ZIP: {e}")
+                
+                logger.info("✅ 清理结果已发送")
+                
+            except Exception as send_error:
+                logger.error(f"Failed to send cleanup results: {send_error}")
+                # 尝试至少发送一个错误消息
                 try:
-                    caption = f"📦 清理{'成功' if zip_type == 'success' else '失败'}的账户 ({count} 个)"
-                    with open(zip_path, 'rb') as f:
-                        context.bot.send_document(
-                            chat_id=user_id,
-                            document=f,
-                            caption=caption,
-                            filename=os.path.basename(zip_path)
-                        )
-                except Exception as e:
-                    logger.error(f"Failed to send {zip_type} accounts ZIP: {e}")
+                    context.bot.send_message(
+                        chat_id=user_id,
+                        text=f"❌ <b>清理结果发送失败</b>\n\n错误: {str(send_error)[:200]}",
+                        parse_mode='HTML'
+                    )
+                except:
+                    pass
             
-        except Exception as e:
-            logger.error(f"Cleanup execution failed: {e}")
-            import traceback
-            traceback.print_exc()
-            
-            context.bot.send_message(
-                chat_id=user_id,
-                text=f"❌ <b>清理失败</b>\n\n错误: {str(e)}",
-                parse_mode='HTML'
-            )
-        
-        finally:
             # 清理任务
             self.cleanup_cleanup_task(user_id)
     
