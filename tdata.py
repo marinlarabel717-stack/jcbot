@@ -13718,7 +13718,7 @@ class EnhancedBot:
         # 发送进度消息
         progress_msg = self.safe_send_message(
             update,
-            "📥 <b>正在处理您的文件...</b>",
+            f"<b>{t(user_id, 'processing_your_file')}</b>",
             'HTML'
         )
         
@@ -13773,7 +13773,7 @@ class EnhancedBot:
             
             try:
                 progress_msg.edit_text(
-                    f"🔄 <b>开始转换...</b>\n\n📁 找到 {total_files} 个文件\n⏳ 正在初始化...",
+                    f"<b>{t(user_id, 'start_conversion')}</b>\n\n{t(user_id, 'found_files').format(count=total_files)}\n{t(user_id, 'initializing')}",
                     parse_mode='HTML'
                 )
             except:

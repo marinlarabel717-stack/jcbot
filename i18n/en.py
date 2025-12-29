@@ -203,6 +203,10 @@ TEXTS = {
     'session_to_tdata_info3': '· Generate corresponding Tdata folders',
     
     # Conversion progress
+    'processing_your_file': '📥 Processing your file...',
+    'start_conversion': '🔄 Starting conversion...',
+    'found_files': '📁 Found {count} files',
+    'initializing': '⏳ Initializing...',
     'conversion_in_progress': '🔄 Format conversion in progress...',
     'conversion_current_progress': '📊 Current Progress',
     'conversion_processed': '· Processed: {done}/{total}',

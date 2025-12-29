@@ -203,6 +203,10 @@ TEXTS = {
     'session_to_tdata_info3': '· 生成对应的Tdata文件夹',
     
     # 转换进度
+    'processing_your_file': '📥 正在处理您的文件...',
+    'start_conversion': '🔄 开始转换...',
+    'found_files': '📁 找到 {count} 个文件',
+    'initializing': '⏳ 正在初始化...',
     'conversion_in_progress': '🔄 格式转换进行中...',
     'conversion_current_progress': '📊 当前进度',
     'conversion_processed': '· 已处理: {done}/{total}',
