@@ -17819,8 +17819,13 @@ class EnhancedBot:
         
         task = self.pending_rename[user_id]
         
+        # 调试日志：记录原始输入
+        print(f"🔍 重命名输入 - 原始文本: {repr(text)}")
+        print(f"🔍 重命名输入 - text.strip(): {repr(text.strip())}")
+        
         # 清理并验证新文件名
         new_name = self.sanitize_filename(text.strip())
+        print(f"🔍 重命名输入 - 清理后: {repr(new_name)}")
         
         if not new_name:
             self.safe_send_message(update, "❌ 文件名无效，请重新输入")
