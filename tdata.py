@@ -19276,15 +19276,22 @@ class EnhancedBot:
                         item_file_type = file_info[3] if len(file_info) > 3 else 'session'
                         
                         if item_file_type == 'tdata':
-                            # TData格式：打包整个原始TData目录
+                            # TData格式：每个账号独立打包到 手机号/tdata/... 结构
+                            # 提取手机号作为账号标识
+                            phone = extract_phone_from_tdata_path(original_path) or file_name
+                            # 去除特殊字符，确保是有效的目录名
+                            phone = str(phone).replace('.zip', '').replace('/', '_').replace('\\', '_')
+                            
                             if os.path.isdir(original_path):
                                 # 遍历TData目录下的所有文件
                                 for root, dirs, files_in_dir in os.walk(original_path):
                                     for file in files_in_dir:
                                         file_full_path = os.path.join(root, file)
-                                        # 计算相对路径，保留目录结构
+                                        # 计算相对路径，保留TData目录结构
                                         rel_path = os.path.relpath(file_full_path, os.path.dirname(original_path))
-                                        zipf.write(file_full_path, rel_path)
+                                        # 添加手机号前缀，格式：手机号/tdata/...
+                                        arc_path = os.path.join(phone, rel_path)
+                                        zipf.write(file_full_path, arc_path)
                         else:
                             # Session格式：添加session文件及相关文件
                             if os.path.exists(file_path):
@@ -19311,15 +19318,22 @@ class EnhancedBot:
                         item_file_type = file_info[3] if len(file_info) > 3 else 'session'
                         
                         if item_file_type == 'tdata':
-                            # TData格式：打包整个原始TData目录
+                            # TData格式：每个账号独立打包到 手机号/tdata/... 结构
+                            # 提取手机号作为账号标识
+                            phone = extract_phone_from_tdata_path(original_path) or file_name
+                            # 去除特殊字符，确保是有效的目录名
+                            phone = str(phone).replace('.zip', '').replace('/', '_').replace('\\', '_')
+                            
                             if os.path.isdir(original_path):
                                 # 遍历TData目录下的所有文件
                                 for root, dirs, files_in_dir in os.walk(original_path):
                                     for file in files_in_dir:
                                         file_full_path = os.path.join(root, file)
-                                        # 计算相对路径，保留目录结构
+                                        # 计算相对路径，保留TData目录结构
                                         rel_path = os.path.relpath(file_full_path, os.path.dirname(original_path))
-                                        zipf.write(file_full_path, rel_path)
+                                        # 添加手机号前缀，格式：手机号/tdata/...
+                                        arc_path = os.path.join(phone, rel_path)
+                                        zipf.write(file_full_path, arc_path)
                         else:
                             # Session格式：添加session文件及相关文件
                             if os.path.exists(file_path):
