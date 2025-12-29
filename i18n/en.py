@@ -106,11 +106,11 @@ TEXTS = {
     'account_check_timeout': '· Check timeout: {seconds}s',
     
     # Account status categories
-    'status_no_restriction': '🟢 No Restriction',
-    'status_spambot': '🟡 Spambot',
-    'status_frozen': '🟡 Frozen',
-    'status_banned': '🔴 Banned',
-    'status_connection_error': '⚫ Connection Error',
+    'status_no_restriction': 'No Restriction',
+    'status_spambot': 'Spambot',
+    'status_frozen': 'Frozen',
+    'status_banned': 'Banned',
+    'status_connection_error': 'Connection Error',
     
     # Result file ZIP naming
     'zip_no_restriction': 'NoRestriction_{count}',
@@ -137,4 +137,17 @@ TEXTS = {
     'check_mode_summary': '· Check mode: {mode}',
     'check_duration': '· Check duration: {seconds}s',
     'thanks_message': 'Thanks for using the enhanced bot! To check again, click /start',
+    
+    # Proxy stats and other statistics
+    'total_accounts': 'Total Accounts',
+    'proxy_usage_stats': '📡 Proxy Usage Stats',
+    'proxies_used_stat': 'Proxies Used',
+    'fallback_local_stat': 'Fallback Local',
+    'failed_proxies_stat': 'Failed Proxies',
+    'local_only_stat': 'Local Only',
+    'proxy_connection': '📡 Proxy Connection',
+    'local_connection': '🏠 Local Connection',
+    'performance_stats': '⚡ Performance Stats',
+    'average_speed': 'Average Speed',
+    'sending_files': '🚀 Sending classified files, please wait...',
 }

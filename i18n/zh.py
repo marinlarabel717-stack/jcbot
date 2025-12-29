@@ -106,11 +106,11 @@ TEXTS = {
     'account_check_timeout': '· 检测超时: {seconds}秒',
     
     # 账号状态分类
-    'status_no_restriction': '🟢 无限制',
-    'status_spambot': '🟡 垃圾邮件',
-    'status_frozen': '🟡 冻结',
-    'status_banned': '🔴 封禁',
-    'status_connection_error': '⚫ 连接错误',
+    'status_no_restriction': '无限制',
+    'status_spambot': '垃圾邮件',
+    'status_frozen': '冻结',
+    'status_banned': '封禁',
+    'status_connection_error': '连接错误',
     
     # 结果文件ZIP命名
     'zip_no_restriction': '无限制_{count}个',
@@ -137,4 +137,17 @@ TEXTS = {
     'check_mode_summary': '· 检测模式: {mode}',
     'check_duration': '· 检测时间: {seconds}秒',
     'thanks_message': '感谢使用增强版机器人！如需再次检测，请点击 /start',
+    
+    # 代理统计和其他统计
+    'total_accounts': '总计账号',
+    'proxy_usage_stats': '📡 代理使用统计',
+    'proxies_used_stat': '已使用代理',
+    'fallback_local_stat': '回退本地',
+    'failed_proxies_stat': '失败代理',
+    'local_only_stat': '仅本地',
+    'proxy_connection': '📡 代理连接',
+    'local_connection': '🏠 本地连接',
+    'performance_stats': '⚡ 性能统计',
+    'average_speed': '平均速度',
+    'sending_files': '🚀 正在自动发送分类文件，请稍等...',
 }

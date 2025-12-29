@@ -1078,14 +1078,22 @@ def format_time(seconds: float) -> str:
     else:
         return f"{minutes:02d}:{secs:02d}"
 
-def get_back_to_menu_keyboard():
+def get_back_to_menu_keyboard(user_id: int = None):
     """返回主菜单按钮
+    
+    Args:
+        user_id: User ID for language selection (optional)
     
     Returns:
         InlineKeyboardMarkup: 包含"返回主菜单"按钮的键盘布局
     """
+    if user_id:
+        button_text = t(user_id, 'btn_back_to_menu')
+    else:
+        button_text = "返回主菜单"  # Fallback to Chinese
+    
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("返回主菜单", callback_data="back_to_main")]
+        [InlineKeyboardButton(button_text, callback_data="back_to_main")]
     ])
 
 # ================================
@@ -11975,7 +11983,7 @@ class EnhancedBot:
 {t(user_id, 'account_check_upload_hint')}
         """
         
-        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard(user_id))
         
         # 设置用户状态
         self.db.save_user(user_id, query.from_user.username or "", 
@@ -13513,12 +13521,12 @@ class EnhancedBot:
             if config.USE_PROXY:
                 stats = self.checker.get_proxy_usage_stats()
                 if stats['total'] > 0:
-                    proxy_stats = f"\n\n📡 <b>代理使用统计</b>\n• 已使用代理: {stats['proxy_success']}个\n• 回退本地: {stats['local_fallback']}个\n• 失败代理: {stats['proxy_failed']}个\n• 仅本地: {stats['local_only']}个"
+                    proxy_stats = f"\n\n<b>{t(user_id, 'proxy_usage_stats')}</b>\n• {t(user_id, 'proxies_used_stat')}: {stats['proxy_success']}个\n• {t(user_id, 'fallback_local_stat')}: {stats['local_fallback']}个\n• {t(user_id, 'failed_proxies_stat')}: {stats['proxy_failed']}个\n• {t(user_id, 'local_only_stat')}: {stats['local_only']}个"
                 else:
                     # 回退到简单统计
                     proxy_used_count = sum(1 for _, _, info in sum(results.values(), []) if "代理" in info)
                     local_used_count = total_accounts - proxy_used_count
-                    proxy_stats = f"\n\n📡 代理连接: {proxy_used_count}个\n🏠 本地连接: {local_used_count}个"
+                    proxy_stats = f"\n\n{t(user_id, 'proxy_connection')}: {proxy_used_count}个\n{t(user_id, 'local_connection')}: {local_used_count}个"
             
             # 格式化检测时间
             check_time_text = t(user_id, 'check_time').format(time=f'{int(total_time)}秒 ({total_time/60:.1f}分钟)')
@@ -13526,19 +13534,19 @@ class EnhancedBot:
             final_text = f"""
 ✅ <b>{t(user_id, 'all_files_sent')}</b>
 
-📊 <b>{t(user_id, 'send_summary')}</b>
-• 总计账号: {total_accounts}个
-• {t(user_id, 'status_no_restriction')}: {len(results['无限制'])}个
-• {t(user_id, 'status_spambot')}: {len(results['垃圾邮件'])}个
-• {t(user_id, 'status_frozen')}: {len(results['冻结'])}个
-• {t(user_id, 'status_banned')}: {len(results['封禁'])}个
-• {t(user_id, 'status_connection_error')}: {len(results['连接错误'])}个{proxy_stats}
+<b>{t(user_id, 'send_summary')}</b>
+• {t(user_id, 'total_accounts')}: {total_accounts}个
+• 🟢 {t(user_id, 'status_no_restriction')}: {len(results['无限制'])}个
+• 🟡 {t(user_id, 'status_spambot')}: {len(results['垃圾邮件'])}个
+• 🔴 {t(user_id, 'status_frozen')}: {len(results['冻结'])}个
+• 🟠 {t(user_id, 'status_banned')}: {len(results['封禁'])}个
+• ⚫ {t(user_id, 'status_connection_error')}: {len(results['连接错误'])}个{proxy_stats}
 
-⚡ <b>性能统计</b>
+<b>{t(user_id, 'performance_stats')}</b>
 • {check_time_text}
-• 平均速度: {final_speed:.1f} 账号/秒
+• {t(user_id, 'average_speed')}: {final_speed:.1f} 账号/秒
 
-🚀 正在自动发送分类文件，请稍等...
+{t(user_id, 'sending_files')}
             """
             
             # 最终状态按钮
