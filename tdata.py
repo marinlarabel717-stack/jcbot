@@ -10095,6 +10095,60 @@ class EnhancedBot:
         
         print("✅ 增强版机器人初始化完成")
     
+    def get_status_translation_key(self, status: str) -> str:
+        """Map internal status to translation key
+        
+        Args:
+            status: Internal status name (Chinese)
+            
+        Returns:
+            Translation key for the status
+        """
+        status_map = {
+            "无限制": "status_no_restriction",
+            "垃圾邮件": "status_spambot",
+            "冻结": "status_frozen",
+            "封禁": "status_banned",
+            "连接错误": "status_connection_error",
+        }
+        return status_map.get(status, "status_no_restriction")
+    
+    def get_zip_name_translation_key(self, status: str) -> str:
+        """Map internal status to ZIP file name translation key
+        
+        Args:
+            status: Internal status name (Chinese)
+            
+        Returns:
+            Translation key for ZIP file naming
+        """
+        zip_map = {
+            "无限制": "zip_no_restriction",
+            "垃圾邮件": "zip_spambot",
+            "冻结": "zip_frozen",
+            "封禁": "zip_banned",
+            "连接错误": "zip_connection_error",
+        }
+        return zip_map.get(status, "zip_no_restriction")
+    
+    def get_file_desc_translation_key(self, status: str) -> str:
+        """Map internal status to file description translation key
+        
+        Args:
+            status: Internal status name (Chinese)
+            
+        Returns:
+            Translation key for file description
+        """
+        desc_map = {
+            "无限制": "file_desc_no_restriction",
+            "垃圾邮件": "file_desc_spambot",
+            "冻结": "file_desc_frozen",
+            "封禁": "file_desc_banned",
+            "连接错误": "file_desc_connection_error",
+        }
+        return desc_map.get(status, "file_desc_no_restriction")
+    
     def setup_handlers(self):
         self.dp.add_handler(CommandHandler("start", self.start_command))
         self.dp.add_handler(CommandHandler("help", self.help_command))
@@ -11874,18 +11928,20 @@ class EnhancedBot:
         proxy_info = ""
         if config.USE_PROXY:
             proxy_count = len(self.proxy_manager.proxies)
-            proxy_info = f"\n📡 代理模式: 启用 ({proxy_count}个代理)"
+            proxy_info = f"\n{t(user_id, 'account_check_proxy_enabled').format(count=proxy_count)}"
+        else:
+            proxy_info = f"\n{t(user_id, 'account_check_proxy_disabled')}"
         
         text = f"""
-📤 <b>请上传您的账号文件</b>
+{t(user_id, 'account_check_upload_title')}
 
-📁 <b>支持格式</b>
-• ZIP压缩包 (推荐)
-• 包含 Session 文件 (.session)
-• 包含 Session+JSON 文件 (.session + .json)
-• 包含 TData 文件夹{proxy_info}
+{t(user_id, 'account_check_supported_formats')}
+{t(user_id, 'account_check_format_zip')}
+{t(user_id, 'account_check_format_session')}
+{t(user_id, 'account_check_format_session_json')}
+{t(user_id, 'account_check_format_tdata')}{proxy_info}
 
-请选择您的ZIP文件并上传...
+{t(user_id, 'account_check_upload_hint')}
         """
         
         self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
@@ -13331,17 +13387,17 @@ class EnhancedBot:
                 return
             
             total_accounts = len(files)
-            proxy_status = f"📡 {'代理模式' if config.USE_PROXY else '本地模式'}"
+            proxy_mode_text = t(user_id, 'account_check_proxy_mode') if config.USE_PROXY else t(user_id, 'account_check_local_mode')
             print(f"📊 找到 {total_accounts} 个账号文件，类型: {file_type}")
             
             # 开始检测提示
             try:
                 progress_msg.edit_text(
-                    f"🔍 <b>开始检测 {total_accounts} 个账号...</b>\n\n"
-                    f"📊 文件类型: {file_type.upper()}\n"
-                    f"{proxy_status}\n"
-                    f"⚡ 并发线程: {config.MAX_CONCURRENT_CHECKS}个\n\n"
-                    f"请稍等，实时显示检测进度...",
+                    f"{t(user_id, 'account_check_starting').format(count=total_accounts)}\n\n"
+                    f"{t(user_id, 'account_check_file_type').format(type=file_type.upper())}\n"
+                    f"{proxy_mode_text}\n"
+                    f"{t(user_id, 'account_check_threads').format(count=config.MAX_CONCURRENT_CHECKS)}\n\n"
+                    f"{t(user_id, 'account_check_please_wait')}",
                     parse_mode='HTML'
                 )
             except:
@@ -13358,26 +13414,29 @@ class EnhancedBot:
                     if config.USE_PROXY and self.checker.proxy_manager.is_proxy_mode_active(self.db):
                         stats = self.checker.get_proxy_usage_stats()
                         proxy_stats_text = f"""
-📡 <b>代理使用统计</b>
-• 已使用代理: {stats['proxy_success']}
-• 回退本地: {stats['local_fallback']}
-• 失败代理: {stats['proxy_failed']}
+{t(user_id, 'account_check_proxy_stats')}
+{t(user_id, 'account_check_proxies_used').format(count=stats['proxy_success'])}
+{t(user_id, 'account_check_fallback_local').format(count=stats['local_fallback'])}
+{t(user_id, 'account_check_failed_proxies').format(count=stats['proxy_failed'])}
 """
                     
+                    mode_text = t(user_id, 'account_check_proxy_mode') if config.USE_PROXY else t(user_id, 'account_check_local_mode')
+                    fast_mode_status = t(user_id, 'account_check_fast_mode_on') if config.PROXY_FAST_MODE else t(user_id, 'account_check_fast_mode_off')
+                    
                     text = f"""
-⚡ <b>检测进行中...</b>
+{t(user_id, 'account_check_in_progress')}
 
-📊 <b>检测进度</b>
-• 进度: {progress}% ({processed}/{total})
-• 格式: {file_type.upper()}
-• 模式: {'📡代理模式' if config.USE_PROXY else '🏠本地模式'}
-• 速度: {speed:.1f} 账号/秒
-• 预计剩余: {remaining_time/60:.1f} 分钟
+{t(user_id, 'account_check_progress_title')}
+{t(user_id, 'account_check_progress_percent').format(percent=progress, done=processed, total=total)}
+{t(user_id, 'account_check_format').format(format=file_type.upper())}
+{t(user_id, 'account_check_mode').format(mode=mode_text)}
+{t(user_id, 'account_check_speed').format(speed=f'{speed:.1f}')}
+{t(user_id, 'account_check_remaining').format(time=f'{remaining_time/60:.1f}')}
 {proxy_stats_text}
-⚡ <b>优化状态</b>
-• 快速模式: {'🟢开启' if config.PROXY_FAST_MODE else '🔴关闭'}
-• 并发数: {config.PROXY_CHECK_CONCURRENT if config.PROXY_FAST_MODE else config.MAX_CONCURRENT_CHECKS}
-• 检测超时: {config.PROXY_CHECK_TIMEOUT if config.PROXY_FAST_MODE else config.CHECK_TIMEOUT}秒
+{t(user_id, 'account_check_optimization')}
+{t(user_id, 'account_check_fast_mode').format(status=fast_mode_status)}
+{t(user_id, 'account_check_concurrency').format(count=config.PROXY_CHECK_CONCURRENT if config.PROXY_FAST_MODE else config.MAX_CONCURRENT_CHECKS)}
+{t(user_id, 'account_check_timeout').format(seconds=config.PROXY_CHECK_TIMEOUT if config.PROXY_FAST_MODE else config.CHECK_TIMEOUT)}
                     """
                     
                     # 创建状态|数量分离按钮
@@ -13430,19 +13489,22 @@ class EnhancedBot:
                     local_used_count = total_accounts - proxy_used_count
                     proxy_stats = f"\n\n📡 代理连接: {proxy_used_count}个\n🏠 本地连接: {local_used_count}个"
             
+            # 格式化检测时间
+            check_time_text = t(user_id, 'check_time').format(time=f'{int(total_time)}秒 ({total_time/60:.1f}分钟)')
+            
             final_text = f"""
-✅ <b>检测完成！正在自动发送文件...</b>
+✅ <b>{t(user_id, 'all_files_sent')}</b>
 
-📊 <b>最终结果</b>
+📊 <b>{t(user_id, 'send_summary')}</b>
 • 总计账号: {total_accounts}个
-• 🟢 无限制: {len(results['无限制'])}个
-• 🟡 垃圾邮件: {len(results['垃圾邮件'])}个
-• 🔴 冻结: {len(results['冻结'])}个
-• 🟠 封禁: {len(results['封禁'])}个
-• ⚫ 连接错误: {len(results['连接错误'])}个{proxy_stats}
+• {t(user_id, 'status_no_restriction')}: {len(results['无限制'])}个
+• {t(user_id, 'status_spambot')}: {len(results['垃圾邮件'])}个
+• {t(user_id, 'status_frozen')}: {len(results['冻结'])}个
+• {t(user_id, 'status_banned')}: {len(results['封禁'])}个
+• {t(user_id, 'status_connection_error')}: {len(results['连接错误'])}个{proxy_stats}
 
 ⚡ <b>性能统计</b>
-• 检测时间: {int(total_time)}秒 ({total_time/60:.1f}分钟)
+• {check_time_text}
 • 平均速度: {final_speed:.1f} 账号/秒
 
 🚀 正在自动发送分类文件，请稍等...
@@ -13463,21 +13525,32 @@ class EnhancedBot:
                     try:
                         print(f"📤 正在发送: {status}_{count}个.zip")
                         
+                        # 获取翻译后的状态名称和文件名
+                        status_text = t(user_id, self.get_status_translation_key(status))
+                        zip_name_key = self.get_zip_name_translation_key(status)
+                        file_desc_key = self.get_file_desc_translation_key(status)
+                        
+                        zip_filename = f"{t(user_id, zip_name_key).format(count=count)}.zip"
+                        file_caption_text = t(user_id, file_desc_key).format(count=count)
+                        
                         # 检查实际的代理模式状态
                         actual_proxy_mode = self.proxy_manager.is_proxy_mode_active(self.db)
+                        check_mode = t(user_id, 'check_mode_proxy') if actual_proxy_mode else t(user_id, 'check_mode_local')
+                        check_time_display = datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')
+                        
                         with open(file_path, 'rb') as f:
                             context.bot.send_document(
                                 chat_id=update.effective_chat.id,
                                 document=f,
-                                filename=f"{status}_{count}个.zip",
-                                caption=f"📋 <b>{status}</b> - {count}个账号\n\n"
-                                       f"⏰ 检测时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n"
-                                       f"🔧 检测模式: {'代理模式' if actual_proxy_mode else '本地模式'}",
+                                filename=zip_filename,
+                                caption=f"{file_caption_text}\n\n"
+                                       f"{t(user_id, 'check_time').format(time=check_time_display)}\n"
+                                       f"{t(user_id, 'check_mode_label').format(mode=check_mode)}",
                                 parse_mode='HTML'
                             )
                         
                         sent_count += 1
-                        print(f"✅ 发送成功: {status}_{count}个.zip")
+                        print(f"✅ 发送成功: {zip_filename}")
                         
                         # 延迟避免发送过快
                         await asyncio.sleep(1.0)
@@ -13487,12 +13560,18 @@ class EnhancedBot:
                         await asyncio.sleep(e.retry_after + 1)
                         # 重试发送
                         try:
+                            status_text = t(user_id, self.get_status_translation_key(status))
+                            zip_name_key = self.get_zip_name_translation_key(status)
+                            file_desc_key = self.get_file_desc_translation_key(status)
+                            zip_filename = f"{t(user_id, zip_name_key).format(count=count)}.zip"
+                            file_caption_text = t(user_id, file_desc_key).format(count=count)
+                            
                             with open(file_path, 'rb') as f:
                                 context.bot.send_document(
                                     chat_id=update.effective_chat.id,
                                     document=f,
-                                    filename=f"{status}_{count}个.zip",
-                                    caption=f"📋 <b>{status}</b> - {count}个账号",
+                                    filename=zip_filename,
+                                    caption=file_caption_text,
                                     parse_mode='HTML'
                                 )
                             sent_count += 1
@@ -13505,15 +13584,17 @@ class EnhancedBot:
             if sent_count > 0:
                 # 检查实际的代理模式状态
                 actual_proxy_mode = self.proxy_manager.is_proxy_mode_active(self.db)
+                check_mode = t(user_id, 'check_mode_proxy') if actual_proxy_mode else t(user_id, 'check_mode_local')
+                
                 summary_text = f"""
-🎉 <b>所有文件发送完成！</b>
+🎉 <b>{t(user_id, 'all_files_sent')}</b>
 
-📋 <b>发送总结</b>
-• 成功发送: {sent_count} 个文件
-• 检测模式: {'📡代理模式' if actual_proxy_mode else '🏠本地模式'}
-• 检测时间: {int(total_time)}秒
+{t(user_id, 'send_summary')}
+{t(user_id, 'files_sent_count').format(count=sent_count)}
+{t(user_id, 'check_mode_summary').format(mode=check_mode)}
+{t(user_id, 'check_duration').format(seconds=int(total_time))}
 
-感谢使用增强版机器人！如需再次检测，请点击 /start
+{t(user_id, 'thanks_message')}
                 """
                 
                 try:
