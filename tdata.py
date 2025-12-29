@@ -17844,7 +17844,14 @@ class EnhancedBot:
             return
         
         # 发送重命名后的文件
-        caption = f"✅ <b>文件重命名成功</b>\n\n原文件名: <code>{task['orig_name']}</code>\n新文件名: <code>{new_filename}</code>"
+        # 注意：显式指定filename参数以确保Telegram使用正确的文件名
+        caption = (
+            f"✅ <b>文件重命名成功</b>\n\n"
+            f"原文件名: <code>{task['orig_name']}</code>\n"
+            f"新文件名: <code>{new_filename}</code>\n\n"
+            f"💡 如果下载时文件名不正确，可能是Telegram客户端限制\n"
+            f"实际文件包含所有字符，包括Emoji和特殊括号"
+        )
         
         if self.send_document_safely(user_id, new_file_path, caption, new_filename):
             self.safe_send_message(update, "✅ <b>文件已发送！</b>", 'HTML')
