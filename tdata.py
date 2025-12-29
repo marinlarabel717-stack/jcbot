@@ -10485,10 +10485,11 @@ class EnhancedBot:
         
         return False
     
-    def create_status_count_separate_buttons(self, results: Dict[str, List], processed: int, total: int) -> InlineKeyboardMarkup:
+    def create_status_count_separate_buttons(self, results: Dict[str, List], processed: int, total: int, user_id: int = None) -> InlineKeyboardMarkup:
         """创建状态|数量分离按钮布局"""
         buttons = []
         
+        # Status names for results dictionary (internal keys, keep in Chinese for compatibility)
         status_info = [
             ("无限制", "🟢", len(results['无限制'])),
             ("垃圾邮件", "🟡", len(results['垃圾邮件'])),
@@ -10499,8 +10500,15 @@ class EnhancedBot:
         
         # 每一行显示：状态名称 | 数量
         for status, emoji, count in status_info:
+            # Translate status text for display if user_id is provided
+            if user_id:
+                status_key = self.get_status_translation_key(status)
+                status_display = t(user_id, status_key)
+            else:
+                status_display = status  # Fallback to Chinese if no user_id
+            
             row = [
-                InlineKeyboardButton(f"{emoji} {status}", callback_data=f"status_{status}"),
+                InlineKeyboardButton(f"{emoji} {status_display}", callback_data=f"status_{status}"),
                 InlineKeyboardButton(f"{count}", callback_data=f"count_{status}")
             ]
             buttons.append(row)
@@ -13440,7 +13448,7 @@ class EnhancedBot:
                     """
                     
                     # 创建状态|数量分离按钮
-                    keyboard = self.create_status_count_separate_buttons(results, processed, total)
+                    keyboard = self.create_status_count_separate_buttons(results, processed, total, user_id)
                     
                     # 安全编辑消息
                     try:
@@ -13511,7 +13519,7 @@ class EnhancedBot:
             """
             
             # 最终状态按钮
-            final_keyboard = self.create_status_count_separate_buttons(results, total_accounts, total_accounts)
+            final_keyboard = self.create_status_count_separate_buttons(results, total_accounts, total_accounts, user_id)
             
             try:
                 progress_msg.edit_text(final_text, parse_mode='HTML', reply_markup=final_keyboard)
