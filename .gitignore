@@ -66,3 +66,6 @@ results/
 *.session-journal
 *.db
 *.zip
+
+# User settings
+user_language.json

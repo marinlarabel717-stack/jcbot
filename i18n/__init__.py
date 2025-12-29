@@ -1,0 +1,44 @@
+import json
+import os
+
+DEFAULT_LANGUAGE = 'zh'
+SUPPORTED_LANGUAGES = ['zh', 'en']
+
+# 用户语言设置文件
+USER_LANGUAGE_FILE = 'user_language.json'
+
+def load_user_languages():
+    """加载用户语言设置"""
+    if os.path.exists(USER_LANGUAGE_FILE):
+        with open(USER_LANGUAGE_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {}
+
+def save_user_languages(data):
+    """保存用户语言设置"""
+    with open(USER_LANGUAGE_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+def get_user_language(user_id):
+    """获取用户语言设置"""
+    languages = load_user_languages()
+    return languages.get(str(user_id), DEFAULT_LANGUAGE)
+
+def set_user_language(user_id, lang):
+    """设置用户语言"""
+    languages = load_user_languages()
+    languages[str(user_id)] = lang
+    save_user_languages(languages)
+
+def get_text(user_id, key):
+    """获取翻译文本"""
+    lang = get_user_language(user_id)
+    if lang == 'en':
+        from i18n.en import TEXTS
+    else:
+        from i18n.zh import TEXTS
+    return TEXTS.get(key, key)
+
+def t(user_id, key):
+    """get_text 的简写"""
+    return get_text(user_id, key)
