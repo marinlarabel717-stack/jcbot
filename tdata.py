@@ -1062,6 +1062,16 @@ def format_time(seconds: float) -> str:
     else:
         return f"{minutes:02d}:{secs:02d}"
 
+def get_back_to_menu_keyboard():
+    """返回主菜单按钮
+    
+    Returns:
+        InlineKeyboardMarkup: 包含"返回主菜单"按钮的键盘布局
+    """
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("返回主菜单", callback_data="back_to_main")]
+    ])
+
 # ================================
 # TData 处理辅助函数
 # ================================
@@ -10616,7 +10626,7 @@ class EnhancedBot:
 请上传您的文件...
         """
 
-        self.safe_edit_message(query, text, 'HTML')
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
 
         # 设置用户状态
         self.db.save_user(
@@ -11803,7 +11813,7 @@ class EnhancedBot:
 请选择您的ZIP文件并上传...
         """
         
-        self.safe_edit_message(query, text, 'HTML')
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
         
         # 设置用户状态
         self.db.save_user(user_id, query.from_user.username or "", 
@@ -11880,7 +11890,7 @@ class EnhancedBot:
 请上传您的ZIP文件...
         """
         
-        self.safe_edit_message(query, text, 'HTML')
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
         
         # 设置用户状态
         self.db.save_user(user_id, query.from_user.username or "", 
@@ -11911,7 +11921,7 @@ class EnhancedBot:
 请上传您的ZIP文件...
         """
         
-        self.safe_edit_message(query, text, 'HTML')
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
         
         # 设置用户状态
         self.db.save_user(user_id, query.from_user.username or "", 
@@ -11964,7 +11974,7 @@ class EnhancedBot:
 🚀请上传您的ZIP文件...
         """
         
-        self.safe_edit_message(query, text, 'HTML')
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
         
         # 设置用户状态 - 等待上传文件
         self.db.save_user(user_id, query.from_user.username or "", 
@@ -12114,7 +12124,7 @@ class EnhancedBot:
 🚀请上传您的ZIP文件...
         """
         
-        self.safe_edit_message(query, text, 'HTML')
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
         
         # 设置用户状态 - 等待上传文件
         self.db.save_user(user_id, query.from_user.username or "", 
@@ -14481,15 +14491,25 @@ class EnhancedBot:
         else:
             self.safe_send_message(update, text, 'HTML', keyboard)
     def on_back_to_main(self, update: Update, context: CallbackContext):
-        """处理“返回主菜单”按钮"""
+        """处理"返回主菜单"按钮"""
         query = update.callback_query
         if query:
+            user_id = query.from_user.id
+            
             try:
                 query.answer()
             except:
                 pass
-            # 使用统一方法渲染主菜单（包含“📦 账号分类”按钮）
-            self.show_main_menu(update, query.from_user.id)        
+            
+            # 清除用户状态 - 重置为空状态
+            try:
+                self.db.save_user(user_id, query.from_user.username or "", 
+                                query.from_user.first_name or "", "")
+            except Exception as e:
+                logger.warning(f"清除用户状态失败: {e}")
+            
+            # 使用统一方法渲染主菜单（包含"📦 账号分类"按钮）
+            self.show_main_menu(update, user_id)
     def _classify_buttons_split_type(self) -> InlineKeyboardMarkup:
         """生成拆分方式选择按钮"""
         return InlineKeyboardMarkup([
@@ -15736,7 +15756,8 @@ class EnhancedBot:
                     "• TData 文件夹的ZIP包\n\n"
                     "⚠️ 文件大小限制100MB\n"
                     "⏰ 5分钟超时",
-                    parse_mode='HTML'
+                    parse_mode='HTML',
+                    reply_markup=get_back_to_menu_keyboard()
                 )
             except:
                 pass
@@ -24963,7 +24984,8 @@ admin3</code>
         
         query.edit_message_text(
             text=text,
-            parse_mode='HTML'
+            parse_mode='HTML',
+            reply_markup=get_back_to_menu_keyboard()
         )
         
         # 设置用户状态为等待文件上传
@@ -25025,7 +25047,8 @@ admin3</code>
         
         query.edit_message_text(
             text=text,
-            parse_mode='HTML'
+            parse_mode='HTML',
+            reply_markup=get_back_to_menu_keyboard()
         )
         
         # 设置用户状态为等待上传
