@@ -8411,17 +8411,26 @@ class Forget2FAManager:
         return f"{proxy_type} {host}:{port}"
     
     @staticmethod
-    def mask_proxy_for_display(proxy_used: str) -> str:
+    def mask_proxy_for_display(proxy_used: str, user_id: int = None) -> str:
         """
         隐藏代理详细信息，仅显示是否使用代理
         用于报告文件和进度显示，保护用户代理隐私
         """
+        # 如果没有提供user_id，返回默认中文（向后兼容）
+        if user_id is None:
+            if not proxy_used:
+                return "本地连接"
+            if "本地连接" in proxy_used or proxy_used == "本地连接":
+                return "本地连接"
+            return "✅ 使用代理"
+        
+        # 使用翻译
         if not proxy_used:
-            return "本地连接"
+            return t(user_id, 'forget_2fa_proxy_local')
         if "本地连接" in proxy_used or proxy_used == "本地连接":
-            return "本地连接"
+            return t(user_id, 'forget_2fa_proxy_local')
         # 只显示使用了代理，不暴露具体IP/端口
-        return "✅ 使用代理"
+        return t(user_id, 'forget_2fa_proxy_using')
     
     @staticmethod
     def mask_proxy_in_string(text: str) -> str:
@@ -9205,18 +9214,37 @@ class Forget2FAManager:
                     
                     for idx, item in enumerate(items, 1):
                         f.write(f"{idx}. {emoji} {item.get('account_name', '')}\n")
-                        f.write(f"   {t(user_id, 'report_forget_2fa_phone').format(phone=item.get('phone', '未知'))}\n")
+                        phone = item.get('phone', t(user_id, 'forget_2fa_status_unknown'))
+                        f.write(f"   {t(user_id, 'report_forget_2fa_phone').format(phone=phone)}\n")
                         
-                        # 状态描述
+                        # 状态描述 - 使用正确的翻译键
                         error_msg = item.get('error', status_name)
-                        f.write(f"   {t(user_id, 'forget_2fa_status_reset' if status_key == 'requested' else 'forget_2fa_status_failed')}: {error_msg}\n")
+                        
+                        # 根据状态键选择正确的状态翻译
+                        if status_key == 'requested':
+                            cooling_date = item.get('cooling_until', '')
+                            if cooling_date:
+                                status_text = t(user_id, 'report_forget_2fa_status_reset_waiting').format(date=cooling_date)
+                            else:
+                                status_text = t(user_id, 'report_forget_2fa_status_reset_waiting').format(date='N/A')
+                        elif status_key == 'no_2fa':
+                            if 'detect' in error_msg.lower() or '检测' in error_msg:
+                                status_text = t(user_id, 'report_forget_2fa_status_detect_failed').format(error=error_msg)
+                            else:
+                                status_text = t(user_id, 'report_forget_2fa_status_no_2fa')
+                        elif status_key == 'cooling':
+                            cooling_date = item.get('cooling_until', '')
+                            status_text = t(user_id, 'report_forget_2fa_status_in_cooling').format(date=cooling_date)
+                        else:  # failed
+                            status_text = t(user_id, 'report_forget_2fa_status_connection_failed')
+                        
+                        f.write(f"   {status_text}\n")
                         
                         # 隐藏代理详细信息，保护用户隐私
-                        masked_proxy = self.mask_proxy_for_display(item.get('proxy_used', t(user_id, 'forget_2fa_status_local')))
-                        proxy_text = t(user_id, 'report_forget_2fa_proxy_using') if '✅' in masked_proxy or 'proxy' in masked_proxy.lower() else t(user_id, 'report_forget_2fa_proxy_local')
-                        f.write(f"   {proxy_text}\n")
+                        masked_proxy = self.mask_proxy_for_display(item.get('proxy_used', t(user_id, 'forget_2fa_status_local')), user_id)
+                        f.write(f"   {masked_proxy}\n")
                         
-                        if item.get('cooling_until'):
+                        if item.get('cooling_until') and status_key != 'requested':
                             f.write(f"   {t(user_id, 'report_forget_2fa_cooling_until').format(date=item.get('cooling_until'))}\n")
                         elapsed_time = f"{item.get('elapsed', 0):.1f}"
                         f.write(f"   {t(user_id, 'report_forget_2fa_duration').format(time=elapsed_time)}\n\n")
@@ -15164,10 +15192,13 @@ class EnhancedBot:
                     return
                 last_update_time[0] = current_time
                 
-                # 格式化时间
+                # 格式化时间 - 使用翻译
                 minutes = int(elapsed) // 60
                 seconds = int(elapsed) % 60
-                time_str = f"{minutes}分{seconds}秒" if minutes > 0 else f"{seconds}秒"
+                if minutes > 0:
+                    time_str = f"{minutes}{t(user_id, 'minutes_unit')}{seconds}{t(user_id, 'seconds_unit')}"
+                else:
+                    time_str = f"{seconds}{t(user_id, 'seconds_unit')}"
                 
                 # 统计各状态数量
                 requested = len(results.get('requested', []))
@@ -15181,7 +15212,7 @@ class EnhancedBot:
                 current_status = current_result.get('status', '')
                 # 隐藏代理详细信息，保护用户隐私
                 current_proxy_raw = current_result.get('proxy_used', t(user_id, 'forget_2fa_status_local'))
-                current_proxy = Forget2FAManager.mask_proxy_for_display(current_proxy_raw)
+                current_proxy = Forget2FAManager.mask_proxy_for_display(current_proxy_raw, user_id)
                 
                 # 状态映射 - 使用翻译
                 status_map = {
@@ -15227,7 +15258,10 @@ class EnhancedBot:
             total_time = time.time() - start_time
             minutes = int(total_time) // 60
             seconds = int(total_time) % 60
-            time_str = f"{minutes}分{seconds}秒" if minutes > 0 else f"{seconds}秒"
+            if minutes > 0:
+                time_str = f"{minutes}{t(user_id, 'minutes_unit')}{seconds}{t(user_id, 'seconds_unit')}"
+            else:
+                time_str = f"{seconds}{t(user_id, 'seconds_unit')}"
             
             # 统计各状态数量
             requested = len(results.get('requested', []))
