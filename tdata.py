@@ -13152,7 +13152,7 @@ class EnhancedBot:
         
         # 其他功能需要ZIP格式
         if not document.file_name.lower().endswith('.zip'):
-            self.safe_send_message(update, "❌ 请上传ZIP格式的压缩包")
+            self.safe_send_message(update, t(user_id, 'error_upload_zip_only'))
             return
 
         is_member, _, _ = self.db.check_membership(user_id)
@@ -20083,7 +20083,7 @@ class EnhancedBot:
                 parse_mode='HTML'
             )
             
-            # 验证账号
+            # 验证账号 - 并发30个
             accounts = []
             valid_count = 0
             total_remaining = 0
@@ -20093,15 +20093,9 @@ class EnhancedBot:
             api_id = device_config.get('api_id', config.API_ID)
             api_hash = device_config.get('api_hash', config.API_HASH)
             
-            for i, (file_path, file_name) in enumerate(files):
-                # 更新进度
-                if (i + 1) % 5 == 0:
-                    self.safe_edit_message_text(
-                        progress_msg,
-                        f"{t(user_id, 'batch_create_verifying')}\n\n{t(user_id, 'batch_create_verifying_progress').format(done=i + 1, total=len(files))}",
-                        parse_mode='HTML'
-                    )
-                
+            # 异步验证单个账号
+            async def verify_account(file_path, file_name, index):
+                """验证单个账号"""
                 # 创建账号信息
                 account = BatchAccountInfo(
                     session_path=file_path,
@@ -20128,11 +20122,39 @@ class EnhancedBot:
                     account, api_id, api_hash, proxy_dict, user_id
                 )
                 
-                accounts.append(account)
+                return account, is_valid, index
+            
+            # 并发验证，每批30个
+            CONCURRENT_VALIDATION = 30
+            total_files = len(files)
+            
+            for batch_start in range(0, total_files, CONCURRENT_VALIDATION):
+                batch_end = min(batch_start + CONCURRENT_VALIDATION, total_files)
+                batch_files = files[batch_start:batch_end]
                 
-                if is_valid:
-                    valid_count += 1
-                    total_remaining += account.daily_remaining
+                # 创建并发任务
+                tasks = [
+                    verify_account(file_path, file_name, batch_start + i)
+                    for i, (file_path, file_name) in enumerate(batch_files)
+                ]
+                
+                # 并发执行
+                results = await asyncio.gather(*tasks)
+                
+                # 处理结果
+                for account, is_valid, idx in results:
+                    accounts.append(account)
+                    if is_valid:
+                        valid_count += 1
+                        total_remaining += account.daily_remaining
+                
+                # 更新进度
+                processed = batch_end
+                self.safe_edit_message_text(
+                    progress_msg,
+                    f"{t(user_id, 'batch_create_verifying')}\n\n{t(user_id, 'batch_create_verifying_progress').format(done=processed, total=total_files)}",
+                    parse_mode='HTML'
+                )
             
             # 保存任务信息
             self.pending_batch_create[user_id] = {
@@ -20826,7 +20848,7 @@ admin3</code>
                     # 异步安全地添加到总结果并更新进度
                     async with results_lock:
                         results.append(result)
-                        progress_callback(len(results), total_to_create, f"已完成 {len(results)} 个")
+                        progress_callback(len(results), total_to_create, t(user_id, 'batch_create_status_completed').format(count=len(results)))
                     
                     # 检查是否是账号冻结错误，如果是则立即停止该账号的后续创建
                     if result.status == 'failed' and result.error and 'FROZEN_METHOD_INVALID' in result.error:
@@ -20848,7 +20870,7 @@ admin3</code>
                             account_results.append(skipped_result)
                             async with results_lock:
                                 results.append(skipped_result)
-                                progress_callback(len(results), total_to_create, f"已完成 {len(results)} 个")
+                                progress_callback(len(results), total_to_create, t(user_id, 'batch_create_status_completed').format(count=len(results)))
                         break
                     
                     # 在该账号的每次创建之后添加配置的延迟（避免触发Telegram频率限制）

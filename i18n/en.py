@@ -602,4 +602,9 @@ TEXTS = {
     'batch_create_count_range_error': '❌ Count must be between 1-10, please re-enter',
     'batch_create_failed': '❌ Creation failed',
     'batch_create_error': 'Error: {error}',
+    'error_upload_zip_only': '❌ Please upload ZIP format archive',
+    
+    # Batch Create - Progress Messages
+    'batch_create_progress_completed': 'Completed {count}',
+    'batch_create_status_completed': 'Status: Completed {count}',
 }

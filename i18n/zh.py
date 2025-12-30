@@ -602,4 +602,9 @@ TEXTS = {
     'batch_create_count_range_error': '❌ 数量必须在1-10之间，请重新输入',
     'batch_create_failed': '❌ 创建失败',
     'batch_create_error': '错误: {error}',
+    'error_upload_zip_only': '❌ 请上传ZIP格式的压缩包',
+    
+    # 批量创建 - 进度信息
+    'batch_create_progress_completed': '已完成 {count} 个',
+    'batch_create_status_completed': '状态: 已完成 {count} 个',
 }
