@@ -9895,58 +9895,77 @@ class BatchCreatorService:
         
         return result
     
-    def generate_report(self, results: List[BatchCreationResult]) -> str:
+    def generate_report(self, results: List[BatchCreationResult], user_id: int) -> str:
         """生成创建报告"""
-        lines = ["=" * 60, "批量创建群组/频道 - 结果报告", "=" * 60]
-        lines.append(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n")
+        lines = ["=" * 60, t(user_id, 'report_batch_create_title'), "=" * 60]
+        lines.append(t(user_id, 'report_batch_create_generated').format(
+            time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')
+        ) + "\n")
         
         total = len(results)
         success = len([r for r in results if r.status == 'success'])
         failed = len([r for r in results if r.status == 'failed'])
         skipped = len([r for r in results if r.status == 'skipped'])
         
-        lines.append("统计信息:")
-        lines.append(f"  总数: {total}")
-        lines.append(f"  成功: {success}")
-        lines.append(f"  失败: {failed}")
-        lines.append(f"  跳过: {skipped}\n")
+        lines.append(t(user_id, 'report_batch_create_stats'))
+        lines.append(t(user_id, 'report_batch_create_total').format(count=total))
+        lines.append(t(user_id, 'report_batch_create_success').format(count=success))
+        lines.append(t(user_id, 'report_batch_create_failed').format(count=failed))
+        lines.append(t(user_id, 'report_batch_create_skipped').format(count=skipped) + "\n")
         
         if success > 0:
-            lines.append("成功创建列表:")
+            lines.append(t(user_id, 'report_batch_create_success_list'))
             lines.append("-" * 60)
             for r in results:
                 if r.status == 'success':
-                    lines.append(f"类型: {r.creation_type}")
-                    lines.append(f"名称: {r.name}")
-                    lines.append(f"简介: {r.description or '无'}")
-                    lines.append(f"用户名: {r.username or '无'}")
-                    lines.append(f"链接: {r.invite_link or '无'}")
-                    lines.append(f"创建者账号: {r.phone}")
-                    lines.append(f"创建者用户名: @{r.creator_username or '未知'}")
-                    lines.append(f"创建者ID: {r.creator_id or '未知'}")
+                    type_text = t(user_id, 'report_batch_create_type_group') if r.creation_type == 'group' else t(user_id, 'report_batch_create_type_channel')
+                    lines.append(t(user_id, 'report_batch_create_type').format(type=type_text))
+                    lines.append(t(user_id, 'report_batch_create_name').format(name=r.name))
+                    lines.append(t(user_id, 'report_batch_create_desc').format(
+                        desc=r.description or t(user_id, 'report_batch_create_desc_none')
+                    ))
+                    lines.append(t(user_id, 'report_batch_create_username').format(
+                        username=r.username or t(user_id, 'report_batch_create_desc_none')
+                    ))
+                    lines.append(t(user_id, 'report_batch_create_link').format(
+                        link=r.invite_link or t(user_id, 'report_batch_create_desc_none')
+                    ))
+                    lines.append(t(user_id, 'report_batch_create_creator_account').format(account=r.phone))
+                    lines.append(t(user_id, 'report_batch_create_creator_username').format(
+                        username=f"@{r.creator_username}" if r.creator_username else t(user_id, 'report_batch_create_desc_none')
+                    ))
+                    lines.append(t(user_id, 'report_batch_create_creator_id').format(
+                        id=r.creator_id or t(user_id, 'report_batch_create_desc_none')
+                    ))
                     
                     # 管理员信息（支持多个）
                     if r.admin_usernames:
-                        lines.append(f"管理员: {', '.join([f'@{u}' for u in r.admin_usernames])}")
+                        lines.append(t(user_id, 'report_batch_create_admins').format(
+                            admins=', '.join([f'@{u}' for u in r.admin_usernames])
+                        ))
                     else:
-                        lines.append(f"管理员: @{r.admin_username or '无'}")
+                        lines.append(t(user_id, 'report_batch_create_admins').format(
+                            admins=f"@{r.admin_username}" if r.admin_username else t(user_id, 'report_batch_create_admins_none')
+                        ))
                     
                     # 管理员添加失败信息
                     if r.admin_failures:
-                        lines.append(f"管理员添加失败:")
+                        lines.append(t(user_id, 'report_batch_create_admin_failed'))
                         for failure in r.admin_failures:
                             lines.append(f"  - {failure}")
                     
                     lines.append("")
         
         if failed > 0:
-            lines.append("失败列表:")
+            lines.append(t(user_id, 'report_batch_create_failed') + ":")
             lines.append("-" * 60)
             for r in results:
                 if r.status == 'failed':
-                    lines.append(f"名称: {r.name}")
-                    lines.append(f"简介: {r.description or '无'}")
-                    lines.append(f"创建者账号: {r.phone}")
+                    lines.append(t(user_id, 'report_batch_create_name').format(name=r.name))
+                    lines.append(t(user_id, 'report_batch_create_desc').format(
+                        desc=r.description or t(user_id, 'report_batch_create_desc_none')
+                    ))
+                    lines.append(t(user_id, 'report_batch_create_creator_account').format(account=r.phone))
                     lines.append(f"失败原因: {r.error}\n")
         
         lines.append("=" * 60)
@@ -19865,7 +19884,7 @@ class EnhancedBot:
             
             self.safe_edit_message_text(
                 progress_msg,
-                f"✅ <b>找到 {len(files)} 个账号文件</b>\n\n⏳ 正在验证账号...",
+                t(user_id, 'batch_create_found_files').format(count=len(files)) + f"\n\n{t(user_id, 'batch_create_verifying')}",
                 parse_mode='HTML'
             )
             
@@ -19884,7 +19903,7 @@ class EnhancedBot:
                 if (i + 1) % 5 == 0:
                     self.safe_edit_message_text(
                         progress_msg,
-                        f"⏳ <b>验证账号中...</b>\n\n进度: {i + 1}/{len(files)}",
+                        f"{t(user_id, 'batch_create_verifying')}\n\n{t(user_id, 'batch_create_verifying_progress').format(done=i + 1, total=len(files))}",
                         parse_mode='HTML'
                     )
                 
@@ -19932,24 +19951,24 @@ class EnhancedBot:
             
             # 显示验证结果
             text = f"""
-✅ <b>账号验证完成</b>
+{t(user_id, 'batch_create_verify_complete')}
 
-<b>统计信息：</b>
-• 总账号数：{len(accounts)}
-• 有效账号：{valid_count}
-• 无效账号：{len(accounts) - valid_count}
-• 今日可创建：{total_remaining} 个
+<b>{t(user_id, 'batch_create_statistics')}</b>
+{t(user_id, 'batch_create_total_accounts').format(count=len(accounts))}
+{t(user_id, 'batch_create_valid_accounts').format(count=valid_count)}
+{t(user_id, 'batch_create_invalid_accounts').format(count=len(accounts) - valid_count)}
+{t(user_id, 'batch_create_can_create_today').format(count=total_remaining)}
 
-<b>下一步：</b>
-请选择要创建的类型
+<b>{t(user_id, 'batch_create_next_step')}</b>
+{t(user_id, 'batch_create_select_type')}
 """
             
             keyboard = InlineKeyboardMarkup([
                 [
-                    InlineKeyboardButton("📱 创建群组", callback_data="batch_create_type_group"),
-                    InlineKeyboardButton("📢 创建频道", callback_data="batch_create_type_channel")
+                    InlineKeyboardButton(f"📱 {t(user_id, 'batch_create_btn_group')}", callback_data="batch_create_type_group"),
+                    InlineKeyboardButton(f"📢 {t(user_id, 'batch_create_btn_channel')}", callback_data="batch_create_type_channel")
                 ],
-                [InlineKeyboardButton("❌ 取消", callback_data="batch_create_cancel")]
+                [InlineKeyboardButton(f"❌ {t(user_id, 'batch_create_btn_cancel')}", callback_data="batch_create_cancel")]
             ])
             
             self.safe_edit_message_text(progress_msg, text, parse_mode='HTML', reply_markup=keyboard)
@@ -19992,33 +20011,33 @@ class EnhancedBot:
             )
             return
         
-        text = """
-📦 <b>批量创建群组/频道</b>
+        text = f"""
+{t(user_id, 'batch_create_title')}
 
-<b>功能说明：</b>
-• 批量创建 Telegram 群组和频道
-• 支持随机设备参数和代理登录
-• 自动校验账号有效性
-• 每日创建数量限制：{} 个/账号
-• 支持自定义命名规则和简介
-• 支持用户名自定义或随机生成
-• 最多同时处理 10 个账号
+<b>{t(user_id, 'batch_create_features')}</b>
+{t(user_id, 'batch_create_feature1')}
+{t(user_id, 'batch_create_feature2')}
+{t(user_id, 'batch_create_feature3')}
+{t(user_id, 'batch_create_feature4').replace('10', str(config.BATCH_CREATE_DAILY_LIMIT))}
+{t(user_id, 'batch_create_feature5')}
+{t(user_id, 'batch_create_feature6')}
+{t(user_id, 'batch_create_feature7')}
 
-<b>使用步骤：</b>
-1. 上传 Session 或 TData 文件（支持 ZIP 压缩包）
-2. 系统自动验证账号并显示可用数量
-3. 配置创建参数（类型、命名规则等）
-4. 确认后开始批量创建
-5. 完成后接收详细报告和链接列表
+<b>{t(user_id, 'batch_create_steps')}</b>
+{t(user_id, 'batch_create_step1')}
+{t(user_id, 'batch_create_step2')}
+{t(user_id, 'batch_create_step3')}
+{t(user_id, 'batch_create_step4')}
+{t(user_id, 'batch_create_step5')}
 
-<b>注意事项：</b>
-⚠️ 请合理使用，避免触发 Telegram 限制
-⚠️ 建议分批次创建，不要一次性创建过多
-⚠️ 创建的群组/频道归属于对应账号
+<b>{t(user_id, 'batch_create_notes')}</b>
+{t(user_id, 'batch_create_note1')}
+{t(user_id, 'batch_create_note2')}
+{t(user_id, 'batch_create_note3')}
 
-📤 <b>请上传账号文件</b>
-支持格式：.session / TData文件夹 / .zip压缩包
-""".format(config.BATCH_CREATE_DAILY_LIMIT)
+<b>{t(user_id, 'batch_create_upload_prompt')}</b>
+{t(user_id, 'batch_create_supported_formats')}
+"""
         
         keyboard = InlineKeyboardMarkup([[
             InlineKeyboardButton("◀️ 返回", callback_data="back_to_main")
@@ -20051,24 +20070,23 @@ class EnhancedBot:
             query.answer()
             if user_id in self.pending_batch_create:
                 self.pending_batch_create[user_id]['username_mode'] = 'custom'
-                type_name = "群组" if self.pending_batch_create[user_id]['creation_type'] == 'group' else "频道"
                 text = f"""
-<b>上传自定义用户名</b>
+<b>{t(user_id, 'batch_create_custom_title')}</b>
 
-请上传包含用户名的TXT文件，或直接输入：
+{t(user_id, 'batch_create_custom_prompt')}
 
-<b>格式：</b>每行一个用户名
+<b>{t(user_id, 'batch_create_step2_format')}</b>{t(user_id, 'batch_create_custom_format')}
 
-<b>示例：</b>
+<b>{t(user_id, 'batch_create_custom_example')}</b>
 <code>tech_community_001
 programming_hub
 game_lovers_group</code>
 
-💡 <i>可以带或不带@符号</i>
-💡 <i>如用户名已存在将自动跳过</i>
+{t(user_id, 'batch_create_custom_tip1')}
+{t(user_id, 'batch_create_custom_tip2')}
 """
                 keyboard = InlineKeyboardMarkup([
-                    [InlineKeyboardButton("◀️ 返回", callback_data="batch_create_cancel")]
+                    [InlineKeyboardButton(f"◀️ {t(user_id, 'batch_create_btn_back')}", callback_data="batch_create_cancel")]
                 ])
                 query.edit_message_text(text, parse_mode='HTML', reply_markup=keyboard)
                 self.db.save_user(user_id, "", "", "batch_create_usernames")
@@ -20098,25 +20116,26 @@ game_lovers_group</code>
         task = self.pending_batch_create[user_id]
         task['creation_type'] = creation_type
         
-        type_name = "群组" if creation_type == "group" else "频道"
+        type_name_key = 'batch_create_group_title' if creation_type == "group" else 'batch_create_channel_title'
+        example_key = 'batch_create_step1_example' if creation_type == "group" else 'batch_create_step1_example_channel'
         
         text = f"""
-📦 <b>批量创建{type_name}</b>
+{t(user_id, type_name_key)}
 
-<b>账号信息：</b>
-• 总账号数：{task['total_accounts']}
-• 有效账号：{task['valid_accounts']}
-• 今日可创建：{task['total_remaining']} 个
+<b>{t(user_id, 'batch_create_account_info')}</b>
+{t(user_id, 'batch_create_total_accounts').format(count=task['total_accounts'])}
+{t(user_id, 'batch_create_valid_accounts').format(count=task['valid_accounts'])}
+{t(user_id, 'batch_create_can_create_today').format(count=task['total_remaining'])}
 
-<b>步骤 1/4：设置创建数量</b>
+<b>{t(user_id, 'batch_create_step1_title')}</b>
 
-请输入每个账号创建的数量（1-10）：
+{t(user_id, 'batch_create_step1_prompt')}
 
-💡 <i>例如：输入 5 表示每个有效账号创建5个{type_name}</i>
+{t(user_id, example_key)}
 """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("◀️ 返回", callback_data="batch_create_cancel")]
+            [InlineKeyboardButton(f"◀️ {t(user_id, 'batch_create_btn_back')}", callback_data="batch_create_cancel")]
         ])
         
         self.safe_edit_message(query, text, parse_mode='HTML', reply_markup=keyboard)
@@ -20138,32 +20157,32 @@ game_lovers_group</code>
             
             task['count_per_account'] = count
             
-            type_name = "群组" if task['creation_type'] == 'group' else "频道"
+            count_set_key = 'batch_create_count_set_group' if task['creation_type'] == 'group' else 'batch_create_count_set_channel'
             
             text = f"""
-✅ <b>数量已设置：{count} 个/{type_name}/账号</b>
+{t(user_id, count_set_key).format(count=count)}
 
-<b>步骤 2/4：设置管理员（可选，支持多个）</b>
+<b>{t(user_id, 'batch_create_step2_title')}</b>
 
-请发送需要添加为管理员的用户名：
+{t(user_id, 'batch_create_step2_prompt')}
 
-<b>格式：</b>
-• 单个管理员：直接输入用户名
-• 多个管理员：<b>每行一个用户名</b>
+<b>{t(user_id, 'batch_create_step2_format')}</b>
+{t(user_id, 'batch_create_step2_format1')}
+{t(user_id, 'batch_create_step2_format2')}
 
-<b>示例：</b>
+<b>{t(user_id, 'batch_create_step2_example')}</b>
 <code>admin1
 admin2
 admin3</code>
 
-💡 <i>可以带或不带@符号</i>
-💡 <i>不需要添加管理员，发送 "跳过" 或 "无"</i>
-💡 <i>失败的管理员会在报告中显示详细原因</i>
+{t(user_id, 'batch_create_step2_tip1')}
+{t(user_id, 'batch_create_step2_tip2')}
+{t(user_id, 'batch_create_step2_tip3')}
 """
             
             keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton("⏭️ 跳过", callback_data="batch_create_skip_admin")],
-                [InlineKeyboardButton("◀️ 返回", callback_data="batch_create_cancel")]
+                [InlineKeyboardButton(f"⏭️ {t(user_id, 'batch_create_btn_skip')}", callback_data="batch_create_skip_admin")],
+                [InlineKeyboardButton(f"◀️ {t(user_id, 'batch_create_btn_back')}", callback_data="batch_create_cancel")]
             ])
             
             self.safe_send_message(update, text, parse_mode='HTML', reply_markup=keyboard)
@@ -20213,38 +20232,41 @@ admin3</code>
     def _ask_for_group_names(self, update: Update, user_id: int):
         """询问群组名称和简介"""
         task = self.pending_batch_create[user_id]
-        type_name = "群组" if task['creation_type'] == 'group' else "频道"
         
         total_to_create = task['valid_accounts'] * task['count_per_account']
         
         admin_usernames = task.get('admin_usernames', [])
-        admin_display = ', '.join([f"@{u}" for u in admin_usernames]) if admin_usernames else '无'
+        admin_display = ', '.join([f"@{u}" for u in admin_usernames]) if admin_usernames else t(user_id, 'batch_create_admins_none')
+        
+        step3_title_key = 'batch_create_step3_title_group' if task['creation_type'] == 'group' else 'batch_create_step3_title_channel'
+        step3_prompt_key = 'batch_create_step3_prompt' if task['creation_type'] == 'group' else 'batch_create_step3_prompt_channel'
+        step3_format_key = 'batch_create_step3_format_group' if task['creation_type'] == 'group' else 'batch_create_step3_format_channel'
         
         text = f"""
-✅ <b>管理员已设置：{admin_display}</b>
-<i>（共 {len(admin_usernames)} 个）</i>
+{t(user_id, 'batch_create_admins_set').format(admins=admin_display)}
+<i>{t(user_id, 'batch_create_admins_count').format(count=len(admin_usernames))}</i>
 
-<b>步骤 3/4：设置{type_name}名称和简介</b>
+<b>{t(user_id, step3_title_key)}</b>
 
-请上传包含{type_name}名称和简介的TXT文件，或直接手动输入（少量）
+{t(user_id, step3_prompt_key)}
 
-<b>格式：</b>
-<code>{type_name}名称|{type_name}简介</code>
+<b>{t(user_id, 'batch_create_step3_format')}</b>
+<code>{t(user_id, step3_format_key)}</code>
 
-<b>示例：</b>
+<b>{t(user_id, 'batch_create_step2_example')}</b>
 <code>科技交流群|欢迎讨论最新科技资讯
 编程学习|一起学习编程技术
 游戏爱好者|</code>
 
-💡 <i>简介可以为空（如第3行）</i>
-💡 <i>需要准备至少 {total_to_create} 行</i>
-💡 <i>如果行数不足，将循环使用已有的名称</i>
+{t(user_id, 'batch_create_step3_tip1')}
+{t(user_id, 'batch_create_step3_tip2').format(count=total_to_create)}
+{t(user_id, 'batch_create_step3_tip3')}
 
-<b>请上传TXT文件或直接输入：</b>
+<b>{t(user_id, 'batch_create_step3_upload')}</b>
 """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("◀️ 返回", callback_data="batch_create_cancel")]
+            [InlineKeyboardButton(f"◀️ {t(user_id, 'batch_create_btn_back')}", callback_data="batch_create_cancel")]
         ])
         
         self.safe_send_message(update, text, parse_mode='HTML', reply_markup=keyboard)
@@ -20287,26 +20309,27 @@ admin3</code>
             task['group_names'] = group_names
             task['group_descriptions'] = group_descriptions
             
-            type_name = "群组" if task['creation_type'] == 'group' else "频道"
+            names_saved_key = 'batch_create_names_saved_group' if task['creation_type'] == 'group' else 'batch_create_names_saved_channel'
+            step4_title_key = 'batch_create_step4_title_group' if task['creation_type'] == 'group' else 'batch_create_step4_title_channel'
             
             text = f"""
-✅ <b>已保存 {len(group_names)} 个{type_name}名称</b>
+{t(user_id, names_saved_key).format(count=len(group_names))}
 
-<b>步骤 4/4：设置{type_name}链接</b>
+<b>{t(user_id, step4_title_key)}</b>
 
-请选择{type_name}链接设置方式：
+{t(user_id, 'batch_create_step4_prompt')}
 
-• <b>自定义上传</b>：上传包含自定义用户名的TXT文件
-• <b>自动生成</b>：系统自动随机生成唯一的用户名
+{t(user_id, 'batch_create_step4_option1')}
+{t(user_id, 'batch_create_step4_option2')}
 
-💡 <i>自定义用户名格式：一行一个，可带或不带@</i>
-💡 <i>如果用户名已存在或不可用，将自动跳过</i>
+{t(user_id, 'batch_create_step4_tip1')}
+{t(user_id, 'batch_create_step4_tip2')}
 """
             
             keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton("📝 自定义上传", callback_data="batch_create_username_custom")],
-                [InlineKeyboardButton("🎲 自动生成", callback_data="batch_create_username_auto")],
-                [InlineKeyboardButton("◀️ 返回", callback_data="batch_create_cancel")]
+                [InlineKeyboardButton(f"📝 {t(user_id, 'batch_create_btn_custom')}", callback_data="batch_create_username_custom")],
+                [InlineKeyboardButton(f"🎲 {t(user_id, 'batch_create_btn_auto')}", callback_data="batch_create_username_auto")],
+                [InlineKeyboardButton(f"◀️ {t(user_id, 'batch_create_btn_back')}", callback_data="batch_create_cancel")]
             ])
             
             self.safe_send_message(update, text, parse_mode='HTML', reply_markup=keyboard)
@@ -20354,49 +20377,53 @@ admin3</code>
             return
         
         task = self.pending_batch_create[user_id]
-        type_name = "群组" if task['creation_type'] == 'group' else "频道"
         
         total_to_create = task['valid_accounts'] * task['count_per_account']
         
-        username_mode_text = "自动生成" if task.get('username_mode', 'auto') == 'auto' else f"自定义（已提供{len(task.get('custom_usernames', []))}个）"
+        username_mode_text = t(user_id, 'batch_create_confirm_link_auto') if task.get('username_mode', 'auto') == 'auto' else t(user_id, 'batch_create_confirm_link_custom')
         
         admin_usernames = task.get('admin_usernames', [])
         if admin_usernames:
-            admin_text = f"{len(admin_usernames)} 个 ({', '.join([f'@{u}' for u in admin_usernames[:3]])}{'...' if len(admin_usernames) > 3 else ''})"
+            admin_text = t(user_id, 'batch_create_confirm_admins').format(
+                count=len(admin_usernames),
+                admins=', '.join([f'@{u}' for u in admin_usernames[:3]]) + ('...' if len(admin_usernames) > 3 else '')
+            )
         else:
-            admin_text = "无"
+            admin_text = t(user_id, 'batch_create_confirm_admins').format(count=0, admins=t(user_id, 'batch_create_admins_none'))
+        
+        type_key = 'batch_create_confirm_type_group' if task['creation_type'] == 'group' else 'batch_create_confirm_type_channel'
         
         text = f"""
-📋 <b>最终确认</b>
+{t(user_id, 'batch_create_confirm_title')}
 
-<b>创建类型：</b>{type_name}
+<b>{t(user_id, type_key)}</b>
 
-<b>账号统计：</b>
-• 有效账号数：{task['valid_accounts']} 个
-• 每账号创建：{task['count_per_account']} 个
-• 预计创建总数：{total_to_create} 个
+<b>{t(user_id, 'batch_create_confirm_account_stats')}</b>
+{t(user_id, 'batch_create_confirm_valid_count').format(count=task['valid_accounts'])}
+{t(user_id, 'batch_create_confirm_per_account').format(count=task['count_per_account'])}
+{t(user_id, 'batch_create_confirm_total_estimate').format(count=total_to_create)}
 
-<b>配置信息：</b>
-• 管理员：{admin_text}
-• 名称数量：{len(task.get('group_names', []))} 个
-• 链接模式：{username_mode_text}
+<b>{t(user_id, 'batch_create_confirm_config')}</b>
+{admin_text}
+{t(user_id, 'batch_create_confirm_names').format(count=len(task.get('group_names', [])))}
+{username_mode_text}
 
-<b>并发设置：</b>
-• 并发账号数：{min(task['valid_accounts'], 10)} 个
-• 线程数：10
+<b>{t(user_id, 'batch_create_confirm_concurrency')}</b>
+{t(user_id, 'batch_create_confirm_concurrent_accounts').format(count=min(task['valid_accounts'], 10))}
+{t(user_id, 'batch_create_confirm_threads').format(count=10)}
 
-⚠️ <b>重要提示：</b>
-• 创建操作不可撤销
-• 将自动处理创建间隔避免频率限制
-• 如用户名已存在将自动跳过
-• 完成后将生成详细报告
+{t(user_id, 'batch_create_confirm_important')}
+{t(user_id, 'batch_create_confirm_tip1')}
+{t(user_id, 'batch_create_confirm_tip2')}
+{t(user_id, 'batch_create_confirm_tip3')}
+{t(user_id, 'batch_create_confirm_tip4')}
 
-<b>确认开始创建？</b>
+<b>{t(user_id, 'batch_create_confirm_question')}</b>
 """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("✅ 确认创建", callback_data="batch_create_confirm")],
-            [InlineKeyboardButton("❌ 取消", callback_data="batch_create_cancel")]
+            [InlineKeyboardButton(f"✅ {t(user_id, 'batch_create_btn_confirm')}", callback_data="batch_create_confirm")],
+            [InlineKeyboardButton(f"❌ {t(user_id, 'batch_create_btn_cancel')}", callback_data="batch_create_cancel")]
         ])
         
         self.safe_send_message(update, text, parse_mode='HTML', reply_markup=keyboard)
@@ -20492,7 +20519,7 @@ admin3</code>
         
         self.safe_edit_message(
             query,
-            "⏳ <b>正在创建中...</b>\n\n请稍候，完成后会发送详细报告",
+            f"{t(user_id, 'batch_create_creating')}\n\n{t(user_id, 'batch_create_wait_report')}",
             parse_mode='HTML'
         )
     
@@ -20519,12 +20546,12 @@ admin3</code>
         total_to_create = task['valid_accounts'] * task['count_per_account']
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("📊 查看日志", callback_data="batch_create_noop")]
+            [InlineKeyboardButton(t(user_id, 'batch_create_btn_view_log'), callback_data="batch_create_noop")]
         ])
         
         progress_msg = context.bot.send_message(
             chat_id=user_id,
-            text=f"🚀 <b>开始批量创建</b>\n\n进度: 0/{total_to_create} (0%)\n状态: 准备中...",
+            text=f"{t(user_id, 'batch_create_starting')}\n\n{t(user_id, 'batch_create_progress').format(done=0, total=total_to_create, percent=0)}\n{t(user_id, 'batch_create_status_preparing')}",
             parse_mode='HTML',
             reply_markup=keyboard
         )
@@ -20542,7 +20569,7 @@ admin3</code>
                 try:
                     progress = int(current / total * 100)
                     keyboard = InlineKeyboardMarkup([
-                        [InlineKeyboardButton("📊 实时进度", callback_data="batch_create_noop")]
+                        [InlineKeyboardButton(t(user_id, 'batch_create_btn_view_log'), callback_data="batch_create_noop")]
                     ])
                     logger.info(f"📊 更新进度: {current}/{total} ({progress}%)")
                     print(f"📊 更新进度: {current}/{total} ({progress}%)", flush=True)
@@ -20550,7 +20577,7 @@ admin3</code>
                     context.bot.edit_message_text(
                         chat_id=user_id,
                         message_id=progress_msg.message_id,
-                        text=f"🚀 <b>批量创建中</b>\n\n进度: {current}/{total} ({progress}%)\n状态: {message}",
+                        text=f"{t(user_id, 'batch_create_starting')}\n\n{t(user_id, 'batch_create_progress').format(done=current, total=total, percent=progress)}\n状态: {message}",
                         parse_mode='HTML',
                         reply_markup=keyboard
                     )
@@ -20683,7 +20710,7 @@ admin3</code>
             loop.run_until_complete(disconnect_clients())
             
             # 生成报告
-            report = self.batch_creator.generate_report(results)
+            report = self.batch_creator.generate_report(results, user_id)
             
             # 保存报告文件
             timestamp = datetime.now(BEIJING_TZ).strftime("%Y%m%d_%H%M%S")
@@ -20700,17 +20727,17 @@ admin3</code>
             skipped = len([r for r in results if r.status == 'skipped'])
             
             summary = f"""
-✅ <b>批量创建完成</b>
+{t(user_id, 'batch_create_complete')}
 
-<b>统计信息：</b>
-• 总数：{total}
-• 成功：{success}
-• 失败：{failed}
-• 跳过：{skipped}
+<b>{t(user_id, 'batch_create_statistics')}</b>
+{t(user_id, 'batch_create_stats_total').format(count=total)}
+{t(user_id, 'batch_create_stats_success').format(count=success)}
+{t(user_id, 'batch_create_stats_failed').format(count=failed)}
+{t(user_id, 'batch_create_stats_skipped').format(count=skipped)}
 
-<b>成功率：</b> {int(success/total*100) if total > 0 else 0}%
+<b>{t(user_id, 'batch_create_success_rate').format(percent=int(success/total*100) if total > 0 else 0)}</b>
 
-📄 详细报告见下方文件
+{t(user_id, 'batch_create_report_below')}
 """
             
             context.bot.edit_message_text(
@@ -20726,7 +20753,7 @@ admin3</code>
                     chat_id=user_id,
                     document=f,
                     filename=report_filename,
-                    caption="📊 批量创建详细报告"
+                    caption=t(user_id, 'batch_create_detailed_report')
                 )
             
             # 生成成功列表文件
@@ -20737,19 +20764,25 @@ admin3</code>
                 
                 with open(success_path, 'w', encoding='utf-8') as f:
                     f.write("=" * 80 + "\n")
-                    f.write("批量创建 - 成功列表\n")
+                    f.write(t(user_id, 'report_success_list_title') + "\n")
                     f.write("=" * 80 + "\n")
-                    f.write(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n")
-                    f.write(f"成功数量: {len(success_results)}\n\n")
+                    f.write(t(user_id, 'report_success_list_generated').format(
+                        time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')
+                    ) + "\n")
+                    f.write(t(user_id, 'report_success_list_count').format(count=len(success_results)) + "\n\n")
                     
                     for r in success_results:
                         f.write("-" * 80 + "\n")
-                        f.write(f"群昵称: {r.name}\n")
-                        f.write(f"群简介: {r.description or '无'}\n")
-                        f.write(f"群链接: {r.invite_link or '无'}\n")
-                        f.write(f"创建者账号: {r.phone}\n")
-                        f.write(f"创建者用户名: @{r.creator_username or '未知'}\n")
-                        f.write(f"管理员用户名: @{r.admin_username or '无'}\n")
+                        name_key = 'report_success_list_group_name' if r.creation_type == 'group' else 'report_success_list_channel_name'
+                        desc_key = 'report_success_list_desc' if r.creation_type == 'group' else 'report_success_list_channel_desc'
+                        link_key = 'report_success_list_link' if r.creation_type == 'group' else 'report_success_list_channel_link'
+                        
+                        f.write(t(user_id, name_key).format(name=r.name) + "\n")
+                        f.write(t(user_id, desc_key).format(desc=r.description or t(user_id, 'report_batch_create_desc_none')) + "\n")
+                        f.write(t(user_id, link_key).format(link=r.invite_link or t(user_id, 'report_batch_create_desc_none')) + "\n")
+                        f.write(t(user_id, 'report_success_list_creator').format(account=r.phone) + "\n")
+                        f.write(t(user_id, 'report_success_list_creator_username').format(username=f"@{r.creator_username}" if r.creator_username else t(user_id, 'report_batch_create_desc_none')) + "\n")
+                        f.write(t(user_id, 'report_success_list_admin_username').format(admin=f"@{r.admin_username}" if r.admin_username else t(user_id, 'report_batch_create_admins_none')) + "\n")
                         f.write("\n")
                     
                     f.write("=" * 80 + "\n")
@@ -20759,7 +20792,7 @@ admin3</code>
                         chat_id=user_id,
                         document=f,
                         filename=success_filename,
-                        caption="✅ 成功创建列表"
+                        caption=t(user_id, 'batch_create_success_list')
                     )
             
             # 生成失败列表文件
