@@ -2882,14 +2882,20 @@ class SpamBotChecker:
                 return "连接错误", f"{user_info} | {proxy_used} | SpamBot通信超时", account_name
             except Exception as e:
                 error_str = str(e).lower()
+                error_type = type(e).__name__
+                
                 # 检测冻结账户相关错误
                 if "deactivated" in error_str or "banned" in error_str or "deleted" in error_str:
                     return "冻结", f"{user_info} | {proxy_used} | 账号已被冻结", account_name
-                # 能登录但无法访问SpamBot的情况：不是封禁，而是无法访问
-                if any(word in error_str for word in ["restricted", "limited", "blocked", "flood"]):
+                
+                # 能登录但无法访问SpamBot的情况：检查特定的Telegram API错误
+                # 只检查真正的权限/访问错误，不检查包含"limited"等词的一般错误
+                if "peerflood" in error_type.lower() or "chatrestricted" in error_type.lower():
                     return "连接错误", f"{user_info} | {proxy_used} | 无法访问SpamBot（账号受限）", account_name
-                if "peer" in error_str and "access" in error_str:
+                if ("peer" in error_str and "access" in error_str) or "userprivacy" in error_type.lower():
                     return "连接错误", f"{user_info} | {proxy_used} | 无法访问SpamBot（权限问题）", account_name
+                
+                # 其他错误统一返回通信失败
                 last_error = str(e)
                 return "连接错误", f"{user_info} | {proxy_used} | SpamBot通信失败: {str(e)[:20]}", account_name
             
@@ -3313,12 +3319,18 @@ class SpamBotChecker:
                 return "连接错误", f"手机号:{phone} | {proxy_used} | SpamBot检测超时", tdata_name
             except Exception as e:
                 error_str = str(e).lower()
+                error_type = type(e).__name__
+                
                 # 检测账号被系统冻结的错误
                 if "deactivated" in error_str or "deleted" in error_str:
                     return "冻结", f"手机号:{phone} | {proxy_used} | 账号已被冻结", tdata_name
-                # 能登录但无法访问SpamBot - 不是封禁
-                if any(word in error_str for word in ['restricted', 'banned', 'blocked']):
+                
+                # 能登录但无法访问SpamBot - 检查特定的Telegram API错误
+                if "peerflood" in error_type.lower() or "chatrestricted" in error_type.lower():
                     return "连接错误", f"手机号:{phone} | {proxy_used} | 无法访问SpamBot（账号受限）", tdata_name
+                if ("peer" in error_str and "access" in error_str) or "userprivacy" in error_type.lower():
+                    return "连接错误", f"手机号:{phone} | {proxy_used} | 无法访问SpamBot（权限问题）", tdata_name
+                
                 return "连接错误", f"手机号:{phone} | {proxy_used} | SpamBot检测失败: {str(e)[:30]}", tdata_name
                 
         except Exception as e:
