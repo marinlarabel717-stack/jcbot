@@ -6281,7 +6281,7 @@ class TwoFactorManager:
     
     async def remove_2fa_password(self, session_path: str, old_password: str, 
                                   account_name: str = "", file_type: str = 'session',
-                                  proxy_dict: Optional[Dict] = None) -> Tuple[bool, str]:
+                                  proxy_dict: Optional[Dict] = None, user_id: int = None) -> Tuple[bool, str]:
         """
         删除2FA密码
         
@@ -6291,6 +6291,7 @@ class TwoFactorManager:
             account_name: 账号名称（用于日志）
             file_type: 文件类型（'session' 或 'tdata'）
             proxy_dict: 代理配置（可选）
+            user_id: 用户ID（用于翻译）
             
         Returns:
             Tuple[bool, str]: (是否成功, 消息说明)
@@ -6300,7 +6301,11 @@ class TwoFactorManager:
         
         async with self.semaphore:
             client = None
-            proxy_used = "本地连接"
+            # Use translation for proxy_used, with fallback for None user_id
+            if user_id:
+                proxy_used = t(user_id, 'report_delete_2fa_local_connection')
+            else:
+                proxy_used = "本地连接"
             
             try:
                 # 尝试使用代理
@@ -6311,7 +6316,10 @@ class TwoFactorManager:
                         if proxy_info:
                             proxy_dict = self.create_proxy_dict(proxy_info)
                             if proxy_dict:
-                                proxy_used = t(user_id, 'report_2fa_using_proxy')
+                                if user_id:
+                                    proxy_used = t(user_id, 'report_delete_2fa_using_proxy')
+                                else:
+                                    proxy_used = "使用代理"
                 
                 # 创建客户端
                 session_base = session_path.replace('.session', '') if session_path.endswith('.session') else session_path
@@ -6795,7 +6803,8 @@ class TwoFactorManager:
                 
                 # 4. 删除密码（使用 Session 格式）
                 success, info = await self.remove_2fa_password(
-                    actual_file_path, current_old_password, file_name
+                    actual_file_path, current_old_password, file_name, 
+                    file_type=actual_file_type, user_id=user_id
                 )
                 
                 if success:
