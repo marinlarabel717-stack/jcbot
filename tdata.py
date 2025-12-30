@@ -8411,17 +8411,26 @@ class Forget2FAManager:
         return f"{proxy_type} {host}:{port}"
     
     @staticmethod
-    def mask_proxy_for_display(proxy_used: str) -> str:
+    def mask_proxy_for_display(proxy_used: str, user_id: int = None) -> str:
         """
         隐藏代理详细信息，仅显示是否使用代理
         用于报告文件和进度显示，保护用户代理隐私
         """
+        # 如果没有提供user_id，返回默认中文（向后兼容）
+        if user_id is None:
+            if not proxy_used:
+                return "本地连接"
+            if "本地连接" in proxy_used or proxy_used == "本地连接":
+                return "本地连接"
+            return "✅ 使用代理"
+        
+        # 使用翻译
         if not proxy_used:
-            return "本地连接"
+            return t(user_id, 'forget_2fa_proxy_local')
         if "本地连接" in proxy_used or proxy_used == "本地连接":
-            return "本地连接"
+            return t(user_id, 'forget_2fa_proxy_local')
         # 只显示使用了代理，不暴露具体IP/端口
-        return "✅ 使用代理"
+        return t(user_id, 'forget_2fa_proxy_using')
     
     @staticmethod
     def mask_proxy_in_string(text: str) -> str:
@@ -9073,21 +9082,25 @@ class Forget2FAManager:
         
         return results
     
-    def create_result_files(self, results: Dict, task_id: str, files: List[Tuple[str, str]], file_type: str) -> List[Tuple[str, str, int]]:
+    def create_result_files(self, results: Dict, task_id: str, files: List[Tuple[str, str]], file_type: str, user_id: int = None) -> List[Tuple[str, str, str, int]]:
         """
         生成结果压缩包（按状态分类）
         
         Returns:
-            [(zip路径, 状态名称, 数量), ...]
+            [(zip路径, txt路径, 状态名称, 数量), ...]
         """
         result_files = []
         
+        # 如果没有提供user_id，使用默认语言
+        if user_id is None:
+            user_id = 0  # 使用默认语言
+        
         # 状态映射
         status_map = {
-            'requested': ('已请求重置', '✅'),
-            'no_2fa': ('无需重置', '⚠️'),
-            'cooling': ('冷却期中', '⏳'),
-            'failed': ('失败', '❌')
+            'requested': (t(user_id, 'forget_2fa_status_requested'), '✅'),
+            'no_2fa': (t(user_id, 'forget_2fa_status_no_2fa'), '⚠️'),
+            'cooling': (t(user_id, 'forget_2fa_status_cooling'), '⏳'),
+            'failed': (t(user_id, 'forget_2fa_status_failed'), '❌')
         }
         
         # 创建文件路径映射
@@ -9152,8 +9165,15 @@ class Forget2FAManager:
                             if os.path.exists(password_path):
                                 shutil.copy2(password_path, os.path.join(account_dir, password_file))
                 
-                # 创建ZIP文件
-                zip_filename = f"忘记2FA_{status_name}_{len(items)}个.zip"
+                # 创建ZIP文件 - 使用翻译
+                zip_key_map = {
+                    'requested': 'zip_forget_2fa_reset',
+                    'no_2fa': 'zip_forget_2fa_no_reset',
+                    'cooling': 'zip_forget_2fa_cooling',
+                    'failed': 'zip_forget_2fa_failed'
+                }
+                zip_key = zip_key_map.get(status_key, 'zip_forget_2fa_reset')
+                zip_filename = t(user_id, zip_key).format(count=len(items)) + ".zip"
                 zip_path = os.path.join(config.RESULTS_DIR, zip_filename)
                 
                 with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
@@ -9163,29 +9183,71 @@ class Forget2FAManager:
                             arcname = os.path.relpath(file_path_full, status_temp_dir)
                             zipf.write(file_path_full, arcname)
                 
-                # 创建TXT报告
-                txt_filename = f"忘记2FA_{status_name}_{len(items)}个_报告.txt"
+                # 创建TXT报告 - 使用翻译
+                report_key_map = {
+                    'requested': 'report_forget_2fa_reset',
+                    'no_2fa': 'report_forget_2fa_no_reset',
+                    'cooling': 'report_forget_2fa_cooling',
+                    'failed': 'report_forget_2fa_failed'
+                }
+                report_key = report_key_map.get(status_key, 'report_forget_2fa_reset')
+                txt_filename = t(user_id, report_key).format(count=len(items))
                 txt_path = os.path.join(config.RESULTS_DIR, txt_filename)
                 
+                # 获取报告标题翻译键
+                title_key_map = {
+                    'requested': 'report_forget_2fa_title_reset',
+                    'no_2fa': 'report_forget_2fa_title_no_reset',
+                    'cooling': 'report_forget_2fa_title_cooling',
+                    'failed': 'report_forget_2fa_title_failed'
+                }
+                title_key = title_key_map.get(status_key, 'report_forget_2fa_title_reset')
+                
                 with open(txt_path, 'w', encoding='utf-8') as f:
-                    f.write(f"忘记2FA处理报告 - {status_name}\n")
+                    f.write(f"{t(user_id, title_key)}\n")
                     f.write("=" * 50 + "\n\n")
-                    f.write(f"总数: {len(items)}个\n")
-                    f.write(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n\n")
+                    f.write(f"{t(user_id, 'report_forget_2fa_total').format(count=len(items))}\n")
+                    f.write(f"{t(user_id, 'report_forget_2fa_generated').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST'))}\n\n")
                     
-                    f.write("详细列表:\n")
+                    f.write(f"{t(user_id, 'report_forget_2fa_detail_list')}\n")
                     f.write("-" * 50 + "\n\n")
                     
                     for idx, item in enumerate(items, 1):
                         f.write(f"{idx}. {emoji} {item.get('account_name', '')}\n")
-                        f.write(f"   手机号: {item.get('phone', '未知')}\n")
-                        f.write(f"   状态: {item.get('error', status_name)}\n")
+                        phone = item.get('phone', t(user_id, 'forget_2fa_status_unknown'))
+                        f.write(f"   {t(user_id, 'report_forget_2fa_phone').format(phone=phone)}\n")
+                        
+                        # 状态描述 - 使用正确的翻译键
+                        error_msg = item.get('error', status_name)
+                        
+                        # 根据状态键选择正确的状态翻译
+                        if status_key == 'requested':
+                            cooling_date = item.get('cooling_until', '')
+                            if cooling_date:
+                                status_text = t(user_id, 'report_forget_2fa_status_reset_waiting').format(date=cooling_date)
+                            else:
+                                status_text = t(user_id, 'report_forget_2fa_status_reset_waiting').format(date='N/A')
+                        elif status_key == 'no_2fa':
+                            if 'detect' in error_msg.lower() or '检测' in error_msg:
+                                status_text = t(user_id, 'report_forget_2fa_status_detect_failed').format(error=error_msg)
+                            else:
+                                status_text = t(user_id, 'report_forget_2fa_status_no_2fa')
+                        elif status_key == 'cooling':
+                            cooling_date = item.get('cooling_until', '')
+                            status_text = t(user_id, 'report_forget_2fa_status_in_cooling').format(date=cooling_date)
+                        else:  # failed
+                            status_text = t(user_id, 'report_forget_2fa_status_connection_failed')
+                        
+                        f.write(f"   {status_text}\n")
+                        
                         # 隐藏代理详细信息，保护用户隐私
-                        masked_proxy = self.mask_proxy_for_display(item.get('proxy_used', '本地连接'))
-                        f.write(f"   代理: {masked_proxy}\n")
-                        if item.get('cooling_until'):
-                            f.write(f"   冷却期至: {item.get('cooling_until')}\n")
-                        f.write(f"   耗时: {item.get('elapsed', 0):.1f}秒\n\n")
+                        masked_proxy = self.mask_proxy_for_display(item.get('proxy_used', t(user_id, 'forget_2fa_status_local')), user_id)
+                        f.write(f"   {masked_proxy}\n")
+                        
+                        if item.get('cooling_until') and status_key != 'requested':
+                            f.write(f"   {t(user_id, 'report_forget_2fa_cooling_until').format(date=item.get('cooling_until'))}\n")
+                        elapsed_time = f"{item.get('elapsed', 0):.1f}"
+                        f.write(f"   {t(user_id, 'report_forget_2fa_duration').format(time=elapsed_time)}\n\n")
                 
                 print(f"✅ 创建文件: {zip_filename}")
                 result_files.append((zip_path, txt_path, status_name, len(items)))
@@ -12466,35 +12528,38 @@ class EnhancedBot:
         proxy_count = len(self.proxy_manager.proxies)
         proxy_warning = ""
         if proxy_count < 3:
-            proxy_warning = f"\n⚠️ <b>警告：代理数量不足！当前仅有 {proxy_count} 个，建议至少 10 个以上</b>\n"
+            proxy_warning = f"\n⚠️ <b>{t(user_id, 'forget_2fa_proxy_warning').format(count=proxy_count)}</b>\n"
+        
+        # 构建代理模式状态文本
+        proxy_mode_text = t(user_id, 'forget_2fa_proxy_mode_enabled') if self.proxy_manager.is_proxy_mode_active(self.db) else t(user_id, 'forget_2fa_proxy_mode_disabled')
         
         text = f"""
-🔓 <b>忘记二级验证密码</b>
+{t(user_id, 'forget_2fa_title')}
 
-⚠️ <b>重要说明：</b>
-• 将启动 Telegram 官方密码重置流程
-• 需要等待 <b>7 天冷却期</b>后密码才会被移除
-• 优先使用代理连接（防风控）
-• 代理失败后自动回退本地连接
-• 账号间自动随机延迟处理（5-15秒）
+<b>{t(user_id, 'forget_2fa_important')}</b>
+{t(user_id, 'forget_2fa_note1')}
+{t(user_id, 'forget_2fa_note2')}
+{t(user_id, 'forget_2fa_note3')}
+{t(user_id, 'forget_2fa_note4')}
+{t(user_id, 'forget_2fa_note5')}
 {proxy_warning}
-<b>📡 当前代理状态</b>
-• 代理模式: {'🟢启用' if self.proxy_manager.is_proxy_mode_active(self.db) else '🔴本地连接'}
-• 可用代理: {proxy_count} 个
+<b>{t(user_id, 'forget_2fa_proxy_status')}</b>
+{proxy_mode_text}
+{t(user_id, 'forget_2fa_proxy_available').format(count=proxy_count)}
 
-<b>📤 请上传账号文件：</b>
-• 支持 .zip 压缩包（Tdata/Session）
-• 自动识别文件格式
+<b>{t(user_id, 'forget_2fa_upload_prompt')}</b>
+{t(user_id, 'forget_2fa_upload_support')}
+{t(user_id, 'forget_2fa_upload_auto')}
 
-<b>📊 结果分类：</b>
-• ✅ 已请求重置 - 成功请求密码重置（需等待7天）
-• ⚠️ 无需重置 - 账号没有设置2FA密码
-• ⏳ 冷却期中 - 已在冷却期内
-• ❌ 失败 - 连接失败/其他错误
+<b>{t(user_id, 'forget_2fa_result_categories')}</b>
+{t(user_id, 'forget_2fa_category_reset')}
+{t(user_id, 'forget_2fa_category_no_reset')}
+{t(user_id, 'forget_2fa_category_cooling')}
+{t(user_id, 'forget_2fa_category_failed')}
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton("🔙 " + t(user_id, 'forget_2fa_back_menu'), callback_data="back_to_main")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
@@ -15076,7 +15141,7 @@ class EnhancedBot:
         task_id = f"{user_id}_{int(start_time)}"
         batch_id = f"forget2fa_{task_id}"
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理您的文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, f"<b>{t(user_id, 'forget_2fa_processing_file')}</b>", 'HTML')
         if not progress_msg:
             return
         
@@ -15092,7 +15157,7 @@ class EnhancedBot:
             if not files:
                 try:
                     progress_msg.edit_text(
-                        "❌ <b>未找到有效文件</b>\n\n请确保ZIP包含Session或TData格式的文件",
+                        f"<b>{t(user_id, 'forget_2fa_no_valid_files')}</b>\n\n{t(user_id, 'forget_2fa_ensure_format')}",
                         parse_mode='HTML'
                     )
                 except:
@@ -15104,11 +15169,11 @@ class EnhancedBot:
             
             try:
                 progress_msg.edit_text(
-                    f"🔓 <b>正在处理忘记2FA...</b>\n\n"
-                    f"📊 找到 {total_files} 个账号\n"
-                    f"📁 格式: {file_type.upper()}\n"
-                    f"📡 代理: {proxy_count} 个可用\n\n"
-                    f"⏳ 正在初始化...",
+                    f"<b>{t(user_id, 'forget_2fa_processing')}</b>\n\n"
+                    f"{t(user_id, 'forget_2fa_found_accounts').format(count=total_files)}\n"
+                    f"{t(user_id, 'forget_2fa_format').format(format=file_type.upper())}\n"
+                    f"{t(user_id, 'forget_2fa_proxy_count').format(count=proxy_count)}\n\n"
+                    f"{t(user_id, 'forget_2fa_initializing')}",
                     parse_mode='HTML'
                 )
             except:
@@ -15127,10 +15192,13 @@ class EnhancedBot:
                     return
                 last_update_time[0] = current_time
                 
-                # 格式化时间
+                # 格式化时间 - 使用翻译
                 minutes = int(elapsed) // 60
                 seconds = int(elapsed) % 60
-                time_str = f"{minutes}分{seconds}秒" if minutes > 0 else f"{seconds}秒"
+                if minutes > 0:
+                    time_str = f"{minutes}{t(user_id, 'minutes_unit')}{seconds}{t(user_id, 'seconds_unit')}"
+                else:
+                    time_str = f"{seconds}{t(user_id, 'seconds_unit')}"
                 
                 # 统计各状态数量
                 requested = len(results.get('requested', []))
@@ -15143,33 +15211,37 @@ class EnhancedBot:
                 current_name = current_result.get('account_name', '')
                 current_status = current_result.get('status', '')
                 # 隐藏代理详细信息，保护用户隐私
-                current_proxy_raw = current_result.get('proxy_used', '本地连接')
-                current_proxy = Forget2FAManager.mask_proxy_for_display(current_proxy_raw)
+                current_proxy_raw = current_result.get('proxy_used', t(user_id, 'forget_2fa_status_local'))
+                current_proxy = Forget2FAManager.mask_proxy_for_display(current_proxy_raw, user_id)
                 
-                # 状态映射
-                status_emoji = {
-                    'requested': '✅ 已请求重置',
-                    'no_2fa': '⚠️ 无需重置',
-                    'cooling': '⏳ 冷却期中',
-                    'failed': '❌ 失败'
-                }.get(current_status, '处理中')
+                # 状态映射 - 使用翻译
+                status_map = {
+                    'requested': t(user_id, 'forget_2fa_status_reset'),
+                    'no_2fa': t(user_id, 'forget_2fa_status_no_reset'),
+                    'cooling': t(user_id, 'forget_2fa_status_cooling'),
+                    'failed': t(user_id, 'forget_2fa_status_failed')
+                }
+                status_emoji = status_map.get(current_status, t(user_id, 'status_processing'))
+                
+                # 计算百分比
+                percent = processed * 100 // total if total > 0 else 0
                 
                 progress_text = f"""
-🔓 <b>正在处理忘记2FA...</b>
+<b>{t(user_id, 'forget_2fa_processing')}</b>
 
-<b>进度:</b> {processed}/{total} ({processed*100//total}%)
-⏱ 已用时间: {time_str}
-⚡ 处理速度: {speed:.2f}个/秒
+<b>{t(user_id, 'forget_2fa_progress').format(done=processed, total=total, percent=percent)}</b>
+{t(user_id, 'forget_2fa_elapsed').format(time=time_str)}
+{t(user_id, 'forget_2fa_speed').format(speed=f"{speed:.2f}")}
 
-✅ 已请求重置: {requested}
-⚠️ 无需重置: {no_2fa}
-⏳ 冷却期中: {cooling}
-❌ 失败: {failed}
-📊 待处理: {pending}
+{t(user_id, 'forget_2fa_stat_reset').format(count=requested)}
+{t(user_id, 'forget_2fa_stat_no_reset').format(count=no_2fa)}
+{t(user_id, 'forget_2fa_stat_cooling').format(count=cooling)}
+{t(user_id, 'forget_2fa_stat_failed').format(count=failed)}
+{t(user_id, 'forget_2fa_stat_pending').format(count=pending)}
 
-<b>当前:</b> {current_name[:30]}...
-<b>状态:</b> {status_emoji}
-<b>代理:</b> {current_proxy}
+<b>{t(user_id, 'forget_2fa_current').format(filename=current_name[:30])}</b>
+<b>{status_emoji}</b>
+<b>{current_proxy}</b>
                 """
                 
                 try:
@@ -15186,7 +15258,10 @@ class EnhancedBot:
             total_time = time.time() - start_time
             minutes = int(total_time) // 60
             seconds = int(total_time) % 60
-            time_str = f"{minutes}分{seconds}秒" if minutes > 0 else f"{seconds}秒"
+            if minutes > 0:
+                time_str = f"{minutes}{t(user_id, 'minutes_unit')}{seconds}{t(user_id, 'seconds_unit')}"
+            else:
+                time_str = f"{seconds}{t(user_id, 'seconds_unit')}"
             
             # 统计各状态数量
             requested = len(results.get('requested', []))
@@ -15196,21 +15271,21 @@ class EnhancedBot:
             
             # 完成消息
             completion_text = f"""
-✅ <b>忘记2FA处理完成！</b>
+<b>{t(user_id, 'forget_2fa_complete')}</b>
 
-<b>📊 处理结果</b>
-• 总账号数: {total_files} 个
-• ✅ 已请求重置: {requested} 个
-• ⚠️ 无需重置: {no_2fa} 个
-• ⏳ 冷却期中: {cooling} 个
-• ❌ 失败: {failed} 个
+<b>{t(user_id, 'forget_2fa_results')}</b>
+{t(user_id, 'forget_2fa_total_accounts').format(count=total_files)}
+{t(user_id, 'forget_2fa_result_reset').format(count=requested)}
+{t(user_id, 'forget_2fa_result_no_reset').format(count=no_2fa)}
+{t(user_id, 'forget_2fa_result_cooling').format(count=cooling)}
+{t(user_id, 'forget_2fa_result_failed').format(count=failed)}
 
-<b>⏱ 总用时:</b> {time_str}
-<b>🆔 批次ID:</b> <code>{batch_id}</code>
+<b>{t(user_id, 'forget_2fa_total_time').format(time=time_str)}</b>
+<b>{t(user_id, 'forget_2fa_batch_id').format(batch_id=batch_id)}</b>
 
-<b>📝 说明:</b>
-• 已请求重置的账号需等待7天冷却期
-• 冷却期结束后2FA密码将被移除
+<b>{t(user_id, 'forget_2fa_notes')}</b>
+{t(user_id, 'forget_2fa_notes_wait')}
+{t(user_id, 'forget_2fa_notes_remove')}
             """
             
             try:
@@ -15219,14 +15294,22 @@ class EnhancedBot:
                 pass
             
             # 生成结果文件
-            result_files = forget_manager.create_result_files(results, task_id, files, file_type)
+            result_files = forget_manager.create_result_files(results, task_id, files, file_type, user_id)
             
             # 发送结果文件
             for zip_path, txt_path, status_name, count in result_files:
                 try:
                     # 发送ZIP文件
                     if os.path.exists(zip_path):
-                        caption = f"📦 忘记2FA - {status_name} ({count}个)"
+                        # 根据状态名获取对应的翻译键
+                        status_key_map = {
+                            '已请求重置': 'file_desc_forget_2fa_reset',
+                            '无需重置': 'file_desc_forget_2fa_no_reset',
+                            '冷却期中': 'file_desc_forget_2fa_cooling',
+                            '失败': 'file_desc_forget_2fa_failed'
+                        }
+                        caption_key = status_key_map.get(status_name, 'file_desc_forget_2fa_reset')
+                        caption = t(user_id, caption_key).format(count=count)
                         with open(zip_path, 'rb') as f:
                             context.bot.send_document(
                                 chat_id=user_id,
@@ -15238,11 +15321,20 @@ class EnhancedBot:
                     
                     # 发送TXT报告
                     if os.path.exists(txt_path):
+                        # 根据状态名获取对应的翻译键
+                        report_key_map = {
+                            '已请求重置': 'report_desc_forget_2fa_reset',
+                            '无需重置': 'report_desc_forget_2fa_no_reset',
+                            '冷却期中': 'report_desc_forget_2fa_cooling',
+                            '失败': 'report_desc_forget_2fa_failed'
+                        }
+                        report_caption_key = report_key_map.get(status_name, 'report_desc_forget_2fa_reset')
+                        report_caption = t(user_id, report_caption_key)
                         with open(txt_path, 'rb') as f:
                             context.bot.send_document(
                                 chat_id=user_id,
                                 document=f,
-                                caption=f"📝 详细报告 - {status_name}",
+                                caption=report_caption,
                                 filename=os.path.basename(txt_path)
                             )
                         os.remove(txt_path)
