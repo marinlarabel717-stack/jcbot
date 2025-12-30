@@ -591,4 +591,15 @@ TEXTS = {
     'report_failure_list_channel_desc': '频道简介: {desc}',
     'report_failure_list_creator': '创建者账号: {account}',
     'report_failure_list_reason': '失败原因: {reason}',
+    
+    # 批量创建 - 账号冻结
+    'batch_create_account_frozen_skipped': '账号已冻结，跳过创建',
+    
+    # 批量创建 - 错误信息
+    'batch_create_feature_disabled': '❌ 批量创建功能未启用',
+    'batch_create_session_expired': '❌ 会话已过期',
+    'batch_create_session_expired_restart': '❌ 会话已过期，请重新开始',
+    'batch_create_count_range_error': '❌ 数量必须在1-10之间，请重新输入',
+    'batch_create_failed': '❌ 创建失败',
+    'batch_create_error': '错误: {error}',
 }

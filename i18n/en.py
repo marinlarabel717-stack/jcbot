@@ -591,4 +591,15 @@ TEXTS = {
     'report_failure_list_channel_desc': 'Channel description: {desc}',
     'report_failure_list_creator': 'Creator account: {account}',
     'report_failure_list_reason': 'Failure reason: {reason}',
+    
+    # Batch Create - Account Frozen
+    'batch_create_account_frozen_skipped': 'Account frozen, creation skipped',
+    
+    # Batch Create - Error Messages
+    'batch_create_feature_disabled': '❌ Batch create feature is disabled',
+    'batch_create_session_expired': '❌ Session expired',
+    'batch_create_session_expired_restart': '❌ Session expired, please restart',
+    'batch_create_count_range_error': '❌ Count must be between 1-10, please re-enter',
+    'batch_create_failed': '❌ Creation failed',
+    'batch_create_error': 'Error: {error}',
 }

@@ -20190,7 +20190,7 @@ class EnhancedBot:
         
         # 检查功能是否启用
         if not config.ENABLE_BATCH_CREATE or self.batch_creator is None:
-            self.safe_edit_message(query, "❌ 批量创建功能未启用")
+            self.safe_edit_message(query, t(user_id, 'batch_create_feature_disabled'))
             return
         
         # 检查会员权限
@@ -20339,7 +20339,7 @@ game_lovers_group</code>
     def handle_batch_create_count_input(self, update: Update, context: CallbackContext, user_id: int, text: str):
         """处理每账号创建数量输入"""
         if user_id not in self.pending_batch_create:
-            self.safe_send_message(update, "❌ 会话已过期，请重新开始")
+            self.safe_send_message(update, t(user_id, 'batch_create_session_expired_restart'))
             return
         
         task = self.pending_batch_create[user_id]
@@ -20347,7 +20347,7 @@ game_lovers_group</code>
         try:
             count = int(text.strip())
             if count < 1 or count > 10:
-                self.safe_send_message(update, "❌ 数量必须在1-10之间，请重新输入")
+                self.safe_send_message(update, t(user_id, 'batch_create_count_range_error'))
                 return
             
             task['count_per_account'] = count
@@ -20681,7 +20681,7 @@ admin3</code>
         query.answer("⏳ 开始创建...")
         
         if user_id not in self.pending_batch_create:
-            self.safe_edit_message(query, "❌ 会话已过期")
+            self.safe_edit_message(query, t(user_id, 'batch_create_session_expired'))
             return
         
         task = self.pending_batch_create[user_id]
@@ -20696,7 +20696,7 @@ admin3</code>
                 traceback.print_exc()
                 context.bot.send_message(
                     chat_id=user_id,
-                    text=f"❌ <b>创建失败</b>\n\n错误: {str(e)}",
+                    text=f"{t(user_id, 'batch_create_failed')}\n\n{t(user_id, 'batch_create_error').format(error=str(e))}",
                     parse_mode='HTML'
                 )
             finally:
@@ -20843,7 +20843,7 @@ admin3</code>
                                 creation_type=batch_config.creation_type,
                                 name="",
                                 status='skipped',
-                                error='账号已冻结，跳过创建'
+                                error=t(user_id, 'batch_create_account_frozen_skipped')
                             )
                             account_results.append(skipped_result)
                             async with results_lock:
