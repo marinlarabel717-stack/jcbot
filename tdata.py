@@ -5232,14 +5232,14 @@ class FormatConverter:
                 
                 if not await client.is_user_authorized():
                     print(f"❌ 账号未授权: {tdata_name}")
-                    error_msg = "账号未授权"
+                    error_msg = "<<ERROR:error_unauthorized>>"
                     self.generate_failure_files(tdata_path, tdata_name, error_msg)
                     return "转换错误", error_msg, tdata_name
                 
                 # 获取完整用户信息
                 me = await client.get_me()
                 phone = me.phone if me.phone else "未知"
-                username = me.username if me.username else "无用户名"
+                username = me.username if me.username else "<<NO_USERNAME>>"
                 
                 # 重命名session文件为手机号
                 final_session_name = phone if phone != "未知" else tdata_name
@@ -5315,13 +5315,13 @@ class FormatConverter:
                 # 最后一次尝试失败，生成失败标记的文件
                 # 确定错误类型和错误消息
                 if "database is locked" in error_msg.lower():
-                    final_error_msg = "TData文件被占用"
+                    final_error_msg = "<<ERROR:error_file_locked>>"
                 elif "auth key" in error_msg.lower() or "authorization" in error_msg.lower():
-                    final_error_msg = "授权密钥无效"
+                    final_error_msg = "<<ERROR:error_auth_key_invalid>>"
                 elif "timeout" in error_msg.lower() or "timed out" in error_msg.lower():
-                    final_error_msg = "连接超时"
+                    final_error_msg = "<<ERROR:error_connection_timeout>>"
                 elif "network" in error_msg.lower() or "connection" in error_msg.lower():
-                    final_error_msg = "网络连接失败"
+                    final_error_msg = "<<ERROR:error_network_failed>>"
                 else:
                     final_error_msg = f"转换失败: {error_msg[:50]}"
                 
@@ -5362,7 +5362,7 @@ class FormatConverter:
             # 获取账号信息
             me = await client.get_me()
             phone = me.phone if me.phone else "未知"
-            username = me.username if me.username else "无用户名"
+            username = me.username if me.username else "<<NO_USERNAME>>"
             
             # 转换为TData
             tdesk = await client.ToTDesktop(flag=UseCurrentSession)
@@ -5387,11 +5387,11 @@ class FormatConverter:
         except Exception as e:
             error_msg = str(e)
             if "database is locked" in error_msg.lower():
-                return "转换错误", "Session文件被占用", session_name
+                return "转换错误", "<<ERROR:error_session_locked>>", session_name
             elif "auth key" in error_msg.lower():
-                return "转换错误", "授权密钥无效", session_name
+                return "转换错误", "<<ERROR:error_auth_key_invalid>>", session_name
             else:
-                return "转换错误", f"转换失败: {error_msg[:50]}", session_name
+                return "转换错误", f"<<ERROR:error_conversion_failed>>: {error_msg[:50]}", session_name
     
     async def batch_convert_with_progress(self, files: List[Tuple[str, str]], conversion_type: str, 
                                          api_id: int, api_hash: str, update_callback) -> Dict[str, List[Tuple[str, str, str]]]:
@@ -5471,17 +5471,24 @@ class FormatConverter:
         return results
     
     def create_conversion_result_zips(self, results: Dict[str, List[Tuple[str, str, str]]], 
-                                     task_id: str, conversion_type: str) -> List[Tuple[str, str, int]]:
+                                     task_id: str, conversion_type: str, user_id: int) -> List[Tuple[str, str, int]]:
         """创建转换结果ZIP文件（修正版）"""
         result_files = []
         
-        # 根据转换类型确定文件名前缀
+        # 根据转换类型确定文件名前缀 - 使用翻译
         if conversion_type == "tdata_to_session":
-            success_prefix = "tdata转换session 成功"
-            failure_prefix = "tdata转换session 失败"
+            # success_prefix = "tdata转换session 成功"
+            # failure_prefix = "tdata转换session 失败"
+            success_zip_key = 'zip_tdata_to_session_success'
+            report_success_key = 'report_filename_success'  # Will need to be tdata->session specific
         else:  # session_to_tdata
-            success_prefix = "session转换tdata 成功"
-            failure_prefix = "session转换tdata 失败"
+            # success_prefix = "session转换tdata 成功"
+            # failure_prefix = "session转换tdata 失败"
+            success_zip_key = 'zip_session_to_tdata_success'
+            report_success_key = 'report_filename_success'
+        
+        failure_zip_key = 'zip_conversion_failed'
+        report_failed_key = 'report_filename_failed'
         
         for status, files in results.items():
             if not files:
@@ -5566,9 +5573,19 @@ class FormatConverter:
                     else:  # 转换错误 - 打包失败的文件
                         if conversion_type == "tdata_to_session":
                             if os.path.isdir(file_path):
-                                dest_path = os.path.join(status_temp_dir, file_name)
-                                shutil.copytree(file_path, dest_path)
-                                print(f"📂 复制失败的TData: {file_name}")
+                                # 检查是否是 tdata 目录，如果是，复制父目录以保留 phone/tdata/D877... 结构
+                                if os.path.basename(file_path).lower() == 'tdata':
+                                    # file_path 是 tdata 目录，复制其父目录（手机号目录）
+                                    phone_dir = os.path.dirname(file_path)
+                                    phone_folder_name = os.path.basename(phone_dir)
+                                    dest_path = os.path.join(status_temp_dir, phone_folder_name)
+                                    shutil.copytree(phone_dir, dest_path)
+                                    print(f"📂 复制失败的TData（保留结构）: {phone_folder_name}/tdata/")
+                                else:
+                                    # 如果不是标准 tdata 结构，按原样复制
+                                    dest_path = os.path.join(status_temp_dir, file_name)
+                                    shutil.copytree(file_path, dest_path)
+                                    print(f"📂 复制失败的TData: {file_name}")
                         else:
                             if os.path.exists(file_path):
                                 dest_path = os.path.join(status_temp_dir, file_name)
@@ -5605,11 +5622,11 @@ class FormatConverter:
                                 f.write("- 关闭其他使用该文件的程序\n")
                                 f.write("- 重启后重试\n")
                 
-                # 创建 ZIP 文件 - 新格式
+                # 创建 ZIP 文件 - 使用翻译的文件名
                 if status == "转换成功":
-                    zip_filename = f"{success_prefix}-{len(files)}.zip"
+                    zip_filename = t(user_id, success_zip_key).format(count=len(files)) + ".zip"
                 else:
-                    zip_filename = f"{failure_prefix}-{len(files)}.zip"
+                    zip_filename = t(user_id, failure_zip_key).format(count=len(files)) + ".zip"
                 
                 zip_path = os.path.join(config.RESULTS_DIR, zip_filename)
                 
@@ -5622,26 +5639,68 @@ class FormatConverter:
                 
                 print(f"✅ 创建ZIP文件: {zip_filename}")
                 
-                # 创建 TXT 报告 - 新格式
-                txt_filename = f"{success_prefix if status == '转换成功' else failure_prefix}-报告.txt"
+                # 创建 TXT 报告 - 使用翻译的文件名和内容
+                if status == "转换成功":
+                    txt_filename = t(user_id, report_success_key)
+                else:
+                    txt_filename = t(user_id, report_failed_key)
                 txt_path = os.path.join(config.RESULTS_DIR, txt_filename)
                 
+                # 确定转换类型的显示文本
+                if conversion_type == "tdata_to_session":
+                    conversion_type_display = "Tdata → Session"
+                else:
+                    conversion_type_display = "Session → Tdata"
+                
                 with open(txt_path, 'w', encoding='utf-8') as f:
-                    f.write(f"格式转换报告 - {status}\n")
+                    # 报告标题
+                    if status == "转换成功":
+                        f.write(f"{t(user_id, 'report_title_success')}\n")
+                    else:
+                        f.write(f"{t(user_id, 'report_title_failed')}\n")
                     f.write("=" * 50 + "\n\n")
-                    f.write(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n")
-                    f.write(f"转换类型: {conversion_type}\n")
-                    f.write(f"总数: {len(files)}个\n\n")
+                    f.write(f"{t(user_id, 'report_generated_time').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST'))}\n")
+                    f.write(f"{t(user_id, 'report_conversion_type').format(type=conversion_type_display)}\n")
+                    f.write(f"{t(user_id, 'report_total_count').format(count=len(files))}\n\n")
                     
-                    f.write("详细列表:\n")
+                    f.write(f"{t(user_id, 'report_detail_list')}\n")
                     f.write("-" * 50 + "\n\n")
                     
                     for idx, (file_path, file_name, info) in enumerate(files, 1):
                         # 隐藏代理详细信息，保护用户隐私
                         masked_info = Forget2FAManager.mask_proxy_in_string(info)
-                        f.write(f"{idx}. 文件: {file_name}\n")
-                        f.write(f"   信息: {masked_info}\n")
-                        f.write(f"   时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n\n")
+                        
+                        # 解析info中的手机号和用户名
+                        phone = "unknown"
+                        username = t(user_id, 'report_no_username')
+                        if "手机号:" in masked_info:
+                            phone_part = masked_info.split("手机号:")[1].split("|")[0].strip()
+                            phone = phone_part if phone_part else "unknown"
+                        if "用户名:" in masked_info:
+                            username_part = masked_info.split("用户名:")[1].strip()
+                            # Replace the special placeholder with translated text
+                            if "<<NO_USERNAME>>" in username_part:
+                                username = t(user_id, 'report_no_username')
+                            else:
+                                username = username_part if username_part else t(user_id, 'report_no_username')
+                        
+                        f.write(f"{idx}. {t(user_id, 'report_file').format(filename=file_name)}\n")
+                        if status == "转换成功":
+                            f.write(f"   {t(user_id, 'report_info').format(phone=phone, username=username)}\n")
+                        else:
+                            # Translate error messages with special markers
+                            translated_error = masked_info
+                            if "<<ERROR:" in masked_info:
+                                # Extract error key
+                                import re
+                                error_match = re.search(r'<<ERROR:(\w+)>>', masked_info)
+                                if error_match:
+                                    error_key = error_match.group(1)
+                                    error_text = t(user_id, error_key)
+                                    # Replace the marker with translated text
+                                    translated_error = re.sub(r'<<ERROR:\w+>>', error_text, masked_info)
+                            f.write(f"   {t(user_id, 'report_error').format(error=translated_error)}\n")
+                        f.write(f"   {t(user_id, 'report_time').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST'))}\n\n")
                 
                 print(f"✅ 创建TXT报告: {txt_filename}")
                 
@@ -11337,32 +11396,32 @@ class EnhancedBot:
             self.safe_send_message(update, "❌ 格式转换功能不可用\n\n原因: opentele库未安装\n💡 请安装: pip install opentele")
             return
         
-        text = """
-🔄 <b>格式转换功能</b>
+        text = f"""
+<b>{t(user_id, 'format_conversion_title')}</b>
 
-<b>📁 支持的转换</b>
-1️⃣ <b>Tdata → Session</b>
-   • 将Telegram Desktop的tdata格式转换为Session格式
-   • 适用于需要使用Session的工具
+<b>{t(user_id, 'format_conversion_supported')}</b>
+<b>{t(user_id, 'format_conversion_tdata_to_session')}</b>
+   {t(user_id, 'format_conversion_tdata_to_session_desc1')}
+   {t(user_id, 'format_conversion_tdata_to_session_desc2')}
 
-2️⃣ <b>Session → Tdata</b>
-   • 将Session格式转换为Telegram Desktop的tdata格式
-   • 适用于Telegram Desktop客户端
+<b>{t(user_id, 'format_conversion_session_to_tdata')}</b>
+   {t(user_id, 'format_conversion_session_to_tdata_desc1')}
+   {t(user_id, 'format_conversion_session_to_tdata_desc2')}
 
-<b>⚡ 功能特点</b>
-• 批量并发转换，提高效率
-• 实时进度显示
-• 自动分类成功和失败
-• 完善的错误处理
+<b>{t(user_id, 'format_conversion_features')}</b>
+{t(user_id, 'format_conversion_feature_batch')}
+{t(user_id, 'format_conversion_feature_progress')}
+{t(user_id, 'format_conversion_feature_classify')}
+{t(user_id, 'format_conversion_feature_error')}
 
-<b>📤 操作说明</b>
-请选择要执行的转换类型：
+<b>{t(user_id, 'format_conversion_instructions')}</b>
+{t(user_id, 'format_conversion_select_type')}
         """
         
         buttons = [
-            [InlineKeyboardButton("📤 Tdata → Session", callback_data="convert_tdata_to_session")],
-            [InlineKeyboardButton("📥 Session → Tdata", callback_data="convert_session_to_tdata")],
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(f"📤 {t(user_id, 'format_conversion_tdata_to_session')}", callback_data="convert_tdata_to_session")],
+            [InlineKeyboardButton(f"📥 {t(user_id, 'format_conversion_session_to_tdata')}", callback_data="convert_session_to_tdata")],
+            [InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_main")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
@@ -12013,32 +12072,32 @@ class EnhancedBot:
             self.safe_edit_message(query, "❌ 格式转换功能不可用\n\n原因: opentele库未安装\n💡 请安装: pip install opentele")
             return
         
-        text = """
-🔄 <b>格式转换功能</b>
+        text = f"""
+<b>{t(user_id, 'format_conversion_title')}</b>
 
-<b>📁 支持的转换</b>
-1️⃣ <b>Tdata → Session</b>
-   • 将Telegram Desktop的tdata格式转换为Session格式
-   • 适用于需要使用Session的工具
+<b>{t(user_id, 'format_conversion_supported')}</b>
+<b>{t(user_id, 'format_conversion_tdata_to_session')}</b>
+   {t(user_id, 'format_conversion_tdata_to_session_desc1')}
+   {t(user_id, 'format_conversion_tdata_to_session_desc2')}
 
-2️⃣ <b>Session → Tdata</b>
-   • 将Session格式转换为Telegram Desktop的tdata格式
-   • 适用于Telegram Desktop客户端
+<b>{t(user_id, 'format_conversion_session_to_tdata')}</b>
+   {t(user_id, 'format_conversion_session_to_tdata_desc1')}
+   {t(user_id, 'format_conversion_session_to_tdata_desc2')}
 
-<b>⚡ 功能特点</b>
-• 批量并发转换，提高效率
-• 实时进度显示
-• 自动分类成功和失败
-• 完善的错误处理
+<b>{t(user_id, 'format_conversion_features')}</b>
+{t(user_id, 'format_conversion_feature_batch')}
+{t(user_id, 'format_conversion_feature_progress')}
+{t(user_id, 'format_conversion_feature_classify')}
+{t(user_id, 'format_conversion_feature_error')}
 
-<b>📤 操作说明</b>
-请选择要执行的转换类型：
+<b>{t(user_id, 'format_conversion_instructions')}</b>
+{t(user_id, 'format_conversion_select_type')}
         """
         
         buttons = [
-            [InlineKeyboardButton("📤 Tdata → Session", callback_data="convert_tdata_to_session")],
-            [InlineKeyboardButton("📥 Session → Tdata", callback_data="convert_session_to_tdata")],
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(f"📤 {t(user_id, 'format_conversion_tdata_to_session')}", callback_data="convert_tdata_to_session")],
+            [InlineKeyboardButton(f"📥 {t(user_id, 'format_conversion_session_to_tdata')}", callback_data="convert_session_to_tdata")],
+            [InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_main")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
@@ -12049,27 +12108,27 @@ class EnhancedBot:
         query.answer()
         user_id = query.from_user.id
         
-        text = """
-📤 <b>Tdata → Session 转换</b>
+        text = f"""
+<b>{t(user_id, 'tdata_to_session_title')}</b>
 
-<b>📁 请准备以下文件</b>
-• ZIP压缩包，包含Tdata文件夹
-• 每个Tdata文件夹应包含 D877F783D5D3EF8C 目录
+<b>{t(user_id, 'tdata_to_session_prepare')}</b>
+{t(user_id, 'tdata_to_session_prepare1')}
+{t(user_id, 'tdata_to_session_prepare2')}
 
-<b>🔧 转换说明</b>
-• 系统将自动识别所有Tdata文件夹
-• 批量转换为Session格式
-• 生成对应的.session和.json文件
+<b>{t(user_id, 'conversion_info')}</b>
+{t(user_id, 'tdata_to_session_info1')}
+{t(user_id, 'tdata_to_session_info2')}
+{t(user_id, 'tdata_to_session_info3')}
 
-<b>⚡ 高性能处理</b>
-• 并发转换，提高速度
-• 实时显示进度
-• 自动分类成功/失败
+<b>{t(user_id, 'high_performance')}</b>
+{t(user_id, 'high_performance_concurrent')}
+{t(user_id, 'high_performance_realtime')}
+{t(user_id, 'high_performance_classify')}
 
-请上传您的ZIP文件...
+{t(user_id, 'upload_zip_prompt')}
         """
         
-        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard(user_id))
         
         # 设置用户状态
         self.db.save_user(user_id, query.from_user.username or "", 
@@ -12080,27 +12139,27 @@ class EnhancedBot:
         query.answer()
         user_id = query.from_user.id
         
-        text = """
-📥 <b>Session → Tdata 转换</b>
+        text = f"""
+<b>{t(user_id, 'session_to_tdata_title')}</b>
 
-<b>📁 请准备以下文件</b>
-• ZIP压缩包，包含.session文件
-• 可选：对应的.json配置文件
+<b>{t(user_id, 'session_to_tdata_prepare')}</b>
+{t(user_id, 'session_to_tdata_prepare1')}
+{t(user_id, 'session_to_tdata_prepare2')}
 
-<b>🔧 转换说明</b>
-• 系统将自动识别所有Session文件
-• 批量转换为Tdata格式
-• 生成对应的Tdata文件夹
+<b>{t(user_id, 'conversion_info')}</b>
+{t(user_id, 'session_to_tdata_info1')}
+{t(user_id, 'session_to_tdata_info2')}
+{t(user_id, 'session_to_tdata_info3')}
 
-<b>⚡ 高性能处理</b>
-• 并发转换，提高速度
-• 实时显示进度
-• 自动分类成功/失败
+<b>{t(user_id, 'high_performance')}</b>
+{t(user_id, 'high_performance_concurrent')}
+{t(user_id, 'high_performance_realtime')}
+{t(user_id, 'high_performance_classify')}
 
-请上传您的ZIP文件...
+{t(user_id, 'upload_zip_prompt')}
         """
         
-        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard(user_id))
         
         # 设置用户状态
         self.db.save_user(user_id, query.from_user.username or "", 
@@ -12847,7 +12906,7 @@ class EnhancedBot:
                 allowed_states.append(row[0])
             
             if not row or row[0] not in allowed_states:
-                self.safe_send_message(update, "❌ 请先点击相应的功能按钮")
+                self.safe_send_message(update, f"❌ {t(user_id, 'error_click_function_button')}")
                 return
 
             user_status = row[0]
@@ -13684,7 +13743,7 @@ class EnhancedBot:
         # 发送进度消息
         progress_msg = self.safe_send_message(
             update,
-            "📥 <b>正在处理您的文件...</b>",
+            f"<b>{t(user_id, 'processing_your_file')}</b>",
             'HTML'
         )
         
@@ -13707,7 +13766,7 @@ class EnhancedBot:
             if not files:
                 try:
                     progress_msg.edit_text(
-                        "❌ <b>未找到有效文件</b>\n\n请确保ZIP包含正确的格式",
+                        f"❌ <b>{t(user_id, 'error_no_valid_files')}</b>\n\n{t(user_id, 'error_ensure_correct_format')}",
                         parse_mode='HTML'
                     )
                 except:
@@ -13718,7 +13777,7 @@ class EnhancedBot:
             if conversion_type == "tdata_to_session" and file_type != "tdata":
                 try:
                     progress_msg.edit_text(
-                        f"❌ <b>文件类型错误</b>\n\n需要Tdata文件，但找到的是{file_type}格式",
+                        f"❌ <b>{t(user_id, 'error_file_type')}</b>\n\n{t(user_id, 'error_need_tdata').format(type=file_type)}",
                         parse_mode='HTML'
                     )
                 except:
@@ -13728,7 +13787,7 @@ class EnhancedBot:
             if conversion_type == "session_to_tdata" and file_type != "session":
                 try:
                     progress_msg.edit_text(
-                        f"❌ <b>文件类型错误</b>\n\n需要Session文件，但找到的是{file_type}格式",
+                        f"❌ <b>{t(user_id, 'error_file_type')}</b>\n\n{t(user_id, 'error_need_session').format(type=file_type)}",
                         parse_mode='HTML'
                     )
                 except:
@@ -13739,7 +13798,7 @@ class EnhancedBot:
             
             try:
                 progress_msg.edit_text(
-                    f"🔄 <b>开始转换...</b>\n\n📁 找到 {total_files} 个文件\n⏳ 正在初始化...",
+                    f"<b>{t(user_id, 'start_conversion')}</b>\n\n{t(user_id, 'found_files').format(count=total_files)}\n{t(user_id, 'initializing')}",
                     parse_mode='HTML'
                 )
             except:
@@ -13752,17 +13811,17 @@ class EnhancedBot:
                     error_count = len(results.get("转换错误", []))
                     
                     progress_text = f"""
-🔄 <b>格式转换进行中...</b>
+<b>{t(user_id, 'conversion_in_progress')}</b>
 
-📊 <b>当前进度</b>
-• 已处理: {processed}/{total}
-• 速度: {speed:.1f} 个/秒
-• 用时: {int(elapsed)} 秒
+<b>{t(user_id, 'conversion_current_progress')}</b>
+{t(user_id, 'conversion_processed').format(done=processed, total=total)}
+{t(user_id, 'conversion_speed').format(speed=f"{speed:.1f}")}
+{t(user_id, 'conversion_elapsed').format(time=int(elapsed))}
 
-✅ <b>转换成功</b>: {success_count}
-❌ <b>转换错误</b>: {error_count}
+{t(user_id, 'conversion_success_count').format(count=success_count)}
+{t(user_id, 'conversion_error_count').format(count=error_count)}
 
-⏱️ 预计剩余: {int((total - processed) / speed) if speed > 0 else 0} 秒
+{t(user_id, 'conversion_remaining').format(time=int((total - processed) / speed) if speed > 0 else 0)}
                     """
                     
                     progress_msg.edit_text(progress_text, parse_mode='HTML')
@@ -13779,7 +13838,7 @@ class EnhancedBot:
             )
             
             # 创建结果文件
-            result_files = self.converter.create_conversion_result_zips(results, task_id, conversion_type)
+            result_files = self.converter.create_conversion_result_zips(results, task_id, conversion_type, user_id)
             
             elapsed_time = time.time() - start_time
             
@@ -13788,16 +13847,16 @@ class EnhancedBot:
             error_count = len(results["转换错误"])
             
             summary_text = f"""
-🎉 <b>转换完成！</b>
+<b>{t(user_id, 'conversion_complete')}</b>
 
-📊 <b>转换统计</b>
-• 总数: {total_files}
-• ✅ 成功: {success_count}
-• ❌ 失败: {error_count}
-• ⏱️ 用时: {int(elapsed_time)} 秒
-• 🚀 速度: {total_files/elapsed_time:.1f} 个/秒
+<b>{t(user_id, 'conversion_stats')}</b>
+{t(user_id, 'conversion_total').format(count=total_files)}
+{t(user_id, 'conversion_success').format(count=success_count)}
+{t(user_id, 'conversion_failed').format(count=error_count)}
+{t(user_id, 'conversion_duration').format(time=int(elapsed_time))}
+{t(user_id, 'conversion_speed_stat').format(speed=f"{total_files/elapsed_time:.1f}")}
 
-📦 正在打包结果文件...
+{t(user_id, 'packing_results')}
             """
             
             try:
@@ -13812,7 +13871,12 @@ class EnhancedBot:
                     # 1. 发送 ZIP 文件
                     if os.path.exists(zip_path):
                         with open(zip_path, 'rb') as f:
-                            caption = f"📦 <b>{status}</b> ({count}个账号)\n\n⏰ 处理时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}"
+                            # Determine if success or failed based on status
+                            if status == "转换成功":
+                                desc_key = 'file_desc_conversion_success'
+                            else:
+                                desc_key = 'file_desc_conversion_failed'
+                            caption = f"{t(user_id, desc_key).format(count=count)}\n\n⏰ {t(user_id, 'processing_file')}: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}"
                             update.message.reply_document(
                                 document=f,
                                 filename=os.path.basename(zip_path),
@@ -13825,7 +13889,11 @@ class EnhancedBot:
                     # 2. 发送 TXT 报告
                     if os.path.exists(txt_path):
                         with open(txt_path, 'rb') as f:
-                            caption = f"📋 <b>{status} 详细报告</b>\n\n包含 {count} 个账号的详细信息"
+                            if status == "转换成功":
+                                desc_key = 'report_desc_success'
+                            else:
+                                desc_key = 'report_desc_failed'
+                            caption = f"{t(user_id, desc_key)}\n\n{t(user_id, 'report_contains_accounts').format(count=count)}"
                             update.message.reply_document(
                                 document=f,
                                 filename=os.path.basename(txt_path),
@@ -13842,17 +13910,17 @@ class EnhancedBot:
             success_rate = (success_count / total_files * 100) if total_files > 0 else 0
             
             final_text = f"""
-✅ <b>转换任务完成！</b>
+<b>{t(user_id, 'conversion_task_complete')}</b>
 
-📊 <b>转换统计</b>
-• 总计: {total_files}个
-• ✅ 成功: {success_count}个 ({success_rate:.1f}%)
-• ❌ 失败: {error_count}个 ({100-success_rate:.1f}%)
-• ⏱️ 总用时: {int(elapsed_time)}秒 ({elapsed_time/60:.1f}分钟)
-• 🚀 平均速度: {total_files/elapsed_time:.2f}个/秒
+<b>{t(user_id, 'conversion_stats')}</b>
+{t(user_id, 'conversion_total_count').format(count=total_files)}
+{t(user_id, 'conversion_success_percent').format(count=success_count, percent=f"{success_rate:.1f}")}
+{t(user_id, 'conversion_failed_percent').format(count=error_count, percent=f"{100-success_rate:.1f}")}
+{t(user_id, 'conversion_total_time').format(seconds=int(elapsed_time), minutes=f"{elapsed_time/60:.1f}")}
+{t(user_id, 'conversion_avg_speed').format(speed=f"{total_files/elapsed_time:.2f}")}
 
 
-📥 {'所有结果文件已发送！'}
+{t(user_id, 'all_results_sent')}
             """
             
             self.safe_send_message(update, final_text, 'HTML')
