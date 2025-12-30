@@ -391,4 +391,9 @@ TEXTS = {
     'report_2fa_reason_network': '网络连接失败',
     'report_2fa_reason_network_desc1': '检查代理设置是否正确',
     'report_2fa_reason_network_desc2': '尝试使用本地连接或更换代理',
+    
+    # 额外的状态消息（用于组装详细信息）
+    'status_tdata_updated': 'TData文件已更新',
+    'status_no_json_found': '但未找到JSON文件',
+    'status_file_update_failed': '但文件更新失败',
 }

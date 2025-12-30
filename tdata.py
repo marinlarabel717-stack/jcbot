@@ -5919,7 +5919,7 @@ class TwoFactorManager:
         self.pending_2fa_tasks = {}  # {user_id: {'files': [...], 'file_type': '...', 'extract_dir': '...', 'task_id': '...'}}
     
     async def change_2fa_password(self, session_path: str, old_password: str, new_password: str, 
-                                  account_name: str) -> Tuple[bool, str]:
+                                  account_name: str, user_id: int = None) -> Tuple[bool, str]:
         """
         修改单个账号的2FA密码
         
@@ -5928,6 +5928,7 @@ class TwoFactorManager:
             old_password: 旧密码
             new_password: 新密码
             account_name: 账号名称（用于日志）
+            user_id: 用户ID（用于翻译）
             
         Returns:
             (是否成功, 详细信息)
@@ -5949,7 +5950,7 @@ class TwoFactorManager:
                         proxy_dict = self.create_proxy_dict(proxy_info)
                         if proxy_dict:
                             # 隐藏代理详细信息，保护用户隐私
-                            proxy_used = "使用代理"
+                            proxy_used = t(user_id, 'report_2fa_using_proxy')
                 
                 # 创建客户端
                 # Telethon expects session path without .session extension
@@ -6002,11 +6003,11 @@ class TwoFactorManager:
                     
                     if update_success:
                         if has_json:
-                            return True, f"{user_info} | {proxy_used} | 密码修改成功，文件已更新"
+                            return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')}"
                         else:
-                            return True, f"{user_info} | {proxy_used} | 密码修改成功，但未找到JSON文件"
+                            return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')} {t(user_id, 'status_no_json_found')}"
                     else:
-                        return True, f"{user_info} | {proxy_used} | 密码修改成功，但文件更新失败"
+                        return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')} {t(user_id, 'status_file_update_failed')}"
                     
                 except AttributeError:
                     # 如果 edit_2fa 不存在，使用手动方法
@@ -6079,11 +6080,11 @@ class TwoFactorManager:
             
             if update_success:
                 if has_json:
-                    return True, f"{user_info} | {proxy_used} | 密码修改成功，文件已更新"
+                    return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')}"
                 else:
-                    return True, f"{user_info} | {proxy_used} | 密码修改成功，但未找到JSON文件"
+                    return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')} {t(user_id, 'status_no_json_found')}"
             else:
-                return True, f"{user_info} | {proxy_used} | 密码修改成功，但文件更新失败"
+                return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')} {t(user_id, 'status_file_update_failed')}"
             
         except Exception as e:
             return False, f"{user_info} | {proxy_used} | 手动修改失败: {str(e)[:50]}"
@@ -6120,7 +6121,7 @@ class TwoFactorManager:
                         if proxy_info:
                             proxy_dict = self.create_proxy_dict(proxy_info)
                             if proxy_dict:
-                                proxy_used = "使用代理"
+                                proxy_used = t(user_id, 'report_2fa_using_proxy')
                 
                 # 创建客户端
                 session_base = session_path.replace('.session', '') if session_path.endswith('.session') else session_path
@@ -6391,7 +6392,7 @@ class TwoFactorManager:
     
     async def batch_change_passwords(self, files: List[Tuple[str, str]], file_type: str, 
                                     old_password: Optional[str], new_password: str,
-                                    progress_callback=None) -> Dict[str, List[Tuple[str, str, str]]]:
+                                    progress_callback=None, user_id: int = None) -> Dict[str, List[Tuple[str, str, str]]]:
         """
         批量修改密码
         
@@ -6401,6 +6402,7 @@ class TwoFactorManager:
             old_password: 手动输入的旧密码（备选）
             new_password: 新密码
             progress_callback: 进度回调函数
+            user_id: 用户ID（用于翻译）
             
         Returns:
             结果字典 {'成功': [...], '失败': [...]}
@@ -6431,7 +6433,7 @@ class TwoFactorManager:
                     )
                     
                     if status != "转换成功":
-                        results["失败"].append((file_path, file_name, f"转换失败: {info}"))
+                        results["失败"].append((file_path, file_name, t(user_id, 'report_2fa_conversion_failed').format(error=info)))
                         processed += 1
                         return
                     
@@ -6459,13 +6461,13 @@ class TwoFactorManager:
                 current_old_password = detected_password if detected_password else old_password
                 
                 if not current_old_password:
-                    results["失败"].append((file_path, file_name, "未找到旧密码"))
+                    results["失败"].append((file_path, file_name, t(user_id, 'report_2fa_old_password_not_found')))
                     processed += 1
                     return
                 
                 # 4. 修改密码（使用 Session 格式）
                 success, info = await self.change_2fa_password(
-                    actual_file_path, current_old_password, new_password, file_name
+                    actual_file_path, current_old_password, new_password, file_name, user_id
                 )
                 
                 if success:
@@ -6475,7 +6477,7 @@ class TwoFactorManager:
                             file_path, new_password, 'tdata'
                         )
                         if tdata_update:
-                            info += " | TData文件已更新"
+                            info += f" | {t(user_id, 'status_tdata_updated')}"
                     
                     results["成功"].append((file_path, file_name, info))
                     print(f"✅ 修改成功 {processed + 1}/{total}: {file_name}")
@@ -6568,7 +6570,7 @@ class TwoFactorManager:
                     )
                     
                     if status != "转换成功":
-                        results["失败"].append((file_path, file_name, f"转换失败: {info}"))
+                        results["失败"].append((file_path, file_name, t(user_id, 'report_2fa_conversion_failed').format(error=info)))
                         processed += 1
                         return
                     
@@ -14144,7 +14146,8 @@ class EnhancedBot:
                 file_type,
                 old_password,
                 new_password,
-                change_callback
+                change_callback,
+                user_id
             )
             
                        # 创建结果文件（传入 file_type 参数）

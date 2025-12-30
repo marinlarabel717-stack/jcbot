@@ -391,4 +391,9 @@ TEXTS = {
     'report_2fa_reason_network': 'Network connection failed',
     'report_2fa_reason_network_desc1': 'Check if proxy settings are correct',
     'report_2fa_reason_network_desc2': 'Try local connection or change proxy',
+    
+    # Additional status messages (for assembling detail information)
+    'status_tdata_updated': 'TData file updated',
+    'status_no_json_found': 'but JSON file not found',
+    'status_file_update_failed': 'but file update failed',
 }
