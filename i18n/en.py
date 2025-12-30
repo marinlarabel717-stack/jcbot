@@ -1047,6 +1047,10 @@ TEXTS = {
     'split_remainder_unallocated': '⚠️ Remaining {remainder} accounts unallocated',
     'split_remainder_exceeded': '⚠️ Requested quantity exceeded, last package may be insufficient',
     
+    # Error messages
+    'split_error_no_task': '❌ No pending classification task',
+    'split_error_qty_exceeds': '❌ Quantity {qty} exceeds total accounts {total}',
+    
     # 9. Classification Complete
     'split_complete': '✅ Classification complete!',
     'split_result_total': '· Total accounts: {count}',

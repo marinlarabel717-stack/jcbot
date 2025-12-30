@@ -1047,6 +1047,10 @@ TEXTS = {
     'split_remainder_unallocated': '⚠️ 剩余 {remainder} 个账号未分配',
     'split_remainder_exceeded': '⚠️ 请求数量超出，最后一包可能不足',
     
+    # 错误消息
+    'split_error_no_task': '❌ 没有待处理的分类任务',
+    'split_error_qty_exceeds': '❌ 数量 {qty} 超过总账号数 {total}',
+    
     # 9. 分类完成
     'split_complete': '✅ 分类完成！',
     'split_result_total': '· 总账号: {count} 个',

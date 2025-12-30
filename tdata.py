@@ -16322,7 +16322,7 @@ class EnhancedBot:
     async def _classify_split_single_qty(self, update, context, user_id, qty):
         """按单个数量拆分"""
         if user_id not in self.pending_classify_tasks:
-            self.safe_send_message(update, "❌ 没有待处理的分类任务")
+            self.safe_send_message(update, t(user_id, 'split_error_no_task'))
             return
         
         task = self.pending_classify_tasks[user_id]
@@ -16333,7 +16333,7 @@ class EnhancedBot:
         try:
             total = len(metas)
             if qty > total:
-                self.safe_send_message(update, f"❌ 数量 {qty} 超过总账号数 {total}")
+                self.safe_send_message(update, t(user_id, 'split_error_qty_exceeds').format(qty=qty, total=total))
                 return
             
             # 更新提示
@@ -16389,7 +16389,7 @@ class EnhancedBot:
     async def _classify_split_multi_qty(self, update, context, user_id, quantities):
         """按多个数量拆分"""
         if user_id not in self.pending_classify_tasks:
-            self.safe_send_message(update, "❌ 没有待处理的分类任务")
+            self.safe_send_message(update, t(user_id, 'split_error_no_task'))
             return
         
         task = self.pending_classify_tasks[user_id]
@@ -16566,7 +16566,7 @@ class EnhancedBot:
     async def _classify_split_by_country(self, update, context, user_id):
         """按国家拆分"""
         if user_id not in self.pending_classify_tasks:
-            self.safe_send_message(update, "❌ 没有待处理的分类任务")
+            self.safe_send_message(update, t(user_id, 'split_error_no_task'))
             return
         
         task = self.pending_classify_tasks[user_id]
