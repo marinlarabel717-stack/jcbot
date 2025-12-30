@@ -848,6 +848,8 @@ TEXTS = {
     'report_delete_2fa_error_deletion_failed': '删除失败',
     'report_delete_2fa_error_network': '网络连接失败',
     'report_delete_2fa_error_general': '错误',
+    'report_delete_2fa_error_session_not_found': '转换后的Session文件未找到',
+    'report_delete_2fa_error_exception': '异常',
     
     # 9. 报告TXT模板 - 失败
     'report_delete_2fa_title_failed': '2FA密码删除报告 - 失败',

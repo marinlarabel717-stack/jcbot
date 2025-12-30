@@ -848,6 +848,8 @@ TEXTS = {
     'report_delete_2fa_error_deletion_failed': 'Deletion failed',
     'report_delete_2fa_error_network': 'Network connection failed',
     'report_delete_2fa_error_general': 'Error',
+    'report_delete_2fa_error_session_not_found': 'Converted session file not found',
+    'report_delete_2fa_error_exception': 'Exception',
     
     # 9. Report TXT Template - Failed
     'report_delete_2fa_title_failed': '2FA Password Deletion Report - Failed',

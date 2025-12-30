@@ -6686,7 +6686,10 @@ class TwoFactorManager:
                     session_path = os.path.join(sessions_dir, f"{phone}.session")
                     
                     if not os.path.exists(session_path):
-                        results["失败"].append((file_path, file_name, "转换后的Session文件未找到"))
+                        if user_id:
+                            results["失败"].append((file_path, file_name, t(user_id, 'report_delete_2fa_error_session_not_found')))
+                        else:
+                            results["失败"].append((file_path, file_name, "转换后的Session文件未找到"))
                         processed += 1
                         return
                     
@@ -6737,7 +6740,10 @@ class TwoFactorManager:
                     await progress_callback(processed, total, results, speed, elapsed)
                 
             except Exception as e:
-                results["失败"].append((file_path, file_name, f"异常: {str(e)[:50]}"))
+                if user_id:
+                    results["失败"].append((file_path, file_name, f"{t(user_id, 'report_delete_2fa_error_exception')}: {str(e)[:50]}"))
+                else:
+                    results["失败"].append((file_path, file_name, f"异常: {str(e)[:50]}"))
                 processed += 1
                 print(f"❌ 处理失败 {processed}/{total}: {file_name} - {str(e)}")
         
@@ -6842,7 +6848,10 @@ class TwoFactorManager:
                 current_old_password = detected_password if detected_password else old_password
                 
                 if not current_old_password:
-                    results["失败"].append((file_path, file_name, "未找到旧密码"))
+                    if user_id:
+                        results["失败"].append((file_path, file_name, t(user_id, 'report_2fa_old_password_not_found')))
+                    else:
+                        results["失败"].append((file_path, file_name, "未找到旧密码"))
                     processed += 1
                     return
                 
@@ -6876,7 +6885,10 @@ class TwoFactorManager:
                     await progress_callback(processed, total, results, speed, elapsed)
                 
             except Exception as e:
-                results["失败"].append((file_path, file_name, f"异常: {str(e)[:50]}"))
+                if user_id:
+                    results["失败"].append((file_path, file_name, f"{t(user_id, 'report_delete_2fa_error_exception')}: {str(e)[:50]}"))
+                else:
+                    results["失败"].append((file_path, file_name, f"异常: {str(e)[:50]}"))
                 processed += 1
                 print(f"❌ 处理失败 {processed}/{total}: {file_name} - {str(e)}")
         
