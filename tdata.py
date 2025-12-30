@@ -5919,7 +5919,7 @@ class TwoFactorManager:
         self.pending_2fa_tasks = {}  # {user_id: {'files': [...], 'file_type': '...', 'extract_dir': '...', 'task_id': '...'}}
     
     async def change_2fa_password(self, session_path: str, old_password: str, new_password: str, 
-                                  account_name: str) -> Tuple[bool, str]:
+                                  account_name: str, user_id: int = None) -> Tuple[bool, str]:
         """
         修改单个账号的2FA密码
         
@@ -5928,6 +5928,7 @@ class TwoFactorManager:
             old_password: 旧密码
             new_password: 新密码
             account_name: 账号名称（用于日志）
+            user_id: 用户ID（用于翻译）
             
         Returns:
             (是否成功, 详细信息)
@@ -5949,7 +5950,7 @@ class TwoFactorManager:
                         proxy_dict = self.create_proxy_dict(proxy_info)
                         if proxy_dict:
                             # 隐藏代理详细信息，保护用户隐私
-                            proxy_used = "使用代理"
+                            proxy_used = t(user_id, 'report_2fa_using_proxy')
                 
                 # 创建客户端
                 # Telethon expects session path without .session extension
@@ -6002,11 +6003,11 @@ class TwoFactorManager:
                     
                     if update_success:
                         if has_json:
-                            return True, f"{user_info} | {proxy_used} | 密码修改成功，文件已更新"
+                            return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')}"
                         else:
-                            return True, f"{user_info} | {proxy_used} | 密码修改成功，但未找到JSON文件"
+                            return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')} {t(user_id, 'status_no_json_found')}"
                     else:
-                        return True, f"{user_info} | {proxy_used} | 密码修改成功，但文件更新失败"
+                        return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')} {t(user_id, 'status_file_update_failed')}"
                     
                 except AttributeError:
                     # 如果 edit_2fa 不存在，使用手动方法
@@ -6079,11 +6080,11 @@ class TwoFactorManager:
             
             if update_success:
                 if has_json:
-                    return True, f"{user_info} | {proxy_used} | 密码修改成功，文件已更新"
+                    return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')}"
                 else:
-                    return True, f"{user_info} | {proxy_used} | 密码修改成功，但未找到JSON文件"
+                    return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')} {t(user_id, 'status_no_json_found')}"
             else:
-                return True, f"{user_info} | {proxy_used} | 密码修改成功，但文件更新失败"
+                return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_2fa_success_updated')} {t(user_id, 'status_file_update_failed')}"
             
         except Exception as e:
             return False, f"{user_info} | {proxy_used} | 手动修改失败: {str(e)[:50]}"
@@ -6120,7 +6121,7 @@ class TwoFactorManager:
                         if proxy_info:
                             proxy_dict = self.create_proxy_dict(proxy_info)
                             if proxy_dict:
-                                proxy_used = "使用代理"
+                                proxy_used = t(user_id, 'report_2fa_using_proxy')
                 
                 # 创建客户端
                 session_base = session_path.replace('.session', '') if session_path.endswith('.session') else session_path
@@ -6391,7 +6392,7 @@ class TwoFactorManager:
     
     async def batch_change_passwords(self, files: List[Tuple[str, str]], file_type: str, 
                                     old_password: Optional[str], new_password: str,
-                                    progress_callback=None) -> Dict[str, List[Tuple[str, str, str]]]:
+                                    progress_callback=None, user_id: int = None) -> Dict[str, List[Tuple[str, str, str]]]:
         """
         批量修改密码
         
@@ -6401,6 +6402,7 @@ class TwoFactorManager:
             old_password: 手动输入的旧密码（备选）
             new_password: 新密码
             progress_callback: 进度回调函数
+            user_id: 用户ID（用于翻译）
             
         Returns:
             结果字典 {'成功': [...], '失败': [...]}
@@ -6431,7 +6433,7 @@ class TwoFactorManager:
                     )
                     
                     if status != "转换成功":
-                        results["失败"].append((file_path, file_name, f"转换失败: {info}"))
+                        results["失败"].append((file_path, file_name, t(user_id, 'report_2fa_conversion_failed').format(error=info)))
                         processed += 1
                         return
                     
@@ -6459,13 +6461,13 @@ class TwoFactorManager:
                 current_old_password = detected_password if detected_password else old_password
                 
                 if not current_old_password:
-                    results["失败"].append((file_path, file_name, "未找到旧密码"))
+                    results["失败"].append((file_path, file_name, t(user_id, 'report_2fa_old_password_not_found')))
                     processed += 1
                     return
                 
                 # 4. 修改密码（使用 Session 格式）
                 success, info = await self.change_2fa_password(
-                    actual_file_path, current_old_password, new_password, file_name
+                    actual_file_path, current_old_password, new_password, file_name, user_id
                 )
                 
                 if success:
@@ -6475,7 +6477,7 @@ class TwoFactorManager:
                             file_path, new_password, 'tdata'
                         )
                         if tdata_update:
-                            info += " | TData文件已更新"
+                            info += f" | {t(user_id, 'status_tdata_updated')}"
                     
                     results["成功"].append((file_path, file_name, info))
                     print(f"✅ 修改成功 {processed + 1}/{total}: {file_name}")
@@ -6568,7 +6570,7 @@ class TwoFactorManager:
                     )
                     
                     if status != "转换成功":
-                        results["失败"].append((file_path, file_name, f"转换失败: {info}"))
+                        results["失败"].append((file_path, file_name, t(user_id, 'report_2fa_conversion_failed').format(error=info)))
                         processed += 1
                         return
                     
@@ -6664,7 +6666,7 @@ class TwoFactorManager:
         
         return results
     
-    def create_result_files(self, results: Dict, task_id: str, file_type: str = 'session') -> List[Tuple[str, str, str, int]]:
+    def create_result_files(self, results: Dict, task_id: str, file_type: str = 'session', user_id: int = None) -> List[Tuple[str, str, str, int]]:
         """
         创建结果文件（修复版 - 分离 ZIP 和 TXT）
         
@@ -6758,7 +6760,11 @@ class TwoFactorManager:
                 
                 # 创建 ZIP 文件 - 新格式
                 logger.info(f"开始打包ZIP文件: {status}, {len(items)} 个文件")
-                zip_filename = f"修改2FA_{status}_{len(items)}个.zip"
+                # Use translation for ZIP filename
+                if status == "成功":
+                    zip_filename = t(user_id, 'zip_change_2fa_success').format(count=len(items)) + '.zip'
+                else:  # 失败
+                    zip_filename = t(user_id, 'zip_change_2fa_failed').format(count=len(items)) + '.zip'
                 zip_path = os.path.join(config.RESULTS_DIR, zip_filename)
                 
                 with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
@@ -6774,39 +6780,47 @@ class TwoFactorManager:
                 
                 # 创建 TXT 报告 - 新格式
                 logger.info(f"开始创建TXT报告: {status}")
-                txt_filename = f"修改2FA_{status}_{len(items)}个_报告.txt"
+                # Use translation for TXT filename
+                if status == "成功":
+                    txt_filename = t(user_id, 'report_change_2fa_success').format(count=len(items))
+                else:  # 失败
+                    txt_filename = t(user_id, 'report_change_2fa_failed').format(count=len(items))
                 txt_path = os.path.join(config.RESULTS_DIR, txt_filename)
                 
                 with open(txt_path, 'w', encoding='utf-8') as f:
-                    f.write(f"2FA密码修改报告 - {status}\n")
+                    # Use translation for report title
+                    if status == "成功":
+                        f.write(t(user_id, 'report_2fa_title_success') + "\n")
+                    else:  # 失败
+                        f.write(t(user_id, 'report_2fa_title_failed') + "\n")
                     f.write("=" * 50 + "\n\n")
-                    f.write(f"总数: {len(items)}个\n\n")
-                    f.write(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n")
+                    f.write(t(user_id, 'report_2fa_total').format(count=len(items)) + "\n\n")
+                    f.write(t(user_id, 'report_2fa_generated').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')) + "\n")
                     
-                    f.write("详细列表:\n")
+                    f.write(t(user_id, 'report_2fa_detail_list') + "\n")
                     f.write("-" * 50 + "\n\n")
                     
                     for idx, (file_path, file_name, info) in enumerate(items, 1):
                         # 隐藏代理详细信息，保护用户隐私
                         masked_info = Forget2FAManager.mask_proxy_in_string(info)
-                        f.write(f"{idx}. 账号: {file_name}\n")
-                        f.write(f"   详细信息: {masked_info}\n")
-                        f.write(f"   处理时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n\n")
+                        f.write(f"{idx}. {t(user_id, 'report_2fa_account').format(account=file_name)}\n")
+                        f.write(f"   {t(user_id, 'report_2fa_details').format(info=masked_info)}\n")
+                        f.write(f"   {t(user_id, 'report_2fa_process_time').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST'))}\n\n")
                     
                     # 如果是失败列表，添加解决方案
                     if status == "失败":
                         f.write("\n" + "=" * 50 + "\n")
-                        f.write("失败原因分析和解决方案:\n")
+                        f.write(t(user_id, 'report_2fa_failure_analysis') + "\n")
                         f.write("-" * 50 + "\n\n")
-                        f.write("1. 账号未授权\n")
-                        f.write("   - TData文件可能未登录或已失效\n")
-                        f.write("   - 建议重新登录账号\n\n")
-                        f.write("2. 旧密码错误\n")
-                        f.write("   - 检查密码文件内容是否正确\n")
-                        f.write("   - 确认JSON中的密码字段是否准确\n\n")
-                        f.write("3. 网络连接失败\n")
-                        f.write("   - 检查代理设置是否正确\n")
-                        f.write("   - 尝试使用本地连接或更换代理\n\n")
+                        f.write(f"1. {t(user_id, 'report_2fa_reason_unauthorized')}\n")
+                        f.write(f"   - {t(user_id, 'report_2fa_reason_unauthorized_desc1')}\n")
+                        f.write(f"   - {t(user_id, 'report_2fa_reason_unauthorized_desc2')}\n\n")
+                        f.write(f"2. {t(user_id, 'report_2fa_reason_wrong_password')}\n")
+                        f.write(f"   - {t(user_id, 'report_2fa_reason_wrong_password_desc1')}\n")
+                        f.write(f"   - {t(user_id, 'report_2fa_reason_wrong_password_desc2')}\n\n")
+                        f.write(f"3. {t(user_id, 'report_2fa_reason_network')}\n")
+                        f.write(f"   - {t(user_id, 'report_2fa_reason_network_desc1')}\n")
+                        f.write(f"   - {t(user_id, 'report_2fa_reason_network_desc2')}\n\n")
                 
                 logger.info(f"✅ TXT报告创建成功: {txt_filename}")
                 print(f"✅ 创建TXT报告: {txt_filename}")
@@ -12180,36 +12194,36 @@ class EnhancedBot:
             self.safe_edit_message(query, "❌ 2FA修改功能不可用\n\n原因: Telethon库未安装")
             return
         
-        text = """
-🔐 <b>批量修改2FA密码功能</b>
+        text = f"""
+<b>{t(user_id, 'change_2fa_title')}</b>
 
-<b>✨ 核心功能</b>
-• 🔍 <b>密码自动识别</b>
-  - TData格式：自动识别 2fa.txt、twofa.txt、password.txt
-  - Session格式：自动识别 JSON 中的密码字段（支持 twofa、twoFA、2fa、password 等）
-  - 智能备选：识别失败时使用手动输入的备选密码
+<b>{t(user_id, 'change_2fa_core_features')}</b>
+• <b>{t(user_id, 'change_2fa_auto_detect')}</b>
+  - {t(user_id, 'change_2fa_tdata_detect')}
+  - {t(user_id, 'change_2fa_session_detect')}
+  - {t(user_id, 'change_2fa_smart_fallback')}
 
-• ✏️ <b>交互式密码输入</b>
-  - 上传文件后系统提示输入密码
-  - 支持两种格式：仅新密码（推荐）或 旧密码+新密码
-  - 系统优先自动检测旧密码，无需手动输入
-  - 5分钟输入超时保护
+• <b>{t(user_id, 'change_2fa_interactive_input')}</b>
+  - {t(user_id, 'change_2fa_input_prompt')}
+  - {t(user_id, 'change_2fa_two_formats')}
+  - {t(user_id, 'change_2fa_auto_detect_old')}
+  - {t(user_id, 'change_2fa_timeout')}
 
-• 🔄 <b>自动更新密码文件</b>
-  - Session格式：统一使用 twofa 字段，删除其他密码字段
-  - TData格式：自动更新2fa.txt等密码文件
-  - 修改成功后文件立即同步更新
-  - 无需手动编辑配置文件
+• <b>{t(user_id, 'change_2fa_auto_update')}</b>
+  - {t(user_id, 'change_2fa_session_update')}
+  - {t(user_id, 'change_2fa_tdata_update')}
+  - {t(user_id, 'change_2fa_sync_update')}
+  - {t(user_id, 'change_2fa_no_manual_edit')}
 
-<b>⚠️ 注意事项</b>
-• 系统会首先尝试自动识别现有密码
-• 推荐使用"仅新密码"格式，让系统自动检测旧密码
-• 如果自动识别失败，将使用您输入的旧密码
-• 请在5分钟内输入密码，否则任务将自动取消
-• 请确保账号已登录且session文件有效
-• 修改成功后密码文件将自动更新并包含在结果ZIP中
+<b>{t(user_id, 'change_2fa_notes')}</b>
+• {t(user_id, 'change_2fa_note1')}
+• {t(user_id, 'change_2fa_note2')}
+• {t(user_id, 'change_2fa_note3')}
+• {t(user_id, 'change_2fa_note4')}
+• {t(user_id, 'change_2fa_note5')}
+• {t(user_id, 'change_2fa_note6')}
 
-🚀请上传您的ZIP文件...
+{t(user_id, 'change_2fa_upload_prompt')}
         """
         
         self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
@@ -14025,20 +14039,20 @@ class EnhancedBot:
             # 请求用户输入密码
             try:
                 progress_msg.edit_text(
-                    f"📁 <b>已找到 {total_files} 个账号文件</b>\n\n"
-                    f"📊 文件类型: {file_type.upper()}\n\n"
-                    f"🔐 <b>请输入密码信息：</b>\n\n"
-                    f"<b>格式1（推荐）：</b> 仅新密码\n"
-                    f"<code>NewPassword123</code>\n"
-                    f"<i>系统会自动检测旧密码</i>\n\n"
-                    f"<b>格式2：</b> 旧密码 新密码\n"
-                    f"<code>OldPass456 NewPassword123</code>\n"
-                    f"<i>如果自动检测失败，将使用您提供的旧密码</i>\n\n"
-                    f"💡 <b>提示：</b>\n"
-                    f"• 推荐使用格式1，让系统自动检测\n"
-                    f"• 密码可包含字母、数字、特殊字符\n"
-                    f"• 两个密码之间用空格分隔\n\n"
-                    f"⏰ 请在5分钟内发送密码...",
+                    f"<b>{t(user_id, 'change_2fa_found_files').format(count=total_files)}</b>\n\n"
+                    f"{t(user_id, 'change_2fa_file_type').format(type=file_type.upper())}\n\n"
+                    f"<b>{t(user_id, 'change_2fa_enter_password')}</b>\n\n"
+                    f"<b>{t(user_id, 'change_2fa_format1')}</b>\n"
+                    f"<code>{t(user_id, 'change_2fa_format1_example')}</code>\n"
+                    f"<i>{t(user_id, 'change_2fa_format1_desc')}</i>\n\n"
+                    f"<b>{t(user_id, 'change_2fa_format2')}</b>\n"
+                    f"<code>{t(user_id, 'change_2fa_format2_example')}</code>\n"
+                    f"<i>{t(user_id, 'change_2fa_format2_desc')}</i>\n\n"
+                    f"<b>{t(user_id, 'change_2fa_tips')}</b>\n"
+                    f"• {t(user_id, 'change_2fa_tip1')}\n"
+                    f"• {t(user_id, 'change_2fa_tip2')}\n"
+                    f"• {t(user_id, 'change_2fa_tip3')}\n\n"
+                    f"{t(user_id, 'change_2fa_wait_password')}",
                     parse_mode='HTML'
                 )
             except:
@@ -14090,10 +14104,10 @@ class EnhancedBot:
             # 更新消息，开始处理
             try:
                 progress_msg.edit_text(
-                    f"🔄 <b>开始修改密码...</b>\n\n"
-                    f"📊 找到 {total_files} 个文件\n"
-                    f"🔐 新密码: {new_password[:3]}***{new_password[-3:] if len(new_password) > 6 else ''}\n"
-                    f"⏳ 正在处理，请稍候...",
+                    f"<b>{t(user_id, 'change_2fa_starting')}</b>\n\n"
+                    f"{t(user_id, 'change_2fa_found_count').format(count=total_files)}\n"
+                    f"{t(user_id, 'change_2fa_new_password').format(password=new_password[:3] + '***' + (new_password[-3:] if len(new_password) > 6 else ''))}\n"
+                    f"{t(user_id, 'change_2fa_please_wait')}",
                     parse_mode='HTML'
                 )
             except:
@@ -14106,17 +14120,17 @@ class EnhancedBot:
                     fail_count = len(results.get("失败", []))
                     
                     progress_text = f"""
-🔐 <b>2FA密码修改进行中...</b>
+<b>{t(user_id, 'change_2fa_in_progress')}</b>
 
-📊 <b>当前进度</b>
-• 已处理: {processed}/{total}
-• 速度: {speed:.1f} 个/秒
-• 用时: {int(elapsed)} 秒
+<b>{t(user_id, 'change_2fa_current_progress')}</b>
+• {t(user_id, 'change_2fa_processed').format(processed=processed, total=total)}
+• {t(user_id, 'change_2fa_speed').format(speed=f'{speed:.1f}')}
+• {t(user_id, 'change_2fa_elapsed').format(elapsed=int(elapsed))}
 
-✅ <b>修改成功</b>: {success_count}
-❌ <b>修改失败</b>: {fail_count}
+<b>{t(user_id, 'change_2fa_success_count').format(count=success_count)}</b>
+<b>{t(user_id, 'change_2fa_failed_count').format(count=fail_count)}</b>
 
-⏱️ 预计剩余: {int((total - processed) / speed) if speed > 0 else 0} 秒
+{t(user_id, 'change_2fa_remaining').format(time=int((total - processed) / speed) if speed > 0 else 0)}
                     """
                     
                     try:
@@ -14132,12 +14146,13 @@ class EnhancedBot:
                 file_type,
                 old_password,
                 new_password,
-                change_callback
+                change_callback,
+                user_id
             )
             
                        # 创建结果文件（传入 file_type 参数）
                     
-            result_files = self.two_factor_manager.create_result_files(results, task_id, file_type)
+            result_files = self.two_factor_manager.create_result_files(results, task_id, file_type, user_id)
             
             elapsed_time = time.time() - start_time
             
@@ -14146,16 +14161,16 @@ class EnhancedBot:
             fail_count = len(results["失败"])
             
             summary_text = f"""
-🎉 <b>2FA密码修改完成！</b>
+<b>{t(user_id, 'change_2fa_complete')}</b>
 
-📊 <b>修改统计</b>
-• 总数: {total_files}
-• ✅ 成功: {success_count}
-• ❌ 失败: {fail_count}
-• ⏱️ 用时: {int(elapsed_time)} 秒
-• 🚀 速度: {total_files/elapsed_time:.1f} 个/秒
+<b>{t(user_id, 'change_2fa_stats')}</b>
+{t(user_id, 'change_2fa_total').format(count=total_files)}
+{t(user_id, 'change_2fa_success').format(count=success_count)}
+{t(user_id, 'change_2fa_failed').format(count=fail_count)}
+{t(user_id, 'change_2fa_duration').format(time=int(elapsed_time))}
+{t(user_id, 'change_2fa_speed_stat').format(speed=f'{total_files/elapsed_time:.1f}')}
 
-📦 正在发送结果文件...
+{t(user_id, 'change_2fa_sending_results')}
             """
             
             try:
@@ -14171,7 +14186,12 @@ class EnhancedBot:
                     if os.path.exists(zip_path):
                         try:
                             with open(zip_path, 'rb') as f:
-                                caption = f"📦 <b>{status}</b> ({count}个账号)\n\n⏰ 处理时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}"
+                                # Use translation for caption
+                                if status == "成功":
+                                    file_desc = t(user_id, 'file_desc_change_2fa_success').format(count=count)
+                                else:  # 失败
+                                    file_desc = t(user_id, 'file_desc_change_2fa_failed').format(count=count)
+                                caption = f"{file_desc}\n\n{t(user_id, 'change_2fa_process_time').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST'))}"
                                 context.bot.send_document(
                                     chat_id=update.effective_chat.id,
                                     document=f,
@@ -14189,7 +14209,12 @@ class EnhancedBot:
                     if os.path.exists(txt_path):
                         try:
                             with open(txt_path, 'rb') as f:
-                                caption = f"📋 <b>{status} 详细报告</b>\n\n包含 {count} 个账号的详细信息"
+                                # Use translation for caption
+                                if status == "成功":
+                                    report_desc = t(user_id, 'report_desc_change_2fa_success')
+                                else:  # 失败
+                                    report_desc = t(user_id, 'report_desc_change_2fa_failed')
+                                caption = f"{report_desc}\n\n{t(user_id, 'report_contains_details').format(count=count)}"
                                 context.bot.send_document(
                                     chat_id=update.effective_chat.id,
                                     document=f,
@@ -14220,16 +14245,16 @@ class EnhancedBot:
             # 发送完成总结
             if sent_count > 0:
                 final_summary_text = f"""
-🎉 <b>所有文件发送完成！</b>
+<b>{t(user_id, 'change_2fa_all_sent')}</b>
 
-📋 <b>发送总结</b>
-• 发送文件: {sent_count} 个
-• 总计账号: {len(files)} 个
-• ✅ 成功: {success_count} 个
-• ❌ 失败: {fail_count} 个
-• ⏱️ 用时: {int(elapsed_time)}秒
+<b>{t(user_id, 'change_2fa_send_summary')}</b>
+{t(user_id, 'change_2fa_files_sent').format(count=sent_count)}
+{t(user_id, 'change_2fa_total_accounts').format(count=len(files))}
+{t(user_id, 'change_2fa_success_count').format(count=success_count)}
+{t(user_id, 'change_2fa_failed_count').format(count=fail_count)}
+{t(user_id, 'change_2fa_time_spent').format(time=int(elapsed_time))}
 
-如需再次使用，请点击 /start
+{t(user_id, 'change_2fa_use_again')}
                 """
                 
                 try:
