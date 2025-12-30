@@ -2879,10 +2879,14 @@ class SpamBotChecker:
                     
             except asyncio.TimeoutError:
                 last_error = "SpamBot通信超时"
+                print(f"⏱️ [{account_name}] SpamBot通信超时")
                 return "连接错误", f"{user_info} | {proxy_used} | SpamBot通信超时", account_name
             except Exception as e:
                 error_str = str(e).lower()
                 error_type = type(e).__name__
+                
+                # 打印详细的异常信息用于调试
+                print(f"❌ [{account_name}] SpamBot通信异常: {error_type} - {str(e)[:100]}")
                 
                 # 检测冻结账户相关错误
                 if "deactivated" in error_str or "banned" in error_str or "deleted" in error_str:
@@ -2891,13 +2895,16 @@ class SpamBotChecker:
                 # 能登录但无法访问SpamBot的情况：检查特定的Telegram API错误
                 # 只检查真正的权限/访问错误，不检查包含"limited"等词的一般错误
                 if "peerflood" in error_type.lower() or "chatrestricted" in error_type.lower():
+                    print(f"🚫 [{account_name}] 检测到账号受限错误: {error_type}")
                     return "连接错误", f"{user_info} | {proxy_used} | 无法访问SpamBot（账号受限）", account_name
                 if ("peer" in error_str and "access" in error_str) or "userprivacy" in error_type.lower():
+                    print(f"🚫 [{account_name}] 检测到权限问题: {error_type}")
                     return "连接错误", f"{user_info} | {proxy_used} | 无法访问SpamBot（权限问题）", account_name
                 
-                # 其他错误统一返回通信失败
+                # 其他错误统一返回通信失败，并显示详细错误信息
                 last_error = str(e)
-                return "连接错误", f"{user_info} | {proxy_used} | SpamBot通信失败: {str(e)[:20]}", account_name
+                print(f"⚠️ [{account_name}] SpamBot通信失败，错误类型: {error_type}")
+                return "连接错误", f"{user_info} | {proxy_used} | SpamBot通信失败: {error_type}", account_name
             
         except asyncio.TimeoutError:
             last_error = "连接超时"
@@ -3316,10 +3323,14 @@ class SpamBotChecker:
                     return "连接错误", f"手机号:{phone} | {proxy_used} | SpamBot无响应", tdata_name
         
             except asyncio.TimeoutError:
+                print(f"⏱️ [TData:{tdata_name}] SpamBot检测超时")
                 return "连接错误", f"手机号:{phone} | {proxy_used} | SpamBot检测超时", tdata_name
             except Exception as e:
                 error_str = str(e).lower()
                 error_type = type(e).__name__
+                
+                # 打印详细的异常信息用于调试
+                print(f"❌ [TData:{tdata_name}] SpamBot通信异常: {error_type} - {str(e)[:100]}")
                 
                 # 检测账号被系统冻结的错误
                 if "deactivated" in error_str or "deleted" in error_str:
@@ -3327,11 +3338,14 @@ class SpamBotChecker:
                 
                 # 能登录但无法访问SpamBot - 检查特定的Telegram API错误
                 if "peerflood" in error_type.lower() or "chatrestricted" in error_type.lower():
+                    print(f"🚫 [TData:{tdata_name}] 检测到账号受限错误: {error_type}")
                     return "连接错误", f"手机号:{phone} | {proxy_used} | 无法访问SpamBot（账号受限）", tdata_name
                 if ("peer" in error_str and "access" in error_str) or "userprivacy" in error_type.lower():
+                    print(f"🚫 [TData:{tdata_name}] 检测到权限问题: {error_type}")
                     return "连接错误", f"手机号:{phone} | {proxy_used} | 无法访问SpamBot（权限问题）", tdata_name
                 
-                return "连接错误", f"手机号:{phone} | {proxy_used} | SpamBot检测失败: {str(e)[:30]}", tdata_name
+                print(f"⚠️ [TData:{tdata_name}] SpamBot通信失败，错误类型: {error_type}")
+                return "连接错误", f"手机号:{phone} | {proxy_used} | SpamBot检测失败: {error_type}", tdata_name
                 
         except Exception as e:
             error_str = str(e).lower()
