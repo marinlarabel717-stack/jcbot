@@ -9218,7 +9218,8 @@ class Forget2FAManager:
                         
                         if item.get('cooling_until'):
                             f.write(f"   {t(user_id, 'report_forget_2fa_cooling_until').format(date=item.get('cooling_until'))}\n")
-                        f.write(f"   {t(user_id, 'report_forget_2fa_duration').format(time=f\"{item.get('elapsed', 0):.1f}\")}\n\n")
+                        elapsed_time = f"{item.get('elapsed', 0):.1f}"
+                        f.write(f"   {t(user_id, 'report_forget_2fa_duration').format(time=elapsed_time)}\n\n")
                 
                 print(f"✅ 创建文件: {zip_filename}")
                 result_files.append((zip_path, txt_path, status_name, len(items)))
