@@ -874,4 +874,88 @@ TEXTS = {
     'delete_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account files',
     'delete_2fa_failed_msg': '❌ Delete 2FA failed',
     'delete_2fa_error_msg': 'Error: {error}',
+    
+    # ===== Add 2FA Feature =====
+    # 1. Feature Introduction Page
+    'add_2fa_title': '➕ Add 2FA Password',
+    'add_2fa_features': '📋 Features:',
+    'add_2fa_feature1': '· Auto-create JSON config file for Session files',
+    'add_2fa_feature2': '· Auto-create 2fa.txt password file for TData directories',
+    'add_2fa_feature3': '· You can customize 2FA password content',
+    'add_2fa_formats': '📤 Supported file formats:',
+    'add_2fa_format1': '· ZIP archive (containing Session or TData)',
+    'add_2fa_format2': '· Auto-detect file type and add corresponding 2FA config',
+    'add_2fa_rules': '⚙️ Processing rules:',
+    'add_2fa_rule1': '· Session file → Create JSON file with same name (contains twofa field)',
+    'add_2fa_rule2': '· TData directory → Create 2fa.txt file (same level as tdata)',
+    'add_2fa_upload_prompt': '📤 Please upload your account files',
+    'add_2fa_back_menu': 'Back to Main Menu',
+    
+    # 2. Processing
+    'add_2fa_processing': 'Processing files....',
+    
+    # 3. Scan Complete
+    'add_2fa_scan_complete': '✅ File scan complete!',
+    'add_2fa_statistics': '📊 Statistics',
+    'add_2fa_total_accounts': '· Total accounts: {count}',
+    'add_2fa_file_type': '· File type: {type}',
+    
+    # 4. Enter Password
+    'add_2fa_enter_password': '📝 Please enter the 2FA password to set',
+    'add_2fa_enter_desc1': '· This password will apply to all accounts',
+    'add_2fa_enter_desc2': '· Session files will create corresponding JSON config files',
+    'add_2fa_enter_desc3': '· TData directories will create 2fa.txt files',
+    'add_2fa_timeout': '⏰ Auto-cancel if not entered within 5 minutes',
+    
+    # 5. Password Received
+    'add_2fa_password_received': '✅ 2FA password received',
+    'add_2fa_password_display': 'Password: {password}',
+    'add_2fa_processing_now': 'Processing...',
+    
+    # 6. Add Complete
+    'add_2fa_complete': '✅ Add 2FA complete!',
+    'add_2fa_results': '📊 Processing Results',
+    'add_2fa_success': '· Success: {count}',
+    'add_2fa_failed': '· Failed: {count}',
+    'add_2fa_total': '· Total: {count}',
+    'add_2fa_duration': '· Duration: {time}s',
+    'add_2fa_password_set': '🔐 2FA password set: {password}',
+    
+    # 7. Result File Naming
+    'zip_add_2fa_result': 'add_2fa_result_{timestamp}',
+    'file_desc_add_2fa_success': '📦 Add 2FA Result - Success {count}',
+    'zip_add_2fa_success': 'Add2FA_Success_{count}',
+    'zip_add_2fa_failed': 'Add2FA_Failed_{count}',
+    'file_desc_add_2fa_success_count': '📦 Success ({count} accounts)',
+    'file_desc_add_2fa_failed_count': '📦 Failed ({count} accounts)',
+    'report_add_2fa_success': 'Add2FA_Success_{count}_Report.txt',
+    'report_add_2fa_failed': 'Add2FA_Failed_{count}_Report.txt',
+    'report_desc_add_2fa_success': '📋 Success Detailed Report',
+    'report_desc_add_2fa_failed': '📋 Failed Detailed Report',
+    
+    # 8. Report TXT Template
+    'report_add_2fa_title_success': '2FA Password Add Report - Success',
+    'report_add_2fa_title_failed': '2FA Password Add Report - Failed',
+    'report_add_2fa_total': 'Total: {count}',
+    'report_add_2fa_generated': 'Generated: {time}',
+    'report_add_2fa_detail_list': 'Detail List:',
+    'report_add_2fa_account': 'Account: {account}',
+    'report_add_2fa_details': 'Details: {info}',
+    'report_add_2fa_process_time': 'Process time: {time}',
+    'report_add_2fa_config_created': '2FA config file created',
+    
+    # 9. Errors and Other Messages
+    'add_2fa_no_pending_task': '❌ No pending Add 2FA task, please start over',
+    'add_2fa_operation_timeout': '❌ Operation timeout, please start over',
+    'add_2fa_password_empty': '❌ 2FA password cannot be empty, please re-enter',
+    'add_2fa_no_valid_files': '❌ No valid files found',
+    'add_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account files',
+    'add_2fa_processing_file': '📥 Processing your file...',
+    'add_2fa_processing_config': '🔄 Adding 2FA config...',
+    'add_2fa_processing_failed': '❌ Processing failed',
+    'add_2fa_error': 'Error: {error}',
+    'add_2fa_result_success_desc': '✅ Success',
+    'add_2fa_result_failed_desc': '❌ Failed',
+    'add_2fa_result_error_desc': '❌ Error',
+    'add_2fa_need_member': '❌ Membership required to use Add 2FA feature',
 }

@@ -12698,30 +12698,30 @@ class EnhancedBot:
         # 检查权限
         is_member, level, _ = self.db.check_membership(user_id)
         if not is_member and not self.db.is_admin(user_id):
-            self.safe_edit_message(query, "❌ 需要会员权限才能使用添加2FA功能")
+            self.safe_edit_message(query, t(user_id, 'add_2fa_need_member'))
             return
         
-        text = """
-➕ <b>添加2FA密码</b>
+        text = f"""
+{t(user_id, 'add_2fa_title')}
 
-<b>📋 功能说明：</b>
-• 为 Session 文件自动创建 JSON 配置文件
-• 为 TData 目录自动创建 2fa.txt 密码文件
-• 您可以自定义2FA密码内容
+<b>{t(user_id, 'add_2fa_features')}</b>
+{t(user_id, 'add_2fa_feature1')}
+{t(user_id, 'add_2fa_feature2')}
+{t(user_id, 'add_2fa_feature3')}
 
-<b>📤 支持的文件格式：</b>
-• ZIP 压缩包（包含 Session 或 TData）
-• 自动识别文件类型并添加对应的2FA配置
+<b>{t(user_id, 'add_2fa_formats')}</b>
+{t(user_id, 'add_2fa_format1')}
+{t(user_id, 'add_2fa_format2')}
 
-<b>⚙️ 处理规则：</b>
-• Session 文件 → 创建同名 JSON 文件（包含 twofa 字段）
-• TData 目录 → 创建 2fa.txt 文件（与 tdata 同级）
+<b>{t(user_id, 'add_2fa_rules')}</b>
+{t(user_id, 'add_2fa_rule1')}
+{t(user_id, 'add_2fa_rule2')}
 
-<b>📤 请上传您的账号文件</b>
+<b>{t(user_id, 'add_2fa_upload_prompt')}</b>
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(f"🔙 {t(user_id, 'add_2fa_back_menu')}", callback_data="back_to_main")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
@@ -15220,7 +15220,7 @@ class EnhancedBot:
     def handle_add_2fa_input(self, update: Update, context: CallbackContext, user_id: int, text: str):
         """处理添加2FA密码输入"""
         if user_id not in self.pending_add_2fa_tasks:
-            self.safe_send_message(update, "❌ 没有待处理的添加2FA任务，请重新开始")
+            self.safe_send_message(update, t(user_id, 'add_2fa_no_pending_task'))
             return
         
         task = self.pending_add_2fa_tasks[user_id]
@@ -15229,22 +15229,22 @@ class EnhancedBot:
         if time.time() - task['start_time'] > 300:
             del self.pending_add_2fa_tasks[user_id]
             self.db.save_user(user_id, "", "", "")
-            self.safe_send_message(update, "❌ 操作超时，请重新开始")
+            self.safe_send_message(update, t(user_id, 'add_2fa_operation_timeout'))
             return
         
         # 验证密码
         two_fa_password = text.strip()
         
         if not two_fa_password:
-            self.safe_send_message(update, "❌ 2FA密码不能为空，请重新输入")
+            self.safe_send_message(update, t(user_id, 'add_2fa_password_empty'))
             return
         
         # 确认接收密码
         self.safe_send_message(
             update,
-            f"✅ <b>2FA密码已接收</b>\n\n"
-            f"密码: <code>{two_fa_password}</code>\n\n"
-            f"正在处理...",
+            f"<b>{t(user_id, 'add_2fa_password_received')}</b>\n\n"
+            f"{t(user_id, 'add_2fa_password_display').format(password=two_fa_password)}\n\n"
+            f"{t(user_id, 'add_2fa_processing_now')}",
             'HTML'
         )
         
@@ -15488,7 +15488,7 @@ class EnhancedBot:
         start_time = time.time()
         task_id = f"{user_id}_{int(start_time)}"
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理您的文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, f"<b>{t(user_id, 'add_2fa_processing_file')}</b>", 'HTML')
         if not progress_msg:
             return
         
@@ -15504,7 +15504,7 @@ class EnhancedBot:
             if not files:
                 try:
                     progress_msg.edit_text(
-                        "❌ <b>未找到有效文件</b>\n\n请确保ZIP包含Session或TData格式的账号文件",
+                        f"<b>{t(user_id, 'add_2fa_no_valid_files')}</b>\n\n{t(user_id, 'add_2fa_ensure_format')}",
                         parse_mode='HTML'
                     )
                 except:
@@ -15527,19 +15527,19 @@ class EnhancedBot:
             
             # 提示用户输入2FA密码
             text = f"""
-✅ <b>文件扫描完成！</b>
+<b>{t(user_id, 'add_2fa_scan_complete')}</b>
 
-📊 <b>统计信息</b>
-• 总账号数: {total_files} 个
-• 文件类型: {file_type.upper()}
+<b>{t(user_id, 'add_2fa_statistics')}</b>
+{t(user_id, 'add_2fa_total_accounts').format(count=total_files)}
+{t(user_id, 'add_2fa_file_type').format(type=file_type.upper())}
 
-<b>📝 请输入要设置的2FA密码</b>
+<b>{t(user_id, 'add_2fa_enter_password')}</b>
 
-• 该密码将应用于所有账号
-• Session文件将创建对应的JSON配置文件
-• TData目录将创建2fa.txt文件
+{t(user_id, 'add_2fa_enter_desc1')}
+{t(user_id, 'add_2fa_enter_desc2')}
+{t(user_id, 'add_2fa_enter_desc3')}
 
-⏰ <i>5分钟内未输入将自动取消</i>
+<i>{t(user_id, 'add_2fa_timeout')}</i>
             """
             
             try:
@@ -15557,7 +15557,7 @@ class EnhancedBot:
             traceback.print_exc()
             try:
                 progress_msg.edit_text(
-                    f"❌ <b>处理失败</b>\n\n错误: {str(e)[:100]}",
+                    f"<b>{t(user_id, 'add_2fa_processing_failed')}</b>\n\n{t(user_id, 'add_2fa_error').format(error=str(e)[:100])}",
                     parse_mode='HTML'
                 )
             except:
@@ -15566,7 +15566,7 @@ class EnhancedBot:
     async def complete_add_2fa(self, update, context, user_id: int, two_fa_password: str):
         """完成添加2FA - 为文件添加2FA配置"""
         if user_id not in self.pending_add_2fa_tasks:
-            self.safe_send_message(update, "❌ 没有待处理的添加2FA任务")
+            self.safe_send_message(update, t(user_id, 'add_2fa_no_pending_task'))
             return
         
         task_info = self.pending_add_2fa_tasks[user_id]
@@ -15575,7 +15575,7 @@ class EnhancedBot:
         extract_dir = task_info['extract_dir']
         temp_dir = task_info.get('temp_dir')
         
-        progress_msg = self.safe_send_message(update, "🔄 <b>正在添加2FA配置...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, f"<b>{t(user_id, 'add_2fa_processing_config')}</b>", 'HTML')
         
         try:
             success_count = 0
@@ -15593,21 +15593,21 @@ class EnhancedBot:
                     
                     if result['success']:
                         success_count += 1
-                        results.append((file_name, "✅ 成功", result.get('message', '')))
+                        results.append((file_name, t(user_id, 'add_2fa_result_success_desc'), result.get('message', '')))
                     else:
                         failed_count += 1
-                        results.append((file_name, "❌ 失败", result.get('error', '')))
+                        results.append((file_name, t(user_id, 'add_2fa_result_failed_desc'), result.get('error', '')))
                         
                 except Exception as e:
                     failed_count += 1
-                    results.append((file_name, "❌ 错误", str(e)[:50]))
+                    results.append((file_name, t(user_id, 'add_2fa_result_error_desc'), str(e)[:50]))
             
             # 创建结果ZIP文件 - 保持原始目录结构，只添加2fa.txt
             timestamp = int(time.time())
             result_dir = os.path.join(config.RESULTS_DIR, f"add_2fa_{user_id}_{timestamp}")
             os.makedirs(result_dir, exist_ok=True)
             
-            result_zip_path = os.path.join(result_dir, f"add_2fa_result_{timestamp}.zip")
+            result_zip_path = os.path.join(result_dir, t(user_id, 'zip_add_2fa_result').format(timestamp=timestamp) + ".zip")
             
             # 直接打包整个extract_dir，保持原始结构（2fa.txt已经被添加到正确位置）
             with zipfile.ZipFile(result_zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
@@ -15622,15 +15622,15 @@ class EnhancedBot:
             elapsed = time.time() - task_info['start_time']
             
             summary_text = f"""
-✅ <b>添加2FA完成！</b>
+<b>{t(user_id, 'add_2fa_complete')}</b>
 
-📊 <b>处理结果</b>
-• 成功: {success_count} 个
-• 失败: {failed_count} 个
-• 总计: {len(files)} 个
-• 用时: {elapsed:.1f}秒
+<b>{t(user_id, 'add_2fa_results')}</b>
+{t(user_id, 'add_2fa_success').format(count=success_count)}
+{t(user_id, 'add_2fa_failed').format(count=failed_count)}
+{t(user_id, 'add_2fa_total').format(count=len(files))}
+{t(user_id, 'add_2fa_duration').format(time=f'{elapsed:.1f}')}
 
-🔐 <b>设置的2FA密码</b>: <code>{two_fa_password}</code>
+<b>{t(user_id, 'add_2fa_password_set').format(password=two_fa_password)}</b>
             """
             
             try:
@@ -15644,7 +15644,7 @@ class EnhancedBot:
                     context.bot.send_document(
                         chat_id=user_id,
                         document=f,
-                        caption=f"📦 添加2FA结果 - 成功 {success_count} 个",
+                        caption=t(user_id, 'file_desc_add_2fa_success').format(count=success_count),
                         filename=os.path.basename(result_zip_path)
                     )
             
@@ -15652,7 +15652,7 @@ class EnhancedBot:
             print(f"❌ 完成添加2FA失败: {e}")
             import traceback
             traceback.print_exc()
-            self.safe_send_message(update, f"❌ 处理失败: {str(e)[:100]}")
+            self.safe_send_message(update, t(user_id, 'add_2fa_error').format(error=str(e)[:100]))
         
         finally:
             # 清理任务
