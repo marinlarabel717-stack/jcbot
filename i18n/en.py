@@ -836,6 +836,18 @@ TEXTS = {
     'report_delete_2fa_using_proxy': 'Using proxy',
     'report_delete_2fa_local_connection': 'Local connection',
     'report_delete_2fa_success_msg': 'Password deleted successfully, file updated',
+    'report_delete_2fa_success_no_json': '2FA password deleted',
+    'report_delete_2fa_success_with_json': '2FA password deleted, file updated',
+    'report_delete_2fa_success_update_failed': '2FA password deleted, but file update failed',
+    'report_delete_2fa_manual_failed': 'Manual deletion failed',
+    'report_delete_2fa_error_unauthorized': 'Account unauthorized',
+    'report_delete_2fa_error_wrong_password': 'Wrong password',
+    'report_delete_2fa_error_no_2fa': '2FA not set',
+    'report_delete_2fa_error_flood': 'Too many requests, please try later',
+    'report_delete_2fa_error_frozen': 'Account frozen/banned',
+    'report_delete_2fa_error_deletion_failed': 'Deletion failed',
+    'report_delete_2fa_error_network': 'Network connection failed',
+    'report_delete_2fa_error_general': 'Error',
     
     # 9. Report TXT Template - Failed
     'report_delete_2fa_title_failed': '2FA Password Deletion Report - Failed',

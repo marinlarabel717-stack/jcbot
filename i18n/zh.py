@@ -836,6 +836,18 @@ TEXTS = {
     'report_delete_2fa_using_proxy': '使用代理',
     'report_delete_2fa_local_connection': '本地连接',
     'report_delete_2fa_success_msg': '密码删除成功，文件已更新',
+    'report_delete_2fa_success_no_json': '2FA密码已删除',
+    'report_delete_2fa_success_with_json': '2FA密码已删除，文件已更新',
+    'report_delete_2fa_success_update_failed': '2FA密码已删除，但文件更新失败',
+    'report_delete_2fa_manual_failed': '手动删除失败',
+    'report_delete_2fa_error_unauthorized': '账号未授权',
+    'report_delete_2fa_error_wrong_password': '密码错误',
+    'report_delete_2fa_error_no_2fa': '未设置2FA',
+    'report_delete_2fa_error_flood': '操作过于频繁，请稍后重试',
+    'report_delete_2fa_error_frozen': '账号已冻结/封禁',
+    'report_delete_2fa_error_deletion_failed': '删除失败',
+    'report_delete_2fa_error_network': '网络连接失败',
+    'report_delete_2fa_error_general': '错误',
     
     # 9. 报告TXT模板 - 失败
     'report_delete_2fa_title_failed': '2FA密码删除报告 - 失败',

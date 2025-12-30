@@ -6339,7 +6339,10 @@ class TwoFactorManager:
                 # 检查授权
                 is_authorized = await asyncio.wait_for(client.is_user_authorized(), timeout=5)
                 if not is_authorized:
-                    return False, f"{proxy_used} | 账号未授权"
+                    if user_id:
+                        return False, f"{proxy_used} | {t(user_id, 'report_delete_2fa_error_unauthorized')}"
+                    else:
+                        return False, f"{proxy_used} | 账号未授权"
                 
                 # 获取用户信息
                 try:
@@ -6371,37 +6374,67 @@ class TwoFactorManager:
                     
                     if update_success:
                         if has_json:
-                            return True, f"{user_info} | {proxy_used} | 2FA密码已删除，文件已更新"
+                            if user_id:
+                                return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_success_with_json')}"
+                            else:
+                                return True, f"{user_info} | {proxy_used} | 2FA密码已删除，文件已更新"
                         else:
-                            return True, f"{user_info} | {proxy_used} | 2FA密码已删除"
+                            if user_id:
+                                return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_success_no_json')}"
+                            else:
+                                return True, f"{user_info} | {proxy_used} | 2FA密码已删除"
                     else:
-                        return True, f"{user_info} | {proxy_used} | 2FA密码已删除，但文件更新失败"
+                        if user_id:
+                            return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_success_update_failed')}"
+                        else:
+                            return True, f"{user_info} | {proxy_used} | 2FA密码已删除，但文件更新失败"
                     
                 except AttributeError:
                     # 如果 edit_2fa 不存在，使用手动方法
                     return await self._remove_2fa_manual(
                         client, session_path, old_password, 
-                        user_info, proxy_used
+                        user_info, proxy_used, user_id
                     )
                 except Exception as e:
                     error_msg = str(e).lower()
                     if "password" in error_msg and ("invalid" in error_msg or "incorrect" in error_msg):
-                        return False, f"{user_info} | {proxy_used} | 密码错误"
+                        if user_id:
+                            return False, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_error_wrong_password')}"
+                        else:
+                            return False, f"{user_info} | {proxy_used} | 密码错误"
                     elif "no password" in error_msg or "not set" in error_msg:
-                        return False, f"{user_info} | {proxy_used} | 未设置2FA"
+                        if user_id:
+                            return False, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_error_no_2fa')}"
+                        else:
+                            return False, f"{user_info} | {proxy_used} | 未设置2FA"
                     elif "flood" in error_msg:
-                        return False, f"{user_info} | {proxy_used} | 操作过于频繁，请稍后重试"
+                        if user_id:
+                            return False, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_error_flood')}"
+                        else:
+                            return False, f"{user_info} | {proxy_used} | 操作过于频繁，请稍后重试"
                     elif any(word in error_msg for word in ["frozen", "deactivated", "banned"]):
-                        return False, f"{user_info} | {proxy_used} | 账号已冻结/封禁"
+                        if user_id:
+                            return False, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_error_frozen')}"
+                        else:
+                            return False, f"{user_info} | {proxy_used} | 账号已冻结/封禁"
                     else:
-                        return False, f"{user_info} | {proxy_used} | 删除失败: {str(e)[:50]}"
+                        if user_id:
+                            return False, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_error_deletion_failed')}: {str(e)[:50]}"
+                        else:
+                            return False, f"{user_info} | {proxy_used} | 删除失败: {str(e)[:50]}"
                 
             except Exception as e:
                 error_msg = str(e).lower()
                 if any(word in error_msg for word in ["timeout", "network", "connection"]):
-                    return False, f"{proxy_used} | 网络连接失败"
+                    if user_id:
+                        return False, f"{proxy_used} | {t(user_id, 'report_delete_2fa_error_network')}"
+                    else:
+                        return False, f"{proxy_used} | 网络连接失败"
                 else:
-                    return False, f"{proxy_used} | 错误: {str(e)[:50]}"
+                    if user_id:
+                        return False, f"{proxy_used} | {t(user_id, 'report_delete_2fa_error_general')}: {str(e)[:50]}"
+                    else:
+                        return False, f"{proxy_used} | 错误: {str(e)[:50]}"
             finally:
                 if client:
                     try:
@@ -6410,7 +6443,7 @@ class TwoFactorManager:
                         pass
     
     async def _remove_2fa_manual(self, client, session_path: str, old_password: str, 
-                                 user_info: str, proxy_used: str) -> Tuple[bool, str]:
+                                 user_info: str, proxy_used: str, user_id: int = None) -> Tuple[bool, str]:
         """
         手动删除2FA密码（备用方法）
         """
@@ -6448,14 +6481,26 @@ class TwoFactorManager:
             
             if update_success:
                 if has_json:
-                    return True, f"{user_info} | {proxy_used} | 2FA密码已删除，文件已更新"
+                    if user_id:
+                        return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_success_with_json')}"
+                    else:
+                        return True, f"{user_info} | {proxy_used} | 2FA密码已删除，文件已更新"
                 else:
-                    return True, f"{user_info} | {proxy_used} | 2FA密码已删除"
+                    if user_id:
+                        return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_success_no_json')}"
+                    else:
+                        return True, f"{user_info} | {proxy_used} | 2FA密码已删除"
             else:
-                return True, f"{user_info} | {proxy_used} | 2FA密码已删除，但文件更新失败"
+                if user_id:
+                    return True, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_success_update_failed')}"
+                else:
+                    return True, f"{user_info} | {proxy_used} | 2FA密码已删除，但文件更新失败"
             
         except Exception as e:
-            return False, f"{user_info} | {proxy_used} | 手动删除失败: {str(e)[:50]}"
+            if user_id:
+                return False, f"{user_info} | {proxy_used} | {t(user_id, 'report_delete_2fa_manual_failed')}: {str(e)[:50]}"
+            else:
+                return False, f"{user_info} | {proxy_used} | 手动删除失败: {str(e)[:50]}"
 
     def create_proxy_dict(self, proxy_info: Dict) -> Optional[Dict]:
         """创建代理字典（复用SpamBotChecker的实现）"""
