@@ -125,13 +125,16 @@ class AccountClassifier:
 
     # -------------- 命名与分组 --------------
     def country_key(self, m: AccountMeta, t_func=None) -> Tuple[str, str]:
+        """Get country name and code for account, with optional translation support"""
         if m.country_code:
             # Use the Chinese country name by default (already in the data)
             return (m.country_name_zh or (t_func('split_unknown') if t_func else "未知")), str(m.country_code)
         return (t_func('split_unknown') if t_func else "未知"), "000"
 
     def detect_bundle_country_label(self, metas: List[AccountMeta], t_func=None) -> Tuple[str, str]:
-        """用于按数量拆分时统一命名：若混合国家返回 ('混合','000')，全未知返回 ('未知','000')"""
+        """Detect unified country label for quantity-based splitting. 
+        Returns ('Mixed','000') for mixed countries or ('Unknown','000') for all unidentified accounts.
+        Labels are translatable when t_func is provided."""
         if not metas:
             return (t_func('split_unknown') if t_func else "未知"), "000"
         codes: Dict[str, str] = {}  # code -> name
@@ -250,7 +253,9 @@ class AccountClassifier:
         country_label: Optional[Tuple[str, str]] = None,
         t_func=None
     ) -> List[Tuple[str, str, int]]:
-        """按给定 sizes 依次切分，命名 {国家}+{区号}+{数量}.zip，带序号后缀避免重名覆盖"""
+        """Split accounts by specified sizes in order. 
+        Naming pattern: {country}+{code}_{quantity}.zip with serial suffix to avoid duplicates.
+        Country names are translatable when t_func is provided."""
         if country_label is None:
             country_label = self.detect_bundle_country_label(metas, t_func)
         name, code = country_label
