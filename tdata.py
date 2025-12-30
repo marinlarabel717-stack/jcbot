@@ -20828,6 +20828,29 @@ admin3</code>
                         results.append(result)
                         progress_callback(len(results), total_to_create, f"已完成 {len(results)} 个")
                     
+                    # 检查是否是账号冻结错误，如果是则立即停止该账号的后续创建
+                    if result.status == 'failed' and result.error and 'FROZEN_METHOD_INVALID' in result.error:
+                        logger.warning(f"🛑 账号 {account.phone} 已冻结 (FROZEN_METHOD_INVALID)，停止该账号的后续创建")
+                        print(f"🛑 账号 {account.phone} 已冻结 (FROZEN_METHOD_INVALID)，停止该账号的后续创建", flush=True)
+                        # 标记剩余任务为跳过
+                        for k in range(j + 1, count_per_account):
+                            skipped_idx = start_idx + k
+                            if skipped_idx >= total_to_create:
+                                break
+                            skipped_result = BatchCreationResult(
+                                account_name=account.file_name,
+                                phone=account.phone or "未知",
+                                creation_type=batch_config.creation_type,
+                                name="",
+                                status='skipped',
+                                error='账号已冻结，跳过创建'
+                            )
+                            account_results.append(skipped_result)
+                            async with results_lock:
+                                results.append(skipped_result)
+                                progress_callback(len(results), total_to_create, f"已完成 {len(results)} 个")
+                        break
+                    
                     # 在该账号的每次创建之后添加配置的延迟（避免触发Telegram频率限制）
                     # 注意：只有不是最后一次创建时才延迟
                     if j < count_per_account - 1:
