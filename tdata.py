@@ -20083,7 +20083,7 @@ class EnhancedBot:
                 parse_mode='HTML'
             )
             
-            # 验证账号 - 并发30个
+            # 验证账号
             accounts = []
             valid_count = 0
             total_remaining = 0
@@ -20093,9 +20093,15 @@ class EnhancedBot:
             api_id = device_config.get('api_id', config.API_ID)
             api_hash = device_config.get('api_hash', config.API_HASH)
             
-            # 异步验证单个账号
-            async def verify_account(file_path, file_name, index):
-                """验证单个账号"""
+            for i, (file_path, file_name) in enumerate(files):
+                # 更新进度
+                if (i + 1) % 5 == 0:
+                    self.safe_edit_message_text(
+                        progress_msg,
+                        f"{t(user_id, 'batch_create_verifying')}\n\n{t(user_id, 'batch_create_verifying_progress').format(done=i + 1, total=len(files))}",
+                        parse_mode='HTML'
+                    )
+                
                 # 创建账号信息
                 account = BatchAccountInfo(
                     session_path=file_path,
@@ -20122,39 +20128,11 @@ class EnhancedBot:
                     account, api_id, api_hash, proxy_dict, user_id
                 )
                 
-                return account, is_valid, index
-            
-            # 并发验证，每批30个
-            CONCURRENT_VALIDATION = 30
-            total_files = len(files)
-            
-            for batch_start in range(0, total_files, CONCURRENT_VALIDATION):
-                batch_end = min(batch_start + CONCURRENT_VALIDATION, total_files)
-                batch_files = files[batch_start:batch_end]
+                accounts.append(account)
                 
-                # 创建并发任务
-                tasks = [
-                    verify_account(file_path, file_name, batch_start + i)
-                    for i, (file_path, file_name) in enumerate(batch_files)
-                ]
-                
-                # 并发执行
-                results = await asyncio.gather(*tasks)
-                
-                # 处理结果
-                for account, is_valid, idx in results:
-                    accounts.append(account)
-                    if is_valid:
-                        valid_count += 1
-                        total_remaining += account.daily_remaining
-                
-                # 更新进度
-                processed = batch_end
-                self.safe_edit_message_text(
-                    progress_msg,
-                    f"{t(user_id, 'batch_create_verifying')}\n\n{t(user_id, 'batch_create_verifying_progress').format(done=processed, total=total_files)}",
-                    parse_mode='HTML'
-                )
+                if is_valid:
+                    valid_count += 1
+                    total_remaining += account.daily_remaining
             
             # 保存任务信息
             self.pending_batch_create[user_id] = {
