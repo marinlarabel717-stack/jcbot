@@ -9931,8 +9931,12 @@ class BatchCreatorService:
                         link=r.invite_link or t(user_id, 'report_batch_create_desc_none')
                     ))
                     lines.append(t(user_id, 'report_batch_create_creator_account').format(account=r.phone))
-                    # Display username with @ prefix, or @user{id} if no username
-                    creator_display = f"@{r.creator_username}" if r.creator_username and not r.creator_username.isdigit() else f"@用户{r.creator_username or r.creator_id}"
+                    # Display username with @ prefix, or @none if no username
+                    if r.creator_username and not r.creator_username.isdigit():
+                        creator_display = f"@{r.creator_username}"
+                    else:
+                        # No username, display @none using translation
+                        creator_display = t(user_id, 'report_batch_create_admins_none')
                     lines.append(t(user_id, 'report_batch_create_creator_username').format(username=creator_display))
                     lines.append(t(user_id, 'report_batch_create_creator_id').format(
                         id=r.creator_id or t(user_id, 'report_batch_create_desc_none')
@@ -19856,7 +19860,7 @@ class EnhancedBot:
         """处理批量创建文件上传"""
         user_id = update.effective_user.id
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, t(user_id, 'processing_file'), 'HTML')
         if not progress_msg:
             return
         
@@ -20776,8 +20780,12 @@ admin3</code>
                         f.write(t(user_id, desc_key).format(desc=r.description or t(user_id, 'report_batch_create_desc_none')) + "\n")
                         f.write(t(user_id, link_key).format(link=r.invite_link or t(user_id, 'report_batch_create_desc_none')) + "\n")
                         f.write(t(user_id, 'report_success_list_creator').format(account=r.phone) + "\n")
-                        # Display username with @ prefix, or @user{id} if no username
-                        creator_display = f"@{r.creator_username}" if r.creator_username and not r.creator_username.isdigit() else f"@用户{r.creator_username or r.creator_id}"
+                        # Display username with @ prefix, or @none if no username
+                        if r.creator_username and not r.creator_username.isdigit():
+                            creator_display = f"@{r.creator_username}"
+                        else:
+                            # No username, display @none using translation
+                            creator_display = t(user_id, 'report_batch_create_admins_none')
                         f.write(t(user_id, 'report_success_list_creator_username').format(username=creator_display) + "\n")
                         f.write(t(user_id, 'report_success_list_admin_username').format(admin=f"@{r.admin_username}" if r.admin_username else t(user_id, 'report_batch_create_admins_none')) + "\n")
                         f.write("\n")
