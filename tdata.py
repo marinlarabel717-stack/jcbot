@@ -16192,7 +16192,7 @@ class EnhancedBot:
         start_time = time.time()
         task_id = f"{user_id}_{int(start_time)}"
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理您的文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, f"<b>{t(user_id, 'split_processing_file')}</b>", 'HTML')
         if not progress_msg:
             return
         

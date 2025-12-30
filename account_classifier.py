@@ -10,6 +10,125 @@ from phonenumbers import geocoder
 
 PHONE_REGEX = re.compile(r"(?:\+?\d{6,16})")
 
+# Country code to translation key mapping
+COUNTRY_CODE_TO_KEY = {
+    420: 'country_czech_republic',
+    86: 'country_china',
+    1: 'country_united_states',  # Also Canada, but we'll handle this separately
+    44: 'country_united_kingdom',
+    7: 'country_russia',  # Also Kazakhstan
+    49: 'country_germany',
+    33: 'country_france',
+    81: 'country_japan',
+    82: 'country_south_korea',
+    91: 'country_india',
+    55: 'country_brazil',
+    61: 'country_australia',
+    65: 'country_singapore',
+    60: 'country_malaysia',
+    62: 'country_indonesia',
+    66: 'country_thailand',
+    84: 'country_vietnam',
+    63: 'country_philippines',
+    213: 'country_algeria',
+    234: 'country_nigeria',
+    20: 'country_egypt',
+    27: 'country_south_africa',
+    52: 'country_mexico',
+    54: 'country_argentina',
+    90: 'country_turkey',
+    966: 'country_saudi_arabia',
+    971: 'country_uae',
+    972: 'country_israel',
+    48: 'country_poland',
+    380: 'country_ukraine',
+    31: 'country_netherlands',
+    32: 'country_belgium',
+    41: 'country_switzerland',
+    43: 'country_austria',
+    46: 'country_sweden',
+    47: 'country_norway',
+    45: 'country_denmark',
+    358: 'country_finland',
+    39: 'country_italy',
+    34: 'country_spain',
+    351: 'country_portugal',
+    30: 'country_greece',
+    36: 'country_hungary',
+    40: 'country_romania',
+    359: 'country_bulgaria',
+    381: 'country_serbia',
+    385: 'country_croatia',
+    421: 'country_slovakia',
+    386: 'country_slovenia',
+    353: 'country_ireland',
+    64: 'country_new_zealand',
+    92: 'country_pakistan',
+    880: 'country_bangladesh',
+    94: 'country_sri_lanka',
+    977: 'country_nepal',
+    95: 'country_myanmar',
+    855: 'country_cambodia',
+    856: 'country_laos',
+    976: 'country_mongolia',
+    998: 'country_uzbekistan',
+    375: 'country_belarus',
+    995: 'country_georgia',
+    374: 'country_armenia',
+    994: 'country_azerbaijan',
+    98: 'country_iran',
+    964: 'country_iraq',
+    965: 'country_kuwait',
+    974: 'country_qatar',
+    973: 'country_bahrain',
+    968: 'country_oman',
+    962: 'country_jordan',
+    961: 'country_lebanon',
+    963: 'country_syria',
+    967: 'country_yemen',
+    212: 'country_morocco',
+    216: 'country_tunisia',
+    218: 'country_libya',
+    249: 'country_sudan',
+    251: 'country_ethiopia',
+    254: 'country_kenya',
+    255: 'country_tanzania',
+    256: 'country_uganda',
+    233: 'country_ghana',
+    237: 'country_cameroon',
+    225: 'country_ivory_coast',
+    221: 'country_senegal',
+    243: 'country_congo',
+    244: 'country_angola',
+    258: 'country_mozambique',
+    263: 'country_zimbabwe',
+    260: 'country_zambia',
+    267: 'country_botswana',
+    264: 'country_namibia',
+    56: 'country_chile',
+    57: 'country_colombia',
+    51: 'country_peru',
+    58: 'country_venezuela',
+    593: 'country_ecuador',
+    591: 'country_bolivia',
+    595: 'country_paraguay',
+    598: 'country_uruguay',
+    53: 'country_cuba',
+    1809: 'country_dominican_republic',
+    1787: 'country_puerto_rico',
+    1876: 'country_jamaica',
+    1868: 'country_trinidad_and_tobago',
+    502: 'country_guatemala',
+    504: 'country_honduras',
+    503: 'country_el_salvador',
+    505: 'country_nicaragua',
+    506: 'country_costa_rica',
+    507: 'country_panama',
+    886: 'country_taiwan',
+    852: 'country_hong_kong',
+    853: 'country_macau',
+}
+
 @dataclass
 class AccountMeta:
     path: str            # 文件或目录绝对路径
@@ -127,8 +246,14 @@ class AccountClassifier:
     def country_key(self, m: AccountMeta, t_func=None) -> Tuple[str, str]:
         """Get country name and code for account, with optional translation support"""
         if m.country_code:
-            # Use the Chinese country name by default (already in the data)
-            return (m.country_name_zh or (t_func('split_unknown') if t_func else "未知")), str(m.country_code)
+            # Try to get translation key from country code mapping
+            if t_func and m.country_code in COUNTRY_CODE_TO_KEY:
+                country_key = COUNTRY_CODE_TO_KEY[m.country_code]
+                country_name = t_func(country_key)
+            else:
+                # Fallback to Chinese name from phonenumbers library
+                country_name = m.country_name_zh or (t_func('split_unknown') if t_func else "未知")
+            return country_name, str(m.country_code)
         return (t_func('split_unknown') if t_func else "未知"), "000"
 
     def detect_bundle_country_label(self, metas: List[AccountMeta], t_func=None) -> Tuple[str, str]:

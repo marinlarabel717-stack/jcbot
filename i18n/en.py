@@ -1035,6 +1035,7 @@ TEXTS = {
     # 8. Processing
     'split_sending_results': '📤 Sending results...',
     'split_processing': 'Processing...',
+    'split_processing_file': '📥 Processing your file...',
     
     # 9. Classification Complete
     'split_complete': '✅ Classification complete!',

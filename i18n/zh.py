@@ -1035,6 +1035,7 @@ TEXTS = {
     # 8. 处理中
     'split_sending_results': '📤 正在发送结果...',
     'split_processing': '正在处理...',
+    'split_processing_file': '📥 正在处理您的文件...',
     
     # 9. 分类完成
     'split_complete': '✅ 分类完成！',
