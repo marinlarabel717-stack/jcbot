@@ -124,28 +124,29 @@ class AccountClassifier:
         return metas
 
     # -------------- 命名与分组 --------------
-    def country_key(self, m: AccountMeta) -> Tuple[str, str]:
+    def country_key(self, m: AccountMeta, t_func=None) -> Tuple[str, str]:
         if m.country_code:
-            return (m.country_name_zh or "未知"), str(m.country_code)
-        return "未知", "000"
+            # Use the Chinese country name by default (already in the data)
+            return (m.country_name_zh or (t_func('split_unknown') if t_func else "未知")), str(m.country_code)
+        return (t_func('split_unknown') if t_func else "未知"), "000"
 
-    def detect_bundle_country_label(self, metas: List[AccountMeta]) -> Tuple[str, str]:
+    def detect_bundle_country_label(self, metas: List[AccountMeta], t_func=None) -> Tuple[str, str]:
         """用于按数量拆分时统一命名：若混合国家返回 ('混合','000')，全未知返回 ('未知','000')"""
         if not metas:
-            return "未知", "000"
+            return (t_func('split_unknown') if t_func else "未知"), "000"
         codes: Dict[str, str] = {}  # code -> name
         code_list: List[str] = []
         for m in metas:
-            name, code = self.country_key(m)
+            name, code = self.country_key(m, t_func)
             codes[code] = name
             code_list.append(code)
         uniq = set(code_list)
         if len(uniq) == 1:
             code = next(iter(uniq))
-            return codes.get(code, "未知"), code
+            return codes.get(code, (t_func('split_unknown') if t_func else "未知")), code
         if uniq == {"000"}:
-            return "未知", "000"
-        return "混合", "000"
+            return (t_func('split_unknown') if t_func else "未知"), "000"
+        return (t_func('split_mixed') if t_func else "混合"), "000"
 
     # -------------- 打包 --------------
     def _zip_bundle(self, items: List[AccountMeta], out_dir: str, display_zip: str) -> str:
@@ -226,11 +227,11 @@ class AccountClassifier:
         return dst
 
     # -------------- 对外：按国家拆分 --------------
-    def split_by_country(self, metas: List[AccountMeta], out_dir: str) -> List[Tuple[str, str, int]]:
+    def split_by_country(self, metas: List[AccountMeta], out_dir: str, t_func=None) -> List[Tuple[str, str, int]]:
         from collections import defaultdict
         groups: Dict[Tuple[str, str], List[AccountMeta]] = defaultdict(list)
         for m in metas:
-            groups[self.country_key(m)].append(m)
+            groups[self.country_key(m, t_func)].append(m)
 
         results: List[Tuple[str, str, int]] = []
         for (name, code), items in groups.items():
@@ -246,11 +247,12 @@ class AccountClassifier:
         metas: List[AccountMeta],
         sizes: Iterable[int],
         out_dir: str,
-        country_label: Optional[Tuple[str, str]] = None
+        country_label: Optional[Tuple[str, str]] = None,
+        t_func=None
     ) -> List[Tuple[str, str, int]]:
         """按给定 sizes 依次切分，命名 {国家}+{区号}+{数量}.zip，带序号后缀避免重名覆盖"""
         if country_label is None:
-            country_label = self.detect_bundle_country_label(metas)
+            country_label = self.detect_bundle_country_label(metas, t_func)
         name, code = country_label
 
         os.makedirs(out_dir, exist_ok=True)

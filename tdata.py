@@ -15139,38 +15139,38 @@ class EnhancedBot:
                 self.safe_send_message(update, msg)
             return
         
-        text = """
-📦 <b>账号文件分类</b>
+        text = f"""
+{t(user_id, 'split_title')}
 
-🎯 <b>功能说明</b>
-支持上传包含多个账号的ZIP文件（TData目录或Session+JSON文件），自动识别并分类打包：
+<b>{t(user_id, 'split_features')}</b>
+{t(user_id, 'split_features_desc')}
 
-📋 <b>支持的分类方式</b>
-1️⃣ <b>按国家区号拆分</b>
-   • 自动识别手机号→区号→国家
-   • 每个国家生成一个ZIP
-   • 命名：国家+区号+数量
+<b>{t(user_id, 'split_methods')}</b>
+<b>{t(user_id, 'split_method_country')}</b>
+   {t(user_id, 'split_method_country_desc1')}
+   {t(user_id, 'split_method_country_desc2')}
+   {t(user_id, 'split_method_country_desc3')}
 
-2️⃣ <b>按数量拆分</b>
-   • 支持单个或多个数量
-   • 混合国家命名"混合+000+数量
-   • 全未知命名"未知+000+数量
+<b>{t(user_id, 'split_method_quantity')}</b>
+   {t(user_id, 'split_method_quantity_desc1')}
+   {t(user_id, 'split_method_quantity_desc2')}
+   {t(user_id, 'split_method_quantity_desc3')}
 
-💡 <b>使用步骤</b>
-1. 点击下方按钮开始
-2. 上传包含账号的ZIP文件
-3. 选择拆分方式
-4. 等待处理并接收结果
+<b>{t(user_id, 'split_steps')}</b>
+{t(user_id, 'split_step1')}
+{t(user_id, 'split_step2')}
+{t(user_id, 'split_step3')}
+{t(user_id, 'split_step4')}
 
-⚠️ <b>注意事项</b>
-• 支持TData和Session两种格式
-• 文件大小限制100MB
-• 自动识别手机号和国家信息
+<b>{t(user_id, 'split_notes')}</b>
+{t(user_id, 'split_note1')}
+{t(user_id, 'split_note2')}
+{t(user_id, 'split_note3')}
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("📤 开始上传", callback_data="classify_start")],
-            [InlineKeyboardButton("◀️ 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(t(user_id, 'split_start_upload'), callback_data="classify_start")],
+            [InlineKeyboardButton(t(user_id, 'split_back_menu'), callback_data="back_to_main")]
         ])
         
         if query:
@@ -15201,20 +15201,20 @@ class EnhancedBot:
             
             # 使用统一方法渲染主菜单（包含"📦 账号分类"按钮）
             self.show_main_menu(update, user_id)
-    def _classify_buttons_split_type(self) -> InlineKeyboardMarkup:
+    def _classify_buttons_split_type(self, user_id: int) -> InlineKeyboardMarkup:
         """生成拆分方式选择按钮"""
         return InlineKeyboardMarkup([
-            [InlineKeyboardButton("🌍 按国家拆分", callback_data="classify_split_country")],
-            [InlineKeyboardButton("🔢 按数量拆分", callback_data="classify_split_quantity")],
-            [InlineKeyboardButton("❌ 取消", callback_data="back_to_main")]
+            [InlineKeyboardButton(t(user_id, 'split_btn_country'), callback_data="classify_split_country")],
+            [InlineKeyboardButton(t(user_id, 'split_btn_quantity'), callback_data="classify_split_quantity")],
+            [InlineKeyboardButton(t(user_id, 'split_btn_cancel'), callback_data="back_to_main")]
         ])
     
-    def _classify_buttons_qty_mode(self) -> InlineKeyboardMarkup:
+    def _classify_buttons_qty_mode(self, user_id: int) -> InlineKeyboardMarkup:
         """生成数量模式选择按钮"""
         return InlineKeyboardMarkup([
-            [InlineKeyboardButton("1️⃣ 单个数量", callback_data="classify_qty_single")],
-            [InlineKeyboardButton("🔢 多个数量", callback_data="classify_qty_multi")],
-            [InlineKeyboardButton("◀️ 返回", callback_data="classify_menu")]
+            [InlineKeyboardButton(t(user_id, 'split_btn_single'), callback_data="classify_qty_single")],
+            [InlineKeyboardButton(t(user_id, 'split_btn_multiple'), callback_data="classify_qty_multi")],
+            [InlineKeyboardButton(t(user_id, 'split_btn_back'), callback_data="classify_menu")]
         ])
     
     def handle_add_2fa_input(self, update: Update, context: CallbackContext, user_id: int, text: str):
@@ -16236,22 +16236,22 @@ class EnhancedBot:
             
             # 提示选择拆分方式
             text = f"""
-✅ <b>文件扫描完成！</b>
+<b>{t(user_id, 'split_scan_complete')}</b>
 
-📊 <b>统计信息</b>
-• 总账号数: {total_count} 个
-• 已识别: {recognized} 个
-• 未识别: {unknown} 个
-• 文件类型: {file_type.upper()}
+<b>{t(user_id, 'split_statistics')}</b>
+{t(user_id, 'split_total_accounts').format(count=total_count)}
+{t(user_id, 'split_identified').format(count=recognized)}
+{t(user_id, 'split_unidentified').format(count=unknown)}
+{t(user_id, 'split_file_type').format(type=file_type.upper())}
 
-🎯 <b>请选择拆分方式：</b>
+<b>{t(user_id, 'split_select_method')}</b>
             """
             
             try:
                 progress_msg.edit_text(
                     text,
                     parse_mode='HTML',
-                    reply_markup=self._classify_buttons_split_type()
+                    reply_markup=self._classify_buttons_split_type(user_id)
                 )
             except:
                 pass
@@ -16290,14 +16290,14 @@ class EnhancedBot:
         # 清空数据库状态
         self.db.save_user(user_id, "", "", "")
     
-    async def _classify_send_bundles(self, update, context, bundles, prefix=""):
+    async def _classify_send_bundles(self, update, context, bundles, user_id, prefix=""):
         """统一发送ZIP包并节流"""
         sent_count = 0
         for zip_path, display_name, count in bundles:
             if os.path.exists(zip_path):
                 try:
                     with open(zip_path, 'rb') as f:
-                        caption = f"📦 <b>{prefix}{display_name}</b>\n包含 {count} 个账号"
+                        caption = f"📦 <b>{prefix}{display_name}</b>\n{t(user_id, 'split_file_contains').format(count=count)}"
                         context.bot.send_document(
                             chat_id=update.effective_chat.id,
                             document=f,
@@ -16350,24 +16350,24 @@ class EnhancedBot:
             sizes = [qty] * (num_bundles - 1) + [total - (num_bundles - 1) * qty]
             
             out_dir = os.path.join(config.RESULTS_DIR, f"classify_{task_id}")
-            bundles = self.classifier.split_by_quantities(metas, sizes, out_dir)
+            bundles = self.classifier.split_by_quantities(metas, sizes, out_dir, t_func=lambda key: t(user_id, key))
             
             # 发送结果
             try:
-                progress_msg.edit_text("📤 <b>正在发送结果...</b>", parse_mode='HTML')
+                progress_msg.edit_text(f"<b>{t(user_id, 'split_sending_results')}</b>", parse_mode='HTML')
             except:
                 pass
             
-            sent = await self._classify_send_bundles(update, context, bundles)
+            sent = await self._classify_send_bundles(update, context, bundles, user_id)
             
             # 完成提示
             self.safe_send_message(
                 update,
-                f"✅ <b>分类完成！</b>\n\n"
-                f"• 总账号: {total} 个\n"
-                f"• 已发送: {sent} 个文件\n"
-                f"• 每包数量: {qty} 个\n\n"
-                f"如需再次使用，请点击 /start",
+                f"<b>{t(user_id, 'split_complete')}</b>\n\n"
+                f"{t(user_id, 'split_result_total').format(count=total)}\n"
+                f"{t(user_id, 'split_result_sent').format(count=sent)}\n"
+                f"• {t(user_id, 'split_method_quantity')}: {qty} {t(user_id, 'accounts_unit')}\n\n"
+                f"{t(user_id, 'split_use_again')}",
                 'HTML'
             )
             
@@ -16414,7 +16414,7 @@ class EnhancedBot:
                 pass
             
             out_dir = os.path.join(config.RESULTS_DIR, f"classify_{task_id}")
-            bundles = self.classifier.split_by_quantities(metas, quantities, out_dir)
+            bundles = self.classifier.split_by_quantities(metas, quantities, out_dir, t_func=lambda key: t(user_id, key))
             
             # 余数提示
             remainder = total - total_requested
@@ -16426,20 +16426,20 @@ class EnhancedBot:
             
             # 发送结果
             try:
-                progress_msg.edit_text("📤 <b>正在发送结果...</b>", parse_mode='HTML')
+                progress_msg.edit_text(f"<b>{t(user_id, 'split_sending_results')}</b>", parse_mode='HTML')
             except:
                 pass
             
-            sent = await self._classify_send_bundles(update, context, bundles)
+            sent = await self._classify_send_bundles(update, context, bundles, user_id)
             
             # 完成提示
             self.safe_send_message(
                 update,
-                f"✅ <b>分类完成！</b>\n\n"
-                f"• 总账号: {total} 个\n"
-                f"• 已发送: {sent} 个文件\n"
-                f"• 数量序列: {' '.join(map(str, quantities))}{remainder_msg}\n\n"
-                f"如需再次使用，请点击 /start",
+                f"<b>{t(user_id, 'split_complete')}</b>\n\n"
+                f"{t(user_id, 'split_result_total').format(count=total)}\n"
+                f"{t(user_id, 'split_result_sent').format(count=sent)}\n"
+                f"{t(user_id, 'split_result_sequence').format(sequence=' '.join(map(str, quantities)))}{remainder_msg}\n\n"
+                f"{t(user_id, 'split_use_again')}",
                 'HTML'
             )
             
@@ -16476,13 +16476,13 @@ class EnhancedBot:
             query.answer()
             try:
                 query.edit_message_text(
-                    "📤 <b>请上传账号文件</b>\n\n"
-                    "支持格式：\n"
-                    "• Session 文件的ZIP包 (.session)\n"
-                    "• Session+JSON 文件的ZIP包 (.session + .json)\n"
-                    "• TData 文件夹的ZIP包\n\n"
-                    "⚠️ 文件大小限制100MB\n"
-                    "⏰ 5分钟超时",
+                    f"<b>{t(user_id, 'split_upload_prompt')}</b>\n\n"
+                    f"{t(user_id, 'split_formats')}\n"
+                    f"{t(user_id, 'split_format1')}\n"
+                    f"{t(user_id, 'split_format2')}\n"
+                    f"{t(user_id, 'split_format3')}\n\n"
+                    f"{t(user_id, 'split_size_limit')}\n"
+                    f"{t(user_id, 'split_timeout')}",
                     parse_mode='HTML',
                     reply_markup=get_back_to_menu_keyboard()
                 )
@@ -16511,13 +16511,13 @@ class EnhancedBot:
             query.answer()
             try:
                 query.edit_message_text(
-                    "🔢 <b>选择数量模式：</b>\n\n"
-                    "1️⃣ <b>单个数量</b>\n"
-                    "   按固定数量切分，例如每包10个\n\n"
-                    "🔢 <b>多个数量</b>\n"
-                    "   按多个数量依次切分，例如 10 20 30",
+                    f"<b>{t(user_id, 'split_quantity_mode')}</b>\n\n"
+                    f"<b>{t(user_id, 'split_single_quantity')}</b>\n"
+                    f"   {t(user_id, 'split_single_quantity_desc')}\n\n"
+                    f"<b>{t(user_id, 'split_multiple_quantity')}</b>\n"
+                    f"   {t(user_id, 'split_multiple_quantity_desc')}",
                     parse_mode='HTML',
-                    reply_markup=self._classify_buttons_qty_mode()
+                    reply_markup=self._classify_buttons_qty_mode(user_id)
                 )
             except:
                 pass
@@ -16533,10 +16533,10 @@ class EnhancedBot:
             query.answer()
             try:
                 query.edit_message_text(
-                    "🔢 <b>请输入每包的账号数量</b>\n\n"
-                    "例如: <code>10</code>\n\n"
-                    "系统将按此数量切分，最后一包为余数\n"
-                    "⏰ 5分钟超时",
+                    f"<b>{t(user_id, 'split_enter_single')}</b>\n\n"
+                    f"{t(user_id, 'split_enter_single_example')}: <code>10</code>\n\n"
+                    f"{t(user_id, 'split_enter_single_desc')}\n"
+                    f"{t(user_id, 'split_enter_timeout')}",
                     parse_mode='HTML'
                 )
             except:
@@ -16553,11 +16553,11 @@ class EnhancedBot:
             query.answer()
             try:
                 query.edit_message_text(
-                    "🔢 <b>请输入多个数量（空格分隔）</b>\n\n"
-                    "例如: <code>10 20 30</code>\n\n"
-                    "系统将依次切分：第1包10个，第2包20个，第3包30个\n"
-                    "余数将提示但不打包\n"
-                    "⏰ 5分钟超时",
+                    f"<b>{t(user_id, 'split_enter_multiple')}</b>\n\n"
+                    f"{t(user_id, 'split_enter_multiple_example')}: <code>10 20 30</code>\n\n"
+                    f"{t(user_id, 'split_enter_multiple_desc')}\n"
+                    f"{t(user_id, 'split_enter_multiple_remainder')}\n"
+                    f"{t(user_id, 'split_enter_timeout')}",
                     parse_mode='HTML'
                 )
             except:
@@ -16585,24 +16585,24 @@ class EnhancedBot:
                 pass
             
             out_dir = os.path.join(config.RESULTS_DIR, f"classify_{task_id}")
-            bundles = self.classifier.split_by_country(metas, out_dir)
+            bundles = self.classifier.split_by_country(metas, out_dir, t_func=lambda key: t(user_id, key))
             
             # 发送结果
             try:
-                progress_msg.edit_text("📤 <b>正在发送结果...</b>", parse_mode='HTML')
+                progress_msg.edit_text(f"<b>{t(user_id, 'split_sending_results')}</b>", parse_mode='HTML')
             except:
                 pass
             
-            sent = await self._classify_send_bundles(update, context, bundles)
+            sent = await self._classify_send_bundles(update, context, bundles, user_id)
             
             # 完成提示
             self.safe_send_message(
                 update,
-                f"✅ <b>分类完成！</b>\n\n"
-                f"• 总账号: {len(metas)} 个\n"
-                f"• 已发送: {sent} 个文件\n"
-                f"• 分类方式: 按国家区号\n\n"
-                f"如需再次使用，请点击 /start",
+                f"<b>{t(user_id, 'split_complete')}</b>\n\n"
+                f"{t(user_id, 'split_result_total').format(count=len(metas))}\n"
+                f"{t(user_id, 'split_result_sent').format(count=sent)}\n"
+                f"{t(user_id, 'split_result_method_country')}\n\n"
+                f"{t(user_id, 'split_use_again')}",
                 'HTML'
             )
             
