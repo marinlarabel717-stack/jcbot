@@ -235,12 +235,41 @@ COUNTRY_CODE_TO_KEY = {
     1684: 'country_american_samoa',
     682: 'country_cook_islands',
     683: 'country_niue',
-    44: 'country_guernsey',  # Uses UK code
-    # 44: 'country_jersey',  # Uses UK code - duplicate
-    # 44: 'country_isle_of_man',  # Uses UK code - duplicate
     350: 'country_gibraltar',
-    # 358: 'country_aland_islands',  # Uses Finland code - duplicate
     383: 'country_kosovo',
+    
+    # Additional codes for more coverage
+    # Note: Some territories share codes with their parent countries
+    # Code 1 countries (North America)
+    # 1: 'country_united_states',  # Already defined above
+    # 1: 'country_canada',  # Shares code 1
+    1340: 'country_us_virgin_islands',
+    500: 'country_falkland_islands',
+    290: 'country_saint_helena',  # Also Ascension and Tristan da Cunha
+    # 290: 'country_ascension_island',  # Shares 290
+    # 290: 'country_tristan_da_cunha',  # Shares 290
+    508: 'country_saint_pierre_and_miquelon',
+    681: 'country_wallis_and_futuna',
+    # 590: 'country_guadeloupe',  # Already defined
+    # 590: 'country_saint_barthelemy',  # Shares 590
+    # 590: 'country_saint_martin',  # Shares 590
+    # 596: 'country_martinique',  # Already defined
+    # 262: 'country_reunion',  # Already defined
+    # 262: 'country_mayotte',  # Shares 262
+    # 594: 'country_french_guiana',  # Already defined
+    672: 'country_norfolk_island',  # Also Antarctica
+    # 672: 'country_antarctica',  # Shares 672
+    61891: 'country_christmas_island',  # Uses Australia +61
+    61891: 'country_cocos_islands',  # Uses Australia +61
+    690: 'country_tokelau',
+    64: 'country_pitcairn_islands',  # Uses satellite phone
+    # 7: 'country_kazakhstan',  # Shares code 7 with Russia
+    # Code 599 Caribbean Netherlands
+    # 599: 'country_bonaire',  # Shares 599
+    # 599: 'country_saba',  # Shares 599
+    # 599: 'country_sint_eustatius',  # Shares 599
+    246: 'country_diego_garcia',  # British Indian Ocean Territory
+    500: 'country_south_georgia',  # Shares with Falklands
 }
 
 @dataclass
