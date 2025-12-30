@@ -6856,14 +6856,17 @@ class TwoFactorManager:
         
         return results
     
-    def create_result_files(self, results: Dict, task_id: str, file_type: str = 'session', user_id: int = None) -> List[Tuple[str, str, str, int]]:
+    def create_result_files(self, results: Dict, task_id: str, file_type: str = 'session', user_id: int = None, operation: str = 'change') -> List[Tuple[str, str, str, int]]:
         """
         创建结果文件（修复版 - 分离 ZIP 和 TXT）
+        
+        Args:
+            operation: 操作类型，'change' 表示修改2FA，'remove' 表示删除2FA
         
         Returns:
             [(zip文件路径, txt文件路径, 状态名称, 数量), ...]
         """
-        logger.info(f"开始创建结果文件: task_id={task_id}, file_type={file_type}")
+        logger.info(f"开始创建结果文件: task_id={task_id}, file_type={file_type}, operation={operation}")
         result_files = []
         
         for status, items in results.items():
@@ -6950,11 +6953,19 @@ class TwoFactorManager:
                 
                 # 创建 ZIP 文件 - 新格式
                 logger.info(f"开始打包ZIP文件: {status}, {len(items)} 个文件")
-                # Use translation for ZIP filename
-                if status == "成功":
-                    zip_filename = t(user_id, 'zip_change_2fa_success').format(count=len(items)) + '.zip'
-                else:  # 失败
-                    zip_filename = t(user_id, 'zip_change_2fa_failed').format(count=len(items)) + '.zip'
+                # Use translation for ZIP filename based on operation
+                if operation == 'remove':
+                    # Delete 2FA operation
+                    if status == "成功":
+                        zip_filename = t(user_id, 'zip_delete_2fa_success').format(count=len(items)) + '.zip'
+                    else:  # 失败
+                        zip_filename = t(user_id, 'zip_delete_2fa_failed').format(count=len(items)) + '.zip'
+                else:
+                    # Change 2FA operation (default)
+                    if status == "成功":
+                        zip_filename = t(user_id, 'zip_change_2fa_success').format(count=len(items)) + '.zip'
+                    else:  # 失败
+                        zip_filename = t(user_id, 'zip_change_2fa_failed').format(count=len(items)) + '.zip'
                 zip_path = os.path.join(config.RESULTS_DIR, zip_filename)
                 
                 with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
@@ -6970,47 +6981,91 @@ class TwoFactorManager:
                 
                 # 创建 TXT 报告 - 新格式
                 logger.info(f"开始创建TXT报告: {status}")
-                # Use translation for TXT filename
-                if status == "成功":
-                    txt_filename = t(user_id, 'report_change_2fa_success').format(count=len(items))
-                else:  # 失败
-                    txt_filename = t(user_id, 'report_change_2fa_failed').format(count=len(items))
+                # Use translation for TXT filename based on operation
+                if operation == 'remove':
+                    # Delete 2FA operation
+                    if status == "成功":
+                        txt_filename = t(user_id, 'report_delete_2fa_success').format(count=len(items))
+                    else:  # 失败
+                        txt_filename = t(user_id, 'report_delete_2fa_failed').format(count=len(items))
+                else:
+                    # Change 2FA operation (default)
+                    if status == "成功":
+                        txt_filename = t(user_id, 'report_change_2fa_success').format(count=len(items))
+                    else:  # 失败
+                        txt_filename = t(user_id, 'report_change_2fa_failed').format(count=len(items))
                 txt_path = os.path.join(config.RESULTS_DIR, txt_filename)
                 
                 with open(txt_path, 'w', encoding='utf-8') as f:
-                    # Use translation for report title
-                    if status == "成功":
-                        f.write(t(user_id, 'report_2fa_title_success') + "\n")
-                    else:  # 失败
-                        f.write(t(user_id, 'report_2fa_title_failed') + "\n")
-                    f.write("=" * 50 + "\n\n")
-                    f.write(t(user_id, 'report_2fa_total').format(count=len(items)) + "\n\n")
-                    f.write(t(user_id, 'report_2fa_generated').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')) + "\n")
-                    
-                    f.write(t(user_id, 'report_2fa_detail_list') + "\n")
-                    f.write("-" * 50 + "\n\n")
-                    
-                    for idx, (file_path, file_name, info) in enumerate(items, 1):
-                        # 隐藏代理详细信息，保护用户隐私
-                        masked_info = Forget2FAManager.mask_proxy_in_string(info)
-                        f.write(f"{idx}. {t(user_id, 'report_2fa_account').format(account=file_name)}\n")
-                        f.write(f"   {t(user_id, 'report_2fa_details').format(info=masked_info)}\n")
-                        f.write(f"   {t(user_id, 'report_2fa_process_time').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST'))}\n\n")
-                    
-                    # 如果是失败列表，添加解决方案
-                    if status == "失败":
-                        f.write("\n" + "=" * 50 + "\n")
-                        f.write(t(user_id, 'report_2fa_failure_analysis') + "\n")
+                    # Use translation for report title based on operation
+                    if operation == 'remove':
+                        # Delete 2FA operation
+                        if status == "成功":
+                            f.write(t(user_id, 'report_delete_2fa_title_success') + "\n")
+                        else:  # 失败
+                            f.write(t(user_id, 'report_delete_2fa_title_failed') + "\n")
+                        f.write("=" * 50 + "\n\n")
+                        f.write(t(user_id, 'report_delete_2fa_total').format(count=len(items)) + "\n\n")
+                        f.write(t(user_id, 'report_delete_2fa_generated').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')) + "\n")
+                        
+                        f.write(t(user_id, 'report_delete_2fa_detail_list') + "\n")
                         f.write("-" * 50 + "\n\n")
-                        f.write(f"1. {t(user_id, 'report_2fa_reason_unauthorized')}\n")
-                        f.write(f"   - {t(user_id, 'report_2fa_reason_unauthorized_desc1')}\n")
-                        f.write(f"   - {t(user_id, 'report_2fa_reason_unauthorized_desc2')}\n\n")
-                        f.write(f"2. {t(user_id, 'report_2fa_reason_wrong_password')}\n")
-                        f.write(f"   - {t(user_id, 'report_2fa_reason_wrong_password_desc1')}\n")
-                        f.write(f"   - {t(user_id, 'report_2fa_reason_wrong_password_desc2')}\n\n")
-                        f.write(f"3. {t(user_id, 'report_2fa_reason_network')}\n")
-                        f.write(f"   - {t(user_id, 'report_2fa_reason_network_desc1')}\n")
-                        f.write(f"   - {t(user_id, 'report_2fa_reason_network_desc2')}\n\n")
+                        
+                        for idx, (file_path, file_name, info) in enumerate(items, 1):
+                            # 隐藏代理详细信息，保护用户隐私
+                            masked_info = Forget2FAManager.mask_proxy_in_string(info)
+                            f.write(f"{idx}. {t(user_id, 'report_delete_2fa_account').format(account=file_name)}\n")
+                            f.write(f"   {t(user_id, 'report_delete_2fa_details').format(info=masked_info)}\n")
+                            f.write(f"   {t(user_id, 'report_delete_2fa_process_time').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST'))}\n\n")
+                        
+                        # 如果是失败列表，添加解决方案
+                        if status == "失败":
+                            f.write("\n" + "=" * 50 + "\n")
+                            f.write(t(user_id, 'report_delete_2fa_failure_analysis') + "\n")
+                            f.write("-" * 50 + "\n\n")
+                            f.write(f"1. {t(user_id, 'report_delete_2fa_reason_unauthorized')}\n")
+                            f.write(f"   - {t(user_id, 'report_delete_2fa_reason_unauthorized_desc1')}\n")
+                            f.write(f"   - {t(user_id, 'report_delete_2fa_reason_unauthorized_desc2')}\n\n")
+                            f.write(f"2. {t(user_id, 'report_delete_2fa_reason_wrong_password')}\n")
+                            f.write(f"   - {t(user_id, 'report_delete_2fa_reason_wrong_password_desc1')}\n")
+                            f.write(f"   - {t(user_id, 'report_delete_2fa_reason_wrong_password_desc2')}\n\n")
+                            f.write(f"3. {t(user_id, 'report_delete_2fa_reason_network')}\n")
+                            f.write(f"   - {t(user_id, 'report_delete_2fa_reason_network_desc1')}\n")
+                            f.write(f"   - {t(user_id, 'report_delete_2fa_reason_network_desc2')}\n\n")
+                    else:
+                        # Change 2FA operation (default)
+                        if status == "成功":
+                            f.write(t(user_id, 'report_2fa_title_success') + "\n")
+                        else:  # 失败
+                            f.write(t(user_id, 'report_2fa_title_failed') + "\n")
+                        f.write("=" * 50 + "\n\n")
+                        f.write(t(user_id, 'report_2fa_total').format(count=len(items)) + "\n\n")
+                        f.write(t(user_id, 'report_2fa_generated').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')) + "\n")
+                        
+                        f.write(t(user_id, 'report_2fa_detail_list') + "\n")
+                        f.write("-" * 50 + "\n\n")
+                        
+                        for idx, (file_path, file_name, info) in enumerate(items, 1):
+                            # 隐藏代理详细信息，保护用户隐私
+                            masked_info = Forget2FAManager.mask_proxy_in_string(info)
+                            f.write(f"{idx}. {t(user_id, 'report_2fa_account').format(account=file_name)}\n")
+                            f.write(f"   {t(user_id, 'report_2fa_details').format(info=masked_info)}\n")
+                            f.write(f"   {t(user_id, 'report_2fa_process_time').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST'))}\n\n")
+                        
+                        # 如果是失败列表，添加解决方案
+                        if status == "失败":
+                            f.write("\n" + "=" * 50 + "\n")
+                            f.write(t(user_id, 'report_2fa_failure_analysis') + "\n")
+                            f.write("-" * 50 + "\n\n")
+                            f.write(f"1. {t(user_id, 'report_2fa_reason_unauthorized')}\n")
+                            f.write(f"   - {t(user_id, 'report_2fa_reason_unauthorized_desc1')}\n")
+                            f.write(f"   - {t(user_id, 'report_2fa_reason_unauthorized_desc2')}\n\n")
+                            f.write(f"2. {t(user_id, 'report_2fa_reason_wrong_password')}\n")
+                            f.write(f"   - {t(user_id, 'report_2fa_reason_wrong_password_desc1')}\n")
+                            f.write(f"   - {t(user_id, 'report_2fa_reason_wrong_password_desc2')}\n\n")
+                            f.write(f"3. {t(user_id, 'report_2fa_reason_network')}\n")
+                            f.write(f"   - {t(user_id, 'report_2fa_reason_network_desc1')}\n")
+                            f.write(f"   - {t(user_id, 'report_2fa_reason_network_desc2')}\n\n")
                 
                 logger.info(f"✅ TXT报告创建成功: {txt_filename}")
                 print(f"✅ 创建TXT报告: {txt_filename}")
@@ -12068,12 +12123,12 @@ class EnhancedBot:
                         progress_msg = task_info['progress_msg']
                         total_files = len(task_info['files'])
                         progress_msg.edit_text(
-                            f"📁 <b>已找到 {total_files} 个账号文件</b>\n\n"
-                            f"🔐 <b>请输入当前的2FA密码：</b>\n\n"
-                            f"• 输入您当前使用的2FA密码\n"
-                            f"• 系统将验证密码并删除2FA\n"
-                            f"• 请在5分钟内发送密码...\n\n"
-                            f"💡 如需取消，请点击 /start 返回主菜单",
+                            f"{t(user_id, 'delete_2fa_found_files').format(count=total_files)}\n\n"
+                            f"{t(user_id, 'delete_2fa_enter_password')}\n\n"
+                            f"{t(user_id, 'delete_2fa_enter_desc1')}\n"
+                            f"{t(user_id, 'delete_2fa_enter_desc2')}\n"
+                            f"{t(user_id, 'delete_2fa_enter_desc3')}\n\n"
+                            f"{t(user_id, 'delete_2fa_cancel_hint')}",
                             parse_mode='HTML'
                         )
                         # 设置用户状态为等待输入密码
@@ -12623,36 +12678,36 @@ class EnhancedBot:
             self.safe_edit_message(query, "❌ 删除2FA功能不可用\n\n原因: Telethon库未安装")
             return
         
-        text = """
-❌ <b>批量删除2FA密码功能</b>
+        text = f"""
+{t(user_id, 'delete_2fa_title')}
 
-<b>✨ 核心功能</b>
-• 🔍 <b>密码自动识别</b>
-  - TData格式：自动识别 2fa.txt、twofa.txt、password.txt
-  - Session格式：自动识别 JSON 中的密码字段（支持 twofa、twoFA、2fa、password 等）
-  - 智能备选：识别失败时使用手动输入的备选密码
+<b>{t(user_id, 'delete_2fa_core_features')}</b>
+• <b>{t(user_id, 'delete_2fa_auto_detect')}</b>
+  - {t(user_id, 'delete_2fa_tdata_detect')}
+  - {t(user_id, 'delete_2fa_session_detect')}
+  - {t(user_id, 'delete_2fa_smart_fallback')}
 
-• ✏️ <b>交互式密码输入</b>
-  - 上传文件后可选择自动识别或手动输入密码
-  - 自动识别：从文件中读取当前密码
-  - 手动输入：用户输入当前的2FA密码
-  - 5分钟输入超时保护
+• <b>{t(user_id, 'delete_2fa_interactive_input')}</b>
+  - {t(user_id, 'delete_2fa_input_choice')}
+  - {t(user_id, 'delete_2fa_auto_read')}
+  - {t(user_id, 'delete_2fa_manual_input')}
+  - {t(user_id, 'delete_2fa_timeout')}
 
-• 🔄 <b>自动更新密码文件</b>
-  - Session格式：统一使用 twofa 字段并清空，删除其他密码字段
-  - TData格式：自动删除或清空2fa.txt等密码文件
-  - 删除成功后文件立即同步更新
-  - 无需手动编辑配置文件
+• <b>{t(user_id, 'delete_2fa_auto_update')}</b>
+  - {t(user_id, 'delete_2fa_session_update')}
+  - {t(user_id, 'delete_2fa_tdata_update')}
+  - {t(user_id, 'delete_2fa_sync_update')}
+  - {t(user_id, 'delete_2fa_no_manual_edit')}
 
-<b>⚠️ 注意事项</b>
-• 删除2FA后账号将不再需要二次验证密码
-• 系统会首先尝试自动识别现有密码
-• 如果自动识别失败，您可以手动输入当前密码
-• 请在5分钟内完成操作，否则任务将自动取消
-• 请确保账号已登录且session文件有效
-• 删除成功后密码文件将自动更新并包含在结果ZIP中
+<b>{t(user_id, 'delete_2fa_notes')}</b>
+• {t(user_id, 'delete_2fa_note1')}
+• {t(user_id, 'delete_2fa_note2')}
+• {t(user_id, 'delete_2fa_note3')}
+• {t(user_id, 'delete_2fa_note4')}
+• {t(user_id, 'delete_2fa_note5')}
+• {t(user_id, 'delete_2fa_note6')}
 
-🚀请上传您的ZIP文件...
+{t(user_id, 'delete_2fa_upload_prompt')}
         """
         
         self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
@@ -15705,7 +15760,7 @@ class EnhancedBot:
         # 发送进度消息
         progress_msg = self.safe_send_message(
             update,
-            "📥 <b>正在处理您的文件...</b>",
+            f"<b>{t(user_id, 'delete_2fa_processing_file')}</b>",
             'HTML'
         )
         
@@ -15728,7 +15783,7 @@ class EnhancedBot:
             if not files:
                 try:
                     progress_msg.edit_text(
-                        "❌ <b>未找到有效文件</b>\n\n请确保ZIP包含Session或TData格式的账号文件",
+                        f"<b>{t(user_id, 'delete_2fa_no_valid_files')}</b>\n\n{t(user_id, 'delete_2fa_ensure_format')}",
                         parse_mode='HTML'
                     )
                 except:
@@ -15751,24 +15806,24 @@ class EnhancedBot:
             
             # 请求用户选择密码输入方式
             keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton("🔍 自动识别密码", callback_data="remove_2fa_auto")],
-                [InlineKeyboardButton("✏️ 手动输入密码", callback_data="remove_2fa_manual")],
-                [InlineKeyboardButton("❌ 取消", callback_data="back_to_main")]
+                [InlineKeyboardButton(f"🔍 {t(user_id, 'delete_2fa_btn_auto')}", callback_data="remove_2fa_auto")],
+                [InlineKeyboardButton(f"✏️ {t(user_id, 'delete_2fa_btn_manual')}", callback_data="remove_2fa_manual")],
+                [InlineKeyboardButton(f"❌ {t(user_id, 'delete_2fa_btn_cancel')}", callback_data="back_to_main")]
             ])
             
             try:
                 progress_msg.edit_text(
-                    f"📁 <b>已找到 {total_files} 个账号文件</b>\n\n"
-                    f"📊 文件类型: {file_type.upper()}\n\n"
-                    f"🔐 <b>请选择密码输入方式：</b>\n\n"
-                    f"<b>🔍 自动识别密码</b>\n"
-                    f"• 系统自动从文件中读取当前2FA密码\n"
-                    f"• TData格式：识别 2fa.txt、twofa.txt、password.txt\n"
-                    f"• Session格式：识别 JSON 中的密码字段\n\n"
-                    f"<b>✏️ 手动输入密码</b>\n"
-                    f"• 您手动输入当前的2FA密码\n"
-                    f"• 适用于自动识别失败的情况\n\n"
-                    f"⏰ 请在5分钟内选择...",
+                    f"{t(user_id, 'delete_2fa_found_files').format(count=total_files)}\n\n"
+                    f"{t(user_id, 'delete_2fa_file_type').format(type=file_type.upper())}\n\n"
+                    f"{t(user_id, 'delete_2fa_select_method')}\n\n"
+                    f"<b>{t(user_id, 'delete_2fa_auto_detect_title')}</b>\n"
+                    f"{t(user_id, 'delete_2fa_auto_detect_desc1')}\n"
+                    f"{t(user_id, 'delete_2fa_auto_detect_desc2')}\n"
+                    f"{t(user_id, 'delete_2fa_auto_detect_desc3')}\n\n"
+                    f"<b>{t(user_id, 'delete_2fa_manual_title')}</b>\n"
+                    f"{t(user_id, 'delete_2fa_manual_desc1')}\n"
+                    f"{t(user_id, 'delete_2fa_manual_desc2')}\n\n"
+                    f"{t(user_id, 'delete_2fa_select_timeout')}",
                     parse_mode='HTML',
                     reply_markup=keyboard
                 )
@@ -15821,9 +15876,9 @@ class EnhancedBot:
             # 更新消息，开始处理
             try:
                 progress_msg.edit_text(
-                    f"🗑️ <b>开始删除2FA密码...</b>\n\n"
-                    f"📊 找到 {total_files} 个文件\n"
-                    f"⏳ 正在处理，请稍候...",
+                    f"{t(user_id, 'delete_2fa_starting')}\n\n"
+                    f"{t(user_id, 'delete_2fa_found_count').format(count=total_files)}\n"
+                    f"{t(user_id, 'delete_2fa_please_wait')}",
                     parse_mode='HTML'
                 )
             except:
@@ -15842,17 +15897,17 @@ class EnhancedBot:
                         logger.info(f"进度回调: {processed}/{total}, 成功={success_count}, 失败={fail_count}")
                     
                     progress_text = f"""
-🗑️ <b>删除2FA密码进行中...</b>
+{t(user_id, 'delete_2fa_in_progress')}
 
-📊 <b>当前进度</b>
-• 已处理: {processed}/{total}
-• 速度: {speed:.1f} 个/秒
-• 用时: {int(elapsed)} 秒
+<b>{t(user_id, 'delete_2fa_current_progress')}</b>
+{t(user_id, 'delete_2fa_processed').format(done=processed, total=total)}
+{t(user_id, 'delete_2fa_speed').format(speed=f"{speed:.1f}")}
+{t(user_id, 'delete_2fa_elapsed').format(time=int(elapsed))}
 
-✅ <b>删除成功</b>: {success_count}
-❌ <b>删除失败</b>: {fail_count}
+{t(user_id, 'delete_2fa_success_count').format(count=success_count)}
+{t(user_id, 'delete_2fa_failed_count').format(count=fail_count)}
 
-⏱️ 预计剩余: {int((total - processed) / speed) if speed > 0 else 0} 秒
+{t(user_id, 'delete_2fa_remaining').format(time=int((total - processed) / speed) if speed > 0 else 0)}
                     """
                     
                     try:
@@ -15876,7 +15931,7 @@ class EnhancedBot:
             
             # 创建结果文件
             logger.info("开始生成结果文件...")
-            result_files = self.two_factor_manager.create_result_files(results, task_id, file_type)
+            result_files = self.two_factor_manager.create_result_files(results, task_id, file_type, user_id, operation='remove')
             logger.info(f"结果文件生成完成，共 {len(result_files)} 个文件")
             
             elapsed_time = time.time() - start_time
@@ -15886,16 +15941,16 @@ class EnhancedBot:
             fail_count = len(results["失败"])
             
             summary_text = f"""
-🎉 <b>2FA密码删除完成！</b>
+{t(user_id, 'delete_2fa_complete')}
 
-📊 <b>删除统计</b>
-• 总数: {total_files}
-• ✅ 成功: {success_count}
-• ❌ 失败: {fail_count}
-• ⏱️ 用时: {int(elapsed_time)} 秒
-• 🚀 速度: {total_files/elapsed_time:.1f} 个/秒
+<b>{t(user_id, 'delete_2fa_stats')}</b>
+{t(user_id, 'delete_2fa_total').format(count=total_files)}
+{t(user_id, 'delete_2fa_success').format(count=success_count)}
+{t(user_id, 'delete_2fa_failed').format(count=fail_count)}
+{t(user_id, 'delete_2fa_duration').format(time=int(elapsed_time))}
+{t(user_id, 'delete_2fa_speed_stat').format(speed=f"{total_files/elapsed_time:.1f}")}
 
-📦 正在发送结果文件...
+{t(user_id, 'delete_2fa_sending_results')}
             """
             
             try:
@@ -15916,7 +15971,11 @@ class EnhancedBot:
                         for attempt in range(max_retries):
                             try:
                                 with open(zip_path, 'rb') as f:
-                                    caption = f"📦 <b>{status}</b> ({count}个账号)\n\n⏰ 处理时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}"
+                                    # Determine caption based on status
+                                    if status == "成功":
+                                        caption = f"{t(user_id, 'file_desc_delete_2fa_success').format(count=count)}\n\n{t(user_id, 'delete_2fa_process_time').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST'))}"
+                                    else:
+                                        caption = f"{t(user_id, 'file_desc_delete_2fa_failed').format(count=count)}\n\n{t(user_id, 'delete_2fa_process_time').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST'))}"
                                     context.bot.send_document(
                                         chat_id=update.effective_chat.id,
                                         document=f,
@@ -15949,7 +16008,11 @@ class EnhancedBot:
                         for attempt in range(max_retries):
                             try:
                                 with open(txt_path, 'rb') as f:
-                                    caption = f"📋 <b>{status} 详细报告</b>\n\n包含 {count} 个账号的详细信息"
+                                    # Determine caption based on status
+                                    if status == "成功":
+                                        caption = f"{t(user_id, 'report_desc_delete_2fa_success')}\n\n{t(user_id, 'report_delete_2fa_contains').format(count=count)}"
+                                    else:
+                                        caption = f"{t(user_id, 'report_desc_delete_2fa_failed')}\n\n{t(user_id, 'report_delete_2fa_contains').format(count=count)}"
                                     context.bot.send_document(
                                         chat_id=update.effective_chat.id,
                                         document=f,
@@ -15983,17 +16046,17 @@ class EnhancedBot:
             
             # 最终汇总消息
             final_text = f"""
-✅ <b>删除2FA任务完成！</b>
+{t(user_id, 'delete_2fa_task_complete')}
 
-📊 <b>最终统计</b>
-• 成功: {success_count} 个
-• 失败: {fail_count} 个
-• 已发送: {sent_count} 个文件
+<b>{t(user_id, 'delete_2fa_final_stats')}</b>
+{t(user_id, 'delete_2fa_final_success').format(count=success_count)}
+{t(user_id, 'delete_2fa_final_failed').format(count=fail_count)}
+{t(user_id, 'delete_2fa_final_sent').format(count=sent_count)}
 
-💡 <b>提示</b>
-• 成功删除的账号不再需要2FA密码
-• 文件中的密码配置已自动清空
-• 请妥善保管结果文件
+<b>{t(user_id, 'delete_2fa_tips')}</b>
+{t(user_id, 'delete_2fa_tip1')}
+{t(user_id, 'delete_2fa_tip2')}
+{t(user_id, 'delete_2fa_tip3')}
             """
             
             try:
@@ -16010,13 +16073,13 @@ class EnhancedBot:
             try:
                 # 尝试发送错误信息给用户
                 progress_msg.edit_text(
-                    f"❌ <b>删除2FA失败</b>\n\n错误: {str(e)}",
+                    f"<b>{t(user_id, 'delete_2fa_failed_msg')}</b>\n\n{t(user_id, 'delete_2fa_error_msg').format(error=str(e))}",
                     parse_mode='HTML'
                 )
             except:
                 # 如果更新消息失败，尝试发送新消息
                 try:
-                    self.safe_send_message(update, f"❌ 删除2FA失败: {str(e)}")
+                    self.safe_send_message(update, f"{t(user_id, 'delete_2fa_failed_msg')}: {str(e)}")
                 except:
                     pass
         
