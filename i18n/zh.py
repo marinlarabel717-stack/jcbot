@@ -56,6 +56,7 @@ TEXTS = {
     
     # 返回按钮
     'btn_back_to_menu': '返回主菜单',
+    'btn_back': '◀️ 返回',
     'btn_cancel': '❌ 取消',
     'btn_confirm': '✅ 确认',
     
@@ -579,4 +580,32 @@ TEXTS = {
     'report_success_list_creator': '创建者账号: {account}',
     'report_success_list_creator_username': '创建者用户名: {username}',
     'report_success_list_admin_username': '管理员用户名: {admin}',
+    
+    # 13. 报告TXT模板 - 失败列表
+    'report_failure_list_title': '❌ 失败详情列表',
+    'report_failure_list_header': '批量创建 - 失败列表（详细原因）',
+    'report_failure_list_generated': '生成时间: {time}',
+    'report_failure_list_count': '失败数量: {count}',
+    'report_failure_list_group_name': '群昵称: {name}',
+    'report_failure_list_channel_name': '频道昵称: {name}',
+    'report_failure_list_group_desc': '群简介: {desc}',
+    'report_failure_list_channel_desc': '频道简介: {desc}',
+    'report_failure_list_creator': '创建者账号: {account}',
+    'report_failure_list_reason': '失败原因: {reason}',
+    
+    # 批量创建 - 账号冻结
+    'batch_create_account_frozen_skipped': '账号已冻结，跳过创建',
+    
+    # 批量创建 - 错误信息
+    'batch_create_feature_disabled': '❌ 批量创建功能未启用',
+    'batch_create_session_expired': '❌ 会话已过期',
+    'batch_create_session_expired_restart': '❌ 会话已过期，请重新开始',
+    'batch_create_count_range_error': '❌ 数量必须在1-10之间，请重新输入',
+    'batch_create_failed': '❌ 创建失败',
+    'batch_create_error': '错误: {error}',
+    'error_upload_zip_only': '❌ 请上传ZIP格式的压缩包',
+    
+    # 批量创建 - 进度信息
+    'batch_create_progress_completed': '已完成 {count} 个',
+    'batch_create_status_completed': '状态: 已完成 {count} 个',
 }

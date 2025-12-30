@@ -10160,7 +10160,8 @@ class BatchCreatorService:
                         desc=r.description or t(user_id, 'report_batch_create_desc_none')
                     ))
                     lines.append(t(user_id, 'report_batch_create_creator_account').format(account=r.phone))
-                    lines.append(f"失败原因: {r.error}\n")
+                    lines.append(t(user_id, 'report_failure_list_reason').format(reason=r.error))
+                    lines.append("")
         
         lines.append("=" * 60)
         return "\n".join(lines)
@@ -13151,7 +13152,7 @@ class EnhancedBot:
         
         # 其他功能需要ZIP格式
         if not document.file_name.lower().endswith('.zip'):
-            self.safe_send_message(update, "❌ 请上传ZIP格式的压缩包")
+            self.safe_send_message(update, t(user_id, 'error_upload_zip_only'))
             return
 
         is_member, _, _ = self.db.check_membership(user_id)
@@ -20189,7 +20190,7 @@ class EnhancedBot:
         
         # 检查功能是否启用
         if not config.ENABLE_BATCH_CREATE or self.batch_creator is None:
-            self.safe_edit_message(query, "❌ 批量创建功能未启用")
+            self.safe_edit_message(query, t(user_id, 'batch_create_feature_disabled'))
             return
         
         # 检查会员权限
@@ -20200,7 +20201,7 @@ class EnhancedBot:
                 "⚠️ 批量创建功能需要会员权限\n\n请先开通会员",
                 reply_markup=InlineKeyboardMarkup([[
                     InlineKeyboardButton("💳 开通会员", callback_data="vip_menu"),
-                    InlineKeyboardButton("◀️ 返回", callback_data="back_to_main")
+                    InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="back_to_main")
                 ]])
             )
             return
@@ -20234,7 +20235,7 @@ class EnhancedBot:
 """
         
         keyboard = InlineKeyboardMarkup([[
-            InlineKeyboardButton("◀️ 返回", callback_data="back_to_main")
+            InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="back_to_main")
         ]])
         
         self.safe_edit_message(query, text, parse_mode='HTML', reply_markup=keyboard)
@@ -20338,7 +20339,7 @@ game_lovers_group</code>
     def handle_batch_create_count_input(self, update: Update, context: CallbackContext, user_id: int, text: str):
         """处理每账号创建数量输入"""
         if user_id not in self.pending_batch_create:
-            self.safe_send_message(update, "❌ 会话已过期，请重新开始")
+            self.safe_send_message(update, t(user_id, 'batch_create_session_expired_restart'))
             return
         
         task = self.pending_batch_create[user_id]
@@ -20346,7 +20347,7 @@ game_lovers_group</code>
         try:
             count = int(text.strip())
             if count < 1 or count > 10:
-                self.safe_send_message(update, "❌ 数量必须在1-10之间，请重新输入")
+                self.safe_send_message(update, t(user_id, 'batch_create_count_range_error'))
                 return
             
             task['count_per_account'] = count
@@ -20680,7 +20681,7 @@ admin3</code>
         query.answer("⏳ 开始创建...")
         
         if user_id not in self.pending_batch_create:
-            self.safe_edit_message(query, "❌ 会话已过期")
+            self.safe_edit_message(query, t(user_id, 'batch_create_session_expired'))
             return
         
         task = self.pending_batch_create[user_id]
@@ -20695,7 +20696,7 @@ admin3</code>
                 traceback.print_exc()
                 context.bot.send_message(
                     chat_id=user_id,
-                    text=f"❌ <b>创建失败</b>\n\n错误: {str(e)}",
+                    text=f"{t(user_id, 'batch_create_failed')}\n\n{t(user_id, 'batch_create_error').format(error=str(e))}",
                     parse_mode='HTML'
                 )
             finally:
@@ -20766,7 +20767,7 @@ admin3</code>
                     context.bot.edit_message_text(
                         chat_id=user_id,
                         message_id=progress_msg.message_id,
-                        text=f"{t(user_id, 'batch_create_starting')}\n\n{t(user_id, 'batch_create_progress').format(done=current, total=total, percent=progress)}\n状态: {message}",
+                        text=f"{t(user_id, 'batch_create_starting')}\n\n{t(user_id, 'batch_create_progress').format(done=current, total=total, percent=progress)}\n{message}",
                         parse_mode='HTML',
                         reply_markup=keyboard
                     )
@@ -20825,7 +20826,30 @@ admin3</code>
                     # 异步安全地添加到总结果并更新进度
                     async with results_lock:
                         results.append(result)
-                        progress_callback(len(results), total_to_create, f"已完成 {len(results)} 个")
+                        progress_callback(len(results), total_to_create, t(user_id, 'batch_create_status_completed').format(count=len(results)))
+                    
+                    # 检查是否是账号冻结错误，如果是则立即停止该账号的后续创建
+                    if result.status == 'failed' and result.error and 'FROZEN_METHOD_INVALID' in result.error:
+                        logger.warning(f"🛑 账号 {account.phone} 已冻结 (FROZEN_METHOD_INVALID)，停止该账号的后续创建")
+                        print(f"🛑 账号 {account.phone} 已冻结 (FROZEN_METHOD_INVALID)，停止该账号的后续创建", flush=True)
+                        # 标记剩余任务为跳过
+                        for k in range(j + 1, count_per_account):
+                            skipped_idx = start_idx + k
+                            if skipped_idx >= total_to_create:
+                                break
+                            skipped_result = BatchCreationResult(
+                                account_name=account.file_name,
+                                phone=account.phone or "未知",
+                                creation_type=batch_config.creation_type,
+                                name="",
+                                status='skipped',
+                                error=t(user_id, 'batch_create_account_frozen_skipped')
+                            )
+                            account_results.append(skipped_result)
+                            async with results_lock:
+                                results.append(skipped_result)
+                                progress_callback(len(results), total_to_create, t(user_id, 'batch_create_status_completed').format(count=len(results)))
+                        break
                     
                     # 在该账号的每次创建之后添加配置的延迟（避免触发Telegram频率限制）
                     # 注意：只有不是最后一次创建时才延迟
@@ -20998,17 +21022,22 @@ admin3</code>
                 
                 with open(failure_path, 'w', encoding='utf-8') as f:
                     f.write("=" * 80 + "\n")
-                    f.write("批量创建 - 失败列表（详细原因）\n")
+                    f.write(t(user_id, 'report_failure_list_header') + "\n")
                     f.write("=" * 80 + "\n")
-                    f.write(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n")
-                    f.write(f"失败数量: {len(failed_results)}\n\n")
+                    f.write(t(user_id, 'report_failure_list_generated').format(
+                        time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')
+                    ) + "\n")
+                    f.write(t(user_id, 'report_failure_list_count').format(count=len(failed_results)) + "\n\n")
                     
                     for r in failed_results:
                         f.write("-" * 80 + "\n")
-                        f.write(f"群昵称: {r.name}\n")
-                        f.write(f"群简介: {r.description or '无'}\n")
-                        f.write(f"创建者账号: {r.phone}\n")
-                        f.write(f"失败原因: {r.error}\n")
+                        name_key = 'report_failure_list_group_name' if r.creation_type == 'group' else 'report_failure_list_channel_name'
+                        desc_key = 'report_failure_list_group_desc' if r.creation_type == 'group' else 'report_failure_list_channel_desc'
+                        
+                        f.write(t(user_id, name_key).format(name=r.name) + "\n")
+                        f.write(t(user_id, desc_key).format(desc=r.description or t(user_id, 'report_batch_create_desc_none')) + "\n")
+                        f.write(t(user_id, 'report_failure_list_creator').format(account=r.phone) + "\n")
+                        f.write(t(user_id, 'report_failure_list_reason').format(reason=r.error) + "\n")
                         f.write("\n")
                     
                     f.write("=" * 80 + "\n")
@@ -21018,7 +21047,7 @@ admin3</code>
                         chat_id=user_id,
                         document=f,
                         filename=failure_filename,
-                        caption="❌ 失败详情列表"
+                        caption=t(user_id, 'report_failure_list_title')
                     )
         
         finally:

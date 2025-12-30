@@ -56,6 +56,7 @@ TEXTS = {
     
     # Back button
     'btn_back_to_menu': 'Back to Menu',
+    'btn_back': '◀️ Back',
     'btn_cancel': '❌ Cancel',
     'btn_confirm': '✅ Confirm',
     
@@ -579,4 +580,32 @@ TEXTS = {
     'report_success_list_creator': 'Creator account: {account}',
     'report_success_list_creator_username': 'Creator username: {username}',
     'report_success_list_admin_username': 'Admin username: {admin}',
+    
+    # 13. Report TXT Template - Failure List
+    'report_failure_list_title': '❌ Failure Details List',
+    'report_failure_list_header': 'Batch Create - Failure List (Detailed Reasons)',
+    'report_failure_list_generated': 'Generated: {time}',
+    'report_failure_list_count': 'Failed count: {count}',
+    'report_failure_list_group_name': 'Group name: {name}',
+    'report_failure_list_channel_name': 'Channel name: {name}',
+    'report_failure_list_group_desc': 'Group description: {desc}',
+    'report_failure_list_channel_desc': 'Channel description: {desc}',
+    'report_failure_list_creator': 'Creator account: {account}',
+    'report_failure_list_reason': 'Failure reason: {reason}',
+    
+    # Batch Create - Account Frozen
+    'batch_create_account_frozen_skipped': 'Account frozen, creation skipped',
+    
+    # Batch Create - Error Messages
+    'batch_create_feature_disabled': '❌ Batch create feature is disabled',
+    'batch_create_session_expired': '❌ Session expired',
+    'batch_create_session_expired_restart': '❌ Session expired, please restart',
+    'batch_create_count_range_error': '❌ Count must be between 1-10, please re-enter',
+    'batch_create_failed': '❌ Creation failed',
+    'batch_create_error': 'Error: {error}',
+    'error_upload_zip_only': '❌ Please upload ZIP format archive',
+    
+    # Batch Create - Progress Messages
+    'batch_create_progress_completed': 'Completed {count}',
+    'batch_create_status_completed': 'Status: Completed {count}',
 }
