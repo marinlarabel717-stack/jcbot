@@ -5573,9 +5573,19 @@ class FormatConverter:
                     else:  # 转换错误 - 打包失败的文件
                         if conversion_type == "tdata_to_session":
                             if os.path.isdir(file_path):
-                                dest_path = os.path.join(status_temp_dir, file_name)
-                                shutil.copytree(file_path, dest_path)
-                                print(f"📂 复制失败的TData: {file_name}")
+                                # 检查是否是 tdata 目录，如果是，复制父目录以保留 phone/tdata/D877... 结构
+                                if os.path.basename(file_path).lower() == 'tdata':
+                                    # file_path 是 tdata 目录，复制其父目录（手机号目录）
+                                    phone_dir = os.path.dirname(file_path)
+                                    phone_folder_name = os.path.basename(phone_dir)
+                                    dest_path = os.path.join(status_temp_dir, phone_folder_name)
+                                    shutil.copytree(phone_dir, dest_path)
+                                    print(f"📂 复制失败的TData（保留结构）: {phone_folder_name}/tdata/")
+                                else:
+                                    # 如果不是标准 tdata 结构，按原样复制
+                                    dest_path = os.path.join(status_temp_dir, file_name)
+                                    shutil.copytree(file_path, dest_path)
+                                    print(f"📂 复制失败的TData: {file_name}")
                         else:
                             if os.path.exists(file_path):
                                 dest_path = os.path.join(status_temp_dir, file_name)
@@ -12896,7 +12906,7 @@ class EnhancedBot:
                 allowed_states.append(row[0])
             
             if not row or row[0] not in allowed_states:
-                self.safe_send_message(update, "❌ 请先点击相应的功能按钮")
+                self.safe_send_message(update, f"❌ {t(user_id, 'error_click_function_button')}")
                 return
 
             user_status = row[0]
@@ -13756,7 +13766,7 @@ class EnhancedBot:
             if not files:
                 try:
                     progress_msg.edit_text(
-                        "❌ <b>未找到有效文件</b>\n\n请确保ZIP包含正确的格式",
+                        f"❌ <b>{t(user_id, 'error_no_valid_files')}</b>\n\n{t(user_id, 'error_ensure_correct_format')}",
                         parse_mode='HTML'
                     )
                 except:

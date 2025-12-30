@@ -272,4 +272,7 @@ TEXTS = {
     'error_connection_timeout': '连接超时',
     'error_network_failed': '网络连接失败',
     'error_conversion_failed': '转换失败',
+    'error_no_valid_files': '未找到有效文件',
+    'error_ensure_correct_format': '请确保ZIP包含正确的格式',
+    'error_click_function_button': '请先点击相应的功能按钮',
 }
