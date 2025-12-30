@@ -56,6 +56,7 @@ TEXTS = {
     
     # 返回按钮
     'btn_back_to_menu': '返回主菜单',
+    'btn_back': '◀️ 返回',
     'btn_cancel': '❌ 取消',
     'btn_confirm': '✅ 确认',
     

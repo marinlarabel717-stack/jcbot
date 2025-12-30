@@ -56,6 +56,7 @@ TEXTS = {
     
     # Back button
     'btn_back_to_menu': 'Back to Menu',
+    'btn_back': '◀️ Back',
     'btn_cancel': '❌ Cancel',
     'btn_confirm': '✅ Confirm',
     

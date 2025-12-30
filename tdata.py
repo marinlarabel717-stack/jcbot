@@ -20223,7 +20223,7 @@ class EnhancedBot:
                 "⚠️ 批量创建功能需要会员权限\n\n请先开通会员",
                 reply_markup=InlineKeyboardMarkup([[
                     InlineKeyboardButton("💳 开通会员", callback_data="vip_menu"),
-                    InlineKeyboardButton("◀️ 返回", callback_data="back_to_main")
+                    InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="back_to_main")
                 ]])
             )
             return
@@ -20257,7 +20257,7 @@ class EnhancedBot:
 """
         
         keyboard = InlineKeyboardMarkup([[
-            InlineKeyboardButton("◀️ 返回", callback_data="back_to_main")
+            InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="back_to_main")
         ]])
         
         self.safe_edit_message(query, text, parse_mode='HTML', reply_markup=keyboard)
@@ -20789,7 +20789,7 @@ admin3</code>
                     context.bot.edit_message_text(
                         chat_id=user_id,
                         message_id=progress_msg.message_id,
-                        text=f"{t(user_id, 'batch_create_starting')}\n\n{t(user_id, 'batch_create_progress').format(done=current, total=total, percent=progress)}\n状态: {message}",
+                        text=f"{t(user_id, 'batch_create_starting')}\n\n{t(user_id, 'batch_create_progress').format(done=current, total=total, percent=progress)}\n{message}",
                         parse_mode='HTML',
                         reply_markup=keyboard
                     )
