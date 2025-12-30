@@ -10160,7 +10160,7 @@ class BatchCreatorService:
                         desc=r.description or t(user_id, 'report_batch_create_desc_none')
                     ))
                     lines.append(t(user_id, 'report_batch_create_creator_account').format(account=r.phone))
-                    lines.append(f"失败原因: {r.error}\n")
+                    lines.append(t(user_id, 'report_failure_list_reason').format(reason=r.error) + "\n")
         
         lines.append("=" * 60)
         return "\n".join(lines)
