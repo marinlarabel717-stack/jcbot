@@ -12624,7 +12624,7 @@ class EnhancedBot:
 {t(user_id, 'change_2fa_upload_prompt')}
         """
         
-        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard(user_id))
         
         # 设置用户状态 - 等待上传文件
         self.db.save_user(user_id, query.from_user.username or "", 
@@ -12777,7 +12777,7 @@ class EnhancedBot:
 {t(user_id, 'delete_2fa_upload_prompt')}
         """
         
-        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard(user_id))
         
         # 设置用户状态 - 等待上传文件
         self.db.save_user(user_id, query.from_user.username or "", 
