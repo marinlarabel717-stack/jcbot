@@ -1395,5 +1395,5 @@ TEXTS = {
     # Result files
     'api_result_filename': 'TG_API_{count}_accounts.txt',
     'api_result_desc': '📋 API Links (Phone + Link)',
-    'api_use_again': '✅ To use again /start (Failed accounts won't be sent)',
+    'api_use_again': "✅ To use again /start (Failed accounts won't be sent)",
 }
