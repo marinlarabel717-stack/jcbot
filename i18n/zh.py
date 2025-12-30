@@ -579,4 +579,16 @@ TEXTS = {
     'report_success_list_creator': '创建者账号: {account}',
     'report_success_list_creator_username': '创建者用户名: {username}',
     'report_success_list_admin_username': '管理员用户名: {admin}',
+    
+    # 13. 报告TXT模板 - 失败列表
+    'report_failure_list_title': '❌ 失败详情列表',
+    'report_failure_list_header': '批量创建 - 失败列表（详细原因）',
+    'report_failure_list_generated': '生成时间: {time}',
+    'report_failure_list_count': '失败数量: {count}',
+    'report_failure_list_group_name': '群昵称: {name}',
+    'report_failure_list_channel_name': '频道昵称: {name}',
+    'report_failure_list_group_desc': '群简介: {desc}',
+    'report_failure_list_channel_desc': '频道简介: {desc}',
+    'report_failure_list_creator': '创建者账号: {account}',
+    'report_failure_list_reason': '失败原因: {reason}',
 }

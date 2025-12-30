@@ -579,4 +579,16 @@ TEXTS = {
     'report_success_list_creator': 'Creator account: {account}',
     'report_success_list_creator_username': 'Creator username: {username}',
     'report_success_list_admin_username': 'Admin username: {admin}',
+    
+    # 13. Report TXT Template - Failure List
+    'report_failure_list_title': '❌ Failure Details List',
+    'report_failure_list_header': 'Batch Create - Failure List (Detailed Reasons)',
+    'report_failure_list_generated': 'Generated: {time}',
+    'report_failure_list_count': 'Failed count: {count}',
+    'report_failure_list_group_name': 'Group name: {name}',
+    'report_failure_list_channel_name': 'Channel name: {name}',
+    'report_failure_list_group_desc': 'Group description: {desc}',
+    'report_failure_list_channel_desc': 'Channel description: {desc}',
+    'report_failure_list_creator': 'Creator account: {account}',
+    'report_failure_list_reason': 'Failure reason: {reason}',
 }

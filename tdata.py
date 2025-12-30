@@ -20998,17 +20998,22 @@ admin3</code>
                 
                 with open(failure_path, 'w', encoding='utf-8') as f:
                     f.write("=" * 80 + "\n")
-                    f.write("批量创建 - 失败列表（详细原因）\n")
+                    f.write(t(user_id, 'report_failure_list_header') + "\n")
                     f.write("=" * 80 + "\n")
-                    f.write(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n")
-                    f.write(f"失败数量: {len(failed_results)}\n\n")
+                    f.write(t(user_id, 'report_failure_list_generated').format(
+                        time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')
+                    ) + "\n")
+                    f.write(t(user_id, 'report_failure_list_count').format(count=len(failed_results)) + "\n\n")
                     
                     for r in failed_results:
                         f.write("-" * 80 + "\n")
-                        f.write(f"群昵称: {r.name}\n")
-                        f.write(f"群简介: {r.description or '无'}\n")
-                        f.write(f"创建者账号: {r.phone}\n")
-                        f.write(f"失败原因: {r.error}\n")
+                        name_key = 'report_failure_list_group_name' if r.creation_type == 'group' else 'report_failure_list_channel_name'
+                        desc_key = 'report_failure_list_group_desc' if r.creation_type == 'group' else 'report_failure_list_channel_desc'
+                        
+                        f.write(t(user_id, name_key).format(name=r.name) + "\n")
+                        f.write(t(user_id, desc_key).format(desc=r.description or t(user_id, 'report_batch_create_desc_none')) + "\n")
+                        f.write(t(user_id, 'report_failure_list_creator').format(account=r.phone) + "\n")
+                        f.write(t(user_id, 'report_failure_list_reason').format(reason=r.error) + "\n")
                         f.write("\n")
                     
                     f.write("=" * 80 + "\n")
@@ -21018,7 +21023,7 @@ admin3</code>
                         chat_id=user_id,
                         document=f,
                         filename=failure_filename,
-                        caption="❌ 失败详情列表"
+                        caption=t(user_id, 'report_failure_list_title')
                     )
         
         finally:
