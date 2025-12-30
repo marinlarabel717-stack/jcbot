@@ -874,4 +874,88 @@ TEXTS = {
     'delete_2fa_ensure_format': '请确保ZIP包含Session或TData格式的账号文件',
     'delete_2fa_failed_msg': '❌ 删除2FA失败',
     'delete_2fa_error_msg': '错误: {error}',
+    
+    # ===== 添加2FA功能 =====
+    # 1. 功能介绍页面
+    'add_2fa_title': '➕ 添加2FA密码',
+    'add_2fa_features': '📋 功能说明：',
+    'add_2fa_feature1': '· 为 Session 文件自动创建 JSON 配置文件',
+    'add_2fa_feature2': '· 为 TData 目录自动创建 2fa.txt 密码文件',
+    'add_2fa_feature3': '· 您可以自定义2FA密码内容',
+    'add_2fa_formats': '📤 支持的文件格式：',
+    'add_2fa_format1': '· ZIP 压缩包（包含 Session 或 TData）',
+    'add_2fa_format2': '· 自动识别文件类型并添加对应的2FA配置',
+    'add_2fa_rules': '⚙️ 处理规则：',
+    'add_2fa_rule1': '· Session 文件 → 创建同名 JSON 文件（包含 twofa 字段）',
+    'add_2fa_rule2': '· TData 目录 → 创建 2fa.txt 文件（与 tdata 同级）',
+    'add_2fa_upload_prompt': '📤 请上传您的账号文件',
+    'add_2fa_back_menu': '返回主菜单',
+    
+    # 2. 处理中
+    'add_2fa_processing': '正在处理文件....',
+    
+    # 3. 扫描完成
+    'add_2fa_scan_complete': '✅ 文件扫描完成！',
+    'add_2fa_statistics': '📊 统计信息',
+    'add_2fa_total_accounts': '· 总账号数: {count} 个',
+    'add_2fa_file_type': '· 文件类型: {type}',
+    
+    # 4. 输入密码
+    'add_2fa_enter_password': '📝 请输入要设置的2FA密码',
+    'add_2fa_enter_desc1': '· 该密码将应用于所有账号',
+    'add_2fa_enter_desc2': '· Session文件将创建对应的JSON配置文件',
+    'add_2fa_enter_desc3': '· TData目录将创建2fa.txt文件',
+    'add_2fa_timeout': '⏰ 5分钟内未输入将自动取消',
+    
+    # 5. 密码已接收
+    'add_2fa_password_received': '✅ 2FA密码已接收',
+    'add_2fa_password_display': '密码: {password}',
+    'add_2fa_processing_now': '正在处理...',
+    
+    # 6. 添加完成
+    'add_2fa_complete': '✅ 添加2FA完成！',
+    'add_2fa_results': '📊 处理结果',
+    'add_2fa_success': '· 成功: {count} 个',
+    'add_2fa_failed': '· 失败: {count} 个',
+    'add_2fa_total': '· 总计: {count} 个',
+    'add_2fa_duration': '· 用时: {time}秒',
+    'add_2fa_password_set': '🔐 设置的2FA密码: {password}',
+    
+    # 7. 结果文件命名
+    'zip_add_2fa_result': 'add_2fa_result_{timestamp}',
+    'file_desc_add_2fa_success': '📦 添加2FA结果 - 成功 {count} 个',
+    'zip_add_2fa_success': '添加2FA_成功_{count}个',
+    'zip_add_2fa_failed': '添加2FA_失败_{count}个',
+    'file_desc_add_2fa_success_count': '📦 成功 ({count}个账号)',
+    'file_desc_add_2fa_failed_count': '📦 失败 ({count}个账号)',
+    'report_add_2fa_success': '添加2FA_成功_{count}个_报告.txt',
+    'report_add_2fa_failed': '添加2FA_失败_{count}个_报告.txt',
+    'report_desc_add_2fa_success': '📋 成功 详细报告',
+    'report_desc_add_2fa_failed': '📋 失败 详细报告',
+    
+    # 8. 报告TXT模板
+    'report_add_2fa_title_success': '2FA密码添加报告 - 成功',
+    'report_add_2fa_title_failed': '2FA密码添加报告 - 失败',
+    'report_add_2fa_total': '总数: {count}个',
+    'report_add_2fa_generated': '生成时间: {time}',
+    'report_add_2fa_detail_list': '详细列表:',
+    'report_add_2fa_account': '账号: {account}',
+    'report_add_2fa_details': '详细信息: {info}',
+    'report_add_2fa_process_time': '处理时间: {time}',
+    'report_add_2fa_config_created': '2FA配置文件已创建',
+    
+    # 9. 错误和其他消息
+    'add_2fa_no_pending_task': '❌ 没有待处理的添加2FA任务，请重新开始',
+    'add_2fa_operation_timeout': '❌ 操作超时，请重新开始',
+    'add_2fa_password_empty': '❌ 2FA密码不能为空，请重新输入',
+    'add_2fa_no_valid_files': '❌ 未找到有效文件',
+    'add_2fa_ensure_format': '请确保ZIP包含Session或TData格式的账号文件',
+    'add_2fa_processing_file': '📥 正在处理您的文件...',
+    'add_2fa_processing_config': '🔄 正在添加2FA配置...',
+    'add_2fa_processing_failed': '❌ 处理失败',
+    'add_2fa_error': '错误: {error}',
+    'add_2fa_result_success_desc': '✅ 成功',
+    'add_2fa_result_failed_desc': '❌ 失败',
+    'add_2fa_result_error_desc': '❌ 错误',
+    'add_2fa_need_member': '❌ 需要会员权限才能使用添加2FA功能',
 }
