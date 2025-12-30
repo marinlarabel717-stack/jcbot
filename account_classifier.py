@@ -10,6 +10,268 @@ from phonenumbers import geocoder
 
 PHONE_REGEX = re.compile(r"(?:\+?\d{6,16})")
 
+# Country code to translation key mapping
+COUNTRY_CODE_TO_KEY = {
+    # Major countries
+    420: 'country_czech_republic',
+    86: 'country_china',
+    1: 'country_united_states',  # Also Canada
+    44: 'country_united_kingdom',
+    7: 'country_russia',  # Also Kazakhstan
+    49: 'country_germany',
+    33: 'country_france',
+    81: 'country_japan',
+    82: 'country_south_korea',
+    91: 'country_india',
+    55: 'country_brazil',
+    61: 'country_australia',
+    65: 'country_singapore',
+    60: 'country_malaysia',
+    62: 'country_indonesia',
+    66: 'country_thailand',
+    84: 'country_vietnam',
+    63: 'country_philippines',
+    213: 'country_algeria',
+    234: 'country_nigeria',
+    20: 'country_egypt',
+    27: 'country_south_africa',
+    52: 'country_mexico',
+    54: 'country_argentina',
+    90: 'country_turkey',
+    966: 'country_saudi_arabia',
+    971: 'country_uae',
+    972: 'country_israel',
+    48: 'country_poland',
+    380: 'country_ukraine',
+    31: 'country_netherlands',
+    32: 'country_belgium',
+    41: 'country_switzerland',
+    43: 'country_austria',
+    46: 'country_sweden',
+    47: 'country_norway',
+    45: 'country_denmark',
+    358: 'country_finland',
+    39: 'country_italy',
+    34: 'country_spain',
+    351: 'country_portugal',
+    30: 'country_greece',
+    36: 'country_hungary',
+    40: 'country_romania',
+    359: 'country_bulgaria',
+    381: 'country_serbia',
+    385: 'country_croatia',
+    421: 'country_slovakia',
+    386: 'country_slovenia',
+    353: 'country_ireland',
+    64: 'country_new_zealand',
+    92: 'country_pakistan',
+    880: 'country_bangladesh',
+    94: 'country_sri_lanka',
+    977: 'country_nepal',
+    95: 'country_myanmar',
+    855: 'country_cambodia',
+    856: 'country_laos',
+    976: 'country_mongolia',
+    998: 'country_uzbekistan',
+    375: 'country_belarus',
+    995: 'country_georgia',
+    374: 'country_armenia',
+    994: 'country_azerbaijan',
+    98: 'country_iran',
+    964: 'country_iraq',
+    965: 'country_kuwait',
+    974: 'country_qatar',
+    973: 'country_bahrain',
+    968: 'country_oman',
+    962: 'country_jordan',
+    961: 'country_lebanon',
+    963: 'country_syria',
+    967: 'country_yemen',
+    212: 'country_morocco',
+    216: 'country_tunisia',
+    218: 'country_libya',
+    249: 'country_sudan',
+    251: 'country_ethiopia',
+    254: 'country_kenya',
+    255: 'country_tanzania',
+    256: 'country_uganda',
+    233: 'country_ghana',
+    237: 'country_cameroon',
+    225: 'country_ivory_coast',
+    221: 'country_senegal',
+    243: 'country_congo',
+    244: 'country_angola',
+    258: 'country_mozambique',
+    263: 'country_zimbabwe',
+    260: 'country_zambia',
+    267: 'country_botswana',
+    264: 'country_namibia',
+    56: 'country_chile',
+    57: 'country_colombia',
+    51: 'country_peru',
+    58: 'country_venezuela',
+    593: 'country_ecuador',
+    591: 'country_bolivia',
+    595: 'country_paraguay',
+    598: 'country_uruguay',
+    53: 'country_cuba',
+    1809: 'country_dominican_republic',
+    1787: 'country_puerto_rico',
+    1876: 'country_jamaica',
+    1868: 'country_trinidad_and_tobago',
+    502: 'country_guatemala',
+    504: 'country_honduras',
+    503: 'country_el_salvador',
+    505: 'country_nicaragua',
+    506: 'country_costa_rica',
+    507: 'country_panama',
+    886: 'country_taiwan',
+    852: 'country_hong_kong',
+    853: 'country_macau',
+    
+    # Additional countries
+    93: 'country_afghanistan',
+    355: 'country_albania',
+    376: 'country_andorra',
+    1268: 'country_antigua_and_barbuda',
+    1242: 'country_bahamas',
+    1246: 'country_barbados',
+    501: 'country_belize',
+    229: 'country_benin',
+    975: 'country_bhutan',
+    387: 'country_bosnia_and_herzegovina',
+    673: 'country_brunei',
+    226: 'country_burkina_faso',
+    257: 'country_burundi',
+    238: 'country_cape_verde',
+    236: 'country_central_african_republic',
+    235: 'country_chad',
+    269: 'country_comoros',
+    357: 'country_cyprus',
+    253: 'country_djibouti',
+    1767: 'country_dominica',
+    240: 'country_equatorial_guinea',
+    291: 'country_eritrea',
+    372: 'country_estonia',
+    268: 'country_eswatini',
+    679: 'country_fiji',
+    241: 'country_gabon',
+    220: 'country_gambia',
+    1473: 'country_grenada',
+    224: 'country_guinea',
+    245: 'country_guinea_bissau',
+    592: 'country_guyana',
+    509: 'country_haiti',
+    354: 'country_iceland',
+    686: 'country_kiribati',
+    996: 'country_kyrgyzstan',
+    371: 'country_latvia',
+    266: 'country_lesotho',
+    231: 'country_liberia',
+    423: 'country_liechtenstein',
+    370: 'country_lithuania',
+    352: 'country_luxembourg',
+    261: 'country_madagascar',
+    265: 'country_malawi',
+    960: 'country_maldives',
+    223: 'country_mali',
+    356: 'country_malta',
+    692: 'country_marshall_islands',
+    222: 'country_mauritania',
+    230: 'country_mauritius',
+    691: 'country_micronesia',
+    373: 'country_moldova',
+    377: 'country_monaco',
+    382: 'country_montenegro',
+    674: 'country_nauru',
+    227: 'country_niger',
+    850: 'country_north_korea',
+    389: 'country_north_macedonia',
+    680: 'country_palau',
+    970: 'country_palestine',
+    675: 'country_papua_new_guinea',
+    250: 'country_rwanda',
+    1869: 'country_saint_kitts_and_nevis',
+    1758: 'country_saint_lucia',
+    1784: 'country_saint_vincent_and_the_grenadines',
+    685: 'country_samoa',
+    378: 'country_san_marino',
+    239: 'country_sao_tome_and_principe',
+    248: 'country_seychelles',
+    232: 'country_sierra_leone',
+    677: 'country_solomon_islands',
+    252: 'country_somalia',
+    211: 'country_south_sudan',
+    597: 'country_suriname',
+    992: 'country_tajikistan',
+    670: 'country_timor_leste',
+    228: 'country_togo',
+    676: 'country_tonga',
+    993: 'country_turkmenistan',
+    688: 'country_tuvalu',
+    678: 'country_vanuatu',
+    379: 'country_vatican_city',
+    
+    # Territories and dependencies
+    590: 'country_guadeloupe',
+    596: 'country_martinique',
+    262: 'country_reunion',
+    594: 'country_french_guiana',
+    689: 'country_french_polynesia',
+    687: 'country_new_caledonia',
+    299: 'country_greenland',
+    298: 'country_faroe_islands',
+    297: 'country_aruba',
+    599: 'country_curacao',
+    1721: 'country_sint_maarten',
+    1441: 'country_bermuda',
+    1345: 'country_cayman_islands',
+    1649: 'country_turks_and_caicos',
+    1284: 'country_british_virgin_islands',
+    1264: 'country_anguilla',
+    1664: 'country_montserrat',
+    1671: 'country_guam',
+    1670: 'country_northern_mariana_islands',
+    1684: 'country_american_samoa',
+    682: 'country_cook_islands',
+    683: 'country_niue',
+    350: 'country_gibraltar',
+    383: 'country_kosovo',
+    
+    # Additional codes for more coverage
+    # Note: Some territories share codes with their parent countries
+    # Code 1 countries (North America)
+    # 1: 'country_united_states',  # Already defined above
+    # 1: 'country_canada',  # Shares code 1
+    1340: 'country_us_virgin_islands',
+    500: 'country_falkland_islands',
+    290: 'country_saint_helena',  # Also Ascension and Tristan da Cunha
+    # 290: 'country_ascension_island',  # Shares 290
+    # 290: 'country_tristan_da_cunha',  # Shares 290
+    508: 'country_saint_pierre_and_miquelon',
+    681: 'country_wallis_and_futuna',
+    # 590: 'country_guadeloupe',  # Already defined
+    # 590: 'country_saint_barthelemy',  # Shares 590
+    # 590: 'country_saint_martin',  # Shares 590
+    # 596: 'country_martinique',  # Already defined
+    # 262: 'country_reunion',  # Already defined
+    # 262: 'country_mayotte',  # Shares 262
+    # 594: 'country_french_guiana',  # Already defined
+    672: 'country_norfolk_island',  # Also Antarctica
+    # 672: 'country_antarctica',  # Shares 672
+    61891: 'country_christmas_island',  # Uses Australia +61
+    61891: 'country_cocos_islands',  # Uses Australia +61
+    690: 'country_tokelau',
+    64: 'country_pitcairn_islands',  # Uses satellite phone
+    # 7: 'country_kazakhstan',  # Shares code 7 with Russia
+    # Code 599 Caribbean Netherlands
+    # 599: 'country_bonaire',  # Shares 599
+    # 599: 'country_saba',  # Shares 599
+    # 599: 'country_sint_eustatius',  # Shares 599
+    246: 'country_diego_garcia',  # British Indian Ocean Territory
+    500: 'country_south_georgia',  # Shares with Falklands
+}
+
 @dataclass
 class AccountMeta:
     path: str            # 文件或目录绝对路径
@@ -124,28 +386,38 @@ class AccountClassifier:
         return metas
 
     # -------------- 命名与分组 --------------
-    def country_key(self, m: AccountMeta) -> Tuple[str, str]:
+    def country_key(self, m: AccountMeta, t_func=None) -> Tuple[str, str]:
+        """Get country name and code for account, with optional translation support"""
         if m.country_code:
-            return (m.country_name_zh or "未知"), str(m.country_code)
-        return "未知", "000"
+            # Try to get translation key from country code mapping
+            if t_func and m.country_code in COUNTRY_CODE_TO_KEY:
+                country_key = COUNTRY_CODE_TO_KEY[m.country_code]
+                country_name = t_func(country_key)
+            else:
+                # Fallback to Chinese name from phonenumbers library
+                country_name = m.country_name_zh or (t_func('split_unknown') if t_func else "未知")
+            return country_name, str(m.country_code)
+        return (t_func('split_unknown') if t_func else "未知"), "000"
 
-    def detect_bundle_country_label(self, metas: List[AccountMeta]) -> Tuple[str, str]:
-        """用于按数量拆分时统一命名：若混合国家返回 ('混合','000')，全未知返回 ('未知','000')"""
+    def detect_bundle_country_label(self, metas: List[AccountMeta], t_func=None) -> Tuple[str, str]:
+        """Detect unified country label for quantity-based splitting. 
+        Returns ('Mixed','000') for mixed countries or ('Unknown','000') for all unidentified accounts.
+        Labels are translatable when t_func is provided."""
         if not metas:
-            return "未知", "000"
+            return (t_func('split_unknown') if t_func else "未知"), "000"
         codes: Dict[str, str] = {}  # code -> name
         code_list: List[str] = []
         for m in metas:
-            name, code = self.country_key(m)
+            name, code = self.country_key(m, t_func)
             codes[code] = name
             code_list.append(code)
         uniq = set(code_list)
         if len(uniq) == 1:
             code = next(iter(uniq))
-            return codes.get(code, "未知"), code
+            return codes.get(code, (t_func('split_unknown') if t_func else "未知")), code
         if uniq == {"000"}:
-            return "未知", "000"
-        return "混合", "000"
+            return (t_func('split_unknown') if t_func else "未知"), "000"
+        return (t_func('split_mixed') if t_func else "混合"), "000"
 
     # -------------- 打包 --------------
     def _zip_bundle(self, items: List[AccountMeta], out_dir: str, display_zip: str) -> str:
@@ -226,11 +498,11 @@ class AccountClassifier:
         return dst
 
     # -------------- 对外：按国家拆分 --------------
-    def split_by_country(self, metas: List[AccountMeta], out_dir: str) -> List[Tuple[str, str, int]]:
+    def split_by_country(self, metas: List[AccountMeta], out_dir: str, t_func=None) -> List[Tuple[str, str, int]]:
         from collections import defaultdict
         groups: Dict[Tuple[str, str], List[AccountMeta]] = defaultdict(list)
         for m in metas:
-            groups[self.country_key(m)].append(m)
+            groups[self.country_key(m, t_func)].append(m)
 
         results: List[Tuple[str, str, int]] = []
         for (name, code), items in groups.items():
@@ -246,11 +518,14 @@ class AccountClassifier:
         metas: List[AccountMeta],
         sizes: Iterable[int],
         out_dir: str,
-        country_label: Optional[Tuple[str, str]] = None
+        country_label: Optional[Tuple[str, str]] = None,
+        t_func=None
     ) -> List[Tuple[str, str, int]]:
-        """按给定 sizes 依次切分，命名 {国家}+{区号}+{数量}.zip，带序号后缀避免重名覆盖"""
+        """Split accounts by specified sizes in order. 
+        Naming pattern: {country}+{code}_{quantity}.zip with serial suffix to avoid duplicates.
+        Country names are translatable when t_func is provided."""
         if country_label is None:
-            country_label = self.detect_bundle_country_label(metas)
+            country_label = self.detect_bundle_country_label(metas, t_func)
         name, code = country_label
 
         os.makedirs(out_dir, exist_ok=True)
