@@ -16339,7 +16339,7 @@ class EnhancedBot:
             # 更新提示
             try:
                 progress_msg.edit_text(
-                    f"🔄 <b>开始按数量拆分...</b>\n\n每包 {qty} 个账号\n总账号: {total} 个",
+                    f"<b>{t(user_id, 'split_processing_quantity_single')}</b>\n\n{t(user_id, 'split_processing_quantity_single_desc').format(qty=qty)}\n{t(user_id, 'split_processing_quantity_multi_total').format(total=total)}",
                     parse_mode='HTML'
                 )
             except:
@@ -16404,10 +16404,10 @@ class EnhancedBot:
             # 更新提示
             try:
                 progress_msg.edit_text(
-                    f"🔄 <b>开始按数量拆分...</b>\n\n"
-                    f"数量序列: {' '.join(map(str, quantities))}\n"
-                    f"总账号: {total} 个\n"
-                    f"请求数量: {total_requested} 个",
+                    f"<b>{t(user_id, 'split_processing_quantity_multi')}</b>\n\n"
+                    f"{t(user_id, 'split_processing_quantity_multi_sequence').format(sequence=' '.join(map(str, quantities)))}\n"
+                    f"{t(user_id, 'split_processing_quantity_multi_total').format(total=total)}\n"
+                    f"{t(user_id, 'split_processing_quantity_multi_requested').format(requested=total_requested)}",
                     parse_mode='HTML'
                 )
             except:
@@ -16420,9 +16420,9 @@ class EnhancedBot:
             remainder = total - total_requested
             remainder_msg = ""
             if remainder > 0:
-                remainder_msg = f"\n\n⚠️ 剩余 {remainder} 个账号未分配"
+                remainder_msg = f"\n\n{t(user_id, 'split_remainder_unallocated').format(remainder=remainder)}"
             elif remainder < 0:
-                remainder_msg = f"\n\n⚠️ 请求数量超出，最后一包可能不足"
+                remainder_msg = f"\n\n{t(user_id, 'split_remainder_exceeded')}"
             
             # 发送结果
             try:
@@ -16578,7 +16578,7 @@ class EnhancedBot:
             # 更新提示
             try:
                 progress_msg.edit_text(
-                    "🔄 <b>开始按国家拆分...</b>\n\n正在分组并打包...",
+                    f"<b>{t(user_id, 'split_processing_country')}</b>\n\n{t(user_id, 'split_processing_country_desc')}",
                     parse_mode='HTML'
                 )
             except:

@@ -1036,6 +1036,16 @@ TEXTS = {
     'split_sending_results': '📤 Sending results...',
     'split_processing': 'Processing...',
     'split_processing_file': '📥 Processing your file...',
+    'split_processing_country': '🔄 Starting split by country...',
+    'split_processing_country_desc': 'Grouping and packaging...',
+    'split_processing_quantity_single': '🔄 Starting split by quantity...',
+    'split_processing_quantity_single_desc': '{qty} accounts per package',
+    'split_processing_quantity_multi': '🔄 Starting split by quantity...',
+    'split_processing_quantity_multi_sequence': 'Quantity sequence: {sequence}',
+    'split_processing_quantity_multi_total': 'Total accounts: {total}',
+    'split_processing_quantity_multi_requested': 'Requested quantity: {requested}',
+    'split_remainder_unallocated': '⚠️ Remaining {remainder} accounts unallocated',
+    'split_remainder_exceeded': '⚠️ Requested quantity exceeded, last package may be insufficient',
     
     # 9. Classification Complete
     'split_complete': '✅ Classification complete!',

@@ -1036,6 +1036,16 @@ TEXTS = {
     'split_sending_results': '📤 正在发送结果...',
     'split_processing': '正在处理...',
     'split_processing_file': '📥 正在处理您的文件...',
+    'split_processing_country': '🔄 开始按国家拆分...',
+    'split_processing_country_desc': '正在分组并打包...',
+    'split_processing_quantity_single': '🔄 开始按数量拆分...',
+    'split_processing_quantity_single_desc': '每包 {qty} 个账号',
+    'split_processing_quantity_multi': '🔄 开始按数量拆分...',
+    'split_processing_quantity_multi_sequence': '数量序列: {sequence}',
+    'split_processing_quantity_multi_total': '总账号: {total} 个',
+    'split_processing_quantity_multi_requested': '请求数量: {requested} 个',
+    'split_remainder_unallocated': '⚠️ 剩余 {remainder} 个账号未分配',
+    'split_remainder_exceeded': '⚠️ 请求数量超出，最后一包可能不足',
     
     # 9. 分类完成
     'split_complete': '✅ 分类完成！',
