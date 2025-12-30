@@ -16484,7 +16484,7 @@ class EnhancedBot:
                     f"{t(user_id, 'split_size_limit')}\n"
                     f"{t(user_id, 'split_timeout')}",
                     parse_mode='HTML',
-                    reply_markup=get_back_to_menu_keyboard()
+                    reply_markup=get_back_to_menu_keyboard(user_id)
                 )
             except:
                 pass
