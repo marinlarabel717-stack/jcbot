@@ -2888,6 +2888,55 @@ class SpamBotChecker:
                 # 打印详细的异常信息用于调试
                 print(f"❌ [{account_name}] SpamBot通信异常: {error_type} - {str(e)[:100]}")
                 
+                # 检测用户屏蔽了SpamBot的情况 - 尝试自动解除屏蔽
+                if "youblockeduser" in error_type.lower() or "you blocked" in error_str:
+                    print(f"🔓 [{account_name}] 检测到用户屏蔽了SpamBot，尝试自动解除屏蔽...")
+                    try:
+                        # 解除屏蔽 SpamBot
+                        from telethon.tl.functions.contacts import UnblockRequest
+                        await client(UnblockRequest(id='SpamBot'))
+                        print(f"✅ [{account_name}] 已自动解除对SpamBot的屏蔽")
+                        
+                        # 等待一下，然后重新尝试发送消息
+                        await asyncio.sleep(1)
+                        await asyncio.wait_for(
+                            client.send_message('SpamBot', '/start'), 
+                            timeout=15
+                        )
+                        await asyncio.sleep(2)
+                        
+                        # 重新获取消息
+                        messages = await asyncio.wait_for(
+                            client.get_messages('SpamBot', limit=5), 
+                            timeout=15
+                        )
+                        
+                        if messages:
+                            for msg in messages:
+                                if msg.message and not msg.out:
+                                    spambot_reply = msg.message
+                                    english_reply = self.translate_to_english(spambot_reply)
+                                    status = self.analyze_spambot_response(english_reply.lower())
+                                    
+                                    if status == '未知':
+                                        return "未知", f"{user_info} | {proxy_used} | 无法识别SpamBot响应", account_name
+                                    
+                                    reply_preview = spambot_reply[:30] + "..." if len(spambot_reply) > 30 else spambot_reply
+                                    total_elapsed = time.time() - connect_start
+                                    info_str = f"{user_info} | {proxy_used}"
+                                    if config.PROXY_DEBUG_VERBOSE:
+                                        info_str += f" (ok {total_elapsed:.2f}s)"
+                                    info_str += f" | {reply_preview}"
+                                    print(f"✅ [{account_name}] 解除屏蔽后成功获取状态: {status}")
+                                    return status, info_str, account_name
+                        
+                        # 如果解除屏蔽后仍无响应
+                        return "未知", f"{user_info} | {proxy_used} | 已解除屏蔽但SpamBot无响应", account_name
+                        
+                    except Exception as unblock_error:
+                        print(f"⚠️ [{account_name}] 自动解除屏蔽失败: {str(unblock_error)[:50]}")
+                        return "未知", f"{user_info} | {proxy_used} | 用户已屏蔽SpamBot（自动解除失败）", account_name
+                
                 # 检测冻结账户相关错误
                 if "deactivated" in error_str or "banned" in error_str or "deleted" in error_str:
                     return "冻结", f"{user_info} | {proxy_used} | 账号已被冻结", account_name
@@ -3331,6 +3380,40 @@ class SpamBotChecker:
                 
                 # 打印详细的异常信息用于调试
                 print(f"❌ [TData:{tdata_name}] SpamBot通信异常: {error_type} - {str(e)[:100]}")
+                
+                # 检测用户屏蔽了SpamBot的情况 - 尝试自动解除屏蔽
+                if "youblockeduser" in error_type.lower() or "you blocked" in error_str:
+                    print(f"🔓 [TData:{tdata_name}] 检测到用户屏蔽了SpamBot，尝试自动解除屏蔽...")
+                    try:
+                        # 解除屏蔽 SpamBot
+                        from telethon.tl.functions.contacts import UnblockRequest
+                        await client(UnblockRequest(id='SpamBot'))
+                        print(f"✅ [TData:{tdata_name}] 已自动解除对SpamBot的屏蔽")
+                        
+                        # 等待一下，然后重新尝试
+                        await asyncio.sleep(1)
+                        await asyncio.wait_for(client.send_message('SpamBot', '/start'), timeout=5)
+                        await asyncio.sleep(config.SPAMBOT_WAIT_TIME if not config.PROXY_FAST_MODE else 0.1)
+                        
+                        entity = await client.get_entity(178220800)  # SpamBot固定ID
+                        async for message in client.iter_messages(entity, limit=5):
+                            if message.raw_text and not message.out:
+                                spambot_reply = message.raw_text
+                                english_text = self.translate_to_english(spambot_reply.lower())
+                                status = self.analyze_spambot_response(english_text)
+                                
+                                if status == '未知':
+                                    return "未知", f"手机号:{phone} | {proxy_used} | 无法识别SpamBot响应", tdata_name
+                                
+                                print(f"✅ [TData:{tdata_name}] 解除屏蔽后成功获取状态: {status}")
+                                return status, f"手机号:{phone} | {proxy_used} | {spambot_reply[:30]}...", tdata_name
+                        
+                        # 如果解除屏蔽后仍无响应
+                        return "未知", f"手机号:{phone} | {proxy_used} | 已解除屏蔽但SpamBot无响应", tdata_name
+                        
+                    except Exception as unblock_error:
+                        print(f"⚠️ [TData:{tdata_name}] 自动解除屏蔽失败: {str(unblock_error)[:50]}")
+                        return "未知", f"手机号:{phone} | {proxy_used} | 用户已屏蔽SpamBot（自动解除失败）", tdata_name
                 
                 # 检测账号被系统冻结的错误
                 if "deactivated" in error_str or "deleted" in error_str:
