@@ -260,4 +260,16 @@ TEXTS = {
     'report_time': 'Time: {time}',
     'report_error': 'Error: {error}',
     'report_no_username': '@NoUsername',
+    
+    # Error messages
+    'error_file_type': 'File type error',
+    'error_need_tdata': 'Need Tdata file, but found {type} format',
+    'error_need_session': 'Need Session file, but found {type} format',
+    'error_unauthorized': 'Account unauthorized',
+    'error_auth_key_invalid': 'Auth key invalid',
+    'error_file_locked': 'TData file is locked',
+    'error_session_locked': 'Session file is locked',
+    'error_connection_timeout': 'Connection timeout',
+    'error_network_failed': 'Network connection failed',
+    'error_conversion_failed': 'Conversion failed',
 }

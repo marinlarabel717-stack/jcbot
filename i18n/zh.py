@@ -260,4 +260,16 @@ TEXTS = {
     'report_time': '时间: {time}',
     'report_error': '错误: {error}',
     'report_no_username': '@无用户名',
+    
+    # 错误消息
+    'error_file_type': '文件类型错误',
+    'error_need_tdata': '需要Tdata文件，但找到的是{type}格式',
+    'error_need_session': '需要Session文件，但找到的是{type}格式',
+    'error_unauthorized': '账号未授权',
+    'error_auth_key_invalid': '授权密钥无效',
+    'error_file_locked': 'TData文件被占用',
+    'error_session_locked': 'Session文件被占用',
+    'error_connection_timeout': '连接超时',
+    'error_network_failed': '网络连接失败',
+    'error_conversion_failed': '转换失败',
 }

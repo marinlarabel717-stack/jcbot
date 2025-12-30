@@ -5232,14 +5232,14 @@ class FormatConverter:
                 
                 if not await client.is_user_authorized():
                     print(f"❌ 账号未授权: {tdata_name}")
-                    error_msg = "账号未授权"
+                    error_msg = "<<ERROR:error_unauthorized>>"
                     self.generate_failure_files(tdata_path, tdata_name, error_msg)
                     return "转换错误", error_msg, tdata_name
                 
                 # 获取完整用户信息
                 me = await client.get_me()
                 phone = me.phone if me.phone else "未知"
-                username = me.username if me.username else "无用户名"
+                username = me.username if me.username else "<<NO_USERNAME>>"
                 
                 # 重命名session文件为手机号
                 final_session_name = phone if phone != "未知" else tdata_name
@@ -5315,13 +5315,13 @@ class FormatConverter:
                 # 最后一次尝试失败，生成失败标记的文件
                 # 确定错误类型和错误消息
                 if "database is locked" in error_msg.lower():
-                    final_error_msg = "TData文件被占用"
+                    final_error_msg = "<<ERROR:error_file_locked>>"
                 elif "auth key" in error_msg.lower() or "authorization" in error_msg.lower():
-                    final_error_msg = "授权密钥无效"
+                    final_error_msg = "<<ERROR:error_auth_key_invalid>>"
                 elif "timeout" in error_msg.lower() or "timed out" in error_msg.lower():
-                    final_error_msg = "连接超时"
+                    final_error_msg = "<<ERROR:error_connection_timeout>>"
                 elif "network" in error_msg.lower() or "connection" in error_msg.lower():
-                    final_error_msg = "网络连接失败"
+                    final_error_msg = "<<ERROR:error_network_failed>>"
                 else:
                     final_error_msg = f"转换失败: {error_msg[:50]}"
                 
@@ -5362,7 +5362,7 @@ class FormatConverter:
             # 获取账号信息
             me = await client.get_me()
             phone = me.phone if me.phone else "未知"
-            username = me.username if me.username else "无用户名"
+            username = me.username if me.username else "<<NO_USERNAME>>"
             
             # 转换为TData
             tdesk = await client.ToTDesktop(flag=UseCurrentSession)
@@ -5387,11 +5387,11 @@ class FormatConverter:
         except Exception as e:
             error_msg = str(e)
             if "database is locked" in error_msg.lower():
-                return "转换错误", "Session文件被占用", session_name
+                return "转换错误", "<<ERROR:error_session_locked>>", session_name
             elif "auth key" in error_msg.lower():
-                return "转换错误", "授权密钥无效", session_name
+                return "转换错误", "<<ERROR:error_auth_key_invalid>>", session_name
             else:
-                return "转换错误", f"转换失败: {error_msg[:50]}", session_name
+                return "转换错误", f"<<ERROR:error_conversion_failed>>: {error_msg[:50]}", session_name
     
     async def batch_convert_with_progress(self, files: List[Tuple[str, str]], conversion_type: str, 
                                          api_id: int, api_hash: str, update_callback) -> Dict[str, List[Tuple[str, str, str]]]:
@@ -5668,13 +5668,28 @@ class FormatConverter:
                             phone = phone_part if phone_part else "unknown"
                         if "用户名:" in masked_info:
                             username_part = masked_info.split("用户名:")[1].strip()
-                            username = username_part if username_part else t(user_id, 'report_no_username')
+                            # Replace the special placeholder with translated text
+                            if "<<NO_USERNAME>>" in username_part:
+                                username = t(user_id, 'report_no_username')
+                            else:
+                                username = username_part if username_part else t(user_id, 'report_no_username')
                         
                         f.write(f"{idx}. {t(user_id, 'report_file').format(filename=file_name)}\n")
                         if status == "转换成功":
                             f.write(f"   {t(user_id, 'report_info').format(phone=phone, username=username)}\n")
                         else:
-                            f.write(f"   {t(user_id, 'report_error').format(error=masked_info)}\n")
+                            # Translate error messages with special markers
+                            translated_error = masked_info
+                            if "<<ERROR:" in masked_info:
+                                # Extract error key
+                                import re
+                                error_match = re.search(r'<<ERROR:(\w+)>>', masked_info)
+                                if error_match:
+                                    error_key = error_match.group(1)
+                                    error_text = t(user_id, error_key)
+                                    # Replace the marker with translated text
+                                    translated_error = re.sub(r'<<ERROR:\w+>>', error_text, masked_info)
+                            f.write(f"   {t(user_id, 'report_error').format(error=translated_error)}\n")
                         f.write(f"   {t(user_id, 'report_time').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST'))}\n\n")
                 
                 print(f"✅ 创建TXT报告: {txt_filename}")
@@ -13752,7 +13767,7 @@ class EnhancedBot:
             if conversion_type == "tdata_to_session" and file_type != "tdata":
                 try:
                     progress_msg.edit_text(
-                        f"❌ <b>文件类型错误</b>\n\n需要Tdata文件，但找到的是{file_type}格式",
+                        f"❌ <b>{t(user_id, 'error_file_type')}</b>\n\n{t(user_id, 'error_need_tdata').format(type=file_type)}",
                         parse_mode='HTML'
                     )
                 except:
@@ -13762,7 +13777,7 @@ class EnhancedBot:
             if conversion_type == "session_to_tdata" and file_type != "session":
                 try:
                     progress_msg.edit_text(
-                        f"❌ <b>文件类型错误</b>\n\n需要Session文件，但找到的是{file_type}格式",
+                        f"❌ <b>{t(user_id, 'error_file_type')}</b>\n\n{t(user_id, 'error_need_session').format(type=file_type)}",
                         parse_mode='HTML'
                     )
                 except:
