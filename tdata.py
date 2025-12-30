@@ -9824,7 +9824,7 @@ class BatchCreatorService:
                 result.username = actual_username
                 me = await account.client.get_me()
                 result.creator_id = me.id
-                result.creator_username = me.username or f"用户{me.id}"
+                result.creator_username = me.username if me.username else str(me.id)
                 
                 # 添加管理员（支持多个管理员）
                 admin_list = []
@@ -9931,9 +9931,9 @@ class BatchCreatorService:
                         link=r.invite_link or t(user_id, 'report_batch_create_desc_none')
                     ))
                     lines.append(t(user_id, 'report_batch_create_creator_account').format(account=r.phone))
-                    lines.append(t(user_id, 'report_batch_create_creator_username').format(
-                        username=f"@{r.creator_username}" if r.creator_username else t(user_id, 'report_batch_create_desc_none')
-                    ))
+                    # Display username with @ prefix, or @user{id} if no username
+                    creator_display = f"@{r.creator_username}" if r.creator_username and not r.creator_username.isdigit() else f"@用户{r.creator_username or r.creator_id}"
+                    lines.append(t(user_id, 'report_batch_create_creator_username').format(username=creator_display))
                     lines.append(t(user_id, 'report_batch_create_creator_id').format(
                         id=r.creator_id or t(user_id, 'report_batch_create_desc_none')
                     ))
@@ -20253,11 +20253,6 @@ admin3</code>
 <b>{t(user_id, 'batch_create_step3_format')}</b>
 <code>{t(user_id, step3_format_key)}</code>
 
-<b>{t(user_id, 'batch_create_step2_example')}</b>
-<code>科技交流群|欢迎讨论最新科技资讯
-编程学习|一起学习编程技术
-游戏爱好者|</code>
-
 {t(user_id, 'batch_create_step3_tip1')}
 {t(user_id, 'batch_create_step3_tip2').format(count=total_to_create)}
 {t(user_id, 'batch_create_step3_tip3')}
@@ -20781,7 +20776,9 @@ admin3</code>
                         f.write(t(user_id, desc_key).format(desc=r.description or t(user_id, 'report_batch_create_desc_none')) + "\n")
                         f.write(t(user_id, link_key).format(link=r.invite_link or t(user_id, 'report_batch_create_desc_none')) + "\n")
                         f.write(t(user_id, 'report_success_list_creator').format(account=r.phone) + "\n")
-                        f.write(t(user_id, 'report_success_list_creator_username').format(username=f"@{r.creator_username}" if r.creator_username else t(user_id, 'report_batch_create_desc_none')) + "\n")
+                        # Display username with @ prefix, or @user{id} if no username
+                        creator_display = f"@{r.creator_username}" if r.creator_username and not r.creator_username.isdigit() else f"@用户{r.creator_username or r.creator_id}"
+                        f.write(t(user_id, 'report_success_list_creator_username').format(username=creator_display) + "\n")
                         f.write(t(user_id, 'report_success_list_admin_username').format(admin=f"@{r.admin_username}" if r.admin_username else t(user_id, 'report_batch_create_admins_none')) + "\n")
                         f.write("\n")
                     
