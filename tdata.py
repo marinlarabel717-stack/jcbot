@@ -6721,7 +6721,7 @@ class TwoFactorManager:
     
     async def batch_remove_passwords(self, files: List[Tuple[str, str]], file_type: str, 
                                     old_password: Optional[str],
-                                    progress_callback=None) -> Dict[str, List[Tuple[str, str, str]]]:
+                                    progress_callback=None, user_id: int = None) -> Dict[str, List[Tuple[str, str, str]]]:
         """
         批量删除2FA密码
         
@@ -6730,6 +6730,7 @@ class TwoFactorManager:
             file_type: 文件类型（'tdata' 或 'session'）
             old_password: 手动输入的旧密码（备选）
             progress_callback: 进度回调函数
+            user_id: 用户ID（用于翻译）
             
         Returns:
             结果字典 {'成功': [...], '失败': [...]}
@@ -15925,7 +15926,8 @@ class EnhancedBot:
                 files,
                 file_type,
                 old_password,
-                remove_callback
+                remove_callback,
+                user_id
             )
             logger.info(f"批量删除完成: 成功={len(results.get('成功', []))}, 失败={len(results.get('失败', []))}")
             
