@@ -1331,4 +1331,70 @@ TEXTS = {
     'country_us_virgin_islands': '美属维尔京群岛',
     'country_antarctica': '南极洲',
     'country_diego_garcia': '迪戈加西亚岛',
+    
+    # ===== API转换功能 =====
+    # 功能介绍页面
+    'api_title': '🔗 API格式转换',
+    'api_core_features': '🎯 核心功能',
+    'api_feature1': '· 📱 提取手机号信息',
+    'api_feature2': '· 🔐 自动检测2FA密码',
+    'api_feature3': '· 🌐 生成验证码接收链接',
+    'api_feature4': '· 📋 输出标准API格式',
+    'api_verification_features': '🌐 验证码接收特性',
+    'api_verify_feature1': '· 每个账号生成独立验证链接',
+    'api_verify_feature2': '· 实时显示验证码，自动刷新',
+    'api_verify_feature3': '· 支持HTTP API调用获取验证码',
+    'api_verify_feature4': '· 5分钟自动过期保护',
+    'api_usage': '📤 使用方法',
+    'api_usage_step1': '1. 上传ZIP文件（包含TData或Session）',
+    'api_usage_step2': '2. 系统自动分析账号信息',
+    'api_usage_step3': '3. 生成API格式文件和验证链接',
+    'api_usage_step4': '4. 下载结果使用',
+    'api_upload_prompt': '请上传您的文件...',
+    'api_back_menu': '返回主菜单',
+    
+    # 处理中
+    'api_processing_file': '正在处理您的文件',
+    
+    # 扫描完成
+    'api_found_accounts': '✅ 已找到 {count} 个账号文件',
+    'api_type_session': '📊 类型: SESSION',
+    'api_type_tdata': '📊 类型: TDATA',
+    
+    # 输入2FA密码
+    'api_enter_2fa': '🔐 请输入将在网页上显示的 2FA 密码：',
+    'api_2fa_example': '· 直接发送 2FA 密码，例如: My2FA@2024',
+    'api_2fa_skip': '· 或回复 跳过 使用自动识别',
+    'api_2fa_timeout': '⏰ 5分钟超时',
+    'api_skip': '跳过',
+    
+    # 转换进度
+    'api_converting': '🔄 API转换进行中...',
+    'api_progress': '📊 转换进度',
+    'api_progress_percent': '· 进度: {percent}% ({done}/{total})',
+    'api_progress_success': '· ✅ 成功: {count} 个',
+    'api_progress_failed': '· ❌ 失败: {count} 个',
+    'api_progress_speed': '· 平均速度: {speed} 个/秒',
+    'api_progress_remaining': '· 预计剩余: {time} 分钟',
+    'api_processing_status': '⚡ 处理状态',
+    'api_file_type_session': '· 文件类型: SESSION',
+    'api_file_type_tdata': '· 文件类型: TDATA',
+    'api_2fa_mode_auto': '· 2FA模式: 自动检测',
+    'api_2fa_mode_manual': '· 2FA模式: 手动输入',
+    'api_elapsed_time': '· 已用时: {time} 秒',
+    
+    # 转换完成
+    'api_complete': '🎉 API格式转换完成！',
+    'api_statistics': '📊 转换统计',
+    'api_stat_total': '· 总计: {count} 个',
+    'api_stat_success': '· ✅ 成功: {count} 个 ({percent}%)',
+    'api_stat_failed': '· ❌ 失败: {count} 个 ({percent}%)',
+    'api_stat_duration': '· ⏱️ 用时: {time} 秒',
+    'api_stat_speed': '· 🚀 速度: {speed} 个/秒',
+    'api_sending_txt': '📄 正在发送TXT文件...',
+    
+    # 结果文件
+    'api_result_filename': 'TG_API_{count}个账号.txt',
+    'api_result_desc': '📋 API链接（手机号 + 链接）',
+    'api_use_again': '✅ 如需再次使用 /start（转换失败的账户不会发送）',
 }
