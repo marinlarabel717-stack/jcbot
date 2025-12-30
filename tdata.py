@@ -2757,12 +2757,13 @@ class SpamBotChecker:
             try:
                 is_authorized = await asyncio.wait_for(client.is_user_authorized(), timeout=15)
                 if not is_authorized:
+                    # 无法登录才是真正的封禁
                     return "封禁", "账号未登录或已失效", account_name
             except asyncio.TimeoutError:
                 return "连接错误", f"{proxy_used} | 授权检查超时", account_name
             except Exception as e:
                 error_msg = str(e).lower()
-                # 检测冻结账户相关错误
+                # 检测冻结账户相关错误 - 这些错误意味着账号无法登录
                 if "deactivated" in error_msg or "banned" in error_msg or "deleted" in error_msg:
                     return "冻结", f"{proxy_used} | 账号已被冻结/删除", account_name
                 if "auth key" in error_msg or "unregistered" in error_msg:
@@ -2774,7 +2775,8 @@ class SpamBotChecker:
             try:
                 me = await asyncio.wait_for(client.get_me(), timeout=15)
                 if not me:
-                    return "封禁", "无法获取账号信息", account_name
+                    # 能登录但无法获取信息 - 不是封禁，是连接问题
+                    return "连接错误", f"{proxy_used} | 无法获取账号信息", account_name
                 user_info = f"ID:{me.id}"
                 if me.username:
                     user_info += f" @{me.username}"
@@ -2784,12 +2786,12 @@ class SpamBotChecker:
                 return "连接错误", f"{proxy_used} | 获取账号信息超时", account_name
             except Exception as e:
                 error_msg = str(e).lower()
-                # 检测冻结账户相关错误
+                # 检测冻结账户相关错误 - 这些错误意味着账号已被系统冻结
                 if "deactivated" in error_msg or "banned" in error_msg or "deleted" in error_msg:
                     return "冻结", f"{proxy_used} | 账号已被冻结/删除", account_name
-                # 快速模式下用户信息获取失败不算严重错误
+                # 快速模式下用户信息获取失败不算严重错误 - 能登录就不是封禁
                 if not config.PROXY_FAST_MODE:
-                    return "封禁", f"账号信息获取失败: {str(e)[:30]}", account_name
+                    return "连接错误", f"{proxy_used} | 账号信息获取失败: {str(e)[:30]}", account_name
             
             # 4. 发送消息给 SpamBot（带超时）
             try:
@@ -2801,46 +2803,157 @@ class SpamBotChecker:
                 
                 # 获取最新消息（带超时）
                 messages = await asyncio.wait_for(
-                    client.get_messages('SpamBot', limit=1), 
+                    client.get_messages('SpamBot', limit=5), 
                     timeout=15
                 )
                 
-                if messages and messages[0].message:
-                    spambot_reply = messages[0].message
-                    english_reply = self.translate_to_english(spambot_reply)
-                    status = self.analyze_spambot_response(english_reply.lower())
+                if messages:
+                    # 查找SpamBot的回复（跳过自己发送的消息）
+                    spambot_reply = None
+                    for msg in messages:
+                        if msg.message and not msg.out:  # 不是自己发送的消息
+                            spambot_reply = msg.message
+                            break
                     
-                    # 快速模式下简化回复信息
-                    if config.PROXY_FAST_MODE:
-                        reply_preview = spambot_reply[:20] + "..." if len(spambot_reply) > 20 else spambot_reply
+                    if spambot_reply:
+                        english_reply = self.translate_to_english(spambot_reply)
+                        status = self.analyze_spambot_response(english_reply.lower())
+                        
+                        # 如果是介绍页面，重试发送 /start
+                        if status == 'intro':
+                            print(f"🔄 [{account_name}] 检测到介绍页面，重试发送/start...")
+                            await asyncio.sleep(1)
+                            await asyncio.wait_for(
+                                client.send_message('SpamBot', '/start'), 
+                                timeout=15
+                            )
+                            await asyncio.sleep(2)
+                            
+                            # 重新获取消息
+                            retry_messages = await asyncio.wait_for(
+                                client.get_messages('SpamBot', limit=3), 
+                                timeout=15
+                            )
+                            
+                            # 再次查找SpamBot的回复
+                            for retry_msg in retry_messages:
+                                if retry_msg.message and not retry_msg.out:
+                                    retry_reply = retry_msg.message
+                                    english_retry = self.translate_to_english(retry_reply)
+                                    retry_status = self.analyze_spambot_response(english_retry.lower())
+                                    
+                                    # 如果不再是intro，使用新状态
+                                    if retry_status != 'intro':
+                                        status = retry_status
+                                        spambot_reply = retry_reply
+                                        print(f"✅ [{account_name}] 重试成功，获取到状态: {status}")
+                                        break
+                            
+                            # 如果重试后仍是intro或未知，返回未知状态
+                            if status == 'intro':
+                                print(f"⚠️ [{account_name}] 重试后仍是介绍页面，返回未知状态")
+                                return "未知", f"{user_info} | {proxy_used} | SpamBot返回介绍页面（无法获取状态）", account_name
+                        
+                        # 如果状态是"未知"，不应该判定为封禁
+                        if status == '未知':
+                            return "未知", f"{user_info} | {proxy_used} | 无法识别SpamBot响应", account_name
+                        
+                        # 快速模式下简化回复信息
+                        if config.PROXY_FAST_MODE:
+                            reply_preview = spambot_reply[:20] + "..." if len(spambot_reply) > 20 else spambot_reply
+                        else:
+                            reply_preview = spambot_reply[:30] + "..." if len(spambot_reply) > 30 else spambot_reply
+                        
+                        # 构建详细信息字符串，包含连接时间
+                        total_elapsed = time.time() - connect_start
+                        info_str = f"{user_info} | {proxy_used}"
+                        if config.PROXY_DEBUG_VERBOSE:
+                            info_str += f" (ok {total_elapsed:.2f}s)"
+                        info_str += f" | {reply_preview}"
+                        
+                        return status, info_str, account_name
                     else:
-                        reply_preview = spambot_reply[:30] + "..." if len(spambot_reply) > 30 else spambot_reply
-                    
-                    # 构建详细信息字符串，包含连接时间
-                    total_elapsed = time.time() - connect_start
-                    info_str = f"{user_info} | {proxy_used}"
-                    if config.PROXY_DEBUG_VERBOSE:
-                        info_str += f" (ok {total_elapsed:.2f}s)"
-                    info_str += f" | {reply_preview}"
-                    
-                    return status, info_str, account_name
+                        return "连接错误", f"{user_info} | {proxy_used} | SpamBot无响应", account_name
                 else:
                     return "连接错误", f"{user_info} | {proxy_used} | SpamBot无响应", account_name
                     
             except asyncio.TimeoutError:
                 last_error = "SpamBot通信超时"
+                print(f"⏱️ [{account_name}] SpamBot通信超时")
                 return "连接错误", f"{user_info} | {proxy_used} | SpamBot通信超时", account_name
             except Exception as e:
                 error_str = str(e).lower()
+                error_type = type(e).__name__
+                
+                # 打印详细的异常信息用于调试
+                print(f"❌ [{account_name}] SpamBot通信异常: {error_type} - {str(e)[:100]}")
+                
+                # 检测用户屏蔽了SpamBot的情况 - 尝试自动解除屏蔽
+                if "youblockeduser" in error_type.lower() or "you blocked" in error_str:
+                    print(f"🔓 [{account_name}] 检测到用户屏蔽了SpamBot，尝试自动解除屏蔽...")
+                    try:
+                        # 解除屏蔽 SpamBot
+                        from telethon.tl.functions.contacts import UnblockRequest
+                        await client(UnblockRequest(id='SpamBot'))
+                        print(f"✅ [{account_name}] 已自动解除对SpamBot的屏蔽")
+                        
+                        # 等待一下，然后重新尝试发送消息
+                        await asyncio.sleep(1)
+                        await asyncio.wait_for(
+                            client.send_message('SpamBot', '/start'), 
+                            timeout=15
+                        )
+                        await asyncio.sleep(2)
+                        
+                        # 重新获取消息
+                        messages = await asyncio.wait_for(
+                            client.get_messages('SpamBot', limit=5), 
+                            timeout=15
+                        )
+                        
+                        if messages:
+                            for msg in messages:
+                                if msg.message and not msg.out:
+                                    spambot_reply = msg.message
+                                    english_reply = self.translate_to_english(spambot_reply)
+                                    status = self.analyze_spambot_response(english_reply.lower())
+                                    
+                                    if status == '未知':
+                                        return "未知", f"{user_info} | {proxy_used} | 无法识别SpamBot响应", account_name
+                                    
+                                    reply_preview = spambot_reply[:30] + "..." if len(spambot_reply) > 30 else spambot_reply
+                                    total_elapsed = time.time() - connect_start
+                                    info_str = f"{user_info} | {proxy_used}"
+                                    if config.PROXY_DEBUG_VERBOSE:
+                                        info_str += f" (ok {total_elapsed:.2f}s)"
+                                    info_str += f" | {reply_preview}"
+                                    print(f"✅ [{account_name}] 解除屏蔽后成功获取状态: {status}")
+                                    return status, info_str, account_name
+                        
+                        # 如果解除屏蔽后仍无响应
+                        return "未知", f"{user_info} | {proxy_used} | 已解除屏蔽但SpamBot无响应", account_name
+                        
+                    except Exception as unblock_error:
+                        print(f"⚠️ [{account_name}] 自动解除屏蔽失败: {str(unblock_error)[:50]}")
+                        return "未知", f"{user_info} | {proxy_used} | 用户已屏蔽SpamBot（自动解除失败）", account_name
+                
                 # 检测冻结账户相关错误
                 if "deactivated" in error_str or "banned" in error_str or "deleted" in error_str:
                     return "冻结", f"{user_info} | {proxy_used} | 账号已被冻结", account_name
-                if any(word in error_str for word in ["restricted", "limited", "blocked", "flood"]):
-                    return "封禁", f"{user_info} | {proxy_used} | 账号受限制", account_name
-                if "peer" in error_str and "access" in error_str:
-                    return "封禁", f"{user_info} | {proxy_used} | 无法访问SpamBot", account_name
+                
+                # 能登录但无法访问SpamBot的情况：检查特定的Telegram API错误
+                # 只检查真正的权限/访问错误，不检查包含"limited"等词的一般错误
+                if "peerflood" in error_type.lower() or "chatrestricted" in error_type.lower():
+                    print(f"🚫 [{account_name}] 检测到账号受限错误: {error_type}")
+                    return "连接错误", f"{user_info} | {proxy_used} | 无法访问SpamBot（账号受限）", account_name
+                if ("peer" in error_str and "access" in error_str) or "userprivacy" in error_type.lower():
+                    print(f"🚫 [{account_name}] 检测到权限问题: {error_type}")
+                    return "连接错误", f"{user_info} | {proxy_used} | 无法访问SpamBot（权限问题）", account_name
+                
+                # 其他错误统一返回通信失败，并显示详细错误信息
                 last_error = str(e)
-                return "连接错误", f"{user_info} | {proxy_used} | SpamBot通信失败: {str(e)[:20]}", account_name
+                print(f"⚠️ [{account_name}] SpamBot通信失败，错误类型: {error_type}")
+                return "连接错误", f"{user_info} | {proxy_used} | SpamBot通信失败: {error_type}", account_name
             
         except asyncio.TimeoutError:
             last_error = "连接超时"
@@ -2901,12 +3014,14 @@ class SpamBotChecker:
         识别更多状态类型
         
         检测优先级（从高到低）：
-        1. 地理限制（判定为无限制）- 最高优先级
-        2. 冻结（永久限制）- 最严重
-        3. 临时限制
-        4. 垃圾邮件限制
-        5. 等待验证
-        6. 无限制（正常）
+        1. 介绍页面（首次访问）- 需要重试
+        2. 地理限制（判定为无限制）- 最高优先级
+        3. 冻结（永久限制）- 最严重
+        4. 临时限制
+        5. 垃圾邮件限制
+        6. 等待验证
+        7. 无限制（正常）
+        8. 未知响应（默认为未知而不是封禁）
         """
         if not response:
             return "无响应"
@@ -2915,45 +3030,57 @@ class SpamBotChecker:
         # 翻译并转换为英文进行匹配
         response_en = self.translate_to_english(response).lower()
         
-        # 1. 首先检查地理限制（判定为无限制）- 最高优先级
+        # 1. 首先检查是否是介绍页面（首次访问SpamBot）
+        intro_keywords = [
+            "what can this bot do",
+            "i'm telegram's official spam info bot",
+            "hello! i'm telegram's official spam info bot",
+            "this bot is part of telegram",
+        ]
+        for keyword in intro_keywords:
+            if keyword in response_lower or keyword in response_en:
+                return "intro"
+        
+        # 2. 检查地理限制（判定为无限制）- 最高优先级
         # "some phone numbers may trigger a harsh response" 是地理限制提示，不是双向限制
         for pattern in self.status_patterns["地理限制"]:
             pattern_lower = pattern.lower()
             if pattern_lower in response_lower or pattern_lower in response_en:
                 return "无限制"
         
-        # 2. 检查冻结/永久限制状态（最严重）
+        # 3. 检查冻结/永久限制状态（最严重）
+        # 注意：只有明确包含这些关键词才判定为冻结
         for pattern in self.status_patterns["冻结"]:
             pattern_lower = pattern.lower()
             if pattern_lower in response_lower or pattern_lower in response_en:
                 return "冻结"
         
-        # 3. 检查临时限制状态
+        # 4. 检查临时限制状态
         for pattern in self.status_patterns["临时限制"]:
             pattern_lower = pattern.lower()
             if pattern_lower in response_lower or pattern_lower in response_en:
                 return "临时限制"
         
-        # 4. 检查一般垃圾邮件限制
+        # 5. 检查一般垃圾邮件限制
         for pattern in self.status_patterns["垃圾邮件"]:
             pattern_lower = pattern.lower()
             if pattern_lower in response_lower or pattern_lower in response_en:
                 return "垃圾邮件"
         
-        # 5. 检查等待验证状态
+        # 6. 检查等待验证状态
         for pattern in self.status_patterns["等待验证"]:
             pattern_lower = pattern.lower()
             if pattern_lower in response_lower or pattern_lower in response_en:
                 return "等待验证"
         
-        # 6. 检查无限制（正常状态）
+        # 7. 检查无限制（正常状态）
         for pattern in self.status_patterns["无限制"]:
             pattern_lower = pattern.lower()
             if pattern_lower in response_lower or pattern_lower in response_en:
                 return "无限制"
         
-        # 7. 未知响应 - 返回无限制作为默认值（保持向后兼容）
-        return "无限制"
+        # 8. 未知响应 - 返回"未知"而不是默认为封禁
+        return "未知"
     
     def get_proxy_usage_stats(self) -> Dict[str, int]:
         """
@@ -3145,11 +3272,13 @@ class SpamBotChecker:
             try:
                 is_authorized = await asyncio.wait_for(client.is_user_authorized(), timeout=15)
                 if not is_authorized:
+                    # 无法登录才是真正的封禁
                     return "封禁", f"{proxy_used} | 账号未授权", tdata_name
             except asyncio.TimeoutError:
                 return "连接错误", f"{proxy_used} | 授权检查超时", tdata_name
             except Exception as e:
                 error_msg = str(e).lower()
+                # 这些错误意味着账号无法登录
                 if "deactivated" in error_msg or "banned" in error_msg or "deleted" in error_msg:
                     return "冻结", f"{proxy_used} | 账号已被冻结/删除", tdata_name
                 if "auth key" in error_msg or "unregistered" in error_msg:
@@ -3163,7 +3292,12 @@ class SpamBotChecker:
             except asyncio.TimeoutError:
                 phone = "未知号码"
                 logger.warning(f"获取手机号超时: {tdata_name}")
-            except Exception:
+            except Exception as e:
+                error_msg = str(e).lower()
+                # 检测冻结账户相关错误
+                if "deactivated" in error_msg or "banned" in error_msg or "deleted" in error_msg:
+                    return "冻结", f"{proxy_used} | 账号已被冻结/删除", tdata_name
+                # 能登录但无法获取信息 - 不是封禁
                 phone = "未知号码"
             
             # 5. 冻结检测（采用FloodError检测）
@@ -3186,59 +3320,115 @@ class SpamBotChecker:
                 await asyncio.sleep(config.SPAMBOT_WAIT_TIME if not config.PROXY_FAST_MODE else SPAMBOT_FAST_WAIT)
                 
                 entity = await client.get_entity(178220800)  # SpamBot固定ID
-                async for message in client.iter_messages(entity, limit=1):
-                    text = message.raw_text.lower()
-                    
-                    # 智能翻译和状态判断
-                    english_text = self.translate_to_english(text)
-                    
-                    # 1. 首先检查地理限制（判定为无限制）- 最高优先级
-                    if any(keyword in english_text for keyword in [
-                        'some phone numbers may trigger a harsh response',
-                        'phone numbers may trigger'
-                    ]):
-                        return "无限制", f"手机号:{phone} | {proxy_used} | 正常无限制（地理限制提示）", tdata_name
-                    
-                    # 2. 检查临时限制（垃圾邮件）
-                    if any(keyword in english_text for keyword in [
-                        'account is now limited until', 'limited until', 'account is limited until',
-                        'moderators have confirmed the report', 'users found your messages annoying',
-                        'will be automatically released', 'limitations will last longer next time',
-                        'while the account is limited', 'account was limited',
-                        'you will not be able to send messages',
-                        'actions can trigger a harsh response'
-                    ]):
-                        return "垃圾邮件", f"手机号:{phone} | {proxy_used} | 垃圾邮件限制", tdata_name
-                    
-                    # 3. 然后检查永久冻结
-                    elif any(keyword in english_text for keyword in [
-                        'permanently banned', 'account has been frozen permanently',
-                        'permanently restricted', 'account is permanently', 'banned permanently',
-                        'blocked for violations', 'terms of service', 'violations of the telegram',
-                        'account was blocked', 'banned', 'suspended'
-                    ]):
-                        return "冻结", f"手机号:{phone} | {proxy_used} | 账号被冻结/封禁", tdata_name
-                    
-                    # 4. 检查无限制状态
-                    elif any(keyword in english_text for keyword in [
-                        'no limits', 'free as a bird', 'no restrictions', 'good news'
-                    ]):
-                        return "无限制", f"手机号:{phone} | {proxy_used} | 正常无限制", tdata_name
-                    
-                    # 5. 默认返回无限制
-                    else:
-                        return "无限制", f"手机号:{phone} | {proxy_used} | 正常无限制", tdata_name
+                messages_found = False
+                spambot_reply = None
                 
-                # 如果没有消息回复
-                return "封禁", f"手机号:{phone} | {proxy_used} | SpamBot无回复", tdata_name
+                async for message in client.iter_messages(entity, limit=5):
+                    if message.raw_text and not message.out:  # 找到SpamBot的回复
+                        messages_found = True
+                        spambot_reply = message.raw_text
+                        text = spambot_reply.lower()
+                        
+                        # 智能翻译和状态判断
+                        english_text = self.translate_to_english(text)
+                        
+                        # 使用统一的analyze_spambot_response方法
+                        status = self.analyze_spambot_response(english_text)
+                        
+                        # 如果是介绍页面，重试
+                        if status == 'intro':
+                            print(f"🔄 [TData:{tdata_name}] 检测到介绍页面，重试发送/start...")
+                            await asyncio.sleep(1)
+                            await asyncio.wait_for(client.send_message('SpamBot', '/start'), timeout=5)
+                            await asyncio.sleep(config.SPAMBOT_WAIT_TIME if not config.PROXY_FAST_MODE else SPAMBOT_FAST_WAIT)
+                            
+                            # 重新获取消息
+                            async for retry_message in client.iter_messages(entity, limit=3):
+                                if retry_message.raw_text and not retry_message.out:
+                                    retry_text = retry_message.raw_text
+                                    english_retry = self.translate_to_english(retry_text.lower())
+                                    retry_status = self.analyze_spambot_response(english_retry)
+                                    
+                                    if retry_status != 'intro':
+                                        status = retry_status
+                                        spambot_reply = retry_text
+                                        print(f"✅ [TData:{tdata_name}] 重试成功，获取到状态: {status}")
+                                        break
+                            
+                            # 如果重试后仍是intro
+                            if status == 'intro':
+                                print(f"⚠️ [TData:{tdata_name}] 重试后仍是介绍页面，返回未知状态")
+                                return "未知", f"手机号:{phone} | {proxy_used} | SpamBot返回介绍页面（无法获取状态）", tdata_name
+                        
+                        # 如果是未知状态
+                        if status == '未知':
+                            return "未知", f"手机号:{phone} | {proxy_used} | 无法识别SpamBot响应", tdata_name
+                        
+                        # 返回检测到的状态
+                        return status, f"手机号:{phone} | {proxy_used} | {spambot_reply[:30]}...", tdata_name
+                
+                # 如果没有找到消息回复 - 能登录但无响应不是封禁
+                if not messages_found:
+                    return "连接错误", f"手机号:{phone} | {proxy_used} | SpamBot无响应", tdata_name
         
             except asyncio.TimeoutError:
+                print(f"⏱️ [TData:{tdata_name}] SpamBot检测超时")
                 return "连接错误", f"手机号:{phone} | {proxy_used} | SpamBot检测超时", tdata_name
             except Exception as e:
                 error_str = str(e).lower()
-                if any(word in error_str for word in ['restricted', 'banned', 'blocked']):
-                    return "封禁", f"手机号:{phone} | {proxy_used} | 账号受限", tdata_name
-                return "封禁", f"手机号:{phone} | {proxy_used} | SpamBot检测失败: {str(e)[:30]}", tdata_name
+                error_type = type(e).__name__
+                
+                # 打印详细的异常信息用于调试
+                print(f"❌ [TData:{tdata_name}] SpamBot通信异常: {error_type} - {str(e)[:100]}")
+                
+                # 检测用户屏蔽了SpamBot的情况 - 尝试自动解除屏蔽
+                if "youblockeduser" in error_type.lower() or "you blocked" in error_str:
+                    print(f"🔓 [TData:{tdata_name}] 检测到用户屏蔽了SpamBot，尝试自动解除屏蔽...")
+                    try:
+                        # 解除屏蔽 SpamBot
+                        from telethon.tl.functions.contacts import UnblockRequest
+                        await client(UnblockRequest(id='SpamBot'))
+                        print(f"✅ [TData:{tdata_name}] 已自动解除对SpamBot的屏蔽")
+                        
+                        # 等待一下，然后重新尝试
+                        await asyncio.sleep(1)
+                        await asyncio.wait_for(client.send_message('SpamBot', '/start'), timeout=5)
+                        await asyncio.sleep(config.SPAMBOT_WAIT_TIME if not config.PROXY_FAST_MODE else 0.1)
+                        
+                        entity = await client.get_entity(178220800)  # SpamBot固定ID
+                        async for message in client.iter_messages(entity, limit=5):
+                            if message.raw_text and not message.out:
+                                spambot_reply = message.raw_text
+                                english_text = self.translate_to_english(spambot_reply.lower())
+                                status = self.analyze_spambot_response(english_text)
+                                
+                                if status == '未知':
+                                    return "未知", f"手机号:{phone} | {proxy_used} | 无法识别SpamBot响应", tdata_name
+                                
+                                print(f"✅ [TData:{tdata_name}] 解除屏蔽后成功获取状态: {status}")
+                                return status, f"手机号:{phone} | {proxy_used} | {spambot_reply[:30]}...", tdata_name
+                        
+                        # 如果解除屏蔽后仍无响应
+                        return "未知", f"手机号:{phone} | {proxy_used} | 已解除屏蔽但SpamBot无响应", tdata_name
+                        
+                    except Exception as unblock_error:
+                        print(f"⚠️ [TData:{tdata_name}] 自动解除屏蔽失败: {str(unblock_error)[:50]}")
+                        return "未知", f"手机号:{phone} | {proxy_used} | 用户已屏蔽SpamBot（自动解除失败）", tdata_name
+                
+                # 检测账号被系统冻结的错误
+                if "deactivated" in error_str or "deleted" in error_str:
+                    return "冻结", f"手机号:{phone} | {proxy_used} | 账号已被冻结", tdata_name
+                
+                # 能登录但无法访问SpamBot - 检查特定的Telegram API错误
+                if "peerflood" in error_type.lower() or "chatrestricted" in error_type.lower():
+                    print(f"🚫 [TData:{tdata_name}] 检测到账号受限错误: {error_type}")
+                    return "连接错误", f"手机号:{phone} | {proxy_used} | 无法访问SpamBot（账号受限）", tdata_name
+                if ("peer" in error_str and "access" in error_str) or "userprivacy" in error_type.lower():
+                    print(f"🚫 [TData:{tdata_name}] 检测到权限问题: {error_type}")
+                    return "连接错误", f"手机号:{phone} | {proxy_used} | 无法访问SpamBot（权限问题）", tdata_name
+                
+                print(f"⚠️ [TData:{tdata_name}] SpamBot通信失败，错误类型: {error_type}")
+                return "连接错误", f"手机号:{phone} | {proxy_used} | SpamBot检测失败: {error_type}", tdata_name
                 
         except Exception as e:
             error_str = str(e).lower()
