@@ -19209,13 +19209,13 @@ class EnhancedBot:
         
         # 检查是否启用
         if not config.ENABLE_ONE_CLICK_CLEANUP:
-            self.safe_edit_message(query, "❌ 一键清理功能未启用")
+            self.safe_edit_message(query, t(user_id, 'cleanup_feature_disabled'))
             return
         
         # 检查会员权限
         is_member, _, _ = self.db.check_membership(user_id)
         if not is_member and not self.db.is_admin(user_id):
-            self.safe_edit_message(query, "❌ 一键清理需要会员权限")
+            self.safe_edit_message(query, t(user_id, 'cleanup_need_member'))
             return
         
         # 设置用户状态
@@ -19226,31 +19226,31 @@ class EnhancedBot:
             "waiting_cleanup_file"
         )
         
-        text = """
-<b>🧹 一键清理功能</b>
+        text = f"""
+<b>{t(user_id, 'cleanup_title')}</b>
 
-<b>⚠️ 重要提示</b>
-此功能会对上传的账号执行以下操作：
-• 🚪 离开所有群组和频道
-• 🗑️ 删除所有聊天记录（尽可能撤回）
-• 📇 清除所有联系人
-• 📁 归档剩余对话
+<b>{t(user_id, 'cleanup_important')}</b>
+{t(user_id, 'cleanup_intro')}
+• {t(user_id, 'cleanup_action1')}
+• {t(user_id, 'cleanup_action2')}
+• {t(user_id, 'cleanup_action3')}
+• {t(user_id, 'cleanup_action4')}
 
-<b>🔴 不可逆操作</b>
-一旦开始清理，无法撤销！请谨慎使用。
+<b>{t(user_id, 'cleanup_irreversible')}</b>
+{t(user_id, 'cleanup_irreversible_warn')}
 
-<b>✅ 安全保障</b>
-• 验证码记录（接码记录）将被保留
-• 自动处理 Telegram 限速
-• 生成详细的清理报告
+<b>{t(user_id, 'cleanup_safety')}</b>
+• {t(user_id, 'cleanup_safety1')}
+• {t(user_id, 'cleanup_safety2')}
+• {t(user_id, 'cleanup_safety3')}
 
-<b>📤 请上传 Session 或 TData ZIP 文件</b>
+<b>{t(user_id, 'cleanup_upload_prompt')}</b>
 
-⏰ <i>5分钟内未上传将自动取消</i>
+⏰ <i>{t(user_id, 'cleanup_timeout')}</i>
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("❌ 取消", callback_data="back_to_main")]
+            [InlineKeyboardButton(t(user_id, 'cleanup_btn_cancel'), callback_data="back_to_main")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
@@ -19260,7 +19260,7 @@ class EnhancedBot:
         user_id = update.effective_user.id
         start_time = time.time()
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理您的文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, f"📥 <b>{t(user_id, 'cleanup_processing_file')}...</b>", 'HTML')
         if not progress_msg:
             return
         
@@ -19280,7 +19280,7 @@ class EnhancedBot:
             if not files:
                 try:
                     progress_msg.edit_text(
-                        "❌ <b>未找到有效文件</b>\n\n请确保ZIP包含Session或TData格式的文件",
+                        f"❌ <b>{t(user_id, 'cleanup_no_valid_files')}</b>\n\n{t(user_id, 'cleanup_ensure_format')}",
                         parse_mode='HTML'
                     )
                 except:
@@ -19288,24 +19288,25 @@ class EnhancedBot:
                 return
             
             total_files = len(files)
+            file_type_text = t(user_id, 'cleanup_type_session') if file_type == 'session' else t(user_id, 'cleanup_type_tdata')
             
             # 显示确认消息
             try:
                 progress_msg.edit_text(
-                    f"✅ <b>已找到 {total_files} 个账号文件</b>\n"
-                    f"📊 类型: {file_type.upper()}\n\n"
-                    f"⚠️ <b>确认清理操作？</b>\n\n"
-                    f"此操作将：\n"
-                    f"• 离开所有群组和频道\n"
-                    f"• 删除所有聊天记录\n"
-                    f"• 清除所有联系人\n"
-                    f"• 归档剩余对话\n\n"
-                    f"<b>🔴 此操作不可逆！</b>",
+                    f"{t(user_id, 'cleanup_found_accounts').format(count=total_files)}\n"
+                    f"{file_type_text}\n\n"
+                    f"<b>{t(user_id, 'cleanup_confirm_title')}</b>\n\n"
+                    f"{t(user_id, 'cleanup_confirm_intro')}\n"
+                    f"{t(user_id, 'cleanup_confirm_action1')}\n"
+                    f"{t(user_id, 'cleanup_confirm_action2')}\n"
+                    f"{t(user_id, 'cleanup_confirm_action3')}\n"
+                    f"{t(user_id, 'cleanup_confirm_action4')}\n\n"
+                    f"<b>{t(user_id, 'cleanup_confirm_warn')}</b>",
                     parse_mode='HTML',
                     reply_markup=InlineKeyboardMarkup([
                         [
-                            InlineKeyboardButton("✅ 确认清理", callback_data="cleanup_confirm"),
-                            InlineKeyboardButton("❌ 取消", callback_data="cleanup_cancel")
+                            InlineKeyboardButton(t(user_id, 'cleanup_btn_confirm'), callback_data="cleanup_confirm"),
+                            InlineKeyboardButton(t(user_id, 'cleanup_btn_cancel'), callback_data="cleanup_cancel")
                         ]
                     ])
                 )
@@ -19329,7 +19330,7 @@ class EnhancedBot:
             
             try:
                 progress_msg.edit_text(
-                    f"❌ <b>处理失败</b>\n\n错误: {str(e)}",
+                    f"❌ <b>{t(user_id, 'cleanup_processing_failed')}</b>\n\n{t(user_id, 'cleanup_error').format(error=str(e))}",
                     parse_mode='HTML'
                 )
             except:
@@ -19767,7 +19768,7 @@ class EnhancedBot:
         query.answer()
         
         if user_id not in self.pending_cleanup:
-            self.safe_edit_message(query, "❌ 没有待处理的清理任务")
+            self.safe_edit_message(query, t(user_id, 'cleanup_no_pending_task'))
             return
         
         task = self.pending_cleanup[user_id]
@@ -19775,7 +19776,7 @@ class EnhancedBot:
         # 检查超时（10分钟）
         if time.time() - task['started_at'] > 600:
             self.cleanup_cleanup_task(user_id)
-            self.safe_edit_message(query, "❌ 操作超时，请重新开始")
+            self.safe_edit_message(query, t(user_id, 'cleanup_operation_timeout'))
             return
         
         # 启动异步清理
@@ -19785,9 +19786,9 @@ class EnhancedBot:
         thread = threading.Thread(target=execute_cleanup, daemon=True)
         thread.start()
         
-        self.safe_edit_message(query, "🧹 <b>开始清理...</b>\n\n正在初始化清理服务...", 'HTML')
+        self.safe_edit_message(query, f"🧹 <b>{t(user_id, 'cleanup_starting')}...</b>\n\n{t(user_id, 'cleanup_initializing')}", 'HTML')
     
-    async def _process_single_account_full(self, file_info: tuple, file_type: str, progress_msg, all_files_count: int, completed_count: dict, lock: asyncio.Lock, start_time: float) -> dict:
+    async def _process_single_account_full(self, file_info: tuple, file_type: str, progress_msg, all_files_count: int, completed_count: dict, lock: asyncio.Lock, start_time: float, user_id: int) -> dict:
         """处理单个账户的完整流程（包含连接和清理）"""
         file_path, file_name = file_info
         result_data = {
@@ -19812,12 +19813,12 @@ class EnhancedBot:
                 # 使用安全转换函数，带超时和错误处理
                 session_path, error_msg = await safe_convert_tdata(file_path, phone_for_log)
                 
-                if session_path is None:
-                    # 转换失败，跳过该账号
-                    logger.warning(f"⚠️ 跳过账号 {phone_for_log}，转换失败: {error_msg}")
-                    result_data['error'] = error_msg
-                    result_data['error_details'].append(error_msg)
-                    return result_data
+                    if session_path is None:
+                        # 转换失败，跳过该账号
+                        logger.warning(f"⚠️ 跳过账号 {phone_for_log}，转换失败: {error_msg}")
+                        result_data['error'] = error_msg
+                        result_data['error_details'].append(error_msg)
+                        return result_data
                 
                 # 使用转换后的session创建不接收更新的客户端以提升清理速度
                 try:
@@ -19946,14 +19947,14 @@ class EnhancedBot:
                             else:
                                 time_remaining = f"{minutes:02d}:{seconds:02d}"
                         else:
-                            time_remaining = "计算中..."
+                            time_remaining = t(user_id, 'cleanup_initializing')
                         
                         message_text = (
-                            f"🧹 <b>正在清理中，请耐心等待。</b>\n\n"
-                            f"📄 当前: {file_name}\n"
-                            f"📊 总进度: {current_idx}/{all_files_count} ({progress_percent}%)\n"
+                            f"<b>{t(user_id, 'cleanup_in_progress')}</b>\n\n"
+                            f"{t(user_id, 'cleanup_current').format(filename=file_name)}\n"
+                            f"{t(user_id, 'cleanup_total_progress').format(current=current_idx, total=all_files_count, percent=progress_percent)}\n"
                             f"⚙️ [{progress_bar}]\n"
-                            f"⏳ 预计完成 还剩 {time_remaining}"
+                            f"{t(user_id, 'cleanup_eta').format(time=time_remaining)}"
                         )
                         
                         # 移除按钮，直接显示进度信息，减少刷新频率避免限流
@@ -20052,7 +20053,7 @@ class EnhancedBot:
             async def process_with_semaphore(file_info):
                 async with semaphore:
                     return await self._process_single_account_full(
-                        file_info, file_type, progress_msg, len(files), completed_count, lock, start_time
+                        file_info, file_type, progress_msg, len(files), completed_count, lock, start_time, user_id
                     )
             
             # 并发处理所有账户
@@ -20299,47 +20300,47 @@ class EnhancedBot:
                 if results_summary.get('cleanup_error'):
                     # 清理过程出错，发送错误消息但仍尝试发送已有的结果
                     final_text = f"""
-⚠️ <b>清理部分完成（出现错误）</b>
+⚠️ <b>{t(user_id, 'cleanup_partial_complete')}</b>
 
-<b>📊 已处理统计</b>
-• 总账号数: {results_summary['total']}
-• 已处理: {actual_processed}/{results_summary['total']}
-• ✅ 成功: {results_summary['success']} ({success_rate:.1f}%)
-• ❄️ 冻结: {results_summary['frozen']} ({frozen_rate:.1f}%)
-• ❌ 失败: {results_summary['failed']}
+<b>📊 {t(user_id, 'cleanup_already_processed')}</b>
+• {t(user_id, 'cleanup_stat_total').format(count=results_summary['total'])}
+• {t(user_id, 'cleanup_actual_processed').format(actual=actual_processed, total=results_summary['total'])}
+• {t(user_id, 'cleanup_stat_success').format(count=results_summary['success'], percent=success_rate)}
+• {t(user_id, 'cleanup_stat_frozen').format(count=results_summary['frozen'], percent=frozen_rate)}
+• {t(user_id, 'cleanup_stat_failed').format(count=results_summary['failed'])}
 
-⚠️ <b>错误信息：</b> {results_summary['cleanup_error'][:200]}
+⚠️ <b>{t(user_id, 'cleanup_error_info')}</b> {results_summary['cleanup_error'][:200]}
 
-<b>📦 正在发送已处理的结果...</b>
+<b>{t(user_id, 'cleanup_sending_results')}</b>
                     """
                 elif not is_complete:
                     # 清理未完成（可能被中断）
                     final_text = f"""
-⚠️ <b>清理未完成</b>
+⚠️ <b>{t(user_id, 'cleanup_incomplete')}</b>
 
-<b>📊 已处理统计</b>
-• 总账号数: {results_summary['total']}
-• 已处理: {actual_processed}/{results_summary['total']}
-• ✅ 成功: {results_summary['success']} ({success_rate:.1f}%)
-• ❄️ 冻结: {results_summary['frozen']} ({frozen_rate:.1f}%)
-• ❌ 失败: {results_summary['failed']}
+<b>📊 {t(user_id, 'cleanup_already_processed')}</b>
+• {t(user_id, 'cleanup_stat_total').format(count=results_summary['total'])}
+• {t(user_id, 'cleanup_actual_processed').format(actual=actual_processed, total=results_summary['total'])}
+• {t(user_id, 'cleanup_stat_success').format(count=results_summary['success'], percent=success_rate)}
+• {t(user_id, 'cleanup_stat_frozen').format(count=results_summary['frozen'], percent=frozen_rate)}
+• {t(user_id, 'cleanup_stat_failed').format(count=results_summary['failed'])}
 
-⚠️ 处理可能被中断或遇到异常
+⚠️ {t(user_id, 'cleanup_may_interrupted')}
 
-<b>📦 正在发送已处理的结果...</b>
+<b>{t(user_id, 'cleanup_sending_results')}</b>
                     """
                 else:
                     # 清理正常完成
                     final_text = f"""
-✅ <b> 清理完成！</b>
+✅ <b>{t(user_id, 'cleanup_complete')}</b>
 
-<b>📊 清理统计</b>
-• 总账号数: {results_summary['total']}
-• ✅ 成功: {results_summary['success']} ({success_rate:.1f}%)
-• ❄️ 冻结: {results_summary['frozen']} ({frozen_rate:.1f}%)
-• ❌ 失败: {results_summary['failed']}
+<b>📊 {t(user_id, 'cleanup_statistics')}</b>
+• {t(user_id, 'cleanup_stat_total').format(count=results_summary['total'])}
+• {t(user_id, 'cleanup_stat_success').format(count=results_summary['success'], percent=success_rate)}
+• {t(user_id, 'cleanup_stat_frozen').format(count=results_summary['frozen'], percent=frozen_rate)}
+• {t(user_id, 'cleanup_stat_failed').format(count=results_summary['failed'])}
 
-<b>📦 正在打包账户文件...</b>
+<b>{t(user_id, 'cleanup_packing')}</b>
                     """
                 
                 context.bot.send_message(
@@ -20355,7 +20356,7 @@ class EnhancedBot:
                             context.bot.send_document(
                                 chat_id=user_id,
                                 document=f,
-                                caption=f"📋 清理汇总报告",
+                                caption=f"📋 {t(user_id, 'cleanup_summary_report')}",
                                 filename=os.path.basename(summary_report_path)
                             )
                     except Exception as e:
@@ -20364,7 +20365,10 @@ class EnhancedBot:
                 # 发送账户ZIP文件
                 for zip_type, zip_path, count in result_zips:
                     try:
-                        caption = f"📦 清理{'成功' if zip_type == 'success' else '失败'}的账户 ({count} 个)"
+                        if zip_type == 'success':
+                            caption = f"📦 {t(user_id, 'cleanup_success_accounts').format(count=count)}"
+                        else:
+                            caption = f"📦 {t(user_id, 'cleanup_failed_accounts').format(count=count)}"
                         with open(zip_path, 'rb') as f:
                             context.bot.send_document(
                                 chat_id=user_id,
@@ -20375,7 +20379,7 @@ class EnhancedBot:
                     except Exception as e:
                         logger.error(f"Failed to send {zip_type} accounts ZIP: {e}")
                 
-                logger.info("✅ 清理结果已发送")
+                logger.info(f"✅ {t(user_id, 'cleanup_results_sent')}")
                 
             except Exception as send_error:
                 logger.error(f"Failed to send cleanup results: {send_error}")
@@ -20383,7 +20387,7 @@ class EnhancedBot:
                 try:
                     context.bot.send_message(
                         chat_id=user_id,
-                        text=f"❌ <b>清理结果发送失败</b>\n\n错误: {str(send_error)[:200]}",
+                        text=f"❌ <b>{t(user_id, 'cleanup_send_failed')}</b>\n\n{t(user_id, 'cleanup_error').format(error=str(send_error)[:200])}",
                         parse_mode='HTML'
                     )
                 except:
