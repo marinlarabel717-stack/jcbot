@@ -18618,7 +18618,7 @@ class EnhancedBot:
         try:
             shutil.move(task['file_path'], new_file_path)
         except Exception as e:
-            self.safe_send_message(update, f"❌ 重命名失败: {str(e)}")
+            self.safe_send_message(update, t(user_id, 'rename_failed').format(error=str(e)))
             self.cleanup_rename_task(user_id)
             return
         

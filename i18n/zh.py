@@ -1445,4 +1445,5 @@ TEXTS = {
     'rename_download_failed': '❌ 下载文件失败: {error}',
     'rename_invalid_name': '❌ 文件名无效，请重新输入',
     'rename_send_failed': '❌ 发送文件失败',
+    'rename_failed': '❌ 重命名失败: {error}',
 }
