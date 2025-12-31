@@ -7529,10 +7529,18 @@ class APIFormatConverter:
 
         return api_accounts
 
-    def create_api_result_files(self, api_accounts: List[dict], task_id: str) -> List[str]:
+    def create_api_result_files(self, api_accounts: List[dict], task_id: str, user_id: int = None) -> List[str]:
         out_dir = os.path.join(os.getcwd(), "api_results")
         os.makedirs(out_dir, exist_ok=True)
-        out_txt = os.path.join(out_dir, f"TG_API_{len(api_accounts)}个账号.txt")
+        
+        # Get translated filename if user_id is provided
+        if user_id is not None:
+            filename = t(user_id, 'api_result_filename').format(count=len(api_accounts))
+        else:
+            # Fallback to Chinese for backward compatibility
+            filename = f"TG_API_{len(api_accounts)}个账号.txt"
+        
+        out_txt = os.path.join(out_dir, filename)
         with open(out_txt, "w", encoding="utf-8") as f:
             for it in (api_accounts or []):
                 f.write("%s\t%s\n" % (it["phone"], it["verification_url"]))
@@ -11181,31 +11189,32 @@ class EnhancedBot:
             self.safe_send_message(update, "❌ API转换功能不可用\n\n原因: Flask库未安装\n💡 请安装: pip install flask jinja2")
             return
 
-        text = """
-🔗 <b>API格式转换功能</b>
+        text = f"""
+{t(user_id, 'api_title')}
 
-<b>📱 功能说明</b>
-• 将TData/Session转换为API格式
-• 生成专属验证码接收链接
-• 自动提取手机号和2FA密码
-• 实时转发短信验证码
+<b>{t(user_id, 'api_core_features')}</b>
+{t(user_id, 'api_feature1')}
+{t(user_id, 'api_feature2')}
+{t(user_id, 'api_feature3')}
+{t(user_id, 'api_feature4')}
 
-<b>📋 输出格式</b>
-• JSON格式（开发者友好）
-• CSV格式（Excel可打开）
-• TXT格式（便于查看）
+<b>{t(user_id, 'api_verification_features')}</b>
+{t(user_id, 'api_verify_feature1')}
+{t(user_id, 'api_verify_feature2')}
+{t(user_id, 'api_verify_feature3')}
+{t(user_id, 'api_verify_feature4')}
 
-<b>🌐 验证码接收</b>
-• 每个账号生成独立网页链接
-• 自动刷新显示最新验证码
-• 5分钟自动过期保护
+<b>{t(user_id, 'api_usage')}</b>
+{t(user_id, 'api_usage_step1')}
+{t(user_id, 'api_usage_step2')}
+{t(user_id, 'api_usage_step3')}
+{t(user_id, 'api_usage_step4')}
 
-<b>📤 操作说明</b>
-请上传包含TData或Session文件的ZIP压缩包（支持：tdata、session、session+json）...
+{t(user_id, 'api_upload_prompt')}
         """
 
         buttons = [
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_main")]
         ]
 
         keyboard = InlineKeyboardMarkup(buttons)
@@ -11234,31 +11243,31 @@ class EnhancedBot:
             self.safe_edit_message(query, "❌ API转换功能不可用\n\n原因: Flask库未安装\n💡 请安装: pip install flask jinja2")
             return
 
-        text = """
-🔗 <b>API格式转换</b>
+        text = f"""
+{t(user_id, 'api_title')}
 
-<b>🎯 核心功能</b>
-• 📱 提取手机号信息
-• 🔐 自动检测2FA密码
-• 🌐 生成验证码接收链接
-• 📋 输出标准API格式
+<b>{t(user_id, 'api_core_features')}</b>
+{t(user_id, 'api_feature1')}
+{t(user_id, 'api_feature2')}
+{t(user_id, 'api_feature3')}
+{t(user_id, 'api_feature4')}
 
-<b>🌐 验证码接收特性</b>
-• 每个账号生成独立验证链接
-• 实时显示验证码，自动刷新
-• 支持HTTP API调用获取验证码
-• 5分钟自动过期保护
+<b>{t(user_id, 'api_verification_features')}</b>
+{t(user_id, 'api_verify_feature1')}
+{t(user_id, 'api_verify_feature2')}
+{t(user_id, 'api_verify_feature3')}
+{t(user_id, 'api_verify_feature4')}
 
-<b>📤 使用方法</b>
-1. 上传ZIP文件（包含TData或Session）
-2. 系统自动分析账号信息
-3. 生成API格式文件和验证链接
-4. 下载结果使用
+<b>{t(user_id, 'api_usage')}</b>
+{t(user_id, 'api_usage_step1')}
+{t(user_id, 'api_usage_step2')}
+{t(user_id, 'api_usage_step3')}
+{t(user_id, 'api_usage_step4')}
 
-请上传您的文件...
+{t(user_id, 'api_upload_prompt')}
         """
 
-        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard(user_id))
 
         # 设置用户状态
         self.db.save_user(
@@ -13562,7 +13571,7 @@ class EnhancedBot:
         start_time = time.time()
         task_id = f"{user_id}_{int(start_time)}"
 
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理您的文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, f"📥 <b>{t(user_id, 'api_processing_file')}...</b>", 'HTML')
         if not progress_msg:
             return
 
@@ -13581,14 +13590,17 @@ class EnhancedBot:
                 return
 
             total_files = len(files)
+            file_type_upper = file_type.upper()
+            file_type_key = 'api_type_session' if file_type.lower() == 'session' else 'api_type_tdata'
+            
             try:
                 progress_msg.edit_text(
-                    f"✅ <b>已找到 {total_files} 个账号文件</b>\n"
-                    f"📊 类型: {file_type.upper()}\n\n"
-                    f"🔐 请输入将在网页上显示的 2FA 密码：\n"
-                    f"• 直接发送 2FA 密码，例如: <code>My2FA@2024</code>\n"
-                    f"• 或回复 <code>跳过</code> 使用自动识别\n\n"
-                    f"⏰ 5分钟超时",
+                    f"{t(user_id, 'api_found_accounts').format(count=total_files)}\n"
+                    f"{t(user_id, file_type_key)}\n\n"
+                    f"{t(user_id, 'api_enter_2fa')}\n"
+                    f"{t(user_id, 'api_2fa_example')}\n"
+                    f"{t(user_id, 'api_2fa_skip')}\n\n"
+                    f"{t(user_id, 'api_2fa_timeout')}",
                     parse_mode='HTML'
                 )
             except:
@@ -13631,15 +13643,16 @@ class EnhancedBot:
         temp_zip = task["temp_zip"]
         start_time = task["start_time"]
 
-        override_two_fa = None if (not two_fa_input or two_fa_input.strip().lower() in ["跳过", "skip"]) else two_fa_input.strip()
+        # Check if user wants to skip (supports both Chinese and English)
+        override_two_fa = None if (not two_fa_input or two_fa_input.strip().lower() in [t(user_id, 'api_skip').lower(), "跳过", "skip"]) else two_fa_input.strip()
 
         # 更新提示
         try:
-            tip = "🔄 <b>开始转换为API格式...</b>\n\n"
+            tip = f"🔄 <b>{t(user_id, 'api_converting')}</b>\n\n"
             if override_two_fa:
-                tip += f"🔐 网页2FA: <code>{override_two_fa}</code>\n"
+                tip += f"🔐 {t(user_id, 'api_2fa_mode_manual')}: <code>{override_two_fa}</code>\n"
             else:
-                tip += "🔐 网页2FA: 自动识别\n"
+                tip += f"🔐 {t(user_id, 'api_2fa_mode_auto')}\n"
             progress_msg.edit_text(tip, parse_mode='HTML')
         except:
             pass
@@ -13658,13 +13671,16 @@ class EnhancedBot:
             
             print(f"🚀 并发转换参数: 文件={total_files}, 批次={batch_size}, 并发={max_concurrent}")
             
+            file_type_key = 'api_file_type_session' if file_type.lower() == 'session' else 'api_file_type_tdata'
+            mode_2fa_key = 'api_2fa_mode_manual' if override_two_fa else 'api_2fa_mode_auto'
+            
             # =================== 进度提示 ===================
             try:
                 progress_msg.edit_text(
-                    f"🔄 <b>开始API转换...</b>\n\n"
-                    f"📊 总文件: {total_files} 个\n"
-                    f"📁 类型: {file_type.upper()}\n"
-                    f"🔐 2FA设置: {'自定义' if override_two_fa else '自动检测'}\n"
+                    f"🔄 <b>{t(user_id, 'api_converting')}</b>\n\n"
+                    f"📊 {t(user_id, 'api_stat_total').format(count=total_files)}\n"
+                    f"{t(user_id, file_type_key)}\n"
+                    f"{t(user_id, mode_2fa_key)}\n"
                     f"🚀 并发数: {max_concurrent} | 批次: {batch_size}\n\n"
                     f"正在处理...",
                     parse_mode='HTML'
@@ -13684,27 +13700,44 @@ class EnhancedBot:
                     speed = processed / elapsed if elapsed > 0 and processed > 0 else 0
                     remaining = (total_files - processed) / speed if speed > 0 else 0
                     
+                    file_type_key = 'api_file_type_session' if file_type.lower() == 'session' else 'api_file_type_tdata'
+                    mode_2fa_key = 'api_2fa_mode_manual' if override_two_fa else 'api_2fa_mode_auto'
+                    
                     # 生成失败原因统计
                     failure_stats = ""
                     if failure_reasons:
-                        failure_stats = "\n\n❌ <b>失败统计</b>\n"
+                        failure_stats = f"\n\n<b>{t(user_id, 'api_failure_stats')}</b>\n"
                         for reason, count in failure_reasons.items():
-                            failure_stats += f"• {reason}: {count}个\n"
+                            # 翻译失败原因
+                            reason_key_map = {
+                                "转换失败": "api_failure_reason_conversion_failed",
+                                "未授权": "api_failure_reason_unauthorized",
+                                "连接超时": "api_failure_reason_timeout",
+                                "转换异常": "api_failure_reason_conversion_error",
+                                "并发异常": "api_failure_reason_concurrent_error",
+                                "文件不存在": "api_failure_reason_file_not_exist",
+                                "文件损坏": "api_failure_reason_file_corrupted",
+                                "目录不存在": "api_failure_reason_dir_not_exist",
+                                "未知错误": "api_failure_reason_unknown",
+                            }
+                            reason_key = reason_key_map.get(reason, None)
+                            translated_reason = t(user_id, reason_key) if reason_key else reason
+                            failure_stats += f"• {translated_reason}: {count}个\n"
                     
                     progress_text = f"""
-🔄 <b>API转换进行中...</b>
+<b>{t(user_id, 'api_converting')}</b>
 
-📊 <b>转换进度</b>
-• 进度: {progress}% ({processed}/{total_files})
-• ✅ 成功: {len(api_accounts)} 个
-• ❌ 失败: {len(failed_accounts)} 个
-• 平均速度: {speed:.1f} 个/秒
-• 预计剩余: {remaining/60:.1f} 分钟
+<b>{t(user_id, 'api_progress')}</b>
+{t(user_id, 'api_progress_percent').format(percent=progress, done=processed, total=total_files)}
+{t(user_id, 'api_progress_success').format(count=len(api_accounts))}
+{t(user_id, 'api_progress_failed').format(count=len(failed_accounts))}
+{t(user_id, 'api_progress_speed').format(speed=f'{speed:.1f}')}
+{t(user_id, 'api_progress_remaining').format(time=f'{remaining/60:.1f}')}
 
-⚡ <b>处理状态</b>
-• 文件类型: {file_type.upper()}
-• 2FA模式: {'自定义' if override_two_fa else '自动检测'}
-• 已用时: {elapsed:.1f} 秒{failure_stats}
+<b>{t(user_id, 'api_processing_status')}</b>
+{t(user_id, file_type_key)}
+{t(user_id, mode_2fa_key)}
+{t(user_id, 'api_elapsed_time').format(time=f'{elapsed:.1f}')}{failure_stats}
                     """
                     
                     progress_msg.edit_text(progress_text, parse_mode='HTML')
@@ -13760,31 +13793,46 @@ class EnhancedBot:
                 await asyncio.sleep(0.1)  # 减少延迟提升速度
 
             # 仅生成TXT
-            result_files = self.api_converter.create_api_result_files(api_accounts, task_id)
+            result_files = self.api_converter.create_api_result_files(api_accounts, task_id, user_id)
             elapsed_time = time.time() - start_time
 
             # 生成详细的失败原因统计
             failure_detail = ""
             if failure_reasons:
-                failure_detail = "\n\n❌ <b>失败原因详细</b>\n"
+                failure_detail = f"\n\n<b>{t(user_id, 'api_failure_details')}</b>\n"
                 for reason, count in failure_reasons.items():
                     percentage = (count / total_files * 100) if total_files > 0 else 0
-                    failure_detail += f"• {reason}: {count}个 ({percentage:.1f}%)\n"
+                    # 翻译失败原因
+                    reason_key_map = {
+                        "转换失败": "api_failure_reason_conversion_failed",
+                        "未授权": "api_failure_reason_unauthorized",
+                        "连接超时": "api_failure_reason_timeout",
+                        "转换异常": "api_failure_reason_conversion_error",
+                        "并发异常": "api_failure_reason_concurrent_error",
+                        "文件不存在": "api_failure_reason_file_not_exist",
+                        "文件损坏": "api_failure_reason_file_corrupted",
+                        "目录不存在": "api_failure_reason_dir_not_exist",
+                        "未知错误": "api_failure_reason_unknown",
+                    }
+                    reason_key = reason_key_map.get(reason, None)
+                    translated_reason = t(user_id, reason_key) if reason_key else reason
+                    failure_detail += f"• {translated_reason}: {count}个 ({percentage:.1f}%)\n"
             
             success_rate = (len(api_accounts) / total_files * 100) if total_files > 0 else 0
+            fail_rate = 100 - success_rate
             
             # 发送结果（TXT）
             summary_text = f"""
-🎉 <b>API格式转换完成！</b>
+<b>{t(user_id, 'api_complete')}</b>
 
-📊 <b>转换统计</b>
-• 总计: {total_files} 个
-• ✅ 成功: {len(api_accounts)} 个 ({success_rate:.1f}%)
-• ❌ 失败: {len(failed_accounts)} 个 ({100-success_rate:.1f}%)
-• ⏱️ 用时: {int(elapsed_time)} 秒
-• 🚀 速度: {total_files/elapsed_time:.1f} 个/秒{failure_detail}
+<b>{t(user_id, 'api_statistics')}</b>
+{t(user_id, 'api_stat_total').format(count=total_files)}
+{t(user_id, 'api_stat_success').format(count=len(api_accounts), percent=f'{success_rate:.1f}')}
+{t(user_id, 'api_stat_failed').format(count=len(failed_accounts), percent=f'{fail_rate:.1f}')}
+{t(user_id, 'api_stat_duration').format(time=int(elapsed_time))}
+{t(user_id, 'api_stat_speed').format(speed=f'{total_files/elapsed_time:.1f}')}{failure_detail}
 
-📄 正在发送TXT文件...
+{t(user_id, 'api_sending_txt')}
             """
             try:
                 progress_msg.edit_text(summary_text, parse_mode='HTML')
@@ -13795,7 +13843,7 @@ class EnhancedBot:
                 if os.path.exists(file_path):
                     try:
                         with open(file_path, 'rb') as f:
-                            caption = "📋 API链接（手机号 + 链接）"
+                            caption = t(user_id, 'api_result_desc')
                             context.bot.send_document(
                                 chat_id=update.effective_chat.id,
                                 document=f,
@@ -13811,7 +13859,7 @@ class EnhancedBot:
             # 完成提示
             self.safe_send_message(
                 update,
-                "✅ 如需再次使用 /start （转换失败的账户不会发送）\n"
+                t(user_id, 'api_use_again')
             )
 
         except Exception as e:

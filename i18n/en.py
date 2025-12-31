@@ -1330,4 +1330,83 @@ TEXTS = {
     'country_diego_garcia': 'Diego Garcia',
     'country_us_virgin_islands': 'U.S. Virgin Islands',
     'country_antarctica': 'Antarctica',
+    
+    # ===== API Conversion Feature =====
+    # Feature introduction page
+    'api_title': '🔗 API Format Conversion',
+    'api_core_features': '🎯 Core Features',
+    'api_feature1': '· 📱 Extract phone number info',
+    'api_feature2': '· 🔐 Auto-detect 2FA password',
+    'api_feature3': '· 🌐 Generate verification code links',
+    'api_feature4': '· 📋 Output standard API format',
+    'api_verification_features': '🌐 Verification Code Features',
+    'api_verify_feature1': '· Generate unique verification link per account',
+    'api_verify_feature2': '· Real-time code display, auto-refresh',
+    'api_verify_feature3': '· Support HTTP API call to get verification code',
+    'api_verify_feature4': '· 5-minute auto-expiry protection',
+    'api_usage': '📤 Usage',
+    'api_usage_step1': '1. Upload ZIP file (containing TData or Session)',
+    'api_usage_step2': '2. System auto-analyzes account info',
+    'api_usage_step3': '3. Generate API format file and verification links',
+    'api_usage_step4': '4. Download and use results',
+    'api_upload_prompt': 'Please upload your file...',
+    'api_back_menu': 'Back to Main Menu',
+    
+    # Processing
+    'api_processing_file': 'Processing your file',
+    
+    # Scan complete
+    'api_found_accounts': '✅ Found {count} account files',
+    'api_type_session': '📊 Type: SESSION',
+    'api_type_tdata': '📊 Type: TDATA',
+    
+    # Input 2FA password
+    'api_enter_2fa': '🔐 Please enter the 2FA password to display on webpage:',
+    'api_2fa_example': '· Send 2FA password directly, e.g.: My2FA@2024',
+    'api_2fa_skip': '· Or reply "skip" to use auto-detect',
+    'api_2fa_timeout': '⏰ 5 minutes timeout',
+    'api_skip': 'skip',
+    
+    # Conversion progress
+    'api_converting': '🔄 API conversion in progress...',
+    'api_progress': '📊 Conversion Progress',
+    'api_progress_percent': '· Progress: {percent}% ({done}/{total})',
+    'api_progress_success': '· ✅ Success: {count}',
+    'api_progress_failed': '· ❌ Failed: {count}',
+    'api_progress_speed': '· Avg speed: {speed}/sec',
+    'api_progress_remaining': '· Est. remaining: {time} min',
+    'api_processing_status': '⚡ Processing Status',
+    'api_file_type_session': '· File type: SESSION',
+    'api_file_type_tdata': '· File type: TDATA',
+    'api_2fa_mode_auto': '· 2FA mode: Auto-detect',
+    'api_2fa_mode_manual': '· 2FA mode: Manual input',
+    'api_elapsed_time': '· Elapsed: {time}s',
+    'api_failure_stats': '❌ Failure Statistics',
+    
+    # Conversion complete
+    'api_complete': '🎉 API format conversion complete!',
+    'api_statistics': '📊 Conversion Statistics',
+    'api_stat_total': '· Total: {count}',
+    'api_stat_success': '· ✅ Success: {count} ({percent}%)',
+    'api_stat_failed': '· ❌ Failed: {count} ({percent}%)',
+    'api_stat_duration': '· ⏱️ Duration: {time}s',
+    'api_stat_speed': '· 🚀 Speed: {speed}/sec',
+    'api_failure_details': '❌ Failure Details',
+    'api_sending_txt': '📄 Sending TXT file...',
+    
+    # Result files
+    'api_result_filename': 'TG_API_{count}_accounts.txt',
+    'api_result_desc': '📋 API Links (Phone + Link)',
+    'api_use_again': "✅ To use again /start (Failed accounts won't be sent)",
+    
+    # Failure reason translations
+    'api_failure_reason_conversion_failed': 'Conversion failed',
+    'api_failure_reason_unauthorized': 'Unauthorized',
+    'api_failure_reason_timeout': 'Connection timeout',
+    'api_failure_reason_conversion_error': 'Conversion error',
+    'api_failure_reason_concurrent_error': 'Concurrent error',
+    'api_failure_reason_file_not_exist': 'File not exist',
+    'api_failure_reason_file_corrupted': 'File corrupted',
+    'api_failure_reason_dir_not_exist': 'Directory not exist',
+    'api_failure_reason_unknown': 'Unknown error',
 }
