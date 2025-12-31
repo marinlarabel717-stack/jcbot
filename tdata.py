@@ -19345,7 +19345,7 @@ class EnhancedBot:
         error_str = str(error).upper()
         return any(keyword in error_str for keyword in self.FROZEN_KEYWORDS)
     
-    async def _cleanup_single_account(self, client, account_name: str, file_path: str, progress_callback=None) -> Dict[str, Any]:
+    async def _cleanup_single_account(self, client, account_name: str, file_path: str, progress_callback=None, user_id: int = None) -> Dict[str, Any]:
         """清理单个账号"""
         start_time = time.time()
         
@@ -19367,8 +19367,8 @@ class EnhancedBot:
         try:
             # 0. 清理账号资料（头像、名字、简介）
             logger.info(f"清理账号资料: {account_name}")
-            if progress_callback:
-                await progress_callback("🔄 清理账号资料（头像、名字、简介）...")
+            if progress_callback and user_id:
+                await progress_callback(t(user_id, 'cleanup_status_profile'))
             
             try:
                 # 添加超时保护
@@ -19813,12 +19813,12 @@ class EnhancedBot:
                 # 使用安全转换函数，带超时和错误处理
                 session_path, error_msg = await safe_convert_tdata(file_path, phone_for_log)
                 
-                    if session_path is None:
-                        # 转换失败，跳过该账号
-                        logger.warning(f"⚠️ 跳过账号 {phone_for_log}，转换失败: {error_msg}")
-                        result_data['error'] = error_msg
-                        result_data['error_details'].append(error_msg)
-                        return result_data
+                if session_path is None:
+                    # 转换失败，跳过该账号
+                    logger.warning(f"⚠️ 跳过账号 {phone_for_log}，转换失败: {error_msg}")
+                    result_data['error'] = error_msg
+                    result_data['error_details'].append(error_msg)
+                    return result_data
                 
                 # 使用转换后的session创建不接收更新的客户端以提升清理速度
                 try:
@@ -19975,7 +19975,8 @@ class EnhancedBot:
                         client=client,
                         account_name=file_name,
                         file_path=file_path,
-                        progress_callback=update_progress
+                        progress_callback=update_progress,
+                        user_id=user_id
                     ),
                     timeout=CLEANUP_SINGLE_ACCOUNT_TIMEOUT
                 )
