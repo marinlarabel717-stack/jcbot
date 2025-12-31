@@ -20289,6 +20289,10 @@ class EnhancedBot:
         finally:
             # 无论如何都要发送清理结果
             try:
+                # 检查实际处理的账号数
+                actual_processed = results_summary['success'] + results_summary['failed']
+                is_complete = (actual_processed == results_summary['total'])
+                
                 # 发送完成消息
                 success_rate = (results_summary['success'] / results_summary['total'] * 100) if results_summary['total'] > 0 else 0
                 frozen_rate = (results_summary['frozen'] / results_summary['total'] * 100) if results_summary['total'] > 0 else 0
@@ -20300,11 +20304,28 @@ class EnhancedBot:
 
 <b>📊 已处理统计</b>
 • 总账号数: {results_summary['total']}
+• 已处理: {actual_processed}/{results_summary['total']}
 • ✅ 成功: {results_summary['success']} ({success_rate:.1f}%)
 • ❄️ 冻结: {results_summary['frozen']} ({frozen_rate:.1f}%)
 • ❌ 失败: {results_summary['failed']}
 
 ⚠️ <b>错误信息：</b> {results_summary['cleanup_error'][:200]}
+
+<b>📦 正在发送已处理的结果...</b>
+                    """
+                elif not is_complete:
+                    # 清理未完成（可能被中断）
+                    final_text = f"""
+⚠️ <b>清理未完成</b>
+
+<b>📊 已处理统计</b>
+• 总账号数: {results_summary['total']}
+• 已处理: {actual_processed}/{results_summary['total']}
+• ✅ 成功: {results_summary['success']} ({success_rate:.1f}%)
+• ❄️ 冻结: {results_summary['frozen']} ({frozen_rate:.1f}%)
+• ❌ 失败: {results_summary['failed']}
+
+⚠️ 处理可能被中断或遇到异常
 
 <b>📦 正在发送已处理的结果...</b>
                     """
