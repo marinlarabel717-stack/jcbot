@@ -13722,7 +13722,7 @@ class EnhancedBot:
                             }
                             reason_key = reason_key_map.get(reason, None)
                             translated_reason = t(user_id, reason_key) if reason_key else reason
-                            failure_stats += f"• {translated_reason}: {count}个\n"
+                            failure_stats += f"• {translated_reason}: {count}\n"
                     
                     progress_text = f"""
 <b>{t(user_id, 'api_converting')}</b>
@@ -13816,7 +13816,7 @@ class EnhancedBot:
                     }
                     reason_key = reason_key_map.get(reason, None)
                     translated_reason = t(user_id, reason_key) if reason_key else reason
-                    failure_detail += f"• {translated_reason}: {count}个 ({percentage:.1f}%)\n"
+                    failure_detail += f"• {translated_reason}: {count} ({percentage:.1f}%)\n"
             
             success_rate = (len(api_accounts) / total_files * 100) if total_files > 0 else 0
             fail_rate = 100 - success_rate
