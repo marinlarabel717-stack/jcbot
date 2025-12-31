@@ -1399,4 +1399,15 @@ TEXTS = {
     'api_result_filename': 'TG_API_{count}个账号.txt',
     'api_result_desc': '📋 API链接（手机号 + 链接）',
     'api_use_again': '✅ 如需再次使用 /start（转换失败的账户不会发送）',
+    
+    # 失败原因翻译
+    'api_failure_reason_conversion_failed': '转换失败',
+    'api_failure_reason_unauthorized': '未授权',
+    'api_failure_reason_timeout': '连接超时',
+    'api_failure_reason_conversion_error': '转换异常',
+    'api_failure_reason_concurrent_error': '并发异常',
+    'api_failure_reason_file_not_exist': '文件不存在',
+    'api_failure_reason_file_corrupted': '文件损坏',
+    'api_failure_reason_dir_not_exist': '目录不存在',
+    'api_failure_reason_unknown': '未知错误',
 }

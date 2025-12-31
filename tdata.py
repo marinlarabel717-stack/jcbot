@@ -13708,7 +13708,21 @@ class EnhancedBot:
                     if failure_reasons:
                         failure_stats = f"\n\n<b>{t(user_id, 'api_failure_stats')}</b>\n"
                         for reason, count in failure_reasons.items():
-                            failure_stats += f"• {reason}: {count}个\n"
+                            # 翻译失败原因
+                            reason_key_map = {
+                                "转换失败": "api_failure_reason_conversion_failed",
+                                "未授权": "api_failure_reason_unauthorized",
+                                "连接超时": "api_failure_reason_timeout",
+                                "转换异常": "api_failure_reason_conversion_error",
+                                "并发异常": "api_failure_reason_concurrent_error",
+                                "文件不存在": "api_failure_reason_file_not_exist",
+                                "文件损坏": "api_failure_reason_file_corrupted",
+                                "目录不存在": "api_failure_reason_dir_not_exist",
+                                "未知错误": "api_failure_reason_unknown",
+                            }
+                            reason_key = reason_key_map.get(reason, None)
+                            translated_reason = t(user_id, reason_key) if reason_key else reason
+                            failure_stats += f"• {translated_reason}: {count}个\n"
                     
                     progress_text = f"""
 <b>{t(user_id, 'api_converting')}</b>
@@ -13788,7 +13802,21 @@ class EnhancedBot:
                 failure_detail = f"\n\n<b>{t(user_id, 'api_failure_details')}</b>\n"
                 for reason, count in failure_reasons.items():
                     percentage = (count / total_files * 100) if total_files > 0 else 0
-                    failure_detail += f"• {reason}: {count}个 ({percentage:.1f}%)\n"
+                    # 翻译失败原因
+                    reason_key_map = {
+                        "转换失败": "api_failure_reason_conversion_failed",
+                        "未授权": "api_failure_reason_unauthorized",
+                        "连接超时": "api_failure_reason_timeout",
+                        "转换异常": "api_failure_reason_conversion_error",
+                        "并发异常": "api_failure_reason_concurrent_error",
+                        "文件不存在": "api_failure_reason_file_not_exist",
+                        "文件损坏": "api_failure_reason_file_corrupted",
+                        "目录不存在": "api_failure_reason_dir_not_exist",
+                        "未知错误": "api_failure_reason_unknown",
+                    }
+                    reason_key = reason_key_map.get(reason, None)
+                    translated_reason = t(user_id, reason_key) if reason_key else reason
+                    failure_detail += f"• {translated_reason}: {count}个 ({percentage:.1f}%)\n"
             
             success_rate = (len(api_accounts) / total_files * 100) if total_files > 0 else 0
             fail_rate = 100 - success_rate

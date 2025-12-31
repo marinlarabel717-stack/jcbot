@@ -1398,4 +1398,15 @@ TEXTS = {
     'api_result_filename': 'TG_API_{count}_accounts.txt',
     'api_result_desc': '📋 API Links (Phone + Link)',
     'api_use_again': "✅ To use again /start (Failed accounts won't be sent)",
+    
+    # Failure reason translations
+    'api_failure_reason_conversion_failed': 'Conversion failed',
+    'api_failure_reason_unauthorized': 'Unauthorized',
+    'api_failure_reason_timeout': 'Connection timeout',
+    'api_failure_reason_conversion_error': 'Conversion error',
+    'api_failure_reason_concurrent_error': 'Concurrent error',
+    'api_failure_reason_file_not_exist': 'File not exist',
+    'api_failure_reason_file_corrupted': 'File corrupted',
+    'api_failure_reason_dir_not_exist': 'Directory not exist',
+    'api_failure_reason_unknown': 'Unknown error',
 }
