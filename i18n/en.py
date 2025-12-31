@@ -1381,6 +1381,7 @@ TEXTS = {
     'api_2fa_mode_auto': '· 2FA mode: Auto-detect',
     'api_2fa_mode_manual': '· 2FA mode: Manual input',
     'api_elapsed_time': '· Elapsed: {time}s',
+    'api_failure_stats': '❌ Failure Statistics',
     
     # Conversion complete
     'api_complete': '🎉 API format conversion complete!',

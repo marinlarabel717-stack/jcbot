@@ -13706,21 +13706,21 @@ class EnhancedBot:
                     # 生成失败原因统计
                     failure_stats = ""
                     if failure_reasons:
-                        failure_stats = "\n\n❌ <b>失败统计</b>\n"
+                        failure_stats = f"\n\n<b>{t(user_id, 'api_failure_stats')}</b>\n"
                         for reason, count in failure_reasons.items():
                             failure_stats += f"• {reason}: {count}个\n"
                     
                     progress_text = f"""
-🔄 <b>{t(user_id, 'api_converting')}</b>
+<b>{t(user_id, 'api_converting')}</b>
 
-📊 <b>{t(user_id, 'api_progress')}</b>
+<b>{t(user_id, 'api_progress')}</b>
 {t(user_id, 'api_progress_percent').format(percent=progress, done=processed, total=total_files)}
 {t(user_id, 'api_progress_success').format(count=len(api_accounts))}
 {t(user_id, 'api_progress_failed').format(count=len(failed_accounts))}
 {t(user_id, 'api_progress_speed').format(speed=f'{speed:.1f}')}
 {t(user_id, 'api_progress_remaining').format(time=f'{remaining/60:.1f}')}
 
-⚡ <b>{t(user_id, 'api_processing_status')}</b>
+<b>{t(user_id, 'api_processing_status')}</b>
 {t(user_id, file_type_key)}
 {t(user_id, mode_2fa_key)}
 {t(user_id, 'api_elapsed_time').format(time=f'{elapsed:.1f}')}{failure_stats}

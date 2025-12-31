@@ -1382,6 +1382,7 @@ TEXTS = {
     'api_2fa_mode_auto': '· 2FA模式: 自动检测',
     'api_2fa_mode_manual': '· 2FA模式: 手动输入',
     'api_elapsed_time': '· 已用时: {time} 秒',
+    'api_failure_stats': '❌ 失败统计',
     
     # 转换完成
     'api_complete': '🎉 API格式转换完成！',
