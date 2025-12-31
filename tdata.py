@@ -18624,10 +18624,12 @@ class EnhancedBot:
         
         # 发送重命名后的文件
         # 注意：显式指定filename参数以确保Telegram使用正确的文件名
+        old_name_html = f"<code>{task['orig_name']}</code>"
+        new_name_html = f"<code>{new_filename}</code>"
         caption = (
             f"<b>{t(user_id, 'rename_success')}</b>\n\n"
-            f"{t(user_id, 'rename_old_name').format(old_name=f'<code>{task[\"orig_name\"]}</code>')}\n"
-            f"{t(user_id, 'rename_new_name').format(new_name=f'<code>{new_filename}</code>')}\n\n"
+            f"{t(user_id, 'rename_old_name').format(old_name=old_name_html)}\n"
+            f"{t(user_id, 'rename_new_name').format(new_name=new_name_html)}\n\n"
             f"{t(user_id, 'rename_telegram_tip')}"
         )
         
