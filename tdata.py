@@ -20112,47 +20112,47 @@ class EnhancedBot:
             
             with open(summary_report_path, 'w', encoding='utf-8') as f:
                 f.write("=" * 80 + "\n")
-                f.write("              批量清理详细报告 / Batch Cleanup Detailed Report\n")
+                f.write(f"              {t(user_id, 'cleanup_report_title')}\n")
                 f.write("=" * 80 + "\n\n")
                 
                 success_rate = (results_summary['success'] / results_summary['total'] * 100) if results_summary['total'] > 0 else 0
                 frozen_rate = (results_summary['frozen'] / results_summary['total'] * 100) if results_summary['total'] > 0 else 0
                 
-                f.write(f"清理时间 / Cleanup Time: {timestamp}\n")
-                f.write(f"并发数 / Concurrency: {config.CLEANUP_ACCOUNT_CONCURRENCY} 账户同时处理\n")
-                f.write(f"总账号数 / Total Accounts: {results_summary['total']}\n")
-                f.write(f"✅ 成功 / Success: {results_summary['success']} ({success_rate:.1f}%)\n")
-                f.write(f"❄️ 冻结 / Frozen: {results_summary['frozen']} ({frozen_rate:.1f}%)\n")
-                f.write(f"❌ 失败 / Failed: {results_summary['failed']}\n\n")
+                f.write(f"{t(user_id, 'cleanup_report_time')}: {timestamp}\n")
+                f.write(f"{t(user_id, 'cleanup_report_concurrency')}: {config.CLEANUP_ACCOUNT_CONCURRENCY} {t(user_id, 'cleanup_report_concurrent_accounts')}\n")
+                f.write(f"{t(user_id, 'cleanup_report_total')}: {results_summary['total']}\n")
+                f.write(f"✅ {t(user_id, 'cleanup_report_success')}: {results_summary['success']} ({success_rate:.1f}%)\n")
+                f.write(f"❄️ {t(user_id, 'cleanup_report_frozen')}: {results_summary['frozen']} ({frozen_rate:.1f}%)\n")
+                f.write(f"❌ {t(user_id, 'cleanup_report_failed')}: {results_summary['failed']}\n\n")
                 
                 # 详细结果
                 f.write("=" * 80 + "\n")
-                f.write("                    详细清理结果 / Detailed Results\n")
+                f.write(f"                    {t(user_id, 'cleanup_report_details')}\n")
                 f.write("=" * 80 + "\n\n")
                 
                 for idx, detail in enumerate(results_summary['detailed_results'], 1):
                     status_icon = "✅" if detail['status'] == 'success' else ("❄️" if detail['status'] == 'frozen' else "❌")
-                    status_text = "成功" if detail['status'] == 'success' else ("冻结" if detail['status'] == 'frozen' else "失败")
+                    status_text = t(user_id, 'cleanup_report_status_success') if detail['status'] == 'success' else (t(user_id, 'cleanup_report_status_frozen') if detail['status'] == 'frozen' else t(user_id, 'cleanup_report_status_failed'))
                     
                     f.write(f"{idx}. {status_icon} {detail['file_name']} - {status_text}\n")
                     
                     if detail.get('error'):
-                        f.write(f"   错误: {detail['error']}\n")
+                        f.write(f"   {t(user_id, 'cleanup_report_error')} {detail['error']}\n")
                     
                     if detail.get('error_details'):
-                        f.write("   详细错误信息:\n")
+                        f.write(f"   {t(user_id, 'cleanup_report_error_details')}\n")
                         for err in detail['error_details']:
                             f.write(f"   - {err}\n")
                     
                     stats = detail.get('statistics', {})
                     if stats:
-                        f.write(f"   统计: ")
+                        f.write(f"   {t(user_id, 'cleanup_report_stats')} ")
                         stat_parts = []
-                        if stats.get('profile_cleared'): stat_parts.append("资料已清理")
-                        if stats.get('groups_left'): stat_parts.append(f"退出{stats['groups_left']}个群组")
-                        if stats.get('channels_left'): stat_parts.append(f"退出{stats['channels_left']}个频道")
-                        if stats.get('histories_deleted'): stat_parts.append(f"删除{stats['histories_deleted']}个对话")
-                        if stats.get('contacts_deleted'): stat_parts.append(f"删除{stats['contacts_deleted']}个联系人")
+                        if stats.get('profile_cleared'): stat_parts.append(t(user_id, 'cleanup_report_profile_cleared'))
+                        if stats.get('groups_left'): stat_parts.append(t(user_id, 'cleanup_report_groups_left').format(count=stats['groups_left']))
+                        if stats.get('channels_left'): stat_parts.append(t(user_id, 'cleanup_report_channels_left').format(count=stats['channels_left']))
+                        if stats.get('histories_deleted'): stat_parts.append(t(user_id, 'cleanup_report_histories_deleted').format(count=stats['histories_deleted']))
+                        if stats.get('contacts_deleted'): stat_parts.append(t(user_id, 'cleanup_report_contacts_deleted_label').format(count=stats['contacts_deleted']))
                         if stat_parts:
                             f.write(", ".join(stat_parts))
                         f.write("\n")
@@ -20162,7 +20162,7 @@ class EnhancedBot:
                 # 分类汇总
                 if results_summary['success_files']:
                     f.write("-" * 80 + "\n")
-                    f.write(f"成功清理的账户 / Successfully Cleaned ({len(results_summary['success_files'])})\n")
+                    f.write(f"{t(user_id, 'cleanup_report_success_list')} ({len(results_summary['success_files'])})\n")
                     f.write("-" * 80 + "\n")
                     for idx, file_info in enumerate(results_summary['success_files'], 1):
                         fname = file_info[1] if len(file_info) > 1 else file_info[0]
@@ -20171,7 +20171,7 @@ class EnhancedBot:
                 
                 if results_summary['frozen_files']:
                     f.write("-" * 80 + "\n")
-                    f.write(f"冻结的账户 / Frozen Accounts ({len(results_summary['frozen_files'])})\n")
+                    f.write(f"{t(user_id, 'cleanup_report_frozen_accounts')} ({len(results_summary['frozen_files'])})\n")
                     f.write("-" * 80 + "\n")
                     for idx, file_info in enumerate(results_summary['frozen_files'], 1):
                         fname = file_info[1] if len(file_info) > 1 else file_info[0]
@@ -20180,7 +20180,7 @@ class EnhancedBot:
                 
                 if results_summary['failed_files']:
                     f.write("-" * 80 + "\n")
-                    f.write(f"清理失败的账户 / Failed to Clean ({len(results_summary['failed_files'])})\n")
+                    f.write(f"{t(user_id, 'cleanup_report_failed_list')} ({len(results_summary['failed_files'])})\n")
                     f.write("-" * 80 + "\n")
                     for idx, file_info in enumerate(results_summary['failed_files'], 1):
                         fname = file_info[1] if len(file_info) > 1 else file_info[0]
@@ -20188,8 +20188,7 @@ class EnhancedBot:
                     f.write("\n")
                 
                 f.write("=" * 80 + "\n")
-                f.write(f"并发清理模式: 同时处理 {config.CLEANUP_ACCOUNT_CONCURRENCY} 个账户，提升处理速度\n")
-                f.write(f"Concurrent mode: Processing {config.CLEANUP_ACCOUNT_CONCURRENCY} accounts simultaneously\n")
+                f.write(f"{t(user_id, 'cleanup_report_concurrent_mode').format(count=config.CLEANUP_ACCOUNT_CONCURRENCY)}\n")
                 f.write("=" * 80 + "\n")
             
             # 打包成功和失败的账户文件
@@ -20303,12 +20302,12 @@ class EnhancedBot:
                     final_text = f"""
 ⚠️ <b>{t(user_id, 'cleanup_partial_complete')}</b>
 
-<b>📊 {t(user_id, 'cleanup_already_processed')}</b>
-• {t(user_id, 'cleanup_stat_total').format(count=results_summary['total'])}
-• {t(user_id, 'cleanup_actual_processed').format(actual=actual_processed, total=results_summary['total'])}
-• {t(user_id, 'cleanup_stat_success').format(count=results_summary['success'], percent=success_rate)}
-• {t(user_id, 'cleanup_stat_frozen').format(count=results_summary['frozen'], percent=frozen_rate)}
-• {t(user_id, 'cleanup_stat_failed').format(count=results_summary['failed'])}
+<b>{t(user_id, 'cleanup_already_processed')}</b>
+{t(user_id, 'cleanup_stat_total').format(count=results_summary['total'])}
+{t(user_id, 'cleanup_actual_processed').format(actual=actual_processed, total=results_summary['total'])}
+{t(user_id, 'cleanup_stat_success').format(count=results_summary['success'], percent=success_rate)}
+{t(user_id, 'cleanup_stat_frozen').format(count=results_summary['frozen'], percent=frozen_rate)}
+{t(user_id, 'cleanup_stat_failed').format(count=results_summary['failed'])}
 
 ⚠️ <b>{t(user_id, 'cleanup_error_info')}</b> {results_summary['cleanup_error'][:200]}
 
@@ -20319,12 +20318,12 @@ class EnhancedBot:
                     final_text = f"""
 ⚠️ <b>{t(user_id, 'cleanup_incomplete')}</b>
 
-<b>📊 {t(user_id, 'cleanup_already_processed')}</b>
-• {t(user_id, 'cleanup_stat_total').format(count=results_summary['total'])}
-• {t(user_id, 'cleanup_actual_processed').format(actual=actual_processed, total=results_summary['total'])}
-• {t(user_id, 'cleanup_stat_success').format(count=results_summary['success'], percent=success_rate)}
-• {t(user_id, 'cleanup_stat_frozen').format(count=results_summary['frozen'], percent=frozen_rate)}
-• {t(user_id, 'cleanup_stat_failed').format(count=results_summary['failed'])}
+<b>{t(user_id, 'cleanup_already_processed')}</b>
+{t(user_id, 'cleanup_stat_total').format(count=results_summary['total'])}
+{t(user_id, 'cleanup_actual_processed').format(actual=actual_processed, total=results_summary['total'])}
+{t(user_id, 'cleanup_stat_success').format(count=results_summary['success'], percent=success_rate)}
+{t(user_id, 'cleanup_stat_frozen').format(count=results_summary['frozen'], percent=frozen_rate)}
+{t(user_id, 'cleanup_stat_failed').format(count=results_summary['failed'])}
 
 ⚠️ {t(user_id, 'cleanup_may_interrupted')}
 
@@ -20333,13 +20332,13 @@ class EnhancedBot:
                 else:
                     # 清理正常完成
                     final_text = f"""
-✅ <b>{t(user_id, 'cleanup_complete')}</b>
+<b>{t(user_id, 'cleanup_complete')}</b>
 
-<b>📊 {t(user_id, 'cleanup_statistics')}</b>
-• {t(user_id, 'cleanup_stat_total').format(count=results_summary['total'])}
-• {t(user_id, 'cleanup_stat_success').format(count=results_summary['success'], percent=success_rate)}
-• {t(user_id, 'cleanup_stat_frozen').format(count=results_summary['frozen'], percent=frozen_rate)}
-• {t(user_id, 'cleanup_stat_failed').format(count=results_summary['failed'])}
+<b>{t(user_id, 'cleanup_statistics')}</b>
+{t(user_id, 'cleanup_stat_total').format(count=results_summary['total'])}
+{t(user_id, 'cleanup_stat_success').format(count=results_summary['success'], percent=success_rate)}
+{t(user_id, 'cleanup_stat_frozen').format(count=results_summary['frozen'], percent=frozen_rate)}
+{t(user_id, 'cleanup_stat_failed').format(count=results_summary['failed'])}
 
 <b>{t(user_id, 'cleanup_packing')}</b>
                     """
@@ -20357,7 +20356,7 @@ class EnhancedBot:
                             context.bot.send_document(
                                 chat_id=user_id,
                                 document=f,
-                                caption=f"📋 {t(user_id, 'cleanup_summary_report')}",
+                                caption=t(user_id, 'cleanup_summary_report'),
                                 filename=os.path.basename(summary_report_path)
                             )
                     except Exception as e:
@@ -20367,9 +20366,9 @@ class EnhancedBot:
                 for zip_type, zip_path, count in result_zips:
                     try:
                         if zip_type == 'success':
-                            caption = f"📦 {t(user_id, 'cleanup_success_accounts').format(count=count)}"
+                            caption = t(user_id, 'cleanup_success_accounts').format(count=count)
                         else:
-                            caption = f"📦 {t(user_id, 'cleanup_failed_accounts').format(count=count)}"
+                            caption = t(user_id, 'cleanup_failed_accounts').format(count=count)
                         with open(zip_path, 'rb') as f:
                             context.bot.send_document(
                                 chat_id=user_id,

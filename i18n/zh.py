@@ -1558,9 +1558,9 @@ TEXTS = {
     'cleanup_packing': '📦 正在打包账户文件...',
     
     # 7. 输出文件
-    'cleanup_summary_report': '清理汇总报告',
-    'cleanup_success_accounts': '清理成功的账户 ({count} 个)',
-    'cleanup_failed_accounts': '清理失败的账户 ({count} 个)',
+    'cleanup_summary_report': '📋 清理汇总报告',
+    'cleanup_success_accounts': '📦 清理成功的账户 ({count} 个)',
+    'cleanup_failed_accounts': '📦 清理失败的账户 ({count} 个)',
     
     # 8. 清理报告内容
     'cleanup_report_title': '批量清理详细报告',
@@ -1580,6 +1580,16 @@ TEXTS = {
     'cleanup_report_success_list': '成功清理的账户',
     'cleanup_report_failed_list': '清理失败的账户',
     'cleanup_report_concurrent_mode': '并发清理模式: 同时处理 {count} 个账户，提升处理速度',
+    'cleanup_report_status_success': '成功',
+    'cleanup_report_status_frozen': '冻结',
+    'cleanup_report_status_failed': '失败',
+    'cleanup_report_profile_cleared': '资料已清理',
+    'cleanup_report_groups_left': '退出{count}个群组',
+    'cleanup_report_channels_left': '退出{count}个频道',
+    'cleanup_report_histories_deleted': '删除{count}个对话',
+    'cleanup_report_contacts_deleted_label': '删除{count}个联系人',
+    'cleanup_report_error_details': '详细错误信息:',
+    'cleanup_report_frozen_accounts': '冻结的账户',
     
     # 9. 错误和其他消息
     'cleanup_feature_disabled': '❌ 一键清理功能未启用',

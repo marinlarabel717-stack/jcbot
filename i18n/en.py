@@ -1557,9 +1557,9 @@ TEXTS = {
     'cleanup_packing': '📦 Packing account files...',
     
     # 7. Output Files
-    'cleanup_summary_report': 'Cleanup Summary Report',
-    'cleanup_success_accounts': 'Successfully cleaned accounts ({count})',
-    'cleanup_failed_accounts': 'Failed to clean accounts ({count})',
+    'cleanup_summary_report': '📋 Cleanup Summary Report',
+    'cleanup_success_accounts': '📦 Successfully cleaned accounts ({count})',
+    'cleanup_failed_accounts': '📦 Failed to clean accounts ({count})',
     
     # 8. Cleanup Report Content
     'cleanup_report_title': 'Batch Cleanup Detailed Report',
@@ -1579,6 +1579,16 @@ TEXTS = {
     'cleanup_report_success_list': 'Successfully Cleaned',
     'cleanup_report_failed_list': 'Failed to Clean',
     'cleanup_report_concurrent_mode': 'Concurrent mode: Processing {count} accounts simultaneously',
+    'cleanup_report_status_success': 'Success',
+    'cleanup_report_status_frozen': 'Frozen',
+    'cleanup_report_status_failed': 'Failed',
+    'cleanup_report_profile_cleared': 'Profile cleared',
+    'cleanup_report_groups_left': 'Left {count} groups',
+    'cleanup_report_channels_left': 'Left {count} channels',
+    'cleanup_report_histories_deleted': 'Deleted {count} conversations',
+    'cleanup_report_contacts_deleted_label': 'Deleted {count} contacts',
+    'cleanup_report_error_details': 'Error details:',
+    'cleanup_report_frozen_accounts': 'Frozen Accounts',
     
     # 9. Errors and Other Messages
     'cleanup_feature_disabled': '❌ One-click cleanup feature is disabled',
