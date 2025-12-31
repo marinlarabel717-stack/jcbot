@@ -19952,9 +19952,8 @@ class EnhancedBot:
                             f"🧹 <b>正在清理中，请耐心等待。</b>\n\n"
                             f"📄 当前: {file_name}\n"
                             f"📊 总进度: {current_idx}/{all_files_count} ({progress_percent}%)\n"
-                            f"[{progress_bar}]\n"
-                            f"预计完成时间 还剩 {time_remaining}\n\n"
-                            f"🔄 状态: {status_text}"
+                            f"⚙️ [{progress_bar}]\n"
+                            f"⏳ 预计完成 还剩 {time_remaining}"
                         )
                         
                         # 移除按钮，直接显示进度信息，减少刷新频率避免限流
@@ -20332,10 +20331,7 @@ class EnhancedBot:
                 else:
                     # 清理正常完成
                     final_text = f"""
-✅ <b>并发清理完成！</b>
-
-<b>⚡ 并发模式</b>
-• 同时处理: {config.CLEANUP_ACCOUNT_CONCURRENCY} 个账户
+✅ <b> 清理完成！</b>
 
 <b>📊 清理统计</b>
 • 总账号数: {results_summary['total']}
