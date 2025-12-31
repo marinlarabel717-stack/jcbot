@@ -18520,7 +18520,7 @@ class EnhancedBot:
 
 <b>{t(user_id, 'rename_upload_prompt')}</b>
 
-⏰ <i>{t(user_id, 'rename_timeout_upload')}</i>
+<i>{t(user_id, 'rename_timeout_upload')}</i>
         """
         
         keyboard = InlineKeyboardMarkup([
