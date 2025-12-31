@@ -18678,27 +18678,28 @@ class EnhancedBot:
             "waiting_merge_files"
         )
         
-        text = """
-<b>🧩 账户文件合并</b>
+        user_id = query.from_user.id
+        text = f"""
+<b>{t(user_id, 'merge_title')}</b>
 
-<b>💡 功能说明</b>
-• 自动解压所有 ZIP 文件
-• 递归扫描识别 TData 账户
-• 递归扫描识别 Session 文件 (支持纯.session或session+json配对)
-• 智能分类归档
+<b>{t(user_id, 'merge_features')}</b>
+{t(user_id, 'merge_feature1')}
+{t(user_id, 'merge_feature2')}
+{t(user_id, 'merge_feature3')}
+{t(user_id, 'merge_feature4')}
 
-<b>📤 请上传 ZIP 文件</b>
+<b>{t(user_id, 'merge_upload_prompt')}</b>
 
-<b>⚠️ 仅接受 .zip 文件</b>
-• 可上传多个 ZIP 文件
-• 系统会自动解压并扫描内容
+<b>{t(user_id, 'merge_zip_only')}</b>
+{t(user_id, 'merge_multi_upload')}
+{t(user_id, 'merge_auto_scan')}
 
-上传完成后点击"✅ 完成合并"
+{t(user_id, 'merge_click_complete')}
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("✅ 完成合并", callback_data="merge_finish")],
-            [InlineKeyboardButton("❌ 取消", callback_data="back_to_main")]
+            [InlineKeyboardButton(t(user_id, 'merge_btn_complete'), callback_data="merge_finish")],
+            [InlineKeyboardButton(t(user_id, 'merge_btn_cancel'), callback_data="back_to_main")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
@@ -18708,7 +18709,7 @@ class EnhancedBot:
         user_id = update.effective_user.id
         
         if user_id not in self.pending_merge:
-            self.safe_send_message(update, "❌ 没有待处理的合并任务")
+            self.safe_send_message(update, t(user_id, 'merge_no_task'))
             return
         
         task = self.pending_merge[user_id]
@@ -18716,7 +18717,7 @@ class EnhancedBot:
         
         # 检查文件类型 - 仅接受ZIP文件
         if not filename.lower().endswith('.zip'):
-            self.safe_send_message(update, "❌ 仅支持 .zip 文件，请重新上传")
+            self.safe_send_message(update, t(user_id, 'merge_zip_only_error'))
             return
         
         # 下载文件
@@ -18729,52 +18730,54 @@ class EnhancedBot:
             
             # 创建即时操作按钮
             keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton("➕ 继续上传文件", callback_data="merge_continue")],
-                [InlineKeyboardButton("✅ 完成合并", callback_data="merge_finish")],
-                [InlineKeyboardButton("❌ 取消", callback_data="merge_cancel")]
+                [InlineKeyboardButton(t(user_id, 'merge_btn_continue'), callback_data="merge_continue")],
+                [InlineKeyboardButton(t(user_id, 'merge_btn_complete'), callback_data="merge_finish")],
+                [InlineKeyboardButton(t(user_id, 'merge_btn_cancel'), callback_data="merge_cancel")]
             ])
             
             self.safe_send_message(
                 update,
-                f"✅ <b>已接收 ZIP 文件 {total_files}</b>\n\n"
-                f"文件名: <code>{filename}</code>\n\n"
-                f"<b>请选择下一步操作：</b>\n"
-                f"• 继续上传：添加更多ZIP文件\n"
-                f"• 完成合并：开始处理所有文件",
+                f"{t(user_id, 'merge_received_zip').format(count=total_files)}\n\n"
+                f"{t(user_id, 'merge_filename').format(filename=filename)}\n\n"
+                f"<b>{t(user_id, 'merge_select_action')}</b>\n"
+                f"{t(user_id, 'merge_action_continue')}\n"
+                f"{t(user_id, 'merge_action_complete')}",
                 'HTML',
                 reply_markup=keyboard
             )
         except Exception as e:
-            self.safe_send_message(update, f"❌ 下载文件失败: {str(e)}")
+            self.safe_send_message(update, t(user_id, 'merge_download_failed').format(error=str(e)))
+    
     
     def handle_merge_continue(self, query):
         """处理继续上传文件"""
-        query.answer("✅ 请继续上传ZIP文件")
         user_id = query.from_user.id
+        query.answer(t(user_id, 'merge_continue_upload_hint'))
         
         if user_id not in self.pending_merge:
-            self.safe_edit_message(query, "❌ 没有待处理的合并任务")
+            self.safe_edit_message(query, t(user_id, 'merge_no_task'))
             return
         
         task = self.pending_merge[user_id]
         total_files = len(task['files'])
         
         text = f"""
-<b>📤 继续上传文件</b>
+<b>{t(user_id, 'merge_btn_continue')}</b>
 
-已接收文件: {total_files} 个
+{t(user_id, 'merge_received_files').format(count=total_files)}
 
-<b>⚠️ 仅接受 .zip 文件</b>
-• 请上传下一个 ZIP 文件
-• 或点击下方按钮完成合并
+<b>{t(user_id, 'merge_zip_only')}</b>
+{t(user_id, 'merge_upload_next')}
+{t(user_id, 'merge_or_complete')}
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("✅ 完成合并", callback_data="merge_finish")],
-            [InlineKeyboardButton("❌ 取消", callback_data="merge_cancel")]
+            [InlineKeyboardButton(t(user_id, 'merge_btn_complete'), callback_data="merge_finish")],
+            [InlineKeyboardButton(t(user_id, 'merge_btn_cancel'), callback_data="merge_cancel")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
+    
     
     def handle_merge_cancel(self, query):
         """处理取消合并"""
@@ -18784,7 +18787,7 @@ class EnhancedBot:
         if user_id in self.pending_merge:
             self.cleanup_merge_task(user_id)
         
-        self.safe_edit_message(query, "❌ 已取消合并操作")
+        self.safe_edit_message(query, t(user_id, 'merge_cancelled'))
         
         # 返回主菜单
         time.sleep(1)
@@ -18799,16 +18802,16 @@ class EnhancedBot:
         query.answer()
         
         if user_id not in self.pending_merge:
-            self.safe_edit_message(query, "❌ 没有待处理的合并任务")
+            self.safe_edit_message(query, t(user_id, 'merge_no_task'))
             return
         
         task = self.pending_merge[user_id]
         
         if not task['files']:
-            self.safe_edit_message(query, "❌ 没有上传任何文件")
+            self.safe_edit_message(query, t(user_id, 'merge_no_files'))
             return
         
-        self.safe_edit_message(query, "🔄 <b>正在处理文件...</b>", 'HTML')
+        self.safe_edit_message(query, f"<b>{t(user_id, 'merge_processing')}</b>", 'HTML')
         
         # 在后台线程中处理
         def process_merge():
@@ -19074,22 +19077,30 @@ class EnhancedBot:
 """
         
         summary = f"""
-✅ <b>账户文件合并完成！</b>
+<b>{t(user_id, 'merge_complete')}</b>
 
-<b>📊 处理结果</b>
-• 解压 ZIP 文件: {len(files)} 个
-• TData 账户: {total_tdata} 个
-• Session 文件: {total_session_json} 个 (支持纯Session或Session+JSON)
+<b>{t(user_id, 'merge_results')}</b>
+{t(user_id, 'merge_result_zip').format(count=len(files))}
+{t(user_id, 'merge_result_tdata').format(count=total_tdata)}
+{t(user_id, 'merge_result_session').format(count=total_session_json)}
 {duplicate_info}
-<b>📦 生成文件</b>
-共 {len(zip_files_created)} 个文件（正常文件和重复文件分开打包）
+<b>{t(user_id, 'merge_generated')}</b>
+{t(user_id, 'merge_total_files').format(count=len(zip_files_created))}
         """
         
         context.bot.send_message(chat_id=user_id, text=summary, parse_mode='HTML')
         
         # 发送所有生成的 ZIP 文件
         for category, zip_path, count in zip_files_created:
-            caption = f"📦 {category} ({count} 项)"
+            # Translate category names
+            if 'Session' in category:
+                category_text = t(user_id, 'merge_session_files').format(count=count)
+            elif 'TData' in category:
+                category_text = t(user_id, 'merge_tdata_files').format(count=count)
+            else:
+                category_text = f"📦 {category} ({count} 项)"
+            
+            caption = category_text
             with open(zip_path, 'rb') as f:
                 context.bot.send_document(
                     chat_id=user_id,

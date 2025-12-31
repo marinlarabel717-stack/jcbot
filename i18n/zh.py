@@ -1446,4 +1446,57 @@ TEXTS = {
     'rename_invalid_name': '❌ 文件名无效，请重新输入',
     'rename_send_failed': '❌ 发送文件失败',
     'rename_failed': '❌ 重命名失败: {error}',
+    
+    # ===== 账户合并功能 =====
+    # 1. 功能介绍页面
+    'merge_title': '🧩 账户文件合并',
+    'merge_features': '💡 功能说明',
+    'merge_feature1': '· 自动解压所有 ZIP 文件',
+    'merge_feature2': '· 递归扫描识别 TData 账户',
+    'merge_feature3': '· 递归扫描识别 Session 文件 (支持纯.session或session+json配对)',
+    'merge_feature4': '· 智能分类归档',
+    'merge_upload_prompt': '📤 请上传 ZIP 文件',
+    'merge_zip_only': '⚠️ 仅接受 .zip 文件',
+    'merge_multi_upload': '· 可上传多个 ZIP 文件',
+    'merge_auto_scan': '· 系统会自动解压并扫描内容',
+    'merge_click_complete': '上传完成后点击"✅ 完成合并"',
+    
+    # 2. 按钮
+    'merge_btn_complete': '✅ 完成合并',
+    'merge_btn_cancel': '❌ 取消',
+    'merge_btn_continue': '📁 继续上传文件',
+    
+    # 3. 上传文件后
+    'merge_received_zip': '✅ 已接收 ZIP 文件 {count}',
+    'merge_filename': '文件名: {filename}',
+    'merge_select_action': '请选择下一步操作：',
+    'merge_action_continue': '· 继续上传：添加更多ZIP文件',
+    'merge_action_complete': '· 完成合并：开始处理所有文件',
+    
+    # 4. 处理中
+    'merge_processing': '🔄 正在处理文件...',
+    
+    # 5. 处理结果
+    'merge_complete': '✅ 账户文件合并完成！',
+    'merge_results': '📊 处理结果',
+    'merge_result_zip': '· 解压 ZIP 文件: {count} 个',
+    'merge_result_tdata': '· TData 账户: {count} 个',
+    'merge_result_session': '· Session 文件: {count} 个 (支持纯Session或Session+JSON)',
+    'merge_generated': '📦 生成文件',
+    'merge_total_files': '共 {count} 个文件（正常文件和重复文件分开打包）',
+    
+    # 6. 输出文件描述
+    'merge_session_files': 'Session 文件 ({count}项)',
+    'merge_tdata_files': 'TData 文件 ({count}项)',
+    
+    # 7. 错误和提示消息
+    'merge_no_task': '❌ 没有待处理的合并任务',
+    'merge_zip_only_error': '❌ 仅支持 .zip 文件，请重新上传',
+    'merge_download_failed': '❌ 下载文件失败: {error}',
+    'merge_continue_upload_hint': '✅ 请继续上传ZIP文件',
+    'merge_received_files': '已接收文件: {count} 个',
+    'merge_upload_next': '• 请上传下一个 ZIP 文件',
+    'merge_or_complete': '• 或点击下方按钮完成合并',
+    'merge_cancelled': '❌ 已取消合并操作',
+    'merge_no_files': '❌ 没有上传任何文件',
 }

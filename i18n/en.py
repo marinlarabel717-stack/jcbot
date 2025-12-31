@@ -1445,4 +1445,57 @@ TEXTS = {
     'rename_invalid_name': '❌ Invalid filename, please re-enter',
     'rename_send_failed': '❌ File send failed',
     'rename_failed': '❌ Rename failed: {error}',
+    
+    # ===== Account Merge Feature =====
+    # 1. Feature Introduction Page
+    'merge_title': '🧩 Account File Merge',
+    'merge_features': '💡 Features',
+    'merge_feature1': '· Auto-extract all ZIP files',
+    'merge_feature2': '· Recursively scan and identify TData accounts',
+    'merge_feature3': '· Recursively scan and identify Session files (support pure .session or session+json pairs)',
+    'merge_feature4': '· Smart classification and archiving',
+    'merge_upload_prompt': '📤 Please upload ZIP files',
+    'merge_zip_only': '⚠️ Only .zip files accepted',
+    'merge_multi_upload': '· Can upload multiple ZIP files',
+    'merge_auto_scan': '· System will auto-extract and scan contents',
+    'merge_click_complete': 'Click "✅ Complete Merge" after upload',
+    
+    # 2. Buttons
+    'merge_btn_complete': '✅ Complete Merge',
+    'merge_btn_cancel': '❌ Cancel',
+    'merge_btn_continue': '📁 Continue Upload',
+    
+    # 3. After File Upload
+    'merge_received_zip': '✅ Received ZIP file {count}',
+    'merge_filename': 'Filename: {filename}',
+    'merge_select_action': 'Please select next action:',
+    'merge_action_continue': '· Continue upload: Add more ZIP files',
+    'merge_action_complete': '· Complete merge: Start processing all files',
+    
+    # 4. Processing
+    'merge_processing': '🔄 Processing files...',
+    
+    # 5. Results
+    'merge_complete': '✅ Account file merge complete!',
+    'merge_results': '📊 Processing Results',
+    'merge_result_zip': '· Extracted ZIP files: {count}',
+    'merge_result_tdata': '· TData accounts: {count}',
+    'merge_result_session': '· Session files: {count} (support pure Session or Session+JSON)',
+    'merge_generated': '📦 Generated Files',
+    'merge_total_files': 'Total {count} files (normal and duplicate files packed separately)',
+    
+    # 6. Output File Descriptions
+    'merge_session_files': 'Session Files ({count} items)',
+    'merge_tdata_files': 'TData Files ({count} items)',
+    
+    # 7. Error and Hint Messages
+    'merge_no_task': '❌ No pending merge task',
+    'merge_zip_only_error': '❌ Only .zip files supported, please re-upload',
+    'merge_download_failed': '❌ File download failed: {error}',
+    'merge_continue_upload_hint': '✅ Please continue uploading ZIP files',
+    'merge_received_files': 'Received files: {count}',
+    'merge_upload_next': '• Please upload next ZIP file',
+    'merge_or_complete': '• Or click button below to complete merge',
+    'merge_cancelled': '❌ Merge operation cancelled',
+    'merge_no_files': '❌ No files uploaded',
 }
