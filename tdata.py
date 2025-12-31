@@ -19434,66 +19434,66 @@ class EnhancedBot:
             try:
                 async with asyncio.timeout(CLEANUP_OPERATION_TIMEOUT):
                     for dialog in groups + channels:
-                entity = dialog.entity
-                chat_id = entity.id
-                title = getattr(entity, 'title', 'Unknown')
-                chat_type = 'channel' if isinstance(entity, Channel) and entity.broadcast else 'group'
-                
-                action = CleanupAction(chat_id=chat_id, title=title, chat_type=chat_type)
-                
-                try:
-                    await asyncio.sleep(config.CLEANUP_ACTION_SLEEP + random.uniform(0, 0.2))
-                    
-                    if isinstance(entity, Channel):
-                        await client(LeaveChannelRequest(entity))
-                    else:
-                        me = await client.get_me()
-                        await client(DeleteChatUserRequest(chat_id, me))
-                    
-                    action.actions_done.append('left')
-                    action.status = 'success'
-                    
-                    if chat_type == 'channel':
-                        stats['channels_left'] += 1
-                    else:
-                        stats['groups_left'] += 1
-                    
-                    logger.debug(f"离开 {chat_type}: {title}")
-                    
-                except FloodWaitError as e:
-                    # 如果等待时间超过60秒，跳过以避免卡住
-                    if e.seconds > 60:
-                        logger.warning(f"FloodWait离开{title}: {e.seconds}秒 - 跳过以避免卡住")
-                        action.status = 'skipped'
-                        action.error = f"FloodWait {e.seconds}秒，已跳过"
-                        stats['skipped'] += 1
-                    else:
-                        logger.warning(f"FloodWait离开{title}: {e.seconds}秒")
-                        await asyncio.sleep(e.seconds)
+                        entity = dialog.entity
+                        chat_id = entity.id
+                        title = getattr(entity, 'title', 'Unknown')
+                        chat_type = 'channel' if isinstance(entity, Channel) and entity.broadcast else 'group'
+                        
+                        action = CleanupAction(chat_id=chat_id, title=title, chat_type=chat_type)
+                        
                         try:
+                            await asyncio.sleep(config.CLEANUP_ACTION_SLEEP + random.uniform(0, 0.2))
+                            
                             if isinstance(entity, Channel):
                                 await client(LeaveChannelRequest(entity))
                             else:
                                 me = await client.get_me()
                                 await client(DeleteChatUserRequest(chat_id, me))
+                            
                             action.actions_done.append('left')
                             action.status = 'success'
+                            
                             if chat_type == 'channel':
                                 stats['channels_left'] += 1
                             else:
                                 stats['groups_left'] += 1
-                        except Exception as retry_error:
+                            
+                            logger.debug(f"离开 {chat_type}: {title}")
+                            
+                        except FloodWaitError as e:
+                            # 如果等待时间超过60秒，跳过以避免卡住
+                            if e.seconds > 60:
+                                logger.warning(f"FloodWait离开{title}: {e.seconds}秒 - 跳过以避免卡住")
+                                action.status = 'skipped'
+                                action.error = f"FloodWait {e.seconds}秒，已跳过"
+                                stats['skipped'] += 1
+                            else:
+                                logger.warning(f"FloodWait离开{title}: {e.seconds}秒")
+                                await asyncio.sleep(e.seconds)
+                                try:
+                                    if isinstance(entity, Channel):
+                                        await client(LeaveChannelRequest(entity))
+                                    else:
+                                        me = await client.get_me()
+                                        await client(DeleteChatUserRequest(chat_id, me))
+                                    action.actions_done.append('left')
+                                    action.status = 'success'
+                                    if chat_type == 'channel':
+                                        stats['channels_left'] += 1
+                                    else:
+                                        stats['groups_left'] += 1
+                                except Exception as retry_error:
+                                    action.status = 'failed'
+                                    action.error = f"重试失败: {str(retry_error)}"
+                                    stats['errors'] += 1
+                            
+                        except Exception as e:
                             action.status = 'failed'
-                            action.error = f"重试失败: {str(retry_error)}"
+                            action.error = str(e)
                             stats['errors'] += 1
+                            logger.error(f"离开{title}错误: {e}")
                         
-                except Exception as e:
-                    action.status = 'failed'
-                    action.error = str(e)
-                    stats['errors'] += 1
-                    logger.error(f"离开{title}错误: {e}")
-                
-                actions.append(action)
+                        actions.append(action)
             
             except asyncio.TimeoutError:
                 logger.warning(f"退出群组/频道操作超时 ({CLEANUP_OPERATION_TIMEOUT}秒)，已处理 {stats['groups_left'] + stats['channels_left']} 个")
@@ -19510,89 +19510,89 @@ class EnhancedBot:
             try:
                 async with asyncio.timeout(CLEANUP_OPERATION_TIMEOUT):
                     for dialog in users + bots:
-                entity = dialog.entity
-                chat_id = entity.id
-                
-                if hasattr(entity, 'first_name') and entity.first_name:
-                    title = entity.first_name
-                elif hasattr(entity, 'username') and entity.username:
-                    title = entity.username
-                else:
-                    title = 'Unknown'
-                
-                chat_type = 'bot' if entity.bot else 'user'
-                action = CleanupAction(chat_id=chat_id, title=title, chat_type=chat_type)
-                
-                try:
-                    await asyncio.sleep(config.CLEANUP_ACTION_SLEEP + random.uniform(0, 0.2))
-                    
-                    # 尝试撤回删除
-                    if config.CLEANUP_REVOKE_DEFAULT:
-                        try:
-                            await client(DeleteHistoryRequest(
-                                peer=entity,
-                                max_id=0,
-                                just_clear=False,
-                                revoke=True
-                            ))
-                            action.actions_done.extend(['history_deleted', 'revoked'])
-                            action.status = 'success'
-                        except Exception:
-                            # 回退到单向删除
-                            await client(DeleteHistoryRequest(
-                                peer=entity,
-                                max_id=0,
-                                just_clear=False,
-                                revoke=False
-                            ))
-                            action.actions_done.append('history_deleted')
-                            action.status = 'partial'
-                            action.error = '部分: 仅删除自己的消息'
-                    else:
-                        await client(DeleteHistoryRequest(
-                            peer=entity,
-                            max_id=0,
-                            just_clear=False,
-                            revoke=False
-                        ))
-                        action.actions_done.append('history_deleted')
-                        action.status = 'success'
-                    
-                    stats['histories_deleted'] += 1
-                    logger.debug(f"删除历史记录: {title}")
-                    
-                except FloodWaitError as e:
-                    # 如果等待时间超过60秒，跳过以避免卡住
-                    if e.seconds > 60:
-                        logger.warning(f"FloodWait删除{title}: {e.seconds}秒 - 跳过以避免卡住")
-                        action.status = 'skipped'
-                        action.error = f"FloodWait {e.seconds}秒，已跳过"
-                        stats['skipped'] += 1
-                    else:
-                        logger.warning(f"FloodWait删除{title}: {e.seconds}秒")
-                        await asyncio.sleep(e.seconds)
-                        try:
-                            await client(DeleteHistoryRequest(
-                                peer=entity,
-                                max_id=0,
-                                just_clear=False,
-                                revoke=False
-                            ))
-                            action.actions_done.append('history_deleted')
-                            action.status = 'success'
-                            stats['histories_deleted'] += 1
-                        except Exception as retry_error:
-                            action.status = 'failed'
-                            action.error = f"重试失败: {str(retry_error)}"
-                            stats['errors'] += 1
+                        entity = dialog.entity
+                        chat_id = entity.id
                         
-                except Exception as e:
-                    action.status = 'failed'
-                    action.error = str(e)
-                    stats['errors'] += 1
-                    logger.error(f"删除{title}历史记录错误: {e}")
-                
-                actions.append(action)
+                        if hasattr(entity, 'first_name') and entity.first_name:
+                            title = entity.first_name
+                        elif hasattr(entity, 'username') and entity.username:
+                            title = entity.username
+                        else:
+                            title = 'Unknown'
+                        
+                        chat_type = 'bot' if entity.bot else 'user'
+                        action = CleanupAction(chat_id=chat_id, title=title, chat_type=chat_type)
+                        
+                        try:
+                            await asyncio.sleep(config.CLEANUP_ACTION_SLEEP + random.uniform(0, 0.2))
+                            
+                            # 尝试撤回删除
+                            if config.CLEANUP_REVOKE_DEFAULT:
+                                try:
+                                    await client(DeleteHistoryRequest(
+                                        peer=entity,
+                                        max_id=0,
+                                        just_clear=False,
+                                        revoke=True
+                                    ))
+                                    action.actions_done.extend(['history_deleted', 'revoked'])
+                                    action.status = 'success'
+                                except Exception:
+                                    # 回退到单向删除
+                                    await client(DeleteHistoryRequest(
+                                        peer=entity,
+                                        max_id=0,
+                                        just_clear=False,
+                                        revoke=False
+                                    ))
+                                    action.actions_done.append('history_deleted')
+                                    action.status = 'partial'
+                                    action.error = '部分: 仅删除自己的消息'
+                            else:
+                                await client(DeleteHistoryRequest(
+                                    peer=entity,
+                                    max_id=0,
+                                    just_clear=False,
+                                    revoke=False
+                                ))
+                                action.actions_done.append('history_deleted')
+                                action.status = 'success'
+                            
+                            stats['histories_deleted'] += 1
+                            logger.debug(f"删除历史记录: {title}")
+                            
+                        except FloodWaitError as e:
+                            # 如果等待时间超过60秒，跳过以避免卡住
+                            if e.seconds > 60:
+                                logger.warning(f"FloodWait删除{title}: {e.seconds}秒 - 跳过以避免卡住")
+                                action.status = 'skipped'
+                                action.error = f"FloodWait {e.seconds}秒，已跳过"
+                                stats['skipped'] += 1
+                            else:
+                                logger.warning(f"FloodWait删除{title}: {e.seconds}秒")
+                                await asyncio.sleep(e.seconds)
+                                try:
+                                    await client(DeleteHistoryRequest(
+                                        peer=entity,
+                                        max_id=0,
+                                        just_clear=False,
+                                        revoke=False
+                                    ))
+                                    action.actions_done.append('history_deleted')
+                                    action.status = 'success'
+                                    stats['histories_deleted'] += 1
+                                except Exception as retry_error:
+                                    action.status = 'failed'
+                                    action.error = f"重试失败: {str(retry_error)}"
+                                    stats['errors'] += 1
+                            
+                        except Exception as e:
+                            action.status = 'failed'
+                            action.error = str(e)
+                            stats['errors'] += 1
+                            logger.error(f"删除{title}历史记录错误: {e}")
+                        
+                        actions.append(action)
             
             except asyncio.TimeoutError:
                 logger.warning(f"删除对话记录操作超时 ({CLEANUP_OPERATION_TIMEOUT}秒)，已处理 {stats['histories_deleted']} 个")
@@ -19609,42 +19609,42 @@ class EnhancedBot:
             try:
                 async with asyncio.timeout(CLEANUP_OPERATION_TIMEOUT):
                     result = await client(GetContactsRequest(hash=0))
-                
-                if hasattr(result, 'users') and result.users:
-                    contact_ids = [user.id for user in result.users]
-                    logger.info(f"删除 {len(contact_ids)} 个联系人...")
                     
-                    batch_size = 100
-                    for i in range(0, len(contact_ids), batch_size):
-                        batch = contact_ids[i:i + batch_size]
+                    if hasattr(result, 'users') and result.users:
+                        contact_ids = [user.id for user in result.users]
+                        logger.info(f"删除 {len(contact_ids)} 个联系人...")
                         
-                        try:
-                            await client(DeleteContactsRequest(id=batch))
-                            stats['contacts_deleted'] += len(batch)
-                            logger.debug(f"已删除 {len(batch)} 个联系人")
+                        batch_size = 100
+                        for i in range(0, len(contact_ids), batch_size):
+                            batch = contact_ids[i:i + batch_size]
                             
-                            if i + batch_size < len(contact_ids):
-                                await asyncio.sleep(config.CLEANUP_ACTION_SLEEP * 2)
+                            try:
+                                await client(DeleteContactsRequest(id=batch))
+                                stats['contacts_deleted'] += len(batch)
+                                logger.debug(f"已删除 {len(batch)} 个联系人")
                                 
-                        except FloodWaitError as e:
-                            # 如果等待时间超过60秒，跳过以避免卡住
-                            if e.seconds > 60:
-                                logger.warning(f"FloodWait删除联系人: {e.seconds}秒 - 跳过以避免卡住")
-                                stats['skipped'] += 1
-                            else:
-                                logger.warning(f"FloodWait删除联系人: {e.seconds}秒")
-                                await asyncio.sleep(e.seconds)
-                                try:
-                                    await client(DeleteContactsRequest(id=batch))
-                                    stats['contacts_deleted'] += len(batch)
-                                except Exception:
-                                    stats['errors'] += 1
+                                if i + batch_size < len(contact_ids):
+                                    await asyncio.sleep(config.CLEANUP_ACTION_SLEEP * 2)
+                                    
+                            except FloodWaitError as e:
+                                # 如果等待时间超过60秒，跳过以避免卡住
+                                if e.seconds > 60:
+                                    logger.warning(f"FloodWait删除联系人: {e.seconds}秒 - 跳过以避免卡住")
+                                    stats['skipped'] += 1
+                                else:
+                                    logger.warning(f"FloodWait删除联系人: {e.seconds}秒")
+                                    await asyncio.sleep(e.seconds)
+                                    try:
+                                        await client(DeleteContactsRequest(id=batch))
+                                        stats['contacts_deleted'] += len(batch)
+                                    except Exception:
+                                        stats['errors'] += 1
+                            
+                            except Exception as e:
+                                stats['errors'] += 1
+                                logger.error(f"删除联系人批次错误: {e}")
                         
-                        except Exception as e:
-                            stats['errors'] += 1
-                            logger.error(f"删除联系人批次错误: {e}")
-                    
-                    logger.info(f"已删除 {stats['contacts_deleted']} 个联系人")
+                        logger.info(f"已删除 {stats['contacts_deleted']} 个联系人")
             
             except asyncio.TimeoutError:
                 logger.warning(f"删除联系人操作超时 ({CLEANUP_OPERATION_TIMEOUT}秒)，已删除 {stats['contacts_deleted']} 个")
@@ -19663,30 +19663,30 @@ class EnhancedBot:
                 async with asyncio.timeout(CLEANUP_OPERATION_TIMEOUT):
                     remaining_dialogs = await client.get_dialogs()
                     archived_count = 0
-                
-                for dialog in remaining_dialogs:
-                    try:
-                        await client.edit_folder(dialog.entity, folder=1)
-                        archived_count += 1
-                        await asyncio.sleep(config.CLEANUP_ACTION_SLEEP)
-                    except FloodWaitError as e:
-                        # 如果等待时间超过60秒，跳过以避免卡住
-                        if e.seconds > 60:
-                            logger.warning(f"FloodWait归档: {e.seconds}秒 - 跳过以避免卡住")
-                            stats['skipped'] += 1
-                        else:
-                            logger.warning(f"FloodWait归档: {e.seconds}秒")
-                            await asyncio.sleep(e.seconds)
-                            try:
-                                await client.edit_folder(dialog.entity, folder=1)
-                                archived_count += 1
-                            except Exception:
-                                pass
-                    except Exception as e:
-                        logger.debug(f"无法归档对话: {e}")
-                
-                stats['dialogs_closed'] = archived_count
-                logger.info(f"已归档 {archived_count} 个对话")
+                    
+                    for dialog in remaining_dialogs:
+                        try:
+                            await client.edit_folder(dialog.entity, folder=1)
+                            archived_count += 1
+                            await asyncio.sleep(config.CLEANUP_ACTION_SLEEP)
+                        except FloodWaitError as e:
+                            # 如果等待时间超过60秒，跳过以避免卡住
+                            if e.seconds > 60:
+                                logger.warning(f"FloodWait归档: {e.seconds}秒 - 跳过以避免卡住")
+                                stats['skipped'] += 1
+                            else:
+                                logger.warning(f"FloodWait归档: {e.seconds}秒")
+                                await asyncio.sleep(e.seconds)
+                                try:
+                                    await client.edit_folder(dialog.entity, folder=1)
+                                    archived_count += 1
+                                except Exception:
+                                    pass
+                        except Exception as e:
+                            logger.debug(f"无法归档对话: {e}")
+                    
+                    stats['dialogs_closed'] = archived_count
+                    logger.info(f"已归档 {archived_count} 个对话")
             
             except asyncio.TimeoutError:
                 logger.warning(f"归档对话操作超时 ({CLEANUP_OPERATION_TIMEOUT}秒)")
