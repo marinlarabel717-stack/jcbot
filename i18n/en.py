@@ -1428,7 +1428,7 @@ TEXTS = {
     'rename_file_size': '📏 File size: {size}',
     'rename_enter_new_name': '✏️ Please enter new filename',
     'rename_name_only': '· Enter filename only (without extension)',
-    'rename_ext_keep': '· Extension {ext} will be kept automatically',
+    'rename_ext_keep': '· Extension {ext} will be automatically kept',
     'rename_illegal_clean': '· Illegal characters will be auto-cleaned',
     'rename_timeout_input': '⏰ Auto-cancel if no input within 5 minutes',
     
@@ -1436,7 +1436,7 @@ TEXTS = {
     'rename_success': '✅ File renamed successfully',
     'rename_old_name': 'Original filename: {old_name}',
     'rename_new_name': 'New filename: {new_name}',
-    'rename_telegram_tip': '💡 If filename is incorrect when downloading, it may be due to Telegram client restrictions\nActual file contains all characters, including Emoji and special brackets',
+    'rename_telegram_tip': '💡 If the filename is incorrect when downloading, it may be due to Telegram client restrictions\nThe actual file contains all characters, including Emoji and special brackets',
     'rename_file_sent': '✅ File sent!',
     
     # 4. Error Messages
