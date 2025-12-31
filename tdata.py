@@ -116,6 +116,54 @@ else:
     print("✅ Python 3.9+ 检测到，使用原生asyncio.to_thread")
 
 # ================================
+# Python版本兼容性 - asyncio.timeout
+# ================================
+# asyncio.timeout在Python 3.11+才可用，为老版本提供兼容实现
+if not hasattr(asyncio, 'timeout'):
+    # Python < 3.11 兼容实现
+    from contextlib import asynccontextmanager
+    
+    @asynccontextmanager
+    async def _timeout_compat(delay):
+        """兼容Python < 3.11的asyncio.timeout实现
+        
+        使用asyncio.wait_for的异常处理机制来模拟timeout上下文管理器
+        """
+        # 创建一个Task来跟踪超时
+        loop = asyncio.get_running_loop()
+        task = asyncio.current_task()
+        
+        # 用于标记是否是超时取消
+        is_timeout = False
+        
+        def _timeout_callback():
+            nonlocal is_timeout
+            is_timeout = True
+            if task and not task.done():
+                task.cancel()
+        
+        # 设置超时
+        timeout_handle = loop.call_later(delay, _timeout_callback) if delay is not None else None
+        
+        try:
+            yield
+        except asyncio.CancelledError:
+            # 如果是超时导致的取消，转换为TimeoutError
+            if is_timeout:
+                raise asyncio.TimeoutError()
+            # 否则重新抛出CancelledError
+            raise
+        finally:
+            # 清理超时句柄
+            if timeout_handle:
+                timeout_handle.cancel()
+    
+    asyncio.timeout = _timeout_compat
+    print("⚠️ Python < 3.11 检测到，使用兼容的asyncio.timeout实现")
+else:
+    print("✅ Python 3.11+ 检测到，使用原生asyncio.timeout")
+
+# ================================
 # 日志配置
 # ================================
 logging.basicConfig(
