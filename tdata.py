@@ -80,8 +80,10 @@ BATCH_TIMEOUT = 30 * 60  # 批量检测总超时（秒）- 30分钟
 UPDATE_INTERVAL = 5  # 进度消息更新间隔（秒）
 
 # 一键清理功能配置
-CLEANUP_UPDATE_INTERVAL = 5  # 一键清理进度刷新间隔（秒），避免触发 Telegram 限流
+CLEANUP_UPDATE_INTERVAL = 10  # 一键清理进度刷新间隔（秒），改为10秒避免触发 Telegram 限流
 TDATA_CONVERT_TIMEOUT = 30  # TData 转换超时（秒）
+CLEANUP_SINGLE_ACCOUNT_TIMEOUT = 300  # 单个账号清理超时（秒），防止卡死
+CLEANUP_OPERATION_TIMEOUT = 60  # 单个清理操作超时（秒），如删除联系人、退出群组等
 
 # 通讯录限制检测状态常量
 CONTACT_STATUS_NORMAL = 'normal'
@@ -2189,7 +2191,7 @@ class Config:
         
         # 一键清理功能配置
         self.ENABLE_ONE_CLICK_CLEANUP = os.getenv("ENABLE_ONE_CLICK_CLEANUP", "true").lower() == "true"
-        self.CLEANUP_ACCOUNT_CONCURRENCY = int(os.getenv("CLEANUP_ACCOUNT_CONCURRENCY", "3"))  # 同时处理的账户数
+        self.CLEANUP_ACCOUNT_CONCURRENCY = int(os.getenv("CLEANUP_ACCOUNT_CONCURRENCY", "30"))  # 同时处理的账户数（改为30）
         self.CLEANUP_LEAVE_CONCURRENCY = int(os.getenv("CLEANUP_LEAVE_CONCURRENCY", "3"))
         self.CLEANUP_DELETE_HISTORY_CONCURRENCY = int(os.getenv("CLEANUP_DELETE_HISTORY_CONCURRENCY", "2"))
         self.CLEANUP_DELETE_CONTACTS_CONCURRENCY = int(os.getenv("CLEANUP_DELETE_CONTACTS_CONCURRENCY", "3"))
@@ -10377,7 +10379,19 @@ async def maybe_update_cleanup_progress(message, text, user_id, parse_mode='HTML
         try:
             await message.edit_text(text, parse_mode=parse_mode)
             _last_cleanup_update_time[user_id] = current_time
+            logger.debug(f"进度消息已更新: user_id={user_id}")
             return True
+        except FloodWaitError as e:
+            logger.warning(f"FloodWaitError: 等待 {e.seconds} 秒")
+            await asyncio.sleep(e.seconds)
+            # 重试一次
+            try:
+                await message.edit_text(text, parse_mode=parse_mode)
+                _last_cleanup_update_time[user_id] = current_time
+                return True
+            except Exception as retry_e:
+                logger.warning(f"更新进度消息重试失败: {retry_e}")
+                return False
         except Exception as e:
             logger.warning(f"更新进度消息失败: {e}")
             return False
@@ -19308,11 +19322,13 @@ class EnhancedBot:
                 await progress_callback("🔄 清理账号资料（头像、名字、简介）...")
             
             try:
-                from telethon.tl.functions.account import UpdateProfileRequest
-                from telethon.tl.functions.photos import DeletePhotosRequest, GetUserPhotosRequest
-                
-                # 获取当前账号信息
-                me = await client.get_me()
+                # 添加超时保护
+                async with asyncio.timeout(CLEANUP_OPERATION_TIMEOUT):
+                    from telethon.tl.functions.account import UpdateProfileRequest
+                    from telethon.tl.functions.photos import DeletePhotosRequest, GetUserPhotosRequest
+                    
+                    # 获取当前账号信息
+                    me = await client.get_me()
                 
                 # 随机修改名字和简介为符号字母
                 profile_cleared = False
@@ -19365,6 +19381,10 @@ class EnhancedBot:
                 
                 await asyncio.sleep(config.CLEANUP_ACTION_SLEEP)
                 
+            except asyncio.TimeoutError:
+                logger.warning(f"清理账号资料超时 ({CLEANUP_OPERATION_TIMEOUT}秒)")
+                stats['errors'] += 1
+                error_details.append(f"清理账号资料超时")
             except Exception as e:
                 logger.error(f"清理账号资料错误: {e}")
                 stats['errors'] += 1
@@ -19410,7 +19430,10 @@ class EnhancedBot:
             from telethon.tl.functions.channels import LeaveChannelRequest
             from telethon.tl.functions.messages import DeleteChatUserRequest
             
-            for dialog in groups + channels:
+            # 添加超时保护，防止卡死
+            try:
+                async with asyncio.timeout(CLEANUP_OPERATION_TIMEOUT):
+                    for dialog in groups + channels:
                 entity = dialog.entity
                 chat_id = entity.id
                 title = getattr(entity, 'title', 'Unknown')
@@ -19472,13 +19495,21 @@ class EnhancedBot:
                 
                 actions.append(action)
             
+            except asyncio.TimeoutError:
+                logger.warning(f"退出群组/频道操作超时 ({CLEANUP_OPERATION_TIMEOUT}秒)，已处理 {stats['groups_left'] + stats['channels_left']} 个")
+                error_details.append(f"退出群组/频道超时")
+                stats['skipped'] += 1
+            
             # 2. 删除聊天记录
             if progress_callback:
                 await progress_callback(f"🗑️ 开始删除 {len(users) + len(bots)} 个对话记录...")
             
             from telethon.tl.functions.messages import DeleteHistoryRequest
             
-            for dialog in users + bots:
+            # 添加超时保护
+            try:
+                async with asyncio.timeout(CLEANUP_OPERATION_TIMEOUT):
+                    for dialog in users + bots:
                 entity = dialog.entity
                 chat_id = entity.id
                 
@@ -19563,14 +19594,21 @@ class EnhancedBot:
                 
                 actions.append(action)
             
+            except asyncio.TimeoutError:
+                logger.warning(f"删除对话记录操作超时 ({CLEANUP_OPERATION_TIMEOUT}秒)，已处理 {stats['histories_deleted']} 个")
+                error_details.append(f"删除对话记录超时")
+                stats['skipped'] += 1
+            
             # 3. 删除联系人
             if progress_callback:
                 await progress_callback("📇 开始删除联系人...")
             
             from telethon.tl.functions.contacts import DeleteContactsRequest, GetContactsRequest
             
+            # 添加超时保护
             try:
-                result = await client(GetContactsRequest(hash=0))
+                async with asyncio.timeout(CLEANUP_OPERATION_TIMEOUT):
+                    result = await client(GetContactsRequest(hash=0))
                 
                 if hasattr(result, 'users') and result.users:
                     contact_ids = [user.id for user in result.users]
@@ -19607,7 +19645,11 @@ class EnhancedBot:
                             logger.error(f"删除联系人批次错误: {e}")
                     
                     logger.info(f"已删除 {stats['contacts_deleted']} 个联系人")
-                    
+            
+            except asyncio.TimeoutError:
+                logger.warning(f"删除联系人操作超时 ({CLEANUP_OPERATION_TIMEOUT}秒)，已删除 {stats['contacts_deleted']} 个")
+                error_details.append(f"删除联系人超时")
+                stats['skipped'] += 1
             except Exception as e:
                 stats['errors'] += 1
                 logger.error(f"获取/删除联系人错误: {e}")
@@ -19616,9 +19658,11 @@ class EnhancedBot:
             if progress_callback:
                 await progress_callback("📁 归档剩余对话...")
             
+            # 添加超时保护
             try:
-                remaining_dialogs = await client.get_dialogs()
-                archived_count = 0
+                async with asyncio.timeout(CLEANUP_OPERATION_TIMEOUT):
+                    remaining_dialogs = await client.get_dialogs()
+                    archived_count = 0
                 
                 for dialog in remaining_dialogs:
                     try:
@@ -19643,7 +19687,11 @@ class EnhancedBot:
                 
                 stats['dialogs_closed'] = archived_count
                 logger.info(f"已归档 {archived_count} 个对话")
-                
+            
+            except asyncio.TimeoutError:
+                logger.warning(f"归档对话操作超时 ({CLEANUP_OPERATION_TIMEOUT}秒)")
+                error_details.append(f"归档对话超时")
+                stats['skipped'] += 1
             except Exception as e:
                 logger.error(f"归档对话错误: {e}")
             
@@ -19794,9 +19842,9 @@ class EnhancedBot:
                         result_data['error'] = f"连接失败: {str(e)}"
                     return result_data
             
-            # 进度更新节流（避免触发 Telegram 限制）
-            last_updated_idx = {'value': 0}
-            UPDATE_BATCH = 100  # 每完成100个账户更新一次，避免频繁刷新触发限流
+            # 进度更新节流（避免触发 Telegram 限制）- 改为基于时间而非账号数量
+            last_update_time = {'value': 0}  # 上次更新的时间戳
+            PROGRESS_UPDATE_INTERVAL = 10  # 每10秒更新一次进度
             
             # 创建进度回调函数
             async def update_progress(status_text):
@@ -19805,14 +19853,15 @@ class EnhancedBot:
                 if not progress_msg:
                     return
                 
+                current_time = time.time()
+                time_since_last_update = current_time - last_update_time['value']
+                
                 # 节流逻辑：只在以下情况更新
-                # 1. 每完成100个账户
+                # 1. 距离上次更新已超过10秒
                 # 2. 是第一个账户
                 # 3. 是最后一个账户
-                accounts_since_last_update = current_idx - last_updated_idx['value']
-                
                 should_update = (
-                    accounts_since_last_update >= UPDATE_BATCH or
+                    time_since_last_update >= PROGRESS_UPDATE_INTERVAL or
                     current_idx == 1 or
                     current_idx == all_files_count
                 )
@@ -19824,8 +19873,8 @@ class EnhancedBot:
                     try:
                         progress_percent = int((current_idx / all_files_count) * 100)
                         
-                        # 更新索引
-                        last_updated_idx['value'] = current_idx
+                        # 更新时间戳
+                        last_update_time['value'] = current_time
                         
                         filled = int(progress_percent / 10)
                         empty = 10 - filled
@@ -19871,13 +19920,25 @@ class EnhancedBot:
                             logger.warning(f"进度更新触发限流: {e}")
                         pass
             
-            # 执行清理
-            cleanup_result = await self._cleanup_single_account(
-                client=client,
-                account_name=file_name,
-                file_path=file_path,
-                progress_callback=update_progress
-            )
+            # 执行清理 - 添加整体超时保护
+            try:
+                cleanup_result = await asyncio.wait_for(
+                    self._cleanup_single_account(
+                        client=client,
+                        account_name=file_name,
+                        file_path=file_path,
+                        progress_callback=update_progress
+                    ),
+                    timeout=CLEANUP_SINGLE_ACCOUNT_TIMEOUT
+                )
+            except asyncio.TimeoutError:
+                logger.error(f"账号 {file_name} 清理超时 ({CLEANUP_SINGLE_ACCOUNT_TIMEOUT}秒)")
+                cleanup_result = {
+                    'success': False,
+                    'error': f'清理超时 ({CLEANUP_SINGLE_ACCOUNT_TIMEOUT}秒)',
+                    'statistics': {},
+                    'error_details': [f'整个清理过程超时']
+                }
             
             # 断开客户端
             try:
