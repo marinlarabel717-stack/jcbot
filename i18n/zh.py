@@ -1488,4 +1488,15 @@ TEXTS = {
     # 6. 输出文件描述
     'merge_session_files': 'Session 文件 ({count}项)',
     'merge_tdata_files': 'TData 文件 ({count}项)',
+    
+    # 7. 错误和提示消息
+    'merge_no_task': '❌ 没有待处理的合并任务',
+    'merge_zip_only_error': '❌ 仅支持 .zip 文件，请重新上传',
+    'merge_download_failed': '❌ 下载文件失败: {error}',
+    'merge_continue_upload_hint': '✅ 请继续上传ZIP文件',
+    'merge_received_files': '已接收文件: {count} 个',
+    'merge_upload_next': '• 请上传下一个 ZIP 文件',
+    'merge_or_complete': '• 或点击下方按钮完成合并',
+    'merge_cancelled': '❌ 已取消合并操作',
+    'merge_no_files': '❌ 没有上传任何文件',
 }

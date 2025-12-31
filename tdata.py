@@ -18709,7 +18709,7 @@ class EnhancedBot:
         user_id = update.effective_user.id
         
         if user_id not in self.pending_merge:
-            self.safe_send_message(update, "❌ 没有待处理的合并任务")
+            self.safe_send_message(update, t(user_id, 'merge_no_task'))
             return
         
         task = self.pending_merge[user_id]
@@ -18717,7 +18717,7 @@ class EnhancedBot:
         
         # 检查文件类型 - 仅接受ZIP文件
         if not filename.lower().endswith('.zip'):
-            self.safe_send_message(update, "❌ 仅支持 .zip 文件，请重新上传")
+            self.safe_send_message(update, t(user_id, 'merge_zip_only_error'))
             return
         
         # 下载文件
@@ -18746,16 +18746,16 @@ class EnhancedBot:
                 reply_markup=keyboard
             )
         except Exception as e:
-            self.safe_send_message(update, f"❌ 下载文件失败: {str(e)}")
+            self.safe_send_message(update, t(user_id, 'merge_download_failed').format(error=str(e)))
     
     
     def handle_merge_continue(self, query):
         """处理继续上传文件"""
         user_id = query.from_user.id
-        query.answer("✅ 请继续上传ZIP文件")
+        query.answer(t(user_id, 'merge_continue_upload_hint'))
         
         if user_id not in self.pending_merge:
-            self.safe_edit_message(query, "❌ 没有待处理的合并任务")
+            self.safe_edit_message(query, t(user_id, 'merge_no_task'))
             return
         
         task = self.pending_merge[user_id]
@@ -18764,11 +18764,11 @@ class EnhancedBot:
         text = f"""
 <b>{t(user_id, 'merge_btn_continue')}</b>
 
-已接收文件: {total_files} 个
+{t(user_id, 'merge_received_files').format(count=total_files)}
 
 <b>{t(user_id, 'merge_zip_only')}</b>
-• 请上传下一个 ZIP 文件
-• 或点击下方按钮完成合并
+{t(user_id, 'merge_upload_next')}
+{t(user_id, 'merge_or_complete')}
         """
         
         keyboard = InlineKeyboardMarkup([
@@ -18787,7 +18787,7 @@ class EnhancedBot:
         if user_id in self.pending_merge:
             self.cleanup_merge_task(user_id)
         
-        self.safe_edit_message(query, "❌ 已取消合并操作")
+        self.safe_edit_message(query, t(user_id, 'merge_cancelled'))
         
         # 返回主菜单
         time.sleep(1)
@@ -18802,13 +18802,13 @@ class EnhancedBot:
         query.answer()
         
         if user_id not in self.pending_merge:
-            self.safe_edit_message(query, "❌ 没有待处理的合并任务")
+            self.safe_edit_message(query, t(user_id, 'merge_no_task'))
             return
         
         task = self.pending_merge[user_id]
         
         if not task['files']:
-            self.safe_edit_message(query, "❌ 没有上传任何文件")
+            self.safe_edit_message(query, t(user_id, 'merge_no_files'))
             return
         
         self.safe_edit_message(query, f"<b>{t(user_id, 'merge_processing')}</b>", 'HTML')

@@ -1487,4 +1487,15 @@ TEXTS = {
     # 6. Output File Descriptions
     'merge_session_files': 'Session Files ({count} items)',
     'merge_tdata_files': 'TData Files ({count} items)',
+    
+    # 7. Error and Hint Messages
+    'merge_no_task': '❌ No pending merge task',
+    'merge_zip_only_error': '❌ Only .zip files supported, please re-upload',
+    'merge_download_failed': '❌ File download failed: {error}',
+    'merge_continue_upload_hint': '✅ Please continue uploading ZIP files',
+    'merge_received_files': 'Received files: {count}',
+    'merge_upload_next': '• Please upload next ZIP file',
+    'merge_or_complete': '• Or click button below to complete merge',
+    'merge_cancelled': '❌ Merge operation cancelled',
+    'merge_no_files': '❌ No files uploaded',
 }
