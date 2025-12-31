@@ -1410,4 +1410,39 @@ TEXTS = {
     'api_failure_reason_file_corrupted': '文件损坏',
     'api_failure_reason_dir_not_exist': '目录不存在',
     'api_failure_reason_unknown': '未知错误',
+    
+    # ===== 文件重命名功能 =====
+    # 1. 功能介绍页面
+    'rename_title': '📝 文件重命名',
+    'rename_features': '💡 功能说明',
+    'rename_feature1': '· 支持任意格式文件',
+    'rename_feature2': '· 保留原始文件扩展名',
+    'rename_feature3': '· 自动清理非法字符',
+    'rename_feature4': '· 无需电脑即可重命名',
+    'rename_upload_prompt': '📤 请上传需要重命名的文件',
+    'rename_timeout_upload': '⏰ 5分钟内未上传将自动取消',
+    'rename_btn_cancel': '取消',
+    
+    # 2. 文件已接收
+    'rename_file_received': '✅ 文件已接收',
+    'rename_original_name': '📁 原文件名: {filename}',
+    'rename_file_size': '📏 文件大小: {size}',
+    'rename_enter_new_name': '✏️ 请输入新的文件名',
+    'rename_name_only': '· 只需输入文件名（不含扩展名）',
+    'rename_ext_keep': '· 扩展名 {ext} 将自动保留',
+    'rename_illegal_clean': '· 非法字符将自动清理',
+    'rename_timeout_input': '⏰ 5分钟内未输入将自动取消',
+    
+    # 3. 重命名成功
+    'rename_success': '✅ 文件重命名成功',
+    'rename_old_name': '原文件名: {old_name}',
+    'rename_new_name': '新文件名: {new_name}',
+    'rename_telegram_tip': '💡 如果下载时文件名不正确，可能是Telegram客户端限制\n实际文件包含所有字符，包括Emoji和特殊括号',
+    'rename_file_sent': '✅ 文件已发送!',
+    
+    # 4. 错误消息
+    'rename_no_task': '❌ 没有待处理的重命名任务',
+    'rename_download_failed': '❌ 下载文件失败: {error}',
+    'rename_invalid_name': '❌ 文件名无效，请重新输入',
+    'rename_send_failed': '❌ 发送文件失败',
 }
