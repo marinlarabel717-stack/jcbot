@@ -1390,6 +1390,7 @@ TEXTS = {
     'api_stat_failed': '· ❌ Failed: {count} ({percent}%)',
     'api_stat_duration': '· ⏱️ Duration: {time}s',
     'api_stat_speed': '· 🚀 Speed: {speed}/sec',
+    'api_failure_details': '❌ Failure Details',
     'api_sending_txt': '📄 Sending TXT file...',
     
     # Result files

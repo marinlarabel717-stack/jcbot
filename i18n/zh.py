@@ -1391,6 +1391,7 @@ TEXTS = {
     'api_stat_failed': '· ❌ 失败: {count} 个 ({percent}%)',
     'api_stat_duration': '· ⏱️ 用时: {time} 秒',
     'api_stat_speed': '· 🚀 速度: {speed} 个/秒',
+    'api_failure_details': '❌ 失败原因详细',
     'api_sending_txt': '📄 正在发送TXT文件...',
     
     # 结果文件

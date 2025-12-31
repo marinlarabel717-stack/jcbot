@@ -11267,7 +11267,7 @@ class EnhancedBot:
 {t(user_id, 'api_upload_prompt')}
         """
 
-        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard())
+        self.safe_edit_message(query, text, 'HTML', reply_markup=get_back_to_menu_keyboard(user_id))
 
         # 设置用户状态
         self.db.save_user(
@@ -13785,7 +13785,7 @@ class EnhancedBot:
             # 生成详细的失败原因统计
             failure_detail = ""
             if failure_reasons:
-                failure_detail = "\n\n❌ <b>失败原因详细</b>\n"
+                failure_detail = f"\n\n<b>{t(user_id, 'api_failure_details')}</b>\n"
                 for reason, count in failure_reasons.items():
                     percentage = (count / total_files * 100) if total_files > 0 else 0
                     failure_detail += f"• {reason}: {count}个 ({percentage:.1f}%)\n"
@@ -13795,16 +13795,16 @@ class EnhancedBot:
             
             # 发送结果（TXT）
             summary_text = f"""
-🎉 <b>{t(user_id, 'api_complete')}</b>
+<b>{t(user_id, 'api_complete')}</b>
 
-📊 <b>{t(user_id, 'api_statistics')}</b>
+<b>{t(user_id, 'api_statistics')}</b>
 {t(user_id, 'api_stat_total').format(count=total_files)}
 {t(user_id, 'api_stat_success').format(count=len(api_accounts), percent=f'{success_rate:.1f}')}
 {t(user_id, 'api_stat_failed').format(count=len(failed_accounts), percent=f'{fail_rate:.1f}')}
 {t(user_id, 'api_stat_duration').format(time=int(elapsed_time))}
 {t(user_id, 'api_stat_speed').format(speed=f'{total_files/elapsed_time:.1f}')}{failure_detail}
 
-📄 {t(user_id, 'api_sending_txt')}
+{t(user_id, 'api_sending_txt')}
             """
             try:
                 progress_msg.edit_text(summary_text, parse_mode='HTML')
