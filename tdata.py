@@ -18509,22 +18509,22 @@ class EnhancedBot:
             "waiting_rename_file"
         )
         
-        text = """
-<b>📝 文件重命名</b>
+        text = f"""
+<b>{t(user_id, 'rename_title')}</b>
 
-<b>💡 功能说明</b>
-• 支持任意格式文件
-• 保留原始文件扩展名
-• 自动清理非法字符
-• 无需电脑即可重命名
+<b>{t(user_id, 'rename_features')}</b>
+{t(user_id, 'rename_feature1')}
+{t(user_id, 'rename_feature2')}
+{t(user_id, 'rename_feature3')}
+{t(user_id, 'rename_feature4')}
 
-<b>📤 请上传需要重命名的文件</b>
+<b>{t(user_id, 'rename_upload_prompt')}</b>
 
-⏰ <i>5分钟内未上传将自动取消</i>
+⏰ <i>{t(user_id, 'rename_timeout_upload')}</i>
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("❌ 取消", callback_data="back_to_main")]
+            [InlineKeyboardButton(f"❌ {t(user_id, 'rename_btn_cancel')}", callback_data="back_to_main")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
@@ -18534,7 +18534,7 @@ class EnhancedBot:
         user_id = update.effective_user.id
         
         if user_id not in self.pending_rename:
-            self.safe_send_message(update, "❌ 没有待处理的重命名任务")
+            self.safe_send_message(update, t(user_id, 'rename_no_task'))
             return
         
         # 创建临时目录
@@ -18555,7 +18555,7 @@ class EnhancedBot:
         try:
             document.get_file().download(file_path)
         except Exception as e:
-            self.safe_send_message(update, f"❌ 下载文件失败: {str(e)}")
+            self.safe_send_message(update, t(user_id, 'rename_download_failed').format(error=str(e)))
             shutil.rmtree(temp_dir, ignore_errors=True)
             return
         
@@ -18574,18 +18574,18 @@ class EnhancedBot:
         )
         
         text = f"""
-✅ <b>文件已接收</b>
+<b>{t(user_id, 'rename_file_received')}</b>
 
-<b>📁 原文件名:</b> <code>{orig_name}</code>
-<b>📏 文件大小:</b> {document.file_size / 1024:.2f} KB
+<b>{t(user_id, 'rename_original_name').format(filename=orig_name)}</b>
+<b>{t(user_id, 'rename_file_size').format(size=f"{document.file_size / 1024:.2f} KB")}</b>
 
-<b>✏️ 请输入新的文件名</b>
+<b>{t(user_id, 'rename_enter_new_name')}</b>
 
-• 只需输入文件名（不含扩展名）
-• 扩展名 <code>{ext}</code> 将自动保留
-• 非法字符将自动清理
+{t(user_id, 'rename_name_only')}
+{t(user_id, 'rename_ext_keep').format(ext=f"<code>{ext}</code>")}
+{t(user_id, 'rename_illegal_clean')}
 
-⏰ <i>5分钟内未输入将自动取消</i>
+⏰ <i>{t(user_id, 'rename_timeout_input')}</i>
         """
         
         self.safe_send_message(update, text, 'HTML')
@@ -18593,7 +18593,7 @@ class EnhancedBot:
     def handle_rename_newname_input(self, update: Update, context: CallbackContext, user_id: int, text: str):
         """处理新文件名输入"""
         if user_id not in self.pending_rename:
-            self.safe_send_message(update, "❌ 没有待处理的重命名任务")
+            self.safe_send_message(update, t(user_id, 'rename_no_task'))
             return
         
         task = self.pending_rename[user_id]
@@ -18607,7 +18607,7 @@ class EnhancedBot:
         logger.debug(f"重命名输入 - 用户{user_id} - 清理后: {repr(new_name)}")
         
         if not new_name:
-            self.safe_send_message(update, "❌ 文件名无效，请重新输入")
+            self.safe_send_message(update, t(user_id, 'rename_invalid_name'))
             return
         
         # 构建完整的新文件名
@@ -18618,24 +18618,25 @@ class EnhancedBot:
         try:
             shutil.move(task['file_path'], new_file_path)
         except Exception as e:
-            self.safe_send_message(update, f"❌ 重命名失败: {str(e)}")
+            self.safe_send_message(update, t(user_id, 'rename_failed').format(error=str(e)))
             self.cleanup_rename_task(user_id)
             return
         
         # 发送重命名后的文件
         # 注意：显式指定filename参数以确保Telegram使用正确的文件名
+        old_name_html = f"<code>{task['orig_name']}</code>"
+        new_name_html = f"<code>{new_filename}</code>"
         caption = (
-            f"✅ <b>文件重命名成功</b>\n\n"
-            f"原文件名: <code>{task['orig_name']}</code>\n"
-            f"新文件名: <code>{new_filename}</code>\n\n"
-            f"💡 如果下载时文件名不正确，可能是Telegram客户端限制\n"
-            f"实际文件包含所有字符，包括Emoji和特殊括号"
+            f"<b>{t(user_id, 'rename_success')}</b>\n\n"
+            f"{t(user_id, 'rename_old_name').format(old_name=old_name_html)}\n"
+            f"{t(user_id, 'rename_new_name').format(new_name=new_name_html)}\n\n"
+            f"{t(user_id, 'rename_telegram_tip')}"
         )
         
         if self.send_document_safely(user_id, new_file_path, caption, new_filename):
-            self.safe_send_message(update, "✅ <b>文件已发送！</b>", 'HTML')
+            self.safe_send_message(update, f"<b>{t(user_id, 'rename_file_sent')}</b>", 'HTML')
         else:
-            self.safe_send_message(update, "❌ 发送文件失败")
+            self.safe_send_message(update, t(user_id, 'rename_send_failed'))
         
         # 清理任务
         self.cleanup_rename_task(user_id)

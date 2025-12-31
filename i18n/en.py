@@ -1409,4 +1409,40 @@ TEXTS = {
     'api_failure_reason_file_corrupted': 'File corrupted',
     'api_failure_reason_dir_not_exist': 'Directory not exist',
     'api_failure_reason_unknown': 'Unknown error',
+    
+    # ===== File Rename Feature =====
+    # 1. Feature Introduction Page
+    'rename_title': '📝 File Rename',
+    'rename_features': '💡 Features',
+    'rename_feature1': '· Support any file format',
+    'rename_feature2': '· Keep original file extension',
+    'rename_feature3': '· Auto-clean illegal characters',
+    'rename_feature4': '· Rename without computer',
+    'rename_upload_prompt': '📤 Please upload file to rename',
+    'rename_timeout_upload': '⏰ Auto-cancel if no upload within 5 minutes',
+    'rename_btn_cancel': 'Cancel',
+    
+    # 2. File Received
+    'rename_file_received': '✅ File received',
+    'rename_original_name': '📁 Original filename: {filename}',
+    'rename_file_size': '📏 File size: {size}',
+    'rename_enter_new_name': '✏️ Please enter new filename',
+    'rename_name_only': '· Enter filename only (without extension)',
+    'rename_ext_keep': '· Extension {ext} will be automatically kept',
+    'rename_illegal_clean': '· Illegal characters will be auto-cleaned',
+    'rename_timeout_input': '⏰ Auto-cancel if no input within 5 minutes',
+    
+    # 3. Rename Success
+    'rename_success': '✅ File renamed successfully',
+    'rename_old_name': 'Original filename: {old_name}',
+    'rename_new_name': 'New filename: {new_name}',
+    'rename_telegram_tip': '💡 If the filename is incorrect when downloading, it may be due to Telegram client restrictions\nThe actual file contains all characters, including Emoji and special brackets',
+    'rename_file_sent': '✅ File sent!',
+    
+    # 4. Error Messages
+    'rename_no_task': '❌ No pending rename task',
+    'rename_download_failed': '❌ File download failed: {error}',
+    'rename_invalid_name': '❌ Invalid filename, please re-enter',
+    'rename_send_failed': '❌ File send failed',
+    'rename_failed': '❌ Rename failed: {error}',
 }
