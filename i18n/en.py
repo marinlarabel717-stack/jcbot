@@ -1546,6 +1546,12 @@ TEXTS = {
     'cleanup_eta_alt': 'Estimated completion time: {time} remaining',
     'cleanup_status': '🔄 Status:',
     'cleanup_status_profile': '🔄 Cleaning account info (avatar, name, bio)...',
+    'cleanup_status_get_dialogs': '📋 Getting dialog list...',
+    'cleanup_status_found_dialogs': '📊 Found {groups} groups, {channels} channels, {users} users',
+    'cleanup_status_leave_groups': '🚪 Leaving {count} groups/channels...',
+    'cleanup_status_delete_histories': '🗑️ Deleting {count} chat histories...',
+    'cleanup_status_delete_contacts': '📇 Deleting contacts...',
+    'cleanup_status_archive_dialogs': '📁 Archiving remaining conversations...',
     
     # 6. Cleanup Complete
     'cleanup_complete': '✅ Cleanup complete!',

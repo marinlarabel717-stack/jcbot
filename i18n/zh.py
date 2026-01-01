@@ -1547,6 +1547,12 @@ TEXTS = {
     'cleanup_eta_alt': '预计完成时间 还剩 {time}',
     'cleanup_status': '🔄 状态:',
     'cleanup_status_profile': '🔄 清理账号资料（头像、名字、简介）...',
+    'cleanup_status_get_dialogs': '📋 获取对话列表...',
+    'cleanup_status_found_dialogs': '📊 找到 {groups}群组, {channels}频道, {users}用户',
+    'cleanup_status_leave_groups': '🚪 开始退出 {count} 个群组/频道...',
+    'cleanup_status_delete_histories': '🗑️ 开始删除 {count} 个对话记录...',
+    'cleanup_status_delete_contacts': '📇 开始删除联系人...',
+    'cleanup_status_archive_dialogs': '📁 归档剩余对话...',
     
     # 6. 清理完成
     'cleanup_complete': '✅ 清理完成！',

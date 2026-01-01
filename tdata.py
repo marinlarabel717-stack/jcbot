@@ -19440,8 +19440,8 @@ class EnhancedBot:
             
             # 1. 获取所有对话
             logger.info(f"获取对话列表: {account_name}")
-            if progress_callback:
-                await progress_callback("📋 获取对话列表...")
+            if progress_callback and user_id:
+                await progress_callback(t(user_id, 'cleanup_status_get_dialogs'))
             
             dialogs = await client.get_dialogs()
             logger.info(f"找到 {len(dialogs)} 个对话")
@@ -19470,12 +19470,18 @@ class EnhancedBot:
             
             logger.info(f"分类: {len(groups)}群组, {len(channels)}频道, {len(users)}用户, {len(bots)}机器人")
             
-            if progress_callback:
-                await progress_callback(f"📊 找到 {len(groups)}群组, {len(channels)}频道, {len(users)}用户")
+            if progress_callback and user_id:
+                await progress_callback(t(user_id, 'cleanup_status_found_dialogs').format(
+                    groups=len(groups), 
+                    channels=len(channels), 
+                    users=len(users)
+                ))
             
             # 1. 离开群组和频道
-            if progress_callback:
-                await progress_callback(f"🚪 开始退出 {len(groups) + len(channels)} 个群组/频道...")
+            if progress_callback and user_id:
+                await progress_callback(t(user_id, 'cleanup_status_leave_groups').format(
+                    count=len(groups) + len(channels)
+                ))
             from telethon.tl.functions.channels import LeaveChannelRequest
             from telethon.tl.functions.messages import DeleteChatUserRequest
             
@@ -19550,8 +19556,10 @@ class EnhancedBot:
                 stats['skipped'] += 1
             
             # 2. 删除聊天记录
-            if progress_callback:
-                await progress_callback(f"🗑️ 开始删除 {len(users) + len(bots)} 个对话记录...")
+            if progress_callback and user_id:
+                await progress_callback(t(user_id, 'cleanup_status_delete_histories').format(
+                    count=len(users) + len(bots)
+                ))
             
             from telethon.tl.functions.messages import DeleteHistoryRequest
             
@@ -19649,8 +19657,8 @@ class EnhancedBot:
                 stats['skipped'] += 1
             
             # 3. 删除联系人
-            if progress_callback:
-                await progress_callback("📇 开始删除联系人...")
+            if progress_callback and user_id:
+                await progress_callback(t(user_id, 'cleanup_status_delete_contacts'))
             
             from telethon.tl.functions.contacts import DeleteContactsRequest, GetContactsRequest
             
@@ -19704,8 +19712,8 @@ class EnhancedBot:
                 logger.error(f"获取/删除联系人错误: {e}")
             
             # 4. 归档剩余对话
-            if progress_callback:
-                await progress_callback("📁 归档剩余对话...")
+            if progress_callback and user_id:
+                await progress_callback(t(user_id, 'cleanup_status_archive_dialogs'))
             
             # 添加超时保护
             try:
