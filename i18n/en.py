@@ -1772,6 +1772,11 @@ TEXTS = {
     'reauth_report_connection': 'Connection:',
     'reauth_report_new_password': 'New Password:',
     
+    # Connection method values
+    'reauth_connection_proxy': 'Using Proxy',
+    'reauth_connection_local': 'Local Connection',
+    'reauth_connection_local_fallback': 'Local Connection (fallback after proxy failed)',
+    
     # Report generation failed
     'reauth_report_gen_failed': 'Report generation failed:',
     'reauth_report_total_success': 'Total: {total}, Success: {success}',

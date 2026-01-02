@@ -22948,7 +22948,18 @@ admin3</code>
                                 if 'app_version' in result:
                                     f.write(f"{t(user_id, 'reauth_report_app_version')} {result['app_version']}\n")
                                 if 'proxy_used' in result:
-                                    f.write(f"{t(user_id, 'reauth_report_connection')} {result['proxy_used']}")
+                                    # 翻译连接方式
+                                    proxy_value = result['proxy_used']
+                                    if '使用代理' in proxy_value:
+                                        proxy_value_translated = t(user_id, 'reauth_connection_proxy')
+                                    elif '本地连接 (代理失败后回退)' in proxy_value:
+                                        proxy_value_translated = t(user_id, 'reauth_connection_local_fallback')
+                                    elif '本地连接' in proxy_value:
+                                        proxy_value_translated = t(user_id, 'reauth_connection_local')
+                                    else:
+                                        proxy_value_translated = proxy_value
+                                    
+                                    f.write(f"{t(user_id, 'reauth_report_connection')} {proxy_value_translated}")
                                     if result.get('proxy_type') and result['proxy_type'] != 'N/A':
                                         f.write(f" ({result['proxy_type'].upper()})")
                                     f.write("\n")

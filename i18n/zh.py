@@ -1773,6 +1773,11 @@ TEXTS = {
     'reauth_report_connection': '连接方式:',
     'reauth_report_new_password': '新密码:',
     
+    # 连接方式值
+    'reauth_connection_proxy': '使用代理',
+    'reauth_connection_local': '本地连接',
+    'reauth_connection_local_fallback': '本地连接 (代理失败后回退)',
+    
     # 报告生成失败
     'reauth_report_gen_failed': '报告生成失败:',
     'reauth_report_total_success': '总计: {total}, 成功: {success}',
