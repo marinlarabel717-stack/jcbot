@@ -1790,4 +1790,116 @@ TEXTS = {
     'reauth_failed': '❌ Re-authorization failed',
     'reauth_error': 'Error: {error}',
     'reauth_file_type': 'File type: {type}',
+    
+    # ===== Query Registration Time Feature =====
+    # 1. Feature Introduction Page
+    'regtime_title': '🕰️ Query Registration Time',
+    'regtime_intro': 'This feature queries the accurate registration time of accounts and classifies by date:',
+    'regtime_feature1': '• 📅 Classify by full date (Year-Month-Day)',
+    'regtime_feature2': '• 🎯 Multiple methods to get the most accurate registration time',
+    'regtime_methods_title': '📊 Data retrieval methods (by priority):',
+    'regtime_method1': '1. ✅ Get first message time from @Telegram official chat (most accurate)',
+    'regtime_method2': '2. ✅ Get first message time from Saved Messages (fairly accurate)',
+    'regtime_method3': '3. 📊 Estimate based on user ID (backup only)',
+    'regtime_notes_title': '⚠️ Notes:',
+    'regtime_note1': '1. Supports Session and TData formats',
+    'regtime_note2': '2. Requires official Telegram API',
+    'regtime_note3': '3. Query speed depends on account count and network conditions',
+    'regtime_note4': '4. Recommend batch processing no more than 100 accounts',
+    'regtime_note5': '5. Will automatically use the most accurate method to get registration time',
+    'regtime_upload_title': '📤 Please upload account files:',
+    'regtime_upload_session': '• Session format: Upload .session files (can be zipped)',
+    'regtime_upload_tdata': '• TData format: Upload zip file containing tdata directory',
+    
+    # 2. Buttons
+    'regtime_btn_back': 'Back to Main Menu',
+    'regtime_btn_start': '✅ Start Query',
+    'regtime_btn_cancel': '❌ Cancel',
+    
+    # 3. After File Upload
+    'regtime_processing_file': 'Processing file',
+    'regtime_found_accounts': '✅ Found {count} account files',
+    'regtime_file_type_session': 'File type: SESSION',
+    'regtime_file_type_tdata': 'File type: TDATA',
+    
+    # 4. Processing Info
+    'regtime_process_title': 'Processing Info:',
+    'regtime_process1': '• Priority: Get accurate registration time from @Telegram official chat',
+    'regtime_process2': '• Backup: Saved Messages or user ID estimation',
+    'regtime_process3': '• Classify accounts by same date (Year-Month-Day)',
+    'regtime_process4': '• Generate classification report and packaged files',
+    'regtime_accuracy_title': '🎯 Data Accuracy:',
+    'regtime_accuracy_intro': 'We use multiple methods to ensure the most accurate registration time:',
+    'regtime_accuracy1': '1. First message in Telegram official chat (most accurate)',
+    'regtime_accuracy2': '2. First message in Saved Messages (fairly accurate)',
+    'regtime_accuracy3': '3. User ID estimation (backup only)',
+    'regtime_ready_question': 'Ready to start query?',
+    
+    # 5. Processing Progress
+    'regtime_querying': 'Querying',
+    'regtime_may_take_minutes': 'May take a few minutes',
+    'regtime_progress_title': '🔄 Query Progress',
+    'regtime_progress_total': '• Total: {count}',
+    'regtime_progress_processed': '• Processed: {count}',
+    'regtime_progress_success': '• Success: {count}',
+    'regtime_progress_failed': '• Failed: {count}',
+    'regtime_please_wait': '⏳ Please wait...',
+    
+    # 6. Query Results
+    'regtime_complete': '✅ Registration Time Query Complete',
+    'regtime_stats_title': 'Statistics:',
+    'regtime_stats_total': '• Total: {count}',
+    'regtime_stats_success': '• ✅ Success: {count}',
+    'regtime_stats_failed': '• ❌ Failed: {count}',
+    'regtime_classify_title': 'Classified by registration date:',
+    'regtime_classify_item': '• {date}: {count}',
+    'regtime_see_report': '📄 See detailed report in files below',
+    
+    # 7. Output Files
+    'regtime_file_report': '📋 Registration Time Query Detailed Report',
+    'regtime_file_classified': '📦 Registration time classified accounts ({count} accounts, sorted into folders by date)',
+    'regtime_file_failed': '❌ Failed query accounts ({count}, with detailed failure reasons)',
+    
+    # 8. Report Content
+    'regtime_report_title': 'Registration Time Query Report',
+    'regtime_report_time': 'Generated Time:',
+    'regtime_report_total': 'Total Accounts:',
+    'regtime_report_success': 'Success:',
+    'regtime_report_failed': 'Failed:',
+    'regtime_report_classify': 'Classified by registration date:',
+    'regtime_source_title': '💡 Data source explanation:',
+    'regtime_source_telegram': '• telegram_chat: From @Telegram official chat (most accurate)',
+    'regtime_source_saved': '• saved_messages: From Saved Messages (fairly accurate)',
+    'regtime_source_estimated': '• estimated: Estimated based on user ID (reference only)',
+    'regtime_date_header': '📅 {date} ({count} accounts)',
+    'regtime_field_file': 'File:',
+    'regtime_field_phone': 'Phone:',
+    'regtime_field_userid': 'User ID:',
+    'regtime_field_username': 'Username:',
+    'regtime_field_name': 'Name:',
+    'regtime_field_common_groups': 'Common Groups:',
+    'regtime_field_source': 'Source:',
+    'regtime_failed_accounts': 'Failed accounts:',
+    'regtime_error_label': 'ERROR:',
+    'regtime_error_field': 'Error:',
+    
+    # 9. Failed Report
+    'regtime_fail_report_title': 'Failed Query Accounts Details',
+    'regtime_fail_total': 'Total Failed:',
+    'regtime_fail_other_errors': '【Other Errors】({count})',
+    'regtime_fail_type': 'Type:',
+    'regtime_fail_reason': 'Failure Reason:',
+    'regtime_fail_unauthorized': 'Account unauthorized or expired',
+    'regtime_fail_timeout': 'Connection timeout',
+    'regtime_fail_detail_file': 'failure_reasons_detail.txt',
+    
+    # 10. ZIP Folder Names
+    'regtime_folder_name': '{date} registered accounts ({count})',
+    
+    # 11. Additional Messages
+    'regtime_need_member': '❌ Registration time query feature requires membership\n\nPlease activate membership first',
+    'regtime_session_expired': '❌ Session expired, please re-upload files',
+    'regtime_no_valid_files': '❌ No valid files found\n\nPlease ensure ZIP contains Session or TData format files',
+    'regtime_processing_failed': '❌ Processing failed',
+    'regtime_processing_error': 'Error: {error}',
 }
