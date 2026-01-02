@@ -1887,6 +1887,8 @@ TEXTS = {
     # 9. 失败报告
     'regtime_fail_report_title': '查询失败账号详细信息',
     'regtime_fail_total': '失败总数:',
+    'regtime_fail_frozen': '【冻结账号】({count} 个)',
+    'regtime_fail_banned': '【封禁账号】({count} 个)',
     'regtime_fail_other_errors': '【其他错误】({count} 个)',
     'regtime_fail_type': '类型:',
     'regtime_fail_reason': '失败原因:',

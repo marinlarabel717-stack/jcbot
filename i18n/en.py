@@ -1886,6 +1886,8 @@ TEXTS = {
     # 9. Failed Report
     'regtime_fail_report_title': 'Failed Query Accounts Details',
     'regtime_fail_total': 'Total Failed:',
+    'regtime_fail_frozen': '【Frozen Accounts】({count})',
+    'regtime_fail_banned': '【Banned Accounts】({count})',
     'regtime_fail_other_errors': '【Other Errors】({count})',
     'regtime_fail_type': 'Type:',
     'regtime_fail_reason': 'Failure Reason:',

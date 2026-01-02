@@ -27122,32 +27122,32 @@ admin3</code>
                                     logger.warning(f"⚠️ 打包失败文件失败 {file_name}: {e}")
                     
                     # 创建失败原因详细说明文件
-                    failed_report = "查询失败账号详细信息\n"
+                    failed_report = f"{t(user_id, 'regtime_fail_report_title')}\n"
                     failed_report += "=" * 80 + "\n"
-                    failed_report += f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n"
-                    failed_report += f"失败总数: {error_count}\n"
+                    failed_report += f"{t(user_id, 'regtime_report_time')} {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n"
+                    failed_report += f"{t(user_id, 'regtime_fail_total')} {error_count}\n"
                     failed_report += "=" * 80 + "\n\n"
                     
                     # 按类别分组
-                    category_names = {
-                        'frozen': '冻结账号',
-                        'banned': '封禁账号',
-                        'error': '其他错误'
+                    category_keys = {
+                        'frozen': 'regtime_fail_frozen',
+                        'banned': 'regtime_fail_banned',
+                        'error': 'regtime_fail_other_errors'
                     }
                     
                     for category in ['frozen', 'banned', 'error']:
                         category_items = [d for d in failed_details if d['category'] == category]
                         if category_items:
-                            failed_report += f"\n【{category_names[category]}】({len(category_items)} 个)\n"
+                            failed_report += f"\n{t(user_id, category_keys[category]).format(count=len(category_items))}\n"
                             failed_report += "-" * 80 + "\n"
                             for item in category_items:
-                                failed_report += f"文件: {item['file_name']}\n"
-                                failed_report += f"类型: {item['file_type']}\n"
-                                failed_report += f"失败原因: {item['error']}\n"
+                                failed_report += f"{t(user_id, 'regtime_field_file')} {item['file_name']}\n"
+                                failed_report += f"{t(user_id, 'regtime_fail_type')} {item['file_type']}\n"
+                                failed_report += f"{t(user_id, 'regtime_fail_reason')} {item['error']}\n"
                                 failed_report += "\n"
                     
                     # 将失败原因文件添加到ZIP
-                    zipf.writestr("失败原因详细说明.txt", failed_report.encode('utf-8'))
+                    zipf.writestr(t(user_id, 'regtime_fail_detail_file'), failed_report.encode('utf-8'))
                 
                 logger.info(f"✅ 失败账号已打包到: {failed_zip}")
                 print(f"✅ 失败账号已打包到: {failed_zip}", flush=True)
