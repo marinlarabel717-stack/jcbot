@@ -1986,7 +1986,7 @@ TEXTS = {
     'profile_custom_tip3': '3. 可选择不修改某项（留空）',
     'profile_custom_rule_title': '📊 智能分配规则：',
     'profile_custom_rule1': '• 1个内容 + N个账号 = 所有账号使用同一内容',
-    'profile_custom_rule2': '• M个内容 + N个账号 (M<N) = 循环使用',
+    'profile_custom_rule2': '• M个内容 + N个账号 (M&lt;N) = 循环使用',
     'profile_custom_rule3': '• M个内容 + N个账号 (M≥N) = 一一对应',
     'profile_custom_select': '请选择要配置的项目：',
     

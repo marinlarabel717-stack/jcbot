@@ -1985,7 +1985,7 @@ TEXTS = {
     'profile_custom_tip3': '3. Can choose not to modify an item (leave empty)',
     'profile_custom_rule_title': '📊 Smart allocation rules:',
     'profile_custom_rule1': '• 1 content + N accounts = All accounts use the same content',
-    'profile_custom_rule2': '• M contents + N accounts (M<N) = Cyclic use',
+    'profile_custom_rule2': '• M contents + N accounts (M&lt;N) = Cyclic use',
     'profile_custom_rule3': '• M contents + N accounts (M≥N) = One-to-one correspondence',
     'profile_custom_select': 'Please select items to configure:',
     
