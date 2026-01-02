@@ -1791,4 +1791,126 @@ TEXTS = {
     'reauth_failed': '❌ 重新授权失败',
     'reauth_error': '错误: {error}',
     'reauth_file_type': '文件类型：{type}',
+    
+    # ===== 查询注册时间功能 =====
+    # 1. 功能介绍页面
+    'regtime_title': '🕰️ 查询注册时间',
+    'regtime_intro': '该功能将查询账号的准确注册时间，并按日期分类：',
+    'regtime_feature1': '• 📅 按完整日期（年-月-日）分类',
+    'regtime_feature2': '• 🎯 多种方法获取最准确的注册时间',
+    'regtime_methods_title': '📊 数据获取方法（按优先级）：',
+    'regtime_method1': '1. ✅ 从与@Telegram官方对话获取第一条消息时间（最准确）',
+    'regtime_method2': '2. ✅ 从收藏夹(Saved Messages)获取第一条消息时间（较准确）',
+    'regtime_method3': '3. 📊 基于用户ID估算（仅作为后备方案）',
+    'regtime_notes_title': '⚠️ 注意事项：',
+    'regtime_note1': '1. 支持 Session 和 TData 格式',
+    'regtime_note2': '2. 需要使用官方 Telegram API',
+    'regtime_note3': '3. 查询速度取决于账号数量和网络状况',
+    'regtime_note4': '4. 建议批量处理不超过100个账号',
+    'regtime_note5': '5. 会自动使用最准确的方法获取注册时间',
+    'regtime_upload_title': '📤 请上传账号文件：',
+    'regtime_upload_session': '• Session格式：上传.session文件（可打包成zip）',
+    'regtime_upload_tdata': '• TData格式：上传包含tdata目录的zip文件',
+    
+    # 2. 按钮
+    'regtime_btn_back': '返回主菜单',
+    'regtime_btn_start': '✅ 开始查询',
+    'regtime_btn_cancel': '❌ 取消',
+    
+    # 3. 上传文件后
+    'regtime_processing_file': '正在处理文件',
+    'regtime_found_accounts': '✅ 找到 {count} 个账号文件',
+    'regtime_file_type_session': '文件类型：SESSION',
+    'regtime_file_type_tdata': '文件类型：TDATA',
+    
+    # 4. 处理说明
+    'regtime_process_title': '处理说明：',
+    'regtime_process1': '• 优先从@Telegram官方对话获取准确注册时间',
+    'regtime_process2': '• 备用方案：收藏夹消息或用户ID估算',
+    'regtime_process3': '• 按相同日期（年-月-日）分类账号',
+    'regtime_process4': '• 生成分类报告和打包文件',
+    'regtime_accuracy_title': '🎯 数据准确性：',
+    'regtime_accuracy_intro': '我们会使用多种方法确保获取最准确的注册时间：',
+    'regtime_accuracy1': '1. Telegram官方对话第一条消息（最准确）',
+    'regtime_accuracy2': '2. 收藏夹第一条消息（较准确）',
+    'regtime_accuracy3': '3. 用户ID估算（仅作后备）',
+    'regtime_ready_question': '准备开始查询吗？',
+    
+    # 5. 处理进度
+    'regtime_querying': '正在查询',
+    'regtime_may_take_minutes': '可能需要几分钟',
+    'regtime_progress_title': '🔄 查询进度',
+    'regtime_progress_total': '• 总数：{count}',
+    'regtime_progress_processed': '• 已处理：{count}',
+    'regtime_progress_success': '• 成功：{count}',
+    'regtime_progress_failed': '• 失败：{count}',
+    'regtime_please_wait': '⏳ 请稍候...',
+    
+    # 6. 查询结果
+    'regtime_complete': '✅ 注册时间查询完成',
+    'regtime_stats_title': '统计信息：',
+    'regtime_stats_total': '• 总数：{count}',
+    'regtime_stats_success': '• ✅ 成功：{count}',
+    'regtime_stats_failed': '• ❌ 失败：{count}',
+    'regtime_classify_title': '按注册日期分类：',
+    'regtime_classify_item': '• {date}: {count} 个',
+    'regtime_see_report': '📄 详细报告见下方文件',
+    
+    # 7. 输出文件
+    'regtime_file_report': '📋 注册时间查询详细报告',
+    'regtime_file_classified': '📦 注册时间分类账号 (共 {count} 个账号，按日期分类到不同文件夹)',
+    'regtime_file_failed': '❌ 查询失败的账号 (共 {count} 个，含详细失败原因说明)',
+    
+    # 8. 报告内容
+    'regtime_report_title': '注册时间查询报告',
+    'regtime_report_time': '生成时间:',
+    'regtime_report_total': '总账号数:',
+    'regtime_report_success': '成功:',
+    'regtime_report_failed': '失败:',
+    'regtime_report_classify': '按注册日期分类:',
+    'regtime_source_title': '💡 数据来源说明:',
+    'regtime_source_telegram': '• telegram_chat: 从与@Telegram官方对话获取（最准确）',
+    'regtime_source_saved': '• saved_messages: 从收藏夹消息获取（较准确）',
+    'regtime_source_estimated': '• estimated: 基于用户ID估算（参考值）',
+    'regtime_date_header': '📅 {date} ({count} 个账号)',
+    'regtime_field_file': '文件:',
+    'regtime_field_phone': '手机号:',
+    'regtime_field_userid': '用户ID:',
+    'regtime_field_username': '用户名:',
+    'regtime_field_name': '名字:',
+    'regtime_field_common_groups': '共同群组:',
+    'regtime_field_source': '来源:',
+    'regtime_failed_accounts': '失败的账号:',
+    'regtime_error_label': 'ERROR:',
+    'regtime_error_field': '错误:',
+    
+    # 9. 失败报告
+    'regtime_fail_report_title': '查询失败账号详细信息',
+    'regtime_fail_total': '失败总数:',
+    'regtime_fail_frozen': '【冻结账号】({count} 个)',
+    'regtime_fail_banned': '【封禁账号】({count} 个)',
+    'regtime_fail_other_errors': '【其他错误】({count} 个)',
+    'regtime_fail_type': '类型:',
+    'regtime_fail_reason': '失败原因:',
+    'regtime_fail_unauthorized': '账号未授权或已失效',
+    'regtime_fail_timeout': '连接超时',
+    'regtime_fail_timeout_both': '连接超时（代理和本地均失败）',
+    'regtime_fail_frozen_account': '账号已被冻结',
+    'regtime_fail_banned_account': '账号已被封禁',
+    'regtime_fail_opentele': 'opentele未安装，无法处理TData格式',
+    'regtime_fail_tdata_load': 'TData未授权或加载失败',
+    'regtime_fail_tdata_timeout': 'TData加载超时',
+    'regtime_fail_conversion_timeout': 'TData转Session超时',
+    'regtime_fail_detail_file': '失败原因详细说明.txt',
+    'regtime_fail_zip_name': '查询失败',
+    
+    # 10. ZIP内文件夹名
+    'regtime_folder_name': '{date} 注册的账号 ({count} 个)',
+    
+    # 11. 额外消息
+    'regtime_need_member': '❌ 查询注册时间功能需要会员权限\n\n请先开通会员',
+    'regtime_session_expired': '❌ 会话已过期，请重新上传文件',
+    'regtime_no_valid_files': '❌ 未找到有效文件\n\n请确保ZIP包含Session或TData格式的文件',
+    'regtime_processing_failed': '❌ 处理失败',
+    'regtime_processing_error': '错误: {error}',
 }
