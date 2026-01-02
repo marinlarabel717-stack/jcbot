@@ -24435,7 +24435,7 @@ admin3</code>
                         chat_id=user_id,
                         document=f,
                         filename=f"profile_report_{timestamp}.txt",
-                        caption="📋 资料修改详细报告",
+                        caption=t(user_id, 'profile_output_report'),
                         parse_mode='HTML'
                     )
                 logger.info("✅ 报告文件已发送")
@@ -24452,7 +24452,7 @@ admin3</code>
                         chat_id=user_id,
                         document=f,
                         filename=f"profile_success_{success_count}.zip",
-                        caption=f"✅ 成功账号 ({success_count}个)",
+                        caption=t(user_id, 'profile_output_success').format(count=success_count),
                         parse_mode='HTML',
                         timeout=120
                     )
@@ -24470,7 +24470,7 @@ admin3</code>
                         chat_id=user_id,
                         document=f,
                         filename=f"profile_failed_{failed_count}.zip",
-                        caption=f"❌ 失败账号 ({failed_count}个)",
+                        caption=t(user_id, 'profile_output_failed').format(count=failed_count),
                         parse_mode='HTML',
                         timeout=120
                     )
@@ -24483,22 +24483,22 @@ admin3</code>
         # ========================================
         error_stats_text = ""
         if error_stats:
-            error_stats_text = "\n\n📋 <b>错误类型统计:</b>\n"
+            error_stats_text = f"\n\n<b>{t(user_id, 'profile_error_stats')}</b>\n"
             for error_name, count in sorted(error_stats.items(), key=lambda x: x[1], reverse=True):
                 error_stats_text += f"• {error_name}: {count}\n"
         
-        files_sent_text = "\n\n📁 <b>已发送文件:</b>\n• 详细报告: profile_report.txt"
+        files_sent_text = f"\n\n<b>{t(user_id, 'profile_files_sent')}</b>\n{t(user_id, 'profile_file_report')} profile_report.txt"
         if success_zip_path:
-            files_sent_text += f"\n• 成功账号: profile_success_{success_count}.zip"
+            files_sent_text += f"\n{t(user_id, 'profile_file_success')} profile_success_{success_count}.zip"
         if failed_zip_path:
-            files_sent_text += f"\n• 失败账号: profile_failed_{failed_count}.zip"
+            files_sent_text += f"\n{t(user_id, 'profile_file_failed')} profile_failed_{failed_count}.zip"
         
-        final_text = f"""✅ <b>资料修改完成！</b>
+        final_text = f"""<b>{t(user_id, 'profile_complete')}</b>
 
-📊 <b>统计信息：</b>
-• 总数: {total}
-• 成功: {success_count} ✅
-• 失败: {failed_count} ❌{error_stats_text}{files_sent_text}
+<b>{t(user_id, 'profile_result_stats')}</b>
+{t(user_id, 'profile_result_total')} {total}
+{t(user_id, 'profile_result_success').format(count=success_count)}
+{t(user_id, 'profile_result_failed').format(count=failed_count)}{error_stats_text}{files_sent_text}
 """
         
         try:
