@@ -23462,7 +23462,7 @@ admin3</code>
         """处理资料修改文件上传"""
         user_id = update.effective_user.id
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, f"📥 <b>{t(user_id, 'profile_processing_file')}...</b>", 'HTML')
         if not progress_msg:
             return
         
@@ -23470,7 +23470,7 @@ admin3</code>
         try:
             # 检查是否有配置任务
             if user_id not in self.pending_profile_update:
-                self.safe_edit_message_text(progress_msg, "❌ <b>会话已过期</b>\n\n请重新配置", parse_mode='HTML')
+                self.safe_edit_message_text(progress_msg, f"<b>{t(user_id, 'profile_session_expired')}</b>\n\n请重新配置", parse_mode='HTML')
                 return
             
             task = self.pending_profile_update[user_id]
@@ -23506,79 +23506,79 @@ admin3</code>
             
             # 姓名配置
             if config.mode == 'random':
-                config_text += "├ 姓名: ✅ 随机生成（按国家）\n"
+                config_text += f"{t(user_id, 'profile_config_name_label')} {t(user_id, 'profile_display_random_by_country')}\n"
             elif config.update_name and config.custom_names:
-                config_text += f"├ 姓名: ✅ 自定义（{len(config.custom_names)}个）\n"
+                config_text += f"{t(user_id, 'profile_config_name_label')} {t(user_id, 'profile_custom_status_configured').format(count=len(config.custom_names))}\n"
             elif config.update_name:
-                config_text += "├ 姓名: ⏳ 待配置\n"
+                config_text += f"{t(user_id, 'profile_config_name_label')} {t(user_id, 'profile_custom_status_pending')}\n"
             else:
-                config_text += "├ 姓名: ⏩ 不修改\n"
+                config_text += f"{t(user_id, 'profile_config_name_label')} {t(user_id, 'profile_display_no_modify')}\n"
             
             # 头像配置
             if config.update_photo:
                 if config.photo_action == 'delete_all':
-                    config_text += "├ 头像: 🗑️ 删除所有历史\n"
+                    config_text += f"{t(user_id, 'profile_config_avatar_label')} {t(user_id, 'profile_display_delete_history')}\n"
                 elif config.photo_action == 'custom' and config.custom_photos:
-                    config_text += f"├ 头像: ✅ 自定义（{len(config.custom_photos)}个）\n"
+                    config_text += f"{t(user_id, 'profile_config_avatar_label')} {t(user_id, 'profile_custom_status_configured').format(count=len(config.custom_photos))}\n"
                 elif config.photo_action == 'custom':
-                    config_text += "├ 头像: ⏳ 待配置\n"
+                    config_text += f"{t(user_id, 'profile_config_avatar_label')} {t(user_id, 'profile_custom_status_pending')}\n"
             else:
-                config_text += "├ 头像: ⏩ 不修改\n"
+                config_text += f"{t(user_id, 'profile_config_avatar_label')} {t(user_id, 'profile_display_no_modify')}\n"
             
             # 简介配置
             if config.update_bio:
                 if config.bio_action == 'clear':
-                    config_text += "├ 简介: 📝 清空\n"
+                    config_text += f"{t(user_id, 'profile_config_bio_label')} {t(user_id, 'profile_display_clear')}\n"
                 elif config.bio_action == 'random':
-                    config_text += "├ 简介: 🎲 随机生成\n"
+                    config_text += f"{t(user_id, 'profile_config_bio_label')} {t(user_id, 'profile_display_random')}\n"
                 elif config.bio_action == 'custom' and config.custom_bios:
-                    config_text += f"├ 简介: ✅ 自定义（{len(config.custom_bios)}个）\n"
+                    config_text += f"{t(user_id, 'profile_config_bio_label')} {t(user_id, 'profile_custom_status_configured').format(count=len(config.custom_bios))}\n"
                 elif config.bio_action == 'custom':
-                    config_text += "├ 简介: ⏳ 待配置\n"
+                    config_text += f"{t(user_id, 'profile_config_bio_label')} {t(user_id, 'profile_custom_status_pending')}\n"
             else:
-                config_text += "├ 简介: ⏩ 不修改\n"
+                config_text += f"{t(user_id, 'profile_config_bio_label')} {t(user_id, 'profile_display_no_modify')}\n"
             
             # 用户名配置
             if config.update_username:
                 if config.username_action == 'delete':
-                    config_text += "└ 用户名: 🗑️ 删除\n"
+                    config_text += f"{t(user_id, 'profile_config_username_label')} {t(user_id, 'profile_display_delete')}\n"
                 elif config.username_action == 'random':
-                    config_text += "└ 用户名: 🎲 随机生成\n"
+                    config_text += f"{t(user_id, 'profile_config_username_label')} {t(user_id, 'profile_display_random')}\n"
                 elif config.username_action == 'custom' and config.custom_usernames:
-                    config_text += f"└ 用户名: ✅ 自定义（{len(config.custom_usernames)}个）\n"
+                    config_text += f"{t(user_id, 'profile_config_username_label')} {t(user_id, 'profile_custom_status_configured').format(count=len(config.custom_usernames))}\n"
                 elif config.username_action == 'custom':
-                    config_text += "└ 用户名: ⏳ 待配置\n"
+                    config_text += f"{t(user_id, 'profile_config_username_label')} {t(user_id, 'profile_custom_status_pending')}\n"
             else:
-                config_text += "└ 用户名: ⏩ 不修改\n"
+                config_text += f"{t(user_id, 'profile_config_username_label')} {t(user_id, 'profile_display_no_modify')}\n"
             
-            text = f"""📝 <b>准备开始修改资料</b>
+            text = f"""<b>{t(user_id, 'profile_confirm_title')}</b>
 
 ━━━━━━━━━━━━━━━━━━━━
 
-📁 <b>文件信息:</b>
-├ 类型: {file_type.upper()}
-└ 数量: {len(files)} 个账号
+<b>{t(user_id, 'profile_file_info')}</b>
+{t(user_id, 'profile_file_type')} {file_type.upper()}
+{t(user_id, 'profile_file_count').format(count=len(files))}
 
-⚙️ <b>修改配置:</b>
+<b>{t(user_id, 'profile_modify_config')}</b>
 {config_text}
 
 ━━━━━━━━━━━━━━━━━━━━
 
-⚠️ <b>注意事项:</b>
-• 修改后无法自动恢复原始资料
-• 系统会自动控制频率避免触发限制
-• 用户名会自动检查可用性
+<b>{t(user_id, 'profile_confirm_notes')}</b>
+{t(user_id, 'profile_confirm_note1')}
+{t(user_id, 'profile_confirm_note2')}
+{t(user_id, 'profile_confirm_note3')}
 
 ━━━━━━━━━━━━━━━━━━━━
 
-确认开始修改吗？
+{t(user_id, 'profile_confirm_question')}
 """
             
             # 添加确认按钮
             keyboard = InlineKeyboardMarkup([
                 [
-                    InlineKeyboardButton("✅ 确认开始修改", callback_data="profile_confirm_execute"),
-                    InlineKeyboardButton("❌ 取消", callback_data="profile_cancel")
+                    InlineKeyboardButton(t(user_id, 'profile_btn_confirm'), callback_data="profile_confirm_execute"),
+                    InlineKeyboardButton(t(user_id, 'profile_btn_cancel'), callback_data="profile_cancel")
                 ]
             ])
             
@@ -23596,7 +23596,7 @@ admin3</code>
             
             self.safe_edit_message_text(
                 progress_msg,
-                f"❌ <b>处理失败</b>\n\n错误: {str(e)}",
+                f"<b>{t(user_id, 'profile_processing_failed')}</b>\n\n{t(user_id, 'profile_error_msg').format(error=str(e))}",
                 parse_mode='HTML'
             )
             
@@ -23649,27 +23649,27 @@ admin3</code>
             eta_str = format_time(eta)
             
             # 构建进度显示文本
-            progress_text = f"""📝 <b>资料修改进度</b>
+            progress_text = f"""<b>{t(user_id, 'profile_progress_title')}</b>
 
 ━━━━━━━━━━━━━━━━━━━━
 {progress_bar}
 ━━━━━━━━━━━━━━━━━━━━
 
-📊 <b>统计信息:</b>
-├ 📦 总数: {total}
-├ ✅ 成功: {success_count}
-├ ❌ 失败: {failed_count}
-├ ⏳ 处理中: {1 if processed < total else 0}
-└ 📋 剩余: {remaining}
+<b>{t(user_id, 'profile_stats_title')}</b>
+{t(user_id, 'profile_stats_total')} {total}
+{t(user_id, 'profile_stats_success')} {success_count}
+{t(user_id, 'profile_stats_failed')} {failed_count}
+{t(user_id, 'profile_stats_processing')} {1 if processed < total else 0}
+{t(user_id, 'profile_stats_remaining')} {remaining}
 
-⚡ 处理速度: {speed:.1f} 个/秒
-⏱️ 已用时间: {elapsed_str}
-⏳ 预计剩余: {eta_str}
+{t(user_id, 'profile_speed').format(speed=f'{speed:.1f}')}
+{t(user_id, 'profile_time_elapsed')} {elapsed_str}
+{t(user_id, 'profile_time_remaining')} {eta_str}
 
 {current_account_info}
 
 ━━━━━━━━━━━━━━━━━━━━
-💡 提示: 请耐心等待，不要关闭对话
+{t(user_id, 'profile_wait_tip')}
 """
             
             try:
@@ -24185,20 +24185,20 @@ admin3</code>
         report_lines = []
         
         report_lines.append("=" * 80)
-        report_lines.append("📋 资料修改详细报告")
+        report_lines.append(t(user_id, 'profile_report_title'))
         report_lines.append("=" * 80)
-        report_lines.append(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S')}")
-        report_lines.append(f"总数: {total} | 成功: {success_count} | 失败: {failed_count}")
+        report_lines.append(f"{t(user_id, 'profile_report_time')} {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S')}")
+        report_lines.append(t(user_id, 'profile_report_summary').format(total=total, success=success_count, failed=failed_count))
         report_lines.append("")
         
         # 成功的账号详情
         if results['success']:
             report_lines.append("=" * 80)
-            report_lines.append(f"✅ 成功账号 ({success_count})")
+            report_lines.append(t(user_id, 'profile_report_success_title').format(count=success_count))
             report_lines.append("=" * 80)
             for idx, (file_path, file_name, detail) in enumerate(results['success'], 1):
                 report_lines.append(f"\n{idx}. {detail.get('phone', file_name)}")
-                report_lines.append(f"   文件: {file_name}")
+                report_lines.append(f"   {t(user_id, 'profile_report_file')} {file_name}")
                 
                 # 显示变更详情 - 使用"修改前xxx 修改后xxx"格式
                 changes = detail.get('changes', {})
@@ -24208,17 +24208,17 @@ admin3</code>
                     old_name = changes['name'].get('old', '').strip()
                     new_name = changes['name'].get('new', '').strip()
                     if old_name and new_name:
-                        report_lines.append(f"   - 姓名: 修改前 {old_name}  修改后 {new_name} ✓")
+                        report_lines.append(f"   {t(user_id, 'profile_report_name_change').format(before=old_name, after=new_name)}")
                     elif new_name:
-                        report_lines.append(f"   - 姓名: 修改后 {new_name} ✓")
+                        report_lines.append(f"   - {t(user_id, 'profile_config_name')} {t(user_id, 'profile_report_name_change').format(before='', after=new_name)}")
                 
                 # 头像修改
                 if 'photo' in changes and changes['photo'].get('success'):
                     action = changes['photo'].get('action', 'deleted')
                     if action == 'deleted':
-                        report_lines.append(f"   - 头像: 已删除 ✓")
+                        report_lines.append(f"   {t(user_id, 'profile_report_avatar_deleted')}")
                     elif action == 'uploaded':
-                        report_lines.append(f"   - 头像: 已上传新头像 ✓")
+                        report_lines.append(f"   {t(user_id, 'profile_report_avatar_uploaded')}")
                 
                 # 简介修改
                 if 'bio' in changes and changes['bio'].get('success'):
@@ -24228,15 +24228,15 @@ admin3</code>
                         # 限制显示长度，避免报告太长
                         old_bio_display = old_bio[:30] + '...' if len(old_bio) > 30 else old_bio
                         new_bio_display = new_bio[:30] + '...' if len(new_bio) > 30 else new_bio
-                        report_lines.append(f"   - 简介: 修改前 {old_bio_display}  修改后 {new_bio_display} ✓")
+                        report_lines.append(f"   {t(user_id, 'profile_report_bio_change').format(before=old_bio_display, after=new_bio_display)}")
                     elif new_bio:
                         new_bio_display = new_bio[:30] + '...' if len(new_bio) > 30 else new_bio
-                        report_lines.append(f"   - 简介: 修改前 (无)  修改后 {new_bio_display} ✓")
+                        report_lines.append(f"   {t(user_id, 'profile_report_bio_change').format(before='(无)', after=new_bio_display)}")
                     elif old_bio:
                         old_bio_display = old_bio[:30] + '...' if len(old_bio) > 30 else old_bio
-                        report_lines.append(f"   - 简介: 修改前 {old_bio_display}  修改后 (已清空) ✓")
+                        report_lines.append(f"   {t(user_id, 'profile_report_bio_change').format(before=old_bio_display, after='(已清空)')}")
                     else:
-                        report_lines.append(f"   - 简介: 已清空 ✓")
+                        report_lines.append(f"   {t(user_id, 'profile_report_bio_cleared')}")
                 
                 # 用户名修改
                 if 'username' in changes and changes['username'].get('success'):
@@ -24254,29 +24254,29 @@ admin3</code>
                     else:
                         new_display = "(已删除)"
                     
-                    report_lines.append(f"   - 用户名: 修改前 {old_display}  修改后 {new_display} ✓")
+                    report_lines.append(f"   {t(user_id, 'profile_report_username_change').format(before=old_display, after=new_display)}")
             
             report_lines.append("")
         
         # 失败的账号详情
         if results['failed']:
             report_lines.append("=" * 80)
-            report_lines.append(f"❌ 失败账号 ({failed_count})")
+            report_lines.append(t(user_id, 'profile_report_failed_title').format(count=failed_count))
             report_lines.append("=" * 80)
             for idx, (file_path, file_name, detail) in enumerate(results['failed'], 1):
                 report_lines.append(f"\n{idx}. {detail.get('phone', file_name) if detail.get('phone') else file_name}")
-                report_lines.append(f"   文件: {file_name}")
+                report_lines.append(f"   {t(user_id, 'profile_report_file')} {file_name}")
                 error_type = detail.get('error_type', 'Unknown')
                 error_message = detail.get('error', '未知错误')
-                report_lines.append(f"   错误类型: {error_type}")
-                report_lines.append(f"   错误原因: {error_message}")
+                report_lines.append(f"   {t(user_id, 'profile_report_error_type')} {error_type}")
+                report_lines.append(f"   {t(user_id, 'profile_report_error_reason')} {error_message}")
             
             report_lines.append("")
         
         # 错误统计
         if error_stats:
             report_lines.append("=" * 80)
-            report_lines.append("📊 错误统计")
+            report_lines.append(t(user_id, 'profile_report_error_stats'))
             report_lines.append("=" * 80)
             for error_name, count in sorted(error_stats.items(), key=lambda x: x[1], reverse=True):
                 report_lines.append(f"• {error_name}: {count}")
