@@ -12443,7 +12443,7 @@ class EnhancedBot:
                     InlineKeyboardButton(t(user_id, 'btn_cleanup'), callback_data="cleanup_start")
                 ],
                 [
-                    InlineKeyboardButton("🔑 重新授权", callback_data="reauthorize_start"),
+                    InlineKeyboardButton(t(user_id, 'btn_reauthorize'), callback_data="reauthorize_start"),
                     InlineKeyboardButton("🕰️ 查询注册时间", callback_data="check_registration_start")
                 ],
                 [
