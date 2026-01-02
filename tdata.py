@@ -85,6 +85,12 @@ TDATA_CONVERT_TIMEOUT = 30  # TData 转换超时（秒）
 CLEANUP_SINGLE_ACCOUNT_TIMEOUT = 300  # 单个账号清理超时（秒），防止卡死
 CLEANUP_OPERATION_TIMEOUT = 60  # 单个清理操作超时（秒），如删除联系人、退出群组等
 
+# 进度更新配置（防止触发 Telegram 限流）
+PROGRESS_UPDATE_INTERVAL = 10  # 进度更新最小间隔（秒）
+PROGRESS_UPDATE_MIN_PERCENT = 2  # 最小百分比变化才更新（用于中等批量）
+PROGRESS_UPDATE_MIN_PERCENT_LARGE = 5  # 大批量处理时的最小百分比变化
+PROGRESS_LARGE_BATCH_THRESHOLD = 500  # 大批量阈值
+
 # 通讯录限制检测状态常量
 CONTACT_STATUS_NORMAL = 'normal'
 CONTACT_STATUS_LIMITED = 'limited'
@@ -6853,6 +6859,10 @@ class TwoFactorManager:
         processed = 0
         start_time = time.time()
         
+        # 智能进度更新控制变量
+        last_update_time = 0
+        last_update_percent = 0
+        
         async def process_single_file(file_path, file_name):
             nonlocal processed
             try:
@@ -6928,11 +6938,42 @@ class TwoFactorManager:
                 
                 processed += 1
                 
-                # 调用进度回调
+                # 智能进度回调 - 避免触发 Telegram 限流
                 if progress_callback:
-                    elapsed = time.time() - start_time
-                    speed = processed / elapsed if elapsed > 0 else 0
-                    await progress_callback(processed, total, results, speed, elapsed)
+                    nonlocal last_update_time, last_update_percent
+                    
+                    current_time = time.time()
+                    current_percent = int(processed / total * 100) if total > 0 else 0
+                    
+                    # 确定更新策略（大批量降低更新频率）
+                    update_interval = PROGRESS_UPDATE_INTERVAL
+                    if total >= PROGRESS_LARGE_BATCH_THRESHOLD:
+                        percent_step = PROGRESS_UPDATE_MIN_PERCENT_LARGE
+                    elif total >= 100:
+                        percent_step = PROGRESS_UPDATE_MIN_PERCENT
+                    else:
+                        percent_step = 1  # 小批量每1%更新
+                    
+                    # 判断是否应该更新进度
+                    time_ok = (current_time - last_update_time) >= update_interval
+                    percent_ok = (current_percent - last_update_percent) >= percent_step
+                    is_final = (processed == total)
+                    
+                    should_update = is_final or (time_ok and percent_ok)
+                    
+                    if should_update:
+                        try:
+                            elapsed = time.time() - start_time
+                            speed = processed / elapsed if elapsed > 0 else 0
+                            await progress_callback(processed, total, results, speed, elapsed)
+                            last_update_time = current_time
+                            last_update_percent = current_percent
+                        except FloodWaitError as e:
+                            # 被限流时不阻塞，直接跳过本次更新
+                            logger.warning(f"进度更新被限流（跳过）: {e.seconds}秒")
+                        except Exception as e:
+                            # 其他错误也不阻塞处理流程
+                            logger.warning(f"进度更新失败（跳过）: {e}")
                 
             except Exception as e:
                 if user_id:
@@ -6968,6 +7009,8 @@ class TwoFactorManager:
                 speed = processed / elapsed if elapsed > 0 else 0
                 await progress_callback(processed, total, results, speed, elapsed)
                 logger.info(f"删除2FA完成: {processed}/{total}")
+            except FloodWaitError as e:
+                logger.warning(f"最终进度回调被限流（跳过）: {e.seconds}秒")
             except Exception as e:
                 logger.error(f"最终进度回调错误: {e}")
         
@@ -16089,6 +16132,11 @@ class EnhancedBot:
                     
                     try:
                         progress_msg.edit_text(progress_text, parse_mode='HTML')
+                    except FloodWaitError as e:
+                        # 被限流时记录警告但不阻塞处理
+                        if processed >= total:
+                            logger.warning(f"更新最终进度消息被限流: {e.seconds}秒")
+                        # 非最终消息被限流时静默跳过
                     except Exception as e:
                         if processed >= total:
                             logger.warning(f"更新最终进度消息失败: {e}")
@@ -16164,11 +16212,22 @@ class EnhancedBot:
                                     )
                                 logger.info(f"✅ ZIP文件发送成功: {os.path.basename(zip_path)}")
                                 sent_count += 1
-                                await asyncio.sleep(1.0)
+                                # 添加延迟避免连续发送触发限流
+                                if idx < len(result_files):
+                                    await asyncio.sleep(2.0)
                                 break
                             except RetryAfter as e:
                                 wait_time = e.retry_after + 1
                                 logger.warning(f"被限流，等待 {wait_time} 秒后重试...")
+                                # 尝试通知用户等待
+                                try:
+                                    context.bot.send_message(
+                                        chat_id=update.effective_chat.id,
+                                        text=f"⏳ 发送文件触发频率限制\n等待 {int(wait_time)} 秒后自动继续...\n({idx}/{len(result_files)} 个文件组已发送)",
+                                        parse_mode='HTML'
+                                    )
+                                except:
+                                    pass
                                 await asyncio.sleep(wait_time)
                             except Exception as e:
                                 if attempt < max_retries - 1:
@@ -16201,11 +16260,22 @@ class EnhancedBot:
                                     )
                                 logger.info(f"✅ TXT报告发送成功: {os.path.basename(txt_path)}")
                                 sent_count += 1
-                                await asyncio.sleep(1.0)
+                                # 添加延迟避免连续发送触发限流
+                                if idx < len(result_files):
+                                    await asyncio.sleep(2.0)
                                 break
                             except RetryAfter as e:
                                 wait_time = e.retry_after + 1
                                 logger.warning(f"被限流，等待 {wait_time} 秒后重试...")
+                                # 尝试通知用户等待
+                                try:
+                                    context.bot.send_message(
+                                        chat_id=update.effective_chat.id,
+                                        text=f"⏳ 发送报告触发频率限制\n等待 {int(wait_time)} 秒后自动继续...\n({idx}/{len(result_files)} 个文件组已发送)",
+                                        parse_mode='HTML'
+                                    )
+                                except:
+                                    pass
                                 await asyncio.sleep(wait_time)
                             except Exception as e:
                                 if attempt < max_retries - 1:
