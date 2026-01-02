@@ -619,20 +619,26 @@ class ProxyManager:
 # 账号资料管理器（Profile Manager）
 # ================================
 
-# 错误类型映射（用于资料修改）
-ERROR_MESSAGES = {
-    'UserDeactivatedBanError': '账号已被封禁',
-    'UserDeactivatedError': '账号已注销',
-    'AuthKeyUnregisteredError': '授权已失效，需重新登录',
-    'UsernameOccupiedError': '用户名已被占用',
-    'UsernameInvalidError': '用户名格式无效',
-    'FloodWaitError': '触发频率限制',
-    'TimeoutError': '网络连接超时',
-    'ConnectionError': '网络连接失败',
-    'RPCError': 'Telegram API错误',
-    'SessionPasswordNeededError': '需要两步验证密码',
-    'PhoneNumberBannedError': '手机号已被封禁',
+# 错误类型映射（用于资料修改）- 映射到翻译键
+ERROR_TYPE_TO_TRANSLATION_KEY = {
+    'UserDeactivatedBanError': 'profile_error_banned',
+    'UserDeactivatedError': 'profile_error_deactivated',
+    'AuthKeyUnregisteredError': 'profile_error_auth_expired',
+    'UsernameOccupiedError': 'profile_error_username_taken',
+    'UsernameInvalidError': 'profile_error_username_invalid',
+    'FloodWaitError': 'profile_error_flood',
+    'TimeoutError': 'profile_error_timeout',
+    'ConnectionError': 'profile_error_network',
+    'RPCError': 'profile_error_rpc_error',
+    'SessionPasswordNeededError': 'profile_error_password_needed',
+    'PhoneNumberBannedError': 'profile_error_phone_banned',
 }
+
+def get_profile_error_message(user_id, error_type, fallback=None):
+    """根据用户语言获取错误消息"""
+    if error_type in ERROR_TYPE_TO_TRANSLATION_KEY:
+        return t(user_id, ERROR_TYPE_TO_TRANSLATION_KEY[error_type])
+    return fallback if fallback else t(user_id, 'profile_error_unknown')
 
 class ProfileManager:
     """账号资料管理器 - 使用Faker动态生成随机不重样的本地化内容"""
@@ -23859,7 +23865,7 @@ admin3</code>
             
             if not client or not await client.is_user_authorized():
                 error_type = 'AuthKeyUnregisteredError'
-                error_message = ERROR_MESSAGES.get(error_type, '账号未授权')
+                error_message = get_profile_error_message(user_id, error_type, t(user_id, 'profile_error_unauthorized'))
                 return {
                     'success': False,
                     'account': file_name,
@@ -23875,7 +23881,7 @@ admin3</code>
             country = self.profile_manager.get_country_from_phone(phone) if phone else 'US'
             
             # 构建代理信息字符串
-            proxy_str = '本地连接'
+            proxy_str = t(user_id, 'local_connection')
             if used_proxy:
                 proxy_type = used_proxy.get('type', 'http').upper()
                 proxy_str = f"{proxy_type}://{used_proxy['host']}:{used_proxy['port']}"
@@ -24021,14 +24027,14 @@ admin3</code>
                     
                     if not success_flag and 'username' not in detail['changes']:
                         detail['actions'].append(t(user_id, 'profile_action_username_failed_occupied'))
-                        detail['changes']['username'] = {'success': False, 'error': '用户名已被占用', 'error_type': 'UsernameOccupiedError'}
+                        detail['changes']['username'] = {'success': False, 'error': t(user_id, 'profile_error_username_taken'), 'error_type': 'UsernameOccupiedError'}
                 elif profile_config.username_action == 'delete':
                     try:
                         if await self.profile_manager.update_profile_username(client, ''):
                             detail['actions'].append(t(user_id, 'profile_action_username_deleted'))
                             detail['changes']['username'] = {
-                                'old': f"@{old_username}" if old_username else '无',
-                                'new': '已删除',
+                                'old': f"@{old_username}" if old_username else t(user_id, 'report_no_username'),
+                                'new': t(user_id, 'profile_display_delete'),
                                 'success': True
                             }
                         else:
@@ -24053,7 +24059,7 @@ admin3</code>
                             detail['changes']['username'] = {'success': False}
                     except UsernameOccupiedError:
                         detail['actions'].append(t(user_id, 'profile_action_username_occupied').format(username=username))
-                        detail['changes']['username'] = {'success': False, 'error': '用户名已被占用', 'error_type': 'UsernameOccupiedError'}
+                        detail['changes']['username'] = {'success': False, 'error': t(user_id, 'profile_error_username_taken'), 'error_type': 'UsernameOccupiedError'}
                     except Exception as e:
                         detail['actions'].append(t(user_id, 'profile_action_username_failed_error').format(error=str(e)))
                         detail['changes']['username'] = {'success': False, 'error': str(e)}
@@ -24063,7 +24069,7 @@ admin3</code>
             
         except UserDeactivatedBanError as e:
             error_type = 'UserDeactivatedBanError'
-            error_message = ERROR_MESSAGES.get(error_type, str(e))
+            error_message = get_profile_error_message(user_id, error_type, str(e))
             logger.error(f"Update profile failed for {file_name}: {error_type}")
             return {
                 'success': False,
@@ -24075,7 +24081,7 @@ admin3</code>
             }
         except AuthKeyUnregisteredError as e:
             error_type = 'AuthKeyUnregisteredError'
-            error_message = ERROR_MESSAGES.get(error_type, str(e))
+            error_message = get_profile_error_message(user_id, error_type, str(e))
             logger.error(f"Update profile failed for {file_name}: {error_type}")
             return {
                 'success': False,
@@ -24088,7 +24094,7 @@ admin3</code>
         except FloodWaitError as e:
             error_type = 'FloodWaitError'
             wait_seconds = e.seconds if hasattr(e, 'seconds') else 0
-            error_message = f"{ERROR_MESSAGES.get(error_type, str(e))}，需等待 {wait_seconds} 秒后重试"
+            error_message = t(user_id, 'profile_error_flood_wait').format(seconds=wait_seconds)
             logger.error(f"Update profile failed for {file_name}: {error_type}")
             return {
                 'success': False,
@@ -24100,7 +24106,7 @@ admin3</code>
             }
         except (UsernameOccupiedError, UsernameInvalidError) as e:
             error_type = type(e).__name__
-            error_message = ERROR_MESSAGES.get(error_type, str(e))
+            error_message = get_profile_error_message(user_id, error_type, str(e))
             logger.error(f"Update profile failed for {file_name}: {error_type}")
             return {
                 'success': False,
@@ -24112,7 +24118,7 @@ admin3</code>
             }
         except asyncio.TimeoutError as e:
             error_type = 'TimeoutError'
-            error_message = ERROR_MESSAGES.get(error_type, '网络连接超时')
+            error_message = get_profile_error_message(user_id, error_type, t(user_id, 'profile_error_timeout'))
             logger.error(f"Update profile failed for {file_name}: {error_type}")
             return {
                 'success': False,
@@ -24125,7 +24131,7 @@ admin3</code>
         except Exception as e:
             # 尝试获取错误类型
             error_type = type(e).__name__
-            error_message = ERROR_MESSAGES.get(error_type, str(e))
+            error_message = get_profile_error_message(user_id, error_type, str(e))
             logger.error(f"Update profile failed for {file_name}: {error_type} - {str(e)}")
             return {
                 'success': False,
@@ -24171,8 +24177,8 @@ admin3</code>
         for file_path, file_name, detail in results['failed']:
             error_type = detail.get('error_type', 'Unknown')
             # 获取友好的错误名称
-            if error_type in ERROR_MESSAGES:
-                error_name = ERROR_MESSAGES[error_type]
+            if error_type in ERROR_TYPE_TO_TRANSLATION_KEY:
+                error_name = get_profile_error_message(user_id, error_type)
             else:
                 error_name = error_type
             
@@ -24232,10 +24238,10 @@ admin3</code>
                         report_lines.append(f"   {t(user_id, 'profile_report_bio_change').format(before=old_bio_display, after=new_bio_display)}")
                     elif new_bio:
                         new_bio_display = new_bio[:30] + '...' if len(new_bio) > 30 else new_bio
-                        report_lines.append(f"   {t(user_id, 'profile_report_bio_change').format(before='(无)', after=new_bio_display)}")
+                        report_lines.append(f"   {t(user_id, 'profile_report_bio_change').format(before=t(user_id, 'profile_none'), after=new_bio_display)}")
                     elif old_bio:
                         old_bio_display = old_bio[:30] + '...' if len(old_bio) > 30 else old_bio
-                        report_lines.append(f"   {t(user_id, 'profile_report_bio_change').format(before=old_bio_display, after='(已清空)')}")
+                        report_lines.append(f"   {t(user_id, 'profile_report_bio_change').format(before=old_bio_display, after=t(user_id, 'profile_bio_cleared_inline'))}")
                     else:
                         report_lines.append(f"   {t(user_id, 'profile_report_bio_cleared')}")
                 
@@ -24268,7 +24274,7 @@ admin3</code>
                 report_lines.append(f"\n{idx}. {detail.get('phone', file_name) if detail.get('phone') else file_name}")
                 report_lines.append(f"   {t(user_id, 'profile_report_file')} {file_name}")
                 error_type = detail.get('error_type', 'Unknown')
-                error_message = detail.get('error', '未知错误')
+                error_message = detail.get('error', t(user_id, 'profile_error_unknown'))
                 report_lines.append(f"   {t(user_id, 'profile_report_error_type')} {error_type}")
                 report_lines.append(f"   {t(user_id, 'profile_report_error_reason')} {error_message}")
             
