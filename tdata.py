@@ -25309,52 +25309,52 @@ admin3</code>
             is_member, level, expiry = self.db.check_membership(user_id)
             if not is_member:
                 query.edit_message_text(
-                    text="❌ 修改资料功能需要会员权限\n\n请先开通会员",
+                    text=t(user_id, 'profile_need_member'),
                     reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton("💳 开通会员", callback_data="vip_menu"),
-                        InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")
+                        InlineKeyboardButton(t(user_id, 'btn_vip_menu'), callback_data="vip_menu"),
+                        InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_main")
                     ]]),
                     parse_mode='HTML'
                 )
                 return
         
-        text = """
-<b>📝 修改资料</b>
+        text = f"""
+<b>{t(user_id, 'profile_title')}</b>
 
-该功能支持批量修改账号的姓名、头像、简介、用户名等信息
+{t(user_id, 'profile_intro')}
 
-<b>🎲 随机生成模式：</b>
-• 姓名：根据手机号国家自动生成本地化姓名
-  - 🇺🇸 美国号码 → 生成英文名字
-  - 🇮🇩 印尼号码 → 生成印尼名字
-  - 🇷🇺 俄罗斯号码 → 生成俄语名字
-  - 支持40+种国家/地区
-  - 每个姓名都是随机生成，绝不重复
+<b>{t(user_id, 'profile_random_mode_title')}</b>
+{t(user_id, 'profile_random_name')}
+{t(user_id, 'profile_random_name_us')}
+{t(user_id, 'profile_random_name_id')}
+{t(user_id, 'profile_random_name_ru')}
+{t(user_id, 'profile_random_name_support')}
+{t(user_id, 'profile_random_name_unique')}
 
-• 头像：可选择删除所有历史头像或保留
-• 简介：可选择留空或随机生成对应语言的简介
-• 用户名：可选择删除或随机生成新用户名
+{t(user_id, 'profile_random_avatar')}
+{t(user_id, 'profile_random_bio')}
+{t(user_id, 'profile_random_username')}
 
-<b>✏️ 自定义生成模式：</b>
-• 上传txt文件（每行一个内容）
-• 或手动输入内容
-• 支持自定义姓名、头像、简介、用户名
+<b>{t(user_id, 'profile_custom_mode_title')}</b>
+{t(user_id, 'profile_custom_upload')}
+{t(user_id, 'profile_custom_manual')}
+{t(user_id, 'profile_custom_support')}
 
-<b>⚠️ 注意事项：</b>
-1. Telegram对资料修改有频率限制
-2. 系统会自动添加适当延迟避免限流
-3. 用户名会自动检查是否可用
-4. 支持Session和TData格式
+<b>{t(user_id, 'profile_notes_title')}</b>
+{t(user_id, 'profile_note1')}
+{t(user_id, 'profile_note2')}
+{t(user_id, 'profile_note3')}
+{t(user_id, 'profile_note4')}
 
-<b>请选择修改模式：</b>
+<b>{t(user_id, 'profile_select_mode')}</b>
         """
         
         keyboard = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton("🎲 随机生成", callback_data="profile_mode_random"),
-                InlineKeyboardButton("✏️ 自定义生成", callback_data="profile_mode_custom")
+                InlineKeyboardButton(t(user_id, 'profile_btn_random'), callback_data="profile_mode_random"),
+                InlineKeyboardButton(t(user_id, 'profile_btn_custom'), callback_data="profile_mode_custom")
             ],
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_main")]
         ])
         
         query.edit_message_text(
@@ -25377,7 +25377,7 @@ admin3</code>
                 config = self.pending_profile_update[user_id]['config']
                 self._show_custom_config_menu(query, user_id, config)
             else:
-                query.answer("❌ 会话已过期")
+                query.answer(t(user_id, 'profile_session_expired'))
         elif data.startswith("profile_random_"):
             self.handle_profile_random_config(update, context, query, data, user_id)
         elif data.startswith("profile_custom_"):
@@ -25414,58 +25414,58 @@ admin3</code>
         """显示随机模式配置菜单"""
         # 头像选项显示
         if config.photo_action == 'delete_all':
-            photo_status = "🗑 删除所有"
+            photo_status = t(user_id, 'profile_display_delete_all')
         else:
-            photo_status = "📷 保留当前"
+            photo_status = t(user_id, 'profile_display_keep')
         
         # 简介选项显示
         if config.bio_action == 'clear':
-            bio_status = "📝 留空"
+            bio_status = t(user_id, 'profile_display_clear')
         elif config.bio_action == 'random':
-            bio_status = "🎲 随机生成"
+            bio_status = t(user_id, 'profile_display_random')
         else:
-            bio_status = "⏩ 不修改"
+            bio_status = t(user_id, 'profile_display_no_modify')
         
         # 用户名选项显示
         if config.username_action == 'delete':
-            username_status = "🗑 删除"
+            username_status = t(user_id, 'profile_display_delete')
         elif config.username_action == 'random':
-            username_status = "🎲 随机生成"
+            username_status = t(user_id, 'profile_display_random')
         else:
-            username_status = "⏩ 不修改"
+            username_status = t(user_id, 'profile_display_no_modify')
         
         text = f"""
-<b>🎲 随机生成模式</b>
+<b>{t(user_id, 'profile_random_config_title')}</b>
 
-<b>当前配置：</b>
+<b>{t(user_id, 'profile_current_config')}</b>
 
-• 姓名: ✅ 根据国家自动生成
-• 头像: {photo_status}
-• 简介: {bio_status}
-• 用户名: {username_status}
+{t(user_id, 'profile_config_name')} {t(user_id, 'profile_display_random_by_country')}
+{t(user_id, 'profile_config_avatar')} {photo_status}
+{t(user_id, 'profile_config_bio')} {bio_status}
+{t(user_id, 'profile_config_username')} {username_status}
 
-<b>💡 提示：</b>
-姓名会根据手机号自动识别国家，生成对应语言的随机姓名，每个都不重复！
+<b>{t(user_id, 'profile_random_tip_title')}</b>
+{t(user_id, 'profile_random_tip')}
 
-<b>请配置修改选项或上传账号文件：</b>
+<b>{t(user_id, 'profile_config_prompt')}</b>
         """
         
         keyboard = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton(f"头像: {photo_status}", callback_data="profile_random_photo"),
+                InlineKeyboardButton(f"{t(user_id, 'profile_btn_avatar')} {photo_status}", callback_data="profile_random_photo"),
             ],
             [
-                InlineKeyboardButton(f"简介: {bio_status}", callback_data="profile_random_bio"),
+                InlineKeyboardButton(f"{t(user_id, 'profile_btn_bio')} {bio_status}", callback_data="profile_random_bio"),
             ],
             [
-                InlineKeyboardButton(f"用户名: {username_status}", callback_data="profile_random_username"),
+                InlineKeyboardButton(f"{t(user_id, 'profile_btn_username')} {username_status}", callback_data="profile_random_username"),
             ],
             [
-                InlineKeyboardButton("📤 上传账号文件开始处理", callback_data="profile_execute")
+                InlineKeyboardButton(t(user_id, 'profile_btn_upload'), callback_data="profile_execute")
             ],
             [
-                InlineKeyboardButton("🔙 返回", callback_data="profile_update_start"),
-                InlineKeyboardButton("❌ 取消", callback_data="profile_cancel")
+                InlineKeyboardButton(t(user_id, 'profile_btn_return'), callback_data="profile_update_start"),
+                InlineKeyboardButton(t(user_id, 'profile_btn_cancel'), callback_data="profile_cancel")
             ]
         ])
         
@@ -25483,7 +25483,7 @@ admin3</code>
         query.answer()
         
         if user_id not in self.pending_profile_update:
-            query.answer("❌ 会话已过期")
+            query.answer(t(user_id, 'profile_session_expired'))
             return
         
         config = self.pending_profile_update[user_id]['config']
@@ -25545,93 +25545,93 @@ admin3</code>
         """显示自定义模式配置菜单"""
         # 姓名状态显示
         if config.update_name and config.custom_names:
-            name_status = f"✅ 已设置 ({len(config.custom_names)}个)"
+            name_status = t(user_id, 'profile_custom_status_configured').format(count=len(config.custom_names))
         elif config.update_name:
-            name_status = "⏳ 待设置"
+            name_status = t(user_id, 'profile_custom_status_pending')
         else:
-            name_status = "⏩ 不修改"
+            name_status = t(user_id, 'profile_custom_status_no_modify')
         
         # 头像状态显示
         if config.update_photo:
             if config.photo_action == 'delete_all':
-                photo_status = "🗑 删除所有"
+                photo_status = t(user_id, 'profile_display_delete_all')
             elif config.photo_action == 'custom' and config.custom_photos:
-                photo_status = f"✅ 已设置 ({len(config.custom_photos)}个)"
+                photo_status = t(user_id, 'profile_custom_status_configured').format(count=len(config.custom_photos))
             elif config.photo_action == 'custom':
-                photo_status = "⏳ 待设置"
+                photo_status = t(user_id, 'profile_custom_status_pending')
             else:
-                photo_status = "⏩ 不修改"
+                photo_status = t(user_id, 'profile_custom_status_no_modify')
         else:
-            photo_status = "⏩ 不修改"
+            photo_status = t(user_id, 'profile_custom_status_no_modify')
         
         # 简介状态显示
         if config.update_bio:
             if config.bio_action == 'clear':
-                bio_status = "📝 清空"
+                bio_status = t(user_id, 'profile_display_clear')
             elif config.bio_action == 'custom' and config.custom_bios:
-                bio_status = f"✅ 已设置 ({len(config.custom_bios)}个)"
+                bio_status = t(user_id, 'profile_custom_status_configured').format(count=len(config.custom_bios))
             elif config.bio_action == 'custom':
-                bio_status = "⏳ 待设置"
+                bio_status = t(user_id, 'profile_custom_status_pending')
             else:
-                bio_status = "⏩ 不修改"
+                bio_status = t(user_id, 'profile_custom_status_no_modify')
         else:
-            bio_status = "⏩ 不修改"
+            bio_status = t(user_id, 'profile_custom_status_no_modify')
         
         # 用户名状态显示
         if config.update_username:
             if config.username_action == 'delete':
-                username_status = "🗑 删除"
+                username_status = t(user_id, 'profile_display_delete')
             elif config.username_action == 'custom' and config.custom_usernames:
-                username_status = f"✅ 已设置 ({len(config.custom_usernames)}个)"
+                username_status = t(user_id, 'profile_custom_status_configured').format(count=len(config.custom_usernames))
             elif config.username_action == 'custom':
-                username_status = "⏳ 待设置"
+                username_status = t(user_id, 'profile_custom_status_pending')
             else:
-                username_status = "⏩ 不修改"
+                username_status = t(user_id, 'profile_custom_status_no_modify')
         else:
-            username_status = "⏩ 不修改"
+            username_status = t(user_id, 'profile_custom_status_no_modify')
         
         text = f"""
-<b>✏️ 自定义生成模式</b>
+<b>{t(user_id, 'profile_custom_config_title')}</b>
 
-<b>当前配置：</b>
+<b>{t(user_id, 'profile_current_config')}</b>
 
-• 姓名: {name_status}
-• 头像: {photo_status}
-• 简介: {bio_status}
-• 用户名: {username_status}
+{t(user_id, 'profile_config_name')} {name_status}
+{t(user_id, 'profile_config_avatar')} {photo_status}
+{t(user_id, 'profile_config_bio')} {bio_status}
+{t(user_id, 'profile_config_username')} {username_status}
 
-<b>💡 配置方式：</b>
-1. 点击按钮配置各项内容
-2. 支持上传txt文件或手动输入
-3. 可选择不修改某项（留空）
+<b>{t(user_id, 'profile_custom_tip_title')}</b>
+{t(user_id, 'profile_custom_tip1')}
+{t(user_id, 'profile_custom_tip2')}
+{t(user_id, 'profile_custom_tip3')}
 
-<b>📊 智能分配规则：</b>
-• 1个内容 + N个账号 = 所有账号使用同一内容
-• M个内容 + N个账号 (M&lt;N) = 循环使用
-• M个内容 + N个账号 (M≥N) = 一一对应
+<b>{t(user_id, 'profile_custom_rule_title')}</b>
+{t(user_id, 'profile_custom_rule1')}
+{t(user_id, 'profile_custom_rule2')}
+{t(user_id, 'profile_custom_rule3')}
 
-<b>请选择要配置的项目：</b>
+<b>{t(user_id, 'profile_custom_select')}</b>
         """
         
         keyboard = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton(f"姓名: {name_status}", callback_data="profile_custom_name"),
+                InlineKeyboardButton(f"{t(user_id, 'profile_btn_name')} {name_status}", callback_data="profile_custom_name"),
             ],
             [
-                InlineKeyboardButton(f"头像: {photo_status}", callback_data="profile_custom_photo"),
+                InlineKeyboardButton(f"{t(user_id, 'profile_btn_avatar')} {photo_status}", callback_data="profile_custom_photo"),
             ],
             [
-                InlineKeyboardButton(f"简介: {bio_status}", callback_data="profile_custom_bio"),
+                InlineKeyboardButton(f"{t(user_id, 'profile_btn_bio')} {bio_status}", callback_data="profile_custom_bio"),
             ],
             [
-                InlineKeyboardButton(f"用户名: {username_status}", callback_data="profile_custom_username"),
+                InlineKeyboardButton(f"{t(user_id, 'profile_btn_username')} {username_status}", callback_data="profile_custom_username"),
             ],
             [
-                InlineKeyboardButton("📤 上传账号文件开始处理", callback_data="profile_execute")
+                InlineKeyboardButton(t(user_id, 'profile_btn_upload'), callback_data="profile_execute")
             ],
             [
-                InlineKeyboardButton("🔙 返回", callback_data="profile_update_start"),
-                InlineKeyboardButton("❌ 取消", callback_data="profile_cancel")
+                InlineKeyboardButton(t(user_id, 'profile_btn_return'), callback_data="profile_update_start"),
+                InlineKeyboardButton(t(user_id, 'profile_btn_cancel'), callback_data="profile_cancel")
             ]
         ])
         
@@ -25674,7 +25674,7 @@ admin3</code>
     def _show_custom_field_config(self, query, user_id: int, field: str, field_name: str):
         """显示字段配置选项"""
         if user_id not in self.pending_profile_update:
-            query.answer("❌ 会话已过期")
+            query.answer(t(user_id, 'profile_session_expired'))
             return
         
         config = self.pending_profile_update[user_id]['config']
@@ -25684,53 +25684,53 @@ admin3</code>
         task['custom_input_field'] = field
         
         # 根据字段类型显示不同的选项
-        text = f"<b>📝 配置{field_name}</b>\n\n请选择操作："
+        text = f"<b>{t(user_id, 'profile_custom_field_config').format(field=field_name)}</b>\n\n{t(user_id, 'profile_custom_field_select')}"
         
         keyboard_buttons = []
         
         if field == 'name':
             keyboard_buttons = [
-                [InlineKeyboardButton("📄 上传txt文件", callback_data=f"profile_custom_field_{field}_upload")],
-                [InlineKeyboardButton("✍️ 手动输入", callback_data=f"profile_custom_field_{field}_manual")],
-                [InlineKeyboardButton("⏩ 不修改此项", callback_data=f"profile_custom_field_{field}_skip")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_upload_txt'), callback_data=f"profile_custom_field_{field}_upload")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_manual_input'), callback_data=f"profile_custom_field_{field}_manual")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_no_modify'), callback_data=f"profile_custom_field_{field}_skip")],
             ]
             if config.custom_names:
-                keyboard_buttons.insert(0, [InlineKeyboardButton(f"📊 查看已设置 ({len(config.custom_names)}个)", callback_data=f"profile_custom_field_{field}_view")])
-                keyboard_buttons.insert(1, [InlineKeyboardButton("🗑 清除设置", callback_data=f"profile_custom_field_{field}_clear")])
+                keyboard_buttons.insert(0, [InlineKeyboardButton(t(user_id, 'profile_custom_field_view_configured').format(count=len(config.custom_names)), callback_data=f"profile_custom_field_{field}_view")])
+                keyboard_buttons.insert(1, [InlineKeyboardButton(t(user_id, 'profile_custom_field_clear_config'), callback_data=f"profile_custom_field_{field}_clear")])
         
         elif field == 'photo':
             keyboard_buttons = [
-                [InlineKeyboardButton("🖼 上传图片文件/ZIP", callback_data=f"profile_custom_field_{field}_upload")],
-                [InlineKeyboardButton("🗑 删除所有头像", callback_data=f"profile_custom_field_{field}_delete")],
-                [InlineKeyboardButton("⏩ 不修改此项", callback_data=f"profile_custom_field_{field}_skip")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_upload_images'), callback_data=f"profile_custom_field_{field}_upload")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_delete_all_avatar'), callback_data=f"profile_custom_field_{field}_delete")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_no_modify'), callback_data=f"profile_custom_field_{field}_skip")],
             ]
             if config.custom_photos:
-                keyboard_buttons.insert(0, [InlineKeyboardButton(f"📊 查看已设置 ({len(config.custom_photos)}个)", callback_data=f"profile_custom_field_{field}_view")])
-                keyboard_buttons.insert(1, [InlineKeyboardButton("🗑 清除设置", callback_data=f"profile_custom_field_{field}_clear")])
+                keyboard_buttons.insert(0, [InlineKeyboardButton(t(user_id, 'profile_custom_field_view_configured').format(count=len(config.custom_photos)), callback_data=f"profile_custom_field_{field}_view")])
+                keyboard_buttons.insert(1, [InlineKeyboardButton(t(user_id, 'profile_custom_field_clear_config'), callback_data=f"profile_custom_field_{field}_clear")])
         
         elif field == 'bio':
             keyboard_buttons = [
-                [InlineKeyboardButton("📄 上传txt文件", callback_data=f"profile_custom_field_{field}_upload")],
-                [InlineKeyboardButton("✍️ 手动输入", callback_data=f"profile_custom_field_{field}_manual")],
-                [InlineKeyboardButton("📝 清空简介", callback_data=f"profile_custom_field_{field}_clear_bio")],
-                [InlineKeyboardButton("⏩ 不修改此项", callback_data=f"profile_custom_field_{field}_skip")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_upload_txt'), callback_data=f"profile_custom_field_{field}_upload")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_manual_input'), callback_data=f"profile_custom_field_{field}_manual")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_clear_bio'), callback_data=f"profile_custom_field_{field}_clear_bio")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_no_modify'), callback_data=f"profile_custom_field_{field}_skip")],
             ]
             if config.custom_bios:
-                keyboard_buttons.insert(0, [InlineKeyboardButton(f"📊 查看已设置 ({len(config.custom_bios)}个)", callback_data=f"profile_custom_field_{field}_view")])
-                keyboard_buttons.insert(1, [InlineKeyboardButton("🗑 清除设置", callback_data=f"profile_custom_field_{field}_clear")])
+                keyboard_buttons.insert(0, [InlineKeyboardButton(t(user_id, 'profile_custom_field_view_configured').format(count=len(config.custom_bios)), callback_data=f"profile_custom_field_{field}_view")])
+                keyboard_buttons.insert(1, [InlineKeyboardButton(t(user_id, 'profile_custom_field_clear_config'), callback_data=f"profile_custom_field_{field}_clear")])
         
         elif field == 'username':
             keyboard_buttons = [
-                [InlineKeyboardButton("📄 上传txt文件", callback_data=f"profile_custom_field_{field}_upload")],
-                [InlineKeyboardButton("✍️ 手动输入", callback_data=f"profile_custom_field_{field}_manual")],
-                [InlineKeyboardButton("🗑 删除用户名", callback_data=f"profile_custom_field_{field}_delete_username")],
-                [InlineKeyboardButton("⏩ 不修改此项", callback_data=f"profile_custom_field_{field}_skip")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_upload_txt'), callback_data=f"profile_custom_field_{field}_upload")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_manual_input'), callback_data=f"profile_custom_field_{field}_manual")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_delete_username'), callback_data=f"profile_custom_field_{field}_delete_username")],
+                [InlineKeyboardButton(t(user_id, 'profile_custom_field_no_modify'), callback_data=f"profile_custom_field_{field}_skip")],
             ]
             if config.custom_usernames:
-                keyboard_buttons.insert(0, [InlineKeyboardButton(f"📊 查看已设置 ({len(config.custom_usernames)}个)", callback_data=f"profile_custom_field_{field}_view")])
-                keyboard_buttons.insert(1, [InlineKeyboardButton("🗑 清除设置", callback_data=f"profile_custom_field_{field}_clear")])
+                keyboard_buttons.insert(0, [InlineKeyboardButton(t(user_id, 'profile_custom_field_view_configured').format(count=len(config.custom_usernames)), callback_data=f"profile_custom_field_{field}_view")])
+                keyboard_buttons.insert(1, [InlineKeyboardButton(t(user_id, 'profile_custom_field_clear_config'), callback_data=f"profile_custom_field_{field}_clear")])
         
-        keyboard_buttons.append([InlineKeyboardButton("🔙 返回配置菜单", callback_data="profile_custom_back")])
+        keyboard_buttons.append([InlineKeyboardButton(t(user_id, 'profile_custom_field_back_to_menu'), callback_data="profile_custom_back")])
         
         keyboard = InlineKeyboardMarkup(keyboard_buttons)
         
@@ -25743,7 +25743,7 @@ admin3</code>
     def _handle_custom_field_action(self, update: Update, context: CallbackContext, query, data: str, user_id: int):
         """处理字段配置动作"""
         if user_id not in self.pending_profile_update:
-            query.answer("❌ 会话已过期")
+            query.answer(t(user_id, 'profile_session_expired'))
             return
         
         config = self.pending_profile_update[user_id]['config']
