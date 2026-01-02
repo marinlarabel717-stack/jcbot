@@ -24568,7 +24568,7 @@ admin3</code>
             nonlocal processed
             async with semaphore:
                 try:
-                    result = await self.check_account_registration_time(file_path, file_name, file_type)
+                    result = await self.check_account_registration_time(file_path, file_name, file_type, user_id)
                     
                     if result['status'] == 'success':
                         results['success'].append((file_path, file_name, result))
@@ -24617,7 +24617,7 @@ admin3</code>
         # 清理
         self.cleanup_registration_check_task(user_id)
     
-    async def check_account_registration_time(self, file_path: str, file_name: str, file_type: str) -> Dict:
+    async def check_account_registration_time(self, file_path: str, file_name: str, file_type: str, user_id: int) -> Dict:
         """
         查询单个账号的注册时间
         
@@ -24654,7 +24654,7 @@ admin3</code>
                     logger.error(f"[{file_name}] ❌ opentele未安装，无法处理TData格式")
                     return {
                         'status': 'error',
-                        'error': 'opentele未安装，无法处理TData格式',
+                        'error': t(user_id, 'regtime_fail_opentele'),
                         'file_name': file_name,
                         'file_type': file_type,
                         'original_file_path': original_file_path
@@ -24674,7 +24674,7 @@ admin3</code>
                         logger.error(f"[{file_name}]   ❌ TData未授权或加载失败")
                         return {
                             'status': 'error',
-                            'error': 'TData未授权或加载失败',
+                            'error': t(user_id, 'regtime_fail_tdata_load'),
                             'file_name': file_name,
                             'file_type': file_type,
                             'original_file_path': original_file_path
@@ -24683,7 +24683,7 @@ admin3</code>
                     logger.error(f"[{file_name}]   ⏱️ TData加载超时(30秒)")
                     return {
                         'status': 'error',
-                        'error': 'TData加载超时',
+                        'error': t(user_id, 'regtime_fail_tdata_timeout'),
                         'file_name': file_name,
                         'file_type': file_type,
                         'original_file_path': original_file_path
@@ -24712,7 +24712,7 @@ admin3</code>
                     logger.error(f"[{file_name}]   ⏱️ TData转Session超时(60秒)")
                     return {
                         'status': 'error',
-                        'error': 'TData转Session超时',
+                        'error': t(user_id, 'regtime_fail_conversion_timeout'),
                         'file_name': file_name,
                         'file_type': file_type,
                         'original_file_path': original_file_path
@@ -24826,7 +24826,7 @@ admin3</code>
                         logger.error(f"[{file_name}]   💡 代理和本地连接均失败")
                         return {
                             'status': 'error',
-                            'error': '连接超时（代理和本地均失败）',
+                            'error': t(user_id, 'regtime_fail_timeout_both'),
                             'file_name': file_name,
                             'file_type': file_type,
                             'original_file_path': original_file_path
@@ -24836,7 +24836,7 @@ admin3</code>
                     logger.error(f"[{file_name}]   ❌ 本地连接超时(30秒)")
                     return {
                         'status': 'error',
-                        'error': '连接超时',
+                        'error': t(user_id, 'regtime_fail_timeout'),
                         'file_name': file_name,
                         'file_type': file_type,
                         'original_file_path': original_file_path
@@ -24848,7 +24848,7 @@ admin3</code>
                 logger.error(f"[{file_name}] ❌ 账号未授权或已失效")
                 return {
                     'status': 'error',
-                    'error': '账号未授权或已失效',
+                    'error': t(user_id, 'regtime_fail_unauthorized'),
                     'file_name': file_name,
                     'file_type': file_type,
                     'original_file_path': original_file_path
@@ -25088,7 +25088,7 @@ admin3</code>
         except UserDeactivatedError:
             return {
                 'status': 'frozen',
-                'error': '账号已被冻结',
+                'error': t(user_id, 'regtime_fail_frozen_account'),
                 'file_name': file_name,
                 'file_type': file_type,
                 'original_file_path': original_file_path
@@ -25096,7 +25096,7 @@ admin3</code>
         except PhoneNumberBannedError:
             return {
                 'status': 'banned',
-                'error': '账号已被封禁',
+                'error': t(user_id, 'regtime_fail_banned_account'),
                 'file_name': file_name,
                 'file_type': file_type,
                 'original_file_path': original_file_path
@@ -25104,7 +25104,7 @@ admin3</code>
         except asyncio.TimeoutError:
             return {
                 'status': 'error',
-                'error': '连接超时',
+                'error': t(user_id, 'regtime_fail_timeout'),
                 'file_name': file_name,
                 'file_type': file_type,
                 'original_file_path': original_file_path
@@ -27044,7 +27044,7 @@ admin3</code>
             logger.info(f"📦 开始打包失败的账号...")
             print(f"📦 开始打包失败的账号...", flush=True)
             
-            failed_zip = os.path.join(config.RESULTS_DIR, f"查询失败_{timestamp}.zip")
+            failed_zip = os.path.join(config.RESULTS_DIR, f"{t(user_id, 'regtime_fail_zip_name')}_{timestamp}.zip")
             failed_details = []
             
             try:

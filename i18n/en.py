@@ -1893,7 +1893,15 @@ TEXTS = {
     'regtime_fail_reason': 'Failure Reason:',
     'regtime_fail_unauthorized': 'Account unauthorized or expired',
     'regtime_fail_timeout': 'Connection timeout',
+    'regtime_fail_timeout_both': 'Connection timeout (both proxy and local failed)',
+    'regtime_fail_frozen_account': 'Account has been frozen',
+    'regtime_fail_banned_account': 'Account has been banned',
+    'regtime_fail_opentele': 'opentele not installed, cannot process TData format',
+    'regtime_fail_tdata_load': 'TData unauthorized or loading failed',
+    'regtime_fail_tdata_timeout': 'TData loading timeout',
+    'regtime_fail_conversion_timeout': 'TData to Session conversion timeout',
     'regtime_fail_detail_file': 'failure_reasons_detail.txt',
+    'regtime_fail_zip_name': 'query_failed',
     
     # 10. ZIP Folder Names
     'regtime_folder_name': '{date} registered accounts ({count})',

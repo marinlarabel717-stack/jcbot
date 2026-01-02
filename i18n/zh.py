@@ -1894,7 +1894,15 @@ TEXTS = {
     'regtime_fail_reason': '失败原因:',
     'regtime_fail_unauthorized': '账号未授权或已失效',
     'regtime_fail_timeout': '连接超时',
+    'regtime_fail_timeout_both': '连接超时（代理和本地均失败）',
+    'regtime_fail_frozen_account': '账号已被冻结',
+    'regtime_fail_banned_account': '账号已被封禁',
+    'regtime_fail_opentele': 'opentele未安装，无法处理TData格式',
+    'regtime_fail_tdata_load': 'TData未授权或加载失败',
+    'regtime_fail_tdata_timeout': 'TData加载超时',
+    'regtime_fail_conversion_timeout': 'TData转Session超时',
     'regtime_fail_detail_file': '失败原因详细说明.txt',
+    'regtime_fail_zip_name': '查询失败',
     
     # 10. ZIP内文件夹名
     'regtime_folder_name': '{date} 注册的账号 ({count} 个)',
