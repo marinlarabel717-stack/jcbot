@@ -1838,7 +1838,7 @@ TEXTS = {
     
     # 5. 处理进度
     'regtime_querying': '正在查询',
-    'regtime_may_take_minutes': '可能是需要几分钟',
+    'regtime_may_take_minutes': '可能需要几分钟',
     'regtime_progress_title': '🔄 查询进度',
     'regtime_progress_total': '• 总数：{count}',
     'regtime_progress_processed': '• 已处理：{count}',
