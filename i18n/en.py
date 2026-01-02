@@ -2119,4 +2119,10 @@ TEXTS = {
     'profile_session_expired': '❌ Session expired',
     'profile_processing_failed': '❌ Processing failed',
     'profile_error_msg': 'Error: {error}',
+    
+    # 18. Field Names
+    'profile_field_name': 'Name',
+    'profile_field_avatar': 'Avatar',
+    'profile_field_bio': 'Bio',
+    'profile_field_username': 'Username',
 }

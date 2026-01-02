@@ -2120,4 +2120,10 @@ TEXTS = {
     'profile_session_expired': '❌ 会话已过期',
     'profile_processing_failed': '❌ 处理失败',
     'profile_error_msg': '错误: {error}',
+    
+    # 18. 字段名称
+    'profile_field_name': '姓名',
+    'profile_field_avatar': '头像',
+    'profile_field_bio': '简介',
+    'profile_field_username': '用户名',
 }

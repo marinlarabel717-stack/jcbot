@@ -12463,7 +12463,7 @@ class EnhancedBot:
                     InlineKeyboardButton(t(user_id, 'btn_check_registration'), callback_data="check_registration_start")
                 ],
                 [
-                    InlineKeyboardButton("📝 修改资料", callback_data="profile_update_start"),
+                    InlineKeyboardButton(t(user_id, 'btn_profile_update'), callback_data="profile_update_start"),
                     InlineKeyboardButton("🔍 检查通讯录限制", callback_data="check_contact_limit")
                 ],
                 [
@@ -25657,16 +25657,16 @@ admin3</code>
         
         if data == "profile_custom_name":
             # 配置姓名
-            self._show_custom_field_config(query, user_id, 'name', '姓名')
+            self._show_custom_field_config(query, user_id, 'name', t(user_id, 'profile_field_name'))
         elif data == "profile_custom_photo":
             # 配置头像
-            self._show_custom_field_config(query, user_id, 'photo', '头像')
+            self._show_custom_field_config(query, user_id, 'photo', t(user_id, 'profile_field_avatar'))
         elif data == "profile_custom_bio":
             # 配置简介
-            self._show_custom_field_config(query, user_id, 'bio', '简介')
+            self._show_custom_field_config(query, user_id, 'bio', t(user_id, 'profile_field_bio'))
         elif data == "profile_custom_username":
             # 配置用户名
-            self._show_custom_field_config(query, user_id, 'username', '用户名')
+            self._show_custom_field_config(query, user_id, 'username', t(user_id, 'profile_field_username'))
         elif data.startswith("profile_custom_field_"):
             # 处理字段配置选项
             self._handle_custom_field_action(update, context, query, data, user_id)
@@ -25757,9 +25757,19 @@ admin3</code>
         
         field_name, action = parts[0], parts[1]
         
+        # Helper function to get translated field display name
+        def get_field_display(field):
+            field_map = {
+                'name': 'profile_field_name',
+                'photo': 'profile_field_avatar',
+                'bio': 'profile_field_bio',
+                'username': 'profile_field_username'
+            }
+            return t(user_id, field_map.get(field, 'profile_field_name'))
+        
         if action == "upload":
             # 请求用户上传文件
-            field_display = {'name': '姓名', 'photo': '头像', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+            field_display = get_field_display(field_name)
             
             if field_name == 'photo':
                 text = f"""
@@ -25860,12 +25870,11 @@ admin3</code>
                 config.custom_usernames = []
             
             query.answer("✅ 已清除设置")
-            self._show_custom_field_config(query, user_id, field_name, 
-                                          {'name': '姓名', 'photo': '头像', 'bio': '简介', 'username': '用户名'}[field_name])
+            self._show_custom_field_config(query, user_id, field_name, get_field_display(field_name))
         
         elif action == "view":
             # 查看已设置的内容
-            field_display = {'name': '姓名', 'photo': '头像', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+            field_display = get_field_display(field_name)
             
             items = []
             if field_name == 'name':
