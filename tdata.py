@@ -26865,55 +26865,56 @@ admin3</code>
         try:
             with open(report_path, 'w', encoding='utf-8') as f:
                 f.write("=" * 80 + "\n")
-                f.write("注册时间查询报告\n")
+                f.write(f"{t(user_id, 'regtime_report_title')}\n")
                 f.write("=" * 80 + "\n")
-                f.write(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n")
-                f.write(f"总账号数: {total}\n")
-                f.write(f"成功: {success_count}\n")
-                f.write(f"失败: {error_count}\n")
+                f.write(f"{t(user_id, 'regtime_report_time')} {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n")
+                f.write(f"{t(user_id, 'regtime_report_total')} {total}\n")
+                f.write(f"{t(user_id, 'regtime_report_success')} {success_count}\n")
+                f.write(f"{t(user_id, 'regtime_report_failed')} {error_count}\n")
                 f.write("=" * 80 + "\n\n")
                 
                 # 按日期统计（排序）
-                f.write("按注册日期分类:\n")
+                f.write(f"{t(user_id, 'regtime_report_classify')}\n")
                 f.write("-" * 80 + "\n")
-                f.write("💡 数据来源说明:\n")
-                f.write("  • telegram_chat: 从与@Telegram官方对话获取（最准确）\n")
-                f.write("  • saved_messages: 从收藏夹消息获取（较准确）\n")
-                f.write("  • estimated: 基于用户ID估算（参考值）\n")
+                f.write(f"{t(user_id, 'regtime_source_title')}\n")
+                f.write(f"{t(user_id, 'regtime_source_telegram')}\n")
+                f.write(f"{t(user_id, 'regtime_source_saved')}\n")
+                f.write(f"{t(user_id, 'regtime_source_estimated')}\n")
                 f.write("-" * 80 + "\n\n")
                 
                 for reg_date in sorted(by_date.keys()):
-                    f.write(f"\n📅 {reg_date} ({len(by_date[reg_date])} 个账号)\n")
+                    f.write(f"\n{t(user_id, 'regtime_date_header').format(date=reg_date, count=len(by_date[reg_date]))}\n")
                     f.write("-" * 40 + "\n")
                     for file_path, file_name, result in by_date[reg_date]:
-                        f.write(f"文件: {file_name}\n")
-                        f.write(f"手机号: {result['phone']}\n")
-                        f.write(f"用户ID: {result['user_id']}\n")
+                        f.write(f"{t(user_id, 'regtime_field_file')} {file_name}\n")
+                        f.write(f"{t(user_id, 'regtime_field_phone')} {result['phone']}\n")
+                        f.write(f"{t(user_id, 'regtime_field_userid')} {result['user_id']}\n")
                         if result.get('username'):
-                            f.write(f"用户名: @{result['username']}\n")
-                        f.write(f"名字: {result['first_name']} {result['last_name']}\n")
-                        f.write(f"共同群组: {result['common_chats']}\n")
+                            f.write(f"{t(user_id, 'regtime_field_username')} @{result['username']}\n")
+                        f.write(f"{t(user_id, 'regtime_field_name')} {result['first_name']} {result['last_name']}\n")
+                        f.write(f"{t(user_id, 'regtime_field_common_groups')} {result['common_chats']}\n")
                         
                         # 显示数据来源
                         source = result.get('registration_source', 'estimated')
-                        source_text = {
-                            'telegram_chat': '来源: Telegram官方对话（准确）',
-                            'saved_messages': '来源: 收藏夹消息（较准确）',
-                            'estimated': '来源: 用户ID估算（参考）'
-                        }.get(source, f'来源: {source}')
+                        if source == 'telegram_chat':
+                            source_text = f"{t(user_id, 'regtime_field_source')} {t(user_id, 'regtime_source_telegram').replace('• telegram_chat: ', '')}"
+                        elif source == 'saved_messages':
+                            source_text = f"{t(user_id, 'regtime_field_source')} {t(user_id, 'regtime_source_saved').replace('• saved_messages: ', '')}"
+                        else:
+                            source_text = f"{t(user_id, 'regtime_field_source')} {t(user_id, 'regtime_source_estimated').replace('• estimated: ', '')}"
                         f.write(f"{source_text}\n")
                         f.write("\n")
                 
                 # 失败的账号
                 if error_count > 0:
-                    f.write("\n失败的账号:\n")
+                    f.write(f"\n{t(user_id, 'regtime_failed_accounts')}\n")
                     f.write("-" * 80 + "\n")
                     for category in ['error', 'frozen', 'banned']:
                         if results[category]:
-                            f.write(f"\n{category.upper()}:\n")
+                            f.write(f"\n{t(user_id, 'regtime_error_label')} {category.upper()}:\n")
                             for file_path, file_name, result in results[category]:
-                                f.write(f"文件: {file_name}\n")
-                                f.write(f"错误: {result.get('error', '未知错误')}\n\n")
+                                f.write(f"{t(user_id, 'regtime_field_file')} {file_name}\n")
+                                f.write(f"{t(user_id, 'regtime_error_field')} {result.get('error', '未知错误')}\n\n")
             
             logger.info(f"✅ 报告文件已生成: {report_path}")
             print(f"✅ 报告文件已生成: {report_path}", flush=True)
@@ -26937,7 +26938,7 @@ admin3</code>
                         print(f"📦 打包 {reg_date} 的 {len(items)} 个账号...", flush=True)
                         
                         # 创建日期文件夹名称：如 "2025-09-26 注册的账号 (16 个)"
-                        date_folder = f"{reg_date} 注册的账号 ({len(items)} 个)"
+                        date_folder = t(user_id, 'regtime_folder_name').format(date=reg_date, count=len(items))
                         
                         for file_path, file_name, result in items:
                             phone = result.get('phone', 'unknown')
@@ -27160,24 +27161,24 @@ admin3</code>
         
         # 发送统计信息
         summary = f"""
-✅ <b>注册时间查询完成</b>
+{t(user_id, 'regtime_complete')}
 
-<b>统计信息：</b>
-• 总数：{total}
-• ✅ 成功：{success_count}
-• ❌ 失败：{error_count}
+<b>{t(user_id, 'regtime_stats_title')}</b>
+{t(user_id, 'regtime_stats_total').format(count=total)}
+{t(user_id, 'regtime_stats_success').format(count=success_count)}
+{t(user_id, 'regtime_stats_failed').format(count=error_count)}
 
-<b>按注册日期分类：</b>
+<b>{t(user_id, 'regtime_classify_title')}</b>
 """
         # 显示前10个日期的统计
         sorted_dates = sorted(by_date.keys())
         for i, reg_date in enumerate(sorted_dates[:10]):
-            summary += f"• {reg_date}: {len(by_date[reg_date])} 个\n"
+            summary += t(user_id, 'regtime_classify_item').format(date=reg_date, count=len(by_date[reg_date])) + "\n"
         
         if len(sorted_dates) > 10:
-            summary += f"• ... 还有 {len(sorted_dates) - 10} 个日期\n"
+            summary += f"• ... {len(sorted_dates) - 10} more dates\n"
         
-        summary += "\n📄 详细报告见下方文件"
+        summary += f"\n{t(user_id, 'regtime_see_report')}"
         
         try:
             context.bot.edit_message_text(
@@ -27202,7 +27203,7 @@ admin3</code>
                         chat_id=user_id,
                         document=f,
                         filename=report_filename,
-                        caption="📊 注册时间查询详细报告",
+                        caption=t(user_id, 'regtime_file_report'),
                         timeout=60
                     )
                 logger.info("✅ 报告文件已发送")
@@ -27228,9 +27229,9 @@ admin3</code>
             try:
                 # 根据ZIP类型设置不同的标题
                 if zip_type == "failed":
-                    caption = f"❌ 查询失败的账号 (共 {count} 个，含详细失败原因说明)"
+                    caption = t(user_id, 'regtime_file_failed').format(count=count)
                 else:
-                    caption = f"📦 注册时间分类账号 (共 {count} 个账号，按日期分类到不同文件夹)"
+                    caption = t(user_id, 'regtime_file_classified').format(count=count)
                 
                 max_retries = 3
                 for attempt in range(max_retries):
