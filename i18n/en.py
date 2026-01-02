@@ -2079,6 +2079,8 @@ TEXTS = {
     'profile_action_username_occupied': '❌ Username already taken: {username}',
     'profile_action_username_failed_occupied': '❌ Username update failed (may be taken)',
     'profile_bio_empty': '(empty)',
+    'profile_bio_cleared_inline': '(cleared)',
+    'profile_none': '(none)',
     
     # 12. Modification Results
     'profile_complete': '✅ Profile modification complete!',
@@ -2125,6 +2127,13 @@ TEXTS = {
     'profile_error_username_invalid': 'Invalid username format',
     'profile_error_network': 'Network connection error',
     'profile_error_unknown': 'Unknown error',
+    'profile_error_banned': 'Account has been banned',
+    'profile_error_deactivated': 'Account has been deactivated',
+    'profile_error_unauthorized': 'Account unauthorized',
+    'profile_error_rpc_error': 'Telegram API error',
+    'profile_error_password_needed': '2FA password required',
+    'profile_error_phone_banned': 'Phone number has been banned',
+    'profile_error_flood_wait': 'Rate limit triggered, please wait {seconds} seconds',
     
     # 16. Random Generation Config Display Values
     'profile_display_random_by_country': '✅ Random generate (by country)',

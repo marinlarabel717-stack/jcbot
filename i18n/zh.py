@@ -2080,6 +2080,8 @@ TEXTS = {
     'profile_action_username_occupied': '❌ 用户名已被占用: {username}',
     'profile_action_username_failed_occupied': '❌ 用户名更新失败（可能已被占用）',
     'profile_bio_empty': '(空)',
+    'profile_bio_cleared_inline': '(已清空)',
+    'profile_none': '(无)',
     
     # 12. 修改结果
     'profile_complete': '✅ 资料修改完成！',
@@ -2126,6 +2128,13 @@ TEXTS = {
     'profile_error_username_invalid': '用户名格式无效',
     'profile_error_network': '网络连接错误',
     'profile_error_unknown': '未知错误',
+    'profile_error_banned': '账号已被封禁',
+    'profile_error_deactivated': '账号已注销',
+    'profile_error_unauthorized': '账号未授权',
+    'profile_error_rpc_error': 'Telegram API错误',
+    'profile_error_password_needed': '需要两步验证密码',
+    'profile_error_phone_banned': '手机号已被封禁',
+    'profile_error_flood_wait': '触发频率限制，需等待 {seconds} 秒后重试',
     
     # 16. 随机生成配置显示值
     'profile_display_random_by_country': '✅ 随机生成（按国家）',
