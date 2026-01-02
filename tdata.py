@@ -23693,7 +23693,7 @@ admin3</code>
                     await asyncio.sleep(DELAY_BETWEEN)
                     
                     # 更新当前处理账号信息
-                    current_account_info = f"🔄 当前处理: {file_name}"
+                    current_account_info = f"{t(user_id, 'profile_current_processing')} {file_name}"
                     await update_progress_display()
                     
                     result = await self._update_single_profile(idx, file_path, file_name, file_type, config)
@@ -23701,12 +23701,12 @@ admin3</code>
                     if result['success']:
                         results['success'].append((file_path, file_name, result))
                         # 更新当前账号处理结果
-                        action_summary = result.get('actions', ['✅ 处理完成'])[0]
-                        current_account_info = f"🔄 当前处理: {file_name}\n   {action_summary}"
+                        action_summary = result.get('actions', [t(user_id, 'profile_status_processing_complete')])[0]
+                        current_account_info = f"{t(user_id, 'profile_current_processing')} {file_name}\n   {action_summary}"
                     else:
                         results['failed'].append((file_path, file_name, result))
-                        error_msg = result.get('error', '未知错误')[:self.MAX_ERROR_DISPLAY_LENGTH]
-                        current_account_info = f"🔄 当前处理: {file_name}\n   ❌ 失败: {error_msg}..."
+                        error_msg = result.get('error', t(user_id, 'profile_error_unknown'))[:self.MAX_ERROR_DISPLAY_LENGTH]
+                        current_account_info = f"{t(user_id, 'profile_current_processing')} {file_name}\n   {t(user_id, 'profile_status_failed')} {error_msg}..."
                     
                     results['details'].append(result)
                     processed += 1
@@ -26145,22 +26145,22 @@ admin3</code>
         query.answer()
         
         if user_id not in self.pending_profile_update:
-            self.safe_edit_message(query, "❌ 会话已过期，请重新配置")
+            self.safe_edit_message(query, t(user_id, 'profile_session_expired'))
             return
         
         task = self.pending_profile_update[user_id]
         config = task['config']
         
-        text = """
-<b>📤 请上传账号文件</b>
+        text = f"""
+<b>{t(user_id, 'profile_upload_title')}</b>
 
-<b>支持的格式：</b>
-• Session格式：上传.session文件（可打包成zip）
-• TData格式：上传包含tdata目录的zip文件
+<b>{t(user_id, 'profile_upload_format')}</b>
+{t(user_id, 'profile_upload_session')}
+{t(user_id, 'profile_upload_tdata')}
 
-<b>⏱ 请在5分钟内上传文件...</b>
+<b>{t(user_id, 'profile_upload_timeout')}</b>
 
-💡 如需取消，请点击 /start 返回主菜单
+{t(user_id, 'profile_upload_cancel')}
         """
         
         query.edit_message_text(
