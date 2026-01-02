@@ -23696,7 +23696,7 @@ admin3</code>
                     current_account_info = f"{t(user_id, 'profile_current_processing')} {file_name}"
                     await update_progress_display()
                     
-                    result = await self._update_single_profile(idx, file_path, file_name, file_type, config)
+                    result = await self._update_single_profile(user_id, idx, file_path, file_name, file_type, config)
                     
                     if result['success']:
                         results['success'].append((file_path, file_name, result))
@@ -23733,7 +23733,7 @@ admin3</code>
         # 清理
         self.cleanup_profile_update_task(user_id)
     
-    async def _update_single_profile(self, idx: int, file_path: str, file_name: str, file_type: str, profile_config: ProfileUpdateConfig) -> Dict:
+    async def _update_single_profile(self, user_id: int, idx: int, file_path: str, file_name: str, file_type: str, profile_config: ProfileUpdateConfig) -> Dict:
         """更新单个账号资料"""
         client = None
         session_path = None
@@ -23912,17 +23912,18 @@ admin3</code>
                 if first_name:
                     try:
                         if await self.profile_manager.update_profile_name(client, first_name, last_name):
-                            detail['actions'].append(f"✅ 姓名: {first_name} {last_name}")
+                            name_display = f"{first_name} {last_name}".strip()
+                            detail['actions'].append(t(user_id, 'profile_action_name_success').format(name=name_display))
                             detail['changes']['name'] = {
                                 'old': f"{me.first_name or ''} {me.last_name or ''}".strip(),
-                                'new': f"{first_name} {last_name}".strip(),
+                                'new': name_display,
                                 'success': True
                             }
                         else:
-                            detail['actions'].append("❌ 姓名更新失败")
+                            detail['actions'].append(t(user_id, 'profile_action_name_failed'))
                             detail['changes']['name'] = {'success': False}
                     except Exception as e:
-                        detail['actions'].append(f"❌ 姓名更新失败: {str(e)}")
+                        detail['actions'].append(t(user_id, 'profile_action_name_failed_error').format(error=str(e)))
                         detail['changes']['name'] = {'success': False, 'error': str(e)}
                     await asyncio.sleep(1)
             
@@ -23931,13 +23932,13 @@ admin3</code>
                 if profile_config.photo_action == 'delete_all':
                     try:
                         if await self.profile_manager.delete_profile_photos(client):
-                            detail['actions'].append("✅ 删除所有头像")
+                            detail['actions'].append(t(user_id, 'profile_action_avatar_deleted'))
                             detail['changes']['photo'] = {'action': 'deleted', 'success': True}
                         else:
-                            detail['actions'].append("❌ 删除头像失败")
+                            detail['actions'].append(t(user_id, 'profile_action_avatar_delete_failed'))
                             detail['changes']['photo'] = {'action': 'deleted', 'success': False}
                     except Exception as e:
-                        detail['actions'].append(f"❌ 删除头像失败: {str(e)}")
+                        detail['actions'].append(t(user_id, 'profile_action_avatar_delete_failed_error').format(error=str(e)))
                         detail['changes']['photo'] = {'action': 'deleted', 'success': False, 'error': str(e)}
                     await asyncio.sleep(1)
                 elif profile_config.photo_action == 'custom' and profile_config.custom_photos:
@@ -23945,13 +23946,13 @@ admin3</code>
                     photo_path = profile_config.custom_photos[idx % len(profile_config.custom_photos)]
                     try:
                         if await self.profile_manager.update_profile_photo(client, photo_path):
-                            detail['actions'].append(f"✅ 上传头像")
+                            detail['actions'].append(t(user_id, 'profile_action_avatar_uploaded'))
                             detail['changes']['photo'] = {'action': 'uploaded', 'success': True}
                         else:
-                            detail['actions'].append("❌ 上传头像失败")
+                            detail['actions'].append(t(user_id, 'profile_action_avatar_upload_failed'))
                             detail['changes']['photo'] = {'action': 'uploaded', 'success': False}
                     except Exception as e:
-                        detail['actions'].append(f"❌ 上传头像失败: {str(e)}")
+                        detail['actions'].append(t(user_id, 'profile_action_avatar_upload_failed_error').format(error=str(e)))
                         detail['changes']['photo'] = {'action': 'uploaded', 'success': False, 'error': str(e)}
                     await asyncio.sleep(1)
             
@@ -23976,18 +23977,18 @@ admin3</code>
                         pass
                     
                     if await self.profile_manager.update_profile_bio(client, bio):
-                        bio_display = bio[:20] + '...' if len(bio) > 20 else bio if bio else '(空)'
-                        detail['actions'].append(f"✅ 简介: {bio_display}")
+                        bio_display = bio[:20] + '...' if len(bio) > 20 else bio if bio else t(user_id, 'profile_bio_empty')
+                        detail['actions'].append(t(user_id, 'profile_action_bio_success').format(bio=bio_display))
                         detail['changes']['bio'] = {
                             'old': old_bio or '',
                             'new': bio,
                             'success': True
                         }
                     else:
-                        detail['actions'].append("❌ 简介更新失败")
+                        detail['actions'].append(t(user_id, 'profile_action_bio_failed'))
                         detail['changes']['bio'] = {'success': False}
                 except Exception as e:
-                    detail['actions'].append(f"❌ 简介更新失败: {str(e)}")
+                    detail['actions'].append(t(user_id, 'profile_action_bio_failed_error').format(error=str(e)))
                     detail['changes']['bio'] = {'success': False, 'error': str(e)}
                 await asyncio.sleep(1)
             
@@ -24002,7 +24003,7 @@ admin3</code>
                         username = self.profile_manager.generate_random_username()
                         try:
                             if await self.profile_manager.update_profile_username(client, username):
-                                detail['actions'].append(f"✅ 用户名: {username}")
+                                detail['actions'].append(t(user_id, 'profile_action_username_success').format(username=username))
                                 detail['changes']['username'] = {
                                     'old': f"@{old_username}" if old_username else '无',
                                     'new': f"@{username}",
@@ -24013,48 +24014,48 @@ admin3</code>
                         except UsernameOccupiedError:
                             continue
                         except Exception as e:
-                            detail['actions'].append(f"❌ 用户名更新失败: {str(e)}")
+                            detail['actions'].append(t(user_id, 'profile_action_username_failed_error').format(error=str(e)))
                             detail['changes']['username'] = {'success': False, 'error': str(e), 'error_type': 'UsernameOccupiedError'}
                             success_flag = False
                             break
                     
                     if not success_flag and 'username' not in detail['changes']:
-                        detail['actions'].append("❌ 用户名更新失败（可能已被占用）")
+                        detail['actions'].append(t(user_id, 'profile_action_username_failed_occupied'))
                         detail['changes']['username'] = {'success': False, 'error': '用户名已被占用', 'error_type': 'UsernameOccupiedError'}
                 elif profile_config.username_action == 'delete':
                     try:
                         if await self.profile_manager.update_profile_username(client, ''):
-                            detail['actions'].append("✅ 用户名: 已删除")
+                            detail['actions'].append(t(user_id, 'profile_action_username_deleted'))
                             detail['changes']['username'] = {
                                 'old': f"@{old_username}" if old_username else '无',
                                 'new': '已删除',
                                 'success': True
                             }
                         else:
-                            detail['actions'].append("❌ 用户名删除失败")
+                            detail['actions'].append(t(user_id, 'profile_action_username_delete_failed'))
                             detail['changes']['username'] = {'success': False}
                     except Exception as e:
-                        detail['actions'].append(f"❌ 用户名删除失败: {str(e)}")
+                        detail['actions'].append(t(user_id, 'profile_action_username_delete_failed_error').format(error=str(e)))
                         detail['changes']['username'] = {'success': False, 'error': str(e)}
                 elif profile_config.username_action == 'custom' and profile_config.custom_usernames:
                     # 循环使用自定义用户名列表
                     username = profile_config.custom_usernames[idx % len(profile_config.custom_usernames)]
                     try:
                         if await self.profile_manager.update_profile_username(client, username):
-                            detail['actions'].append(f"✅ 用户名: {username}")
+                            detail['actions'].append(t(user_id, 'profile_action_username_success').format(username=username))
                             detail['changes']['username'] = {
                                 'old': f"@{old_username}" if old_username else '无',
                                 'new': f"@{username}",
                                 'success': True
                             }
                         else:
-                            detail['actions'].append(f"❌ 用户名更新失败")
+                            detail['actions'].append(t(user_id, 'profile_action_username_failed'))
                             detail['changes']['username'] = {'success': False}
                     except UsernameOccupiedError:
-                        detail['actions'].append(f"❌ 用户名已被占用: {username}")
+                        detail['actions'].append(t(user_id, 'profile_action_username_occupied').format(username=username))
                         detail['changes']['username'] = {'success': False, 'error': '用户名已被占用', 'error_type': 'UsernameOccupiedError'}
                     except Exception as e:
-                        detail['actions'].append(f"❌ 用户名更新失败: {str(e)}")
+                        detail['actions'].append(t(user_id, 'profile_action_username_failed_error').format(error=str(e)))
                         detail['changes']['username'] = {'success': False, 'error': str(e)}
                 await asyncio.sleep(1)
             
