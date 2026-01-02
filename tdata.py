@@ -219,13 +219,29 @@ try:
         UsernameOccupiedError, UsernameInvalidError, PeerFloodError
     )
     from telethon.tl.types import User, CodeSettings, InputPhoneContact
-    from telethon.tl.functions.messages import SendMessageRequest, GetHistoryRequest
+    from telethon.tl.functions.messages import SendMessageRequest, GetHistoryRequest, GetPeerSettingsRequest
     from telethon.tl.functions.account import GetPasswordRequest, GetAuthorizationsRequest
     from telethon.tl.functions.auth import ResetAuthorizationsRequest, SendCodeRequest
     from telethon.tl.functions.users import GetFullUserRequest
     from telethon.tl.functions.contacts import ImportContactsRequest, DeleteContactsRequest
     TELETHON_AVAILABLE = True
     print("✅ telethon库导入成功")
+    
+    # 输出Telethon版本信息（用于调试和支持registration_month字段）
+    import telethon
+    if hasattr(telethon, '__version__'):
+        version = telethon.__version__
+        print(f"📌 Telethon 版本: {version}")
+        # 建议更新到最新版本以支持 registration_month 字段 (Layer 214+)
+        try:
+            major, minor = map(int, version.split('.')[:2])
+            if major < 1 or (major == 1 and minor < 34):
+                print(f"💡 提示: 建议更新到 Telethon 1.34+ 以获得最新API支持")
+        except:
+            pass
+    else:
+        print("⚠️ 无法获取 Telethon 版本信息")
+        
 except ImportError:
     print("❌ telethon未安装")
     print("💡 请安装: pip install telethon")
@@ -24617,14 +24633,89 @@ admin3</code>
         # 清理
         self.cleanup_registration_check_task(user_id)
     
+    async def get_registration_date_from_api(self, client, user, file_name: str) -> Optional[Dict]:
+        """
+        从Telegram官方API获取用户注册时间
+        
+        优先级：
+        1. GetPeerSettingsRequest - 最准确的官方API (2024年新增)
+        2. GetFullUserRequest - 备选方案
+        
+        Args:
+            client: Telethon客户端
+            user: 用户实体
+            file_name: 文件名（用于日志）
+            
+        Returns:
+            包含注册日期和来源的字典，失败返回None
+            {
+                'date': 'YYYY-MM' or 'YYYY-MM-DD',
+                'source': 'telegram_api' or 'full_user_api',
+                'accurate': True
+            }
+        """
+        # 方法1: 使用官方 GetPeerSettingsRequest API (最准确)
+        try:
+            logger.info(f"[{file_name}]   → 尝试GetPeerSettingsRequest API...")
+            result = await client(GetPeerSettingsRequest(peer=user))
+            
+            # 检查是否有 registration_month 字段
+            registration_month = None
+            
+            if hasattr(result, 'settings'):
+                settings = result.settings
+                if hasattr(settings, 'registration_month') and settings.registration_month:
+                    registration_month = settings.registration_month
+            
+            if registration_month:
+                logger.info(f"[{file_name}]   ✅ GetPeerSettingsRequest成功: {registration_month} (官方数据)")
+                return {
+                    'date': registration_month,  # 格式如 "2021-09"
+                    'source': 'telegram_api',
+                    'accurate': True
+                }
+            else:
+                logger.info(f"[{file_name}]   ⚠️ GetPeerSettingsRequest返回但无registration_month字段")
+                
+        except Exception as e:
+            logger.warning(f"[{file_name}]   ⚠️ GetPeerSettingsRequest失败: {e}")
+        
+        # 方法2: 尝试获取用户的 GetFullUser 信息
+        try:
+            logger.info(f"[{file_name}]   → 尝试GetFullUserRequest API...")
+            full_user = await client(GetFullUserRequest(user))
+            
+            # 检查是否有注册相关字段
+            if hasattr(full_user, 'full_user'):
+                fu = full_user.full_user
+                # 检查各种可能的字段名
+                for field in ['registration_month', 'registered', 'join_date']:
+                    if hasattr(fu, field) and getattr(fu, field):
+                        reg_value = str(getattr(fu, field))
+                        logger.info(f"[{file_name}]   ✅ GetFullUserRequest成功: {reg_value} (官方数据)")
+                        return {
+                            'date': reg_value,
+                            'source': 'full_user_api',
+                            'accurate': True
+                        }
+                
+                logger.info(f"[{file_name}]   ⚠️ GetFullUserRequest返回但无注册时间字段")
+        except Exception as e:
+            logger.warning(f"[{file_name}]   ⚠️ GetFullUserRequest失败: {e}")
+        
+        # 如果都失败，返回None
+        return None
+    
     async def check_account_registration_time(self, file_path: str, file_name: str, file_type: str, user_id: int) -> Dict:
         """
         查询单个账号的注册时间
         
-        使用多种方法获取最准确的注册时间：
-        1. 查询与 @Telegram (777000) 的第一条消息时间（最准确）
-        2. 查询 Saved Messages 的第一条消息时间
-        3. 基于用户ID估算
+        使用多种方法获取最准确的注册时间（按优先级）：
+        0. 使用官方API获取注册时间（GetPeerSettingsRequest/GetFullUserRequest）- 最准确
+        1. 扫描所有对话找到最早消息时间
+        2. 查询与 @Telegram (777000) 的第一条消息时间
+        3. 查询 Saved Messages 的第一条消息时间
+        4. 基于用户ID估算（标注为不准确）
         
         Args:
             file_path: 文件路径（session文件或tdata目录）
@@ -24878,105 +24969,121 @@ admin3</code>
                 logger.warning(f"[{file_name}] ⚠️ 无法获取完整用户信息（账号可能受限）: {e}")
                 full_user = None
             
-            # 方法0：扫描所有对话，查找最早的消息（最全面的方法）
-            # 这个方法可以找到任何对话中的最早消息，即使Telegram官方对话被删除也能工作
-            # Scan all dialogs to find the earliest message (most comprehensive method)
+            # 开始查询注册时间
             logger.info(f"[{file_name}] ━━━ 步骤5: 开始查询注册时间 ━━━")
             registration_date = None
-            registration_source = "estimated"  # estimated, all_chats, telegram_chat, saved_messages
+            registration_source = "estimated"  # telegram_api, full_user_api, all_chats, telegram_chat, saved_messages, estimated
             
-            try:
-                logger.info(f"[{file_name}] 📊 方法0: 扫描所有对话以查找最早消息...")
-                
-                # 获取所有对话（限制数量以提高速度，设置超时）
-                logger.info(f"[{file_name}]   → 获取对话列表（最多100个，30秒超时）...")
-                dialogs = await asyncio.wait_for(
-                    client.get_dialogs(limit=100),
-                    timeout=30  # 30秒超时
-                )
-                logger.info(f"[{file_name}]   ✅ 获取到 {len(dialogs)} 个对话")
-                
-                oldest_date = None
-                oldest_dialog_name = None
-                scanned_count = 0
-                skipped_bots = 0
-                
-                # 遍历每个对话，找到最早的消息（最多检查100个对话）
-                for idx, dialog in enumerate(dialogs, 1):
-                    try:
-                        # 跳过机器人对话（777000除外，因为它是官方账号）
-                        # Skip bot dialogs except 777000 (Telegram official)
-                        from telethon.tl.types import User
-                        entity = dialog.entity
-                        if isinstance(entity, User) and entity.bot and entity.id != 777000:
-                            skipped_bots += 1
-                            continue
-                        
-                        # 获取对话名称用于日志
-                        dialog_name = "Unknown"
-                        if hasattr(dialog, 'title'):
-                            dialog_name = dialog.title
-                        elif hasattr(dialog, 'name'):
-                            dialog_name = dialog.name
-                        
-                        # 每10个对话输出一次进度
-                        if idx % 10 == 0:
-                            logger.info(f"[{file_name}]   进度: {idx}/{len(dialogs)} 对话已扫描...")
-                        
-                        # 获取该对话的第一条消息（设置超时避免阻塞）
-                        messages = await asyncio.wait_for(
-                            client.get_messages(
-                                dialog.entity,
-                                limit=1,
-                                offset_id=0,  # 从最开始获取
-                                reverse=True   # 按时间正序
-                            ),
-                            timeout=5  # 每个对话5秒超时
-                        )
-                        
-                        scanned_count += 1
-                        
-                        if messages and len(messages) > 0 and messages[0].date:
-                            msg_date = messages[0].date
-                            # 如果这是目前找到的最早日期，记录下来
-                            if not oldest_date or msg_date < oldest_date:
-                                oldest_date = msg_date
-                                # 尝试获取对话名称，优先使用title，再尝试name
-                                if hasattr(dialog, 'title'):
-                                    oldest_dialog_name = dialog.title
-                                elif hasattr(dialog, 'name'):
-                                    oldest_dialog_name = dialog.name
-                                else:
-                                    oldest_dialog_name = 'Unknown'
-                                logger.info(f"[{file_name}]   🔍 发现更早消息: {msg_date.strftime('%Y-%m-%d %H:%M:%S')} (对话: {oldest_dialog_name[:30]})")
-                                
-                    except asyncio.TimeoutError:
-                        # 单个对话超时，继续下一个
-                        logger.warning(f"[{file_name}]   ⏱️ 对话查询超时，跳过")
-                        continue
-                    except Exception as e:
-                        # 某些对话可能无法访问，跳过即可
-                        continue
-                
-                logger.info(f"[{file_name}]   📊 扫描统计: 总对话={len(dialogs)}, 已扫描={scanned_count}, 跳过机器人={skipped_bots}")
-                
-                if oldest_date:
-                    registration_date = oldest_date.strftime("%Y-%m-%d")
-                    registration_source = "all_chats"
-                    logger.info(f"[{file_name}]   ✅ 方法0成功: 从所有对话中找到最早消息")
-                    logger.info(f"[{file_name}]   📅 注册时间: {registration_date} (来源对话: {oldest_dialog_name[:50]})")
-                else:
-                    logger.info(f"[{file_name}]   ⚠️ 方法0未找到消息，尝试方法1...")
-                    
-            except asyncio.TimeoutError:
-                logger.warning(f"[{file_name}]   ⏱️ 方法0: 获取对话列表超时，跳过全对话扫描")
-            except Exception as e:
-                logger.warning(f"[{file_name}]   ❌ 方法0失败: {e}")
+            # 方法0：优先使用官方API获取注册时间（最准确）
+            logger.info(f"[{file_name}] 📊 方法0: 尝试从官方API获取注册时间...")
+            api_result = await self.get_registration_date_from_api(client, me, file_name)
+            if api_result:
+                registration_date = api_result['date']
+                registration_source = api_result['source']
+                logger.info(f"[{file_name}]   ✅ 方法0成功: 从官方API获取到注册时间")
+                logger.info(f"[{file_name}]   📅 注册时间: {registration_date} (来源: {registration_source})")
+                # 如果获取到官方数据，可以直接跳过其他方法
+                # 但为了保持完整性，我们继续执行以获取更多信息
+            else:
+                logger.info(f"[{file_name}]   ⚠️ 方法0失败: 官方API未返回注册时间，尝试方法1...")
             
-            # 方法1：从与 @Telegram (777000) 的对话中获取第一条消息时间
-            # 只有在方法0失败时才使用此方法作为备份
+            # 方法1：扫描所有对话，查找最早的消息（最全面的方法）
+            # 这个方法可以找到任何对话中的最早消息，即使Telegram官方对话被删除也能工作
+            # 只有在官方API失败时才使用此方法
             if not registration_date:
-                logger.info(f"[{file_name}] 📊 方法1: 检查Telegram官方对话(777000)...")
+            
+                try:
+                    logger.info(f"[{file_name}] 📊 方法1: 扫描所有对话以查找最早消息...")
+                    
+                    # 获取所有对话（限制数量以提高速度，设置超时）
+                    logger.info(f"[{file_name}]   → 获取对话列表（最多100个，30秒超时）...")
+                    dialogs = await asyncio.wait_for(
+                        client.get_dialogs(limit=100),
+                        timeout=30  # 30秒超时
+                    )
+                    logger.info(f"[{file_name}]   ✅ 获取到 {len(dialogs)} 个对话")
+                    
+                    oldest_date = None
+                    oldest_dialog_name = None
+                    scanned_count = 0
+                    skipped_bots = 0
+                    
+                    # 遍历每个对话，找到最早的消息（最多检查100个对话）
+                    for idx, dialog in enumerate(dialogs, 1):
+                        try:
+                            # 跳过机器人对话（777000除外，因为它是官方账号）
+                            # Skip bot dialogs except 777000 (Telegram official)
+                            from telethon.tl.types import User
+                            entity = dialog.entity
+                            if isinstance(entity, User) and entity.bot and entity.id != 777000:
+                                skipped_bots += 1
+                                continue
+                            
+                            # 获取对话名称用于日志
+                            dialog_name = "Unknown"
+                            if hasattr(dialog, 'title'):
+                                dialog_name = dialog.title
+                            elif hasattr(dialog, 'name'):
+                                dialog_name = dialog.name
+                            
+                            # 每10个对话输出一次进度
+                            if idx % 10 == 0:
+                                logger.info(f"[{file_name}]   进度: {idx}/{len(dialogs)} 对话已扫描...")
+                            
+                            # 获取该对话的第一条消息（设置超时避免阻塞）
+                            messages = await asyncio.wait_for(
+                                client.get_messages(
+                                    dialog.entity,
+                                    limit=1,
+                                    offset_id=0,  # 从最开始获取
+                                    reverse=True   # 按时间正序
+                                ),
+                                timeout=5  # 每个对话5秒超时
+                            )
+                            
+                            scanned_count += 1
+                            
+                            if messages and len(messages) > 0 and messages[0].date:
+                                msg_date = messages[0].date
+                                # 如果这是目前找到的最早日期，记录下来
+                                if not oldest_date or msg_date < oldest_date:
+                                    oldest_date = msg_date
+                                    # 尝试获取对话名称，优先使用title，再尝试name
+                                    if hasattr(dialog, 'title'):
+                                        oldest_dialog_name = dialog.title
+                                    elif hasattr(dialog, 'name'):
+                                        oldest_dialog_name = dialog.name
+                                    else:
+                                        oldest_dialog_name = 'Unknown'
+                                    logger.info(f"[{file_name}]   🔍 发现更早消息: {msg_date.strftime('%Y-%m-%d %H:%M:%S')} (对话: {oldest_dialog_name[:30]})")
+                                    
+                        except asyncio.TimeoutError:
+                            # 单个对话超时，继续下一个
+                            logger.warning(f"[{file_name}]   ⏱️ 对话查询超时，跳过")
+                            continue
+                        except Exception as e:
+                            # 某些对话可能无法访问，跳过即可
+                            continue
+                    
+                    logger.info(f"[{file_name}]   📊 扫描统计: 总对话={len(dialogs)}, 已扫描={scanned_count}, 跳过机器人={skipped_bots}")
+                    
+                    if oldest_date:
+                        registration_date = oldest_date.strftime("%Y-%m-%d")
+                        registration_source = "all_chats"
+                        logger.info(f"[{file_name}]   ✅ 方法1成功: 从所有对话中找到最早消息")
+                        logger.info(f"[{file_name}]   📅 注册时间: {registration_date} (来源对话: {oldest_dialog_name[:50]})")
+                    else:
+                        logger.info(f"[{file_name}]   ⚠️ 方法1未找到消息，尝试方法2...")
+                        
+                except asyncio.TimeoutError:
+                    logger.warning(f"[{file_name}]   ⏱️ 方法1: 获取对话列表超时，跳过全对话扫描")
+                except Exception as e:
+                    logger.warning(f"[{file_name}]   ❌ 方法1失败: {e}")
+            
+            # 方法2：从与 @Telegram (777000) 的对话中获取第一条消息时间
+            # 只有在方法0和1都失败时才使用此方法作为备份
+            if not registration_date:
+                logger.info(f"[{file_name}] 📊 方法2: 检查Telegram官方对话(777000)...")
                 try:
                     # 获取 Telegram 官方账号 (777000) 的对话
                     logger.info(f"[{file_name}]   → 获取Telegram官方实体...")
@@ -24999,23 +25106,23 @@ admin3</code>
                         if first_msg.date:
                             registration_date = first_msg.date.strftime("%Y-%m-%d")
                             registration_source = "telegram_chat"
-                            logger.info(f"[{file_name}]   ✅ 方法1成功: 从Telegram对话获取到注册时间")
+                            logger.info(f"[{file_name}]   ✅ 方法2成功: 从Telegram对话获取到注册时间")
                             logger.info(f"[{file_name}]   📅 注册时间: {registration_date} (消息时间: {first_msg.date.strftime('%Y-%m-%d %H:%M:%S')})")
                     else:
-                        logger.info(f"[{file_name}]   ⚠️ Telegram对话无消息记录（可能已被删除），尝试方法2...")
+                        logger.info(f"[{file_name}]   ⚠️ Telegram对话无消息记录（可能已被删除），尝试方法3...")
                 except Exception as e:
                     # 记录详细错误信息，帮助调试
                     error_msg = str(e)
                     if "CHAT_RESTRICTED" in error_msg or "USER_RESTRICTED" in error_msg:
-                        logger.warning(f"[{file_name}]   ❌ 方法1失败: 账号受限，无法从Telegram对话获取注册时间")
+                        logger.warning(f"[{file_name}]   ❌ 方法2失败: 账号受限，无法从Telegram对话获取注册时间")
                         logger.warning(f"[{file_name}]      错误详情: {error_msg}")
                     else:
-                        logger.warning(f"[{file_name}]   ❌ 方法1失败: {error_msg}")
+                        logger.warning(f"[{file_name}]   ❌ 方法2失败: {error_msg}")
             
-            # 方法2：如果方法0和1都失败，尝试从 Saved Messages 获取
+            # 方法3：如果方法0、1和2都失败，尝试从 Saved Messages 获取
             # 收藏夹通常不受消息限制影响
             if not registration_date:
-                logger.info(f"[{file_name}] 📊 方法2: 检查收藏夹(Saved Messages)...")
+                logger.info(f"[{file_name}] 📊 方法3: 检查收藏夹(Saved Messages)...")
                 try:
                     # 获取自己（Saved Messages）
                     # offset_id=0 确保从聊天历史的最开始获取消息
@@ -25032,29 +25139,30 @@ admin3</code>
                         if first_saved.date:
                             registration_date = first_saved.date.strftime("%Y-%m-%d")
                             registration_source = "saved_messages"
-                            logger.info(f"[{file_name}]   ✅ 方法2成功: 从Saved Messages获取到注册时间")
+                            logger.info(f"[{file_name}]   ✅ 方法3成功: 从Saved Messages获取到注册时间")
                             logger.info(f"[{file_name}]   📅 注册时间: {registration_date} (消息时间: {first_saved.date.strftime('%Y-%m-%d %H:%M:%S')})")
                     else:
-                        logger.info(f"[{file_name}]   ⚠️ 收藏夹无消息记录（可能已被删除），将使用方法3...")
+                        logger.info(f"[{file_name}]   ⚠️ 收藏夹无消息记录（可能已被删除），将使用方法4...")
                 except Exception as e:
                     error_msg = str(e)
                     if "CHAT_RESTRICTED" in error_msg or "USER_RESTRICTED" in error_msg:
-                        logger.warning(f"[{file_name}]   ❌ 方法2失败: 账号受限，无法从Saved Messages获取注册时间")
+                        logger.warning(f"[{file_name}]   ❌ 方法3失败: 账号受限，无法从Saved Messages获取注册时间")
                         logger.warning(f"[{file_name}]      错误详情: {error_msg}")
                     else:
-                        logger.warning(f"[{file_name}]   ❌ 方法2失败: {error_msg}")
+                        logger.warning(f"[{file_name}]   ❌ 方法3失败: {error_msg}")
             
-            # 方法3：如果以上所有方法都失败，使用用户ID估算
+            # 方法4：如果以上所有方法都失败，使用用户ID估算（标注为不准确）
             # 这个方法永远不会失败，确保总是能返回一个注册时间
             # 即使用户删除了所有聊天记录，用户ID也不会改变，因此仍可进行估算
             if not registration_date:
-                logger.info(f"[{file_name}] 📊 方法3: 使用用户ID估算...")
+                logger.info(f"[{file_name}] 📊 方法4: 使用用户ID估算...")
                 logger.info(f"[{file_name}]   → 用户ID: {user_id_val}")
                 registration_date = self._estimate_registration_date_from_user_id(user_id_val)
                 registration_source = "estimated"
-                logger.info(f"[{file_name}]   ✅ 方法3成功: 基于用户ID估算注册时间")
-                logger.info(f"[{file_name}]   📅 估算时间: {registration_date} (误差: ±1-3个月)")
-                logger.info(f"[{file_name}]   💡 说明: 所有聊天记录可能已被删除，使用ID估算作为后备方案")
+                logger.info(f"[{file_name}]   ✅ 方法4成功: 基于用户ID估算注册时间")
+                logger.info(f"[{file_name}]   ⚠️ 警告: 这是估算值，可能与实际注册时间相差数月甚至数年")
+                logger.info(f"[{file_name}]   📅 估算时间: {registration_date}")
+                logger.info(f"[{file_name}]   💡 说明: 所有官方API和聊天记录方法均失败，使用ID估算作为最后备选")
             
             logger.info(f"[{file_name}] ━━━ 步骤6: 生成查询结果 ━━━")
             logger.info(f"[{file_name}] 📊 查询摘要:")
@@ -25141,52 +25249,51 @@ admin3</code>
         """
         基于用户ID估算注册日期（年-月-日格式）
         
-        Telegram用户ID是递增的，我们可以根据ID范围估算大致注册时间
-        这只是估算，不是精确值
+        ⚠️ 警告：这个方法非常不准确，可能相差数年！
+        Telegram用户ID不是严格按注册顺序递增的。
         
-        返回格式: YYYY-MM-DD
+        仅当官方API和所有聊天记录方法都失败时使用此方法。
+        
+        返回格式: YYYY-MM-DD 或 YYYY-MM
         """
-        # 基于历史数据的ID范围映射（大致估算）
-        # 这些数据基于公开的Telegram增长统计
+        # 基于历史数据的ID范围映射（这些是估算值，非精确值）
+        # 已知的参考点（需要定期更新）
+        reference_points = [
+            (1, "2013-08"),           # Telegram 创始人
+            (100000000, "2014-10"),   # 约1亿用户
+            (500000000, "2017-06"),   # 约5亿用户
+            (1000000000, "2020-01"),  # 约10亿用户
+            (2000000000, "2021-09"),  # 约20亿用户
+            (5000000000, "2023-01"),  # 约50亿用户
+            (7000000000, "2024-06"),  # 约70亿用户
+        ]
         
-        if user_id < 1000000:  # 2013年8月之前
-            return "2013-08-01"
-        elif user_id < 10000000:  # 2013-2014
-            # 平均分配
-            days_offset = int((user_id - 1000000) / 9000000 * 365)
-            base_date = datetime(2013, 8, 1)
-            estimated_date = base_date + timedelta(days=days_offset)
-            return estimated_date.strftime("%Y-%m-%d")
-        elif user_id < 100000000:  # 2014-2016
-            days_offset = int((user_id - 10000000) / 90000000 * 730)
-            base_date = datetime(2014, 8, 1)
-            estimated_date = base_date + timedelta(days=days_offset)
-            return estimated_date.strftime("%Y-%m-%d")
-        elif user_id < 500000000:  # 2016-2019
-            days_offset = int((user_id - 100000000) / 400000000 * 1095)
-            base_date = datetime(2016, 8, 1)
-            estimated_date = base_date + timedelta(days=days_offset)
-            return estimated_date.strftime("%Y-%m-%d")
-        elif user_id < 1000000000:  # 2019-2021
-            days_offset = int((user_id - 500000000) / 500000000 * 730)
-            base_date = datetime(2019, 8, 1)
-            estimated_date = base_date + timedelta(days=days_offset)
-            return estimated_date.strftime("%Y-%m-%d")
-        elif user_id < 2000000000:  # 2021-2023
-            days_offset = int((user_id - 1000000000) / 1000000000 * 730)
-            base_date = datetime(2021, 8, 1)
-            estimated_date = base_date + timedelta(days=days_offset)
-            return estimated_date.strftime("%Y-%m-%d")
-        elif user_id < 5000000000:  # 2023-2024
-            days_offset = int((user_id - 2000000000) / 3000000000 * 365)
-            base_date = datetime(2023, 8, 1)
-            estimated_date = base_date + timedelta(days=days_offset)
-            return estimated_date.strftime("%Y-%m-%d")
-        else:  # 2024+
-            days_offset = int((user_id - 5000000000) / 1000000000 * 180)
-            base_date = datetime(2024, 8, 1)
-            estimated_date = base_date + timedelta(days=days_offset)
-            return estimated_date.strftime("%Y-%m-%d")
+        user_id = int(user_id)
+        
+        # 找到最接近的参考点进行线性插值
+        for i in range(len(reference_points) - 1):
+            id1, date1 = reference_points[i]
+            id2, date2 = reference_points[i + 1]
+            
+            if id1 <= user_id <= id2:
+                # 线性插值
+                ratio = (user_id - id1) / (id2 - id1)
+                
+                # 解析日期
+                d1 = datetime.strptime(date1, "%Y-%m")
+                d2 = datetime.strptime(date2, "%Y-%m")
+                
+                # 计算估算日期
+                delta = d2 - d1
+                estimated = d1 + delta * ratio
+                
+                return estimated.strftime("%Y-%m")
+        
+        # 如果超出范围，返回最近的参考点
+        if user_id < reference_points[0][0]:
+            return reference_points[0][1]
+        else:
+            return reference_points[-1][1]
     
     # ================================
     # 资料修改功能处理方法
@@ -26877,6 +26984,8 @@ admin3</code>
                 f.write(f"{t(user_id, 'regtime_report_classify')}\n")
                 f.write("-" * 80 + "\n")
                 f.write(f"{t(user_id, 'regtime_source_title')}\n")
+                f.write(f"{t(user_id, 'regtime_source_api')}\n")
+                f.write(f"{t(user_id, 'regtime_source_all_chats')}\n")
                 f.write(f"{t(user_id, 'regtime_source_telegram')}\n")
                 f.write(f"{t(user_id, 'regtime_source_saved')}\n")
                 f.write(f"{t(user_id, 'regtime_source_estimated')}\n")
@@ -26894,15 +27003,28 @@ admin3</code>
                         f.write(f"{t(user_id, 'regtime_field_name')} {result['first_name']} {result['last_name']}\n")
                         f.write(f"{t(user_id, 'regtime_field_common_groups')} {result['common_chats']}\n")
                         
-                        # 显示数据来源
+                        # 显示数据来源，区分官方数据和估算数据
                         source = result.get('registration_source', 'estimated')
-                        if source == 'telegram_chat':
-                            source_text = f"{t(user_id, 'regtime_field_source')} {t(user_id, 'regtime_source_telegram').replace('• telegram_chat: ', '')}"
+                        if source in ['telegram_api', 'full_user_api']:
+                            # 官方API数据 - 最准确
+                            source_display = t(user_id, 'regtime_source_api').replace('• telegram_api / full_user_api: ', '')
+                            f.write(f"{t(user_id, 'regtime_field_source')} {source_display}\n")
+                        elif source == 'all_chats':
+                            # 从所有对话扫描获取
+                            source_display = t(user_id, 'regtime_source_all_chats').replace('• all_chats: ', '')
+                            f.write(f"{t(user_id, 'regtime_field_source')} {source_display}\n")
+                        elif source == 'telegram_chat':
+                            # 从Telegram官方对话获取
+                            source_display = t(user_id, 'regtime_source_telegram').replace('• telegram_chat: ', '')
+                            f.write(f"{t(user_id, 'regtime_field_source')} {source_display}\n")
                         elif source == 'saved_messages':
-                            source_text = f"{t(user_id, 'regtime_field_source')} {t(user_id, 'regtime_source_saved').replace('• saved_messages: ', '')}"
+                            # 从收藏夹获取
+                            source_display = t(user_id, 'regtime_source_saved').replace('• saved_messages: ', '')
+                            f.write(f"{t(user_id, 'regtime_field_source')} {source_display}\n")
                         else:
-                            source_text = f"{t(user_id, 'regtime_field_source')} {t(user_id, 'regtime_source_estimated').replace('• estimated: ', '')}"
-                        f.write(f"{source_text}\n")
+                            # ID估算 - 不准确，添加警告
+                            source_display = t(user_id, 'regtime_source_estimated').replace('• estimated: ', '')
+                            f.write(f"{t(user_id, 'regtime_field_source')} {source_display}\n")
                         f.write("\n")
                 
                 # 失败的账号
