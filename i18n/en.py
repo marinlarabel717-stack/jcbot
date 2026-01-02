@@ -1617,4 +1617,177 @@ TEXTS = {
     'cleanup_frozen_detected': 'Account frozen',
     'cleanup_connection_failed': 'Connection failed',
     'cleanup_timeout_error': 'Cleanup timeout',
+    
+    # ===== Re-authorization Feature =====
+    # 1. Feature Introduction Page
+    'reauth_title': '📱 Re-authorization Feature',
+    'reauth_desc_title': 'Feature Description:',
+    'reauth_desc1': '· Kick all logins on other devices',
+    'reauth_desc2': '· Ensure only newly created sessions are valid',
+    'reauth_desc3': '· Prevent account from being used by multiple people',
+    'reauth_desc4': '· Support auto-delete old password and set new password',
+    'reauth_desc5': '· Support proxy connection (fallback to local on timeout)',
+    'reauth_desc6': '· Use random device parameters to prevent risk control',
+    'reauth_workflow_title': 'Workflow:',
+    'reauth_workflow1': '1. Upload account files (Session/TData/ZIP)',
+    'reauth_workflow2': '2. Enter old password (or auto-detect 2FA from JSON)',
+    'reauth_workflow3': '3. Enter new password',
+    'reauth_workflow4': '4. System auto-completes re-authorization',
+    'reauth_workflow5': '5. Results packaged by category (success/failed)',
+    'reauth_fail_title': 'Failure Categories:',
+    'reauth_fail_frozen': '· Frozen: Account has been frozen',
+    'reauth_fail_banned': '· Banned: Account has been banned',
+    'reauth_fail_wrong_pwd': '· Wrong Password: Old password incorrect',
+    'reauth_fail_network': '· Network Error: Connection timeout or network issues',
+    'reauth_notes_title': 'Notes:',
+    'reauth_note1': '⚠️ After re-authorization, old sessions will be invalidated immediately',
+    'reauth_note2': '⚠️ Please ensure you provide the correct old password',
+    'reauth_note3': '⚠️ Recommend setting new password to improve account security',
+    'reauth_upload_prompt': '📤 Please upload account files',
+    'reauth_supported_formats': 'Supported formats: .session / TData folder / .zip archive',
+    
+    # 2. Buttons
+    'reauth_btn_back': '◀️ Back',
+    'reauth_btn_auto_2fa': '🔍 Auto-detect 2FA',
+    'reauth_btn_manual_2fa': '✏️ Manual input 2FA',
+    'reauth_btn_cancel': '❌ Cancel',
+    'reauth_btn_confirm': '✅ Confirm Start',
+    
+    # 3. After File Upload
+    'reauth_processing_file': 'Processing file',
+    'reauth_found_accounts': '✅ Found {count} account files',
+    'reauth_file_type_session': 'File type: SESSION',
+    'reauth_file_type_tdata': 'File type: TDATA',
+    
+    # 4. Password Selection
+    'reauth_pwd_method_title': 'Please select old password input method:',
+    'reauth_pwd_auto': '· Auto-detect: Automatically find password from files',
+    'reauth_pwd_manual': '· Manual input: Manually enter old password',
+    'reauth_pwd_auto_support': '💡 Auto-detect supports:',
+    'reauth_pwd_auto_session': '- Session format: twofa/password/2fa fields in JSON',
+    'reauth_pwd_auto_tdata': '- TData format: Any .txt file containing 2fa/twofa/password (case insensitive)',
+    'reauth_pwd_auto_example': 'Example: 2FA.txt, twoFA.TXT, password.txt, etc.',
+    
+    # 5. Password Detection Result
+    'reauth_pwd_detect_complete': '✅ Password auto-detection complete',
+    'reauth_pwd_stats': 'Statistics:',
+    'reauth_pwd_total': '· Total files: {count}',
+    'reauth_pwd_detected': '· Successfully detected: {count}',
+    'reauth_pwd_not_detected': '· Not detected: {count}',
+    'reauth_pwd_empty_note': '💡 Accounts without detected password will be processed with empty password',
+    
+    # 6. Manual Input Old Password
+    'reauth_manual_old_pwd_title': '📝 Manual Input Old Password',
+    'reauth_manual_old_pwd_prompt': 'Please enter old password (if account has 2FA password)',
+    'reauth_manual_old_pwd_tip': '💡 If no password, enter "无" or "skip"',
+    'reauth_old_pwd_saved': '✅ Old password saved',
+    
+    # 7. New Password Input
+    'reauth_new_pwd_prompt': 'Please enter new password (for re-authorized accounts)',
+    'reauth_new_pwd_tip': '💡 If no new password needed, enter "无" or "skip"',
+    
+    # 8. Final Confirmation
+    'reauth_final_confirm': '📋 Final Confirmation',
+    'reauth_account_info': 'Account Info:',
+    'reauth_account_count': '· Account count: {count}',
+    'reauth_pwd_settings': 'Password Settings:',
+    'reauth_old_pwd': '· Old password: {value}',
+    'reauth_new_pwd': '· New password: {value}',
+    'reauth_pwd_none': 'None',
+    'reauth_pwd_masked': '***',
+    'reauth_process_flow': 'Process Flow:',
+    'reauth_flow1': '1. Reset all sessions (kick other devices)',
+    'reauth_flow2': '2. Delete old password',
+    'reauth_flow3': '3. Create new session (random device parameters)',
+    'reauth_flow4': '4. Set new password',
+    'reauth_flow5': '5. Verify old sessions invalidated',
+    'reauth_flow6': '6. Package categorized results',
+    'reauth_important': '⚠️ Important Notice:',
+    'reauth_important1': '· Operation cannot be undone',
+    'reauth_important2': '· Processing time depends on account count',
+    'reauth_important3': '· Detailed report will be generated after completion',
+    'reauth_confirm_question': 'Confirm to start re-authorization?',
+    
+    # 9. Processing Progress
+    'reauth_in_progress': '🔄 Re-authorizing...',
+    'reauth_please_wait': 'Please wait, detailed report will be sent after completion',
+    'reauth_starting': '🚀 Starting re-authorization...',
+    'reauth_start': '▶️ Start re-authorization',
+    'reauth_progress': 'Progress: {current}/{total} ({percent}%)',
+    'reauth_stat_account_count': '📊 Account Count',
+    'reauth_stat_success': '✅ Authorization Success',
+    'reauth_stat_frozen': '❄️ Frozen Accounts',
+    'reauth_stat_banned': '🚫 Banned Accounts',
+    'reauth_stat_2fa_error': '🔑 2FA Error',
+    'reauth_stat_network_error': '🌐 Network Error',
+    
+    # 10. Processing Result
+    'reauth_complete': '✅ Re-authorization Complete',
+    'reauth_result_stats': 'Statistics:',
+    'reauth_result_total': '· Total: {count}',
+    'reauth_result_success': '· ✅ Success: {count}',
+    'reauth_result_frozen': '· ❄️ Frozen: {count}',
+    'reauth_result_banned': '· 🚫 Banned: {count}',
+    'reauth_result_pwd_error': '· 🔑 Password Error: {count}',
+    'reauth_result_network': '· 🌐 Network Error: {count}',
+    'reauth_result_other': '· ⚠️ Other Error: {count}',
+    'reauth_success_rate': 'Success Rate: {percent}%',
+    'reauth_see_report': '📄 See detailed report in file below',
+    
+    # 11. Output Files
+    'reauth_file_report': '📄 Re-authorization Detailed Report',
+    'reauth_file_success': '📦 Successfully authorized accounts ({count})',
+    'reauth_file_frozen': '📦 Frozen accounts ({count})',
+    'reauth_file_banned': '📦 Banned accounts ({count})',
+    'reauth_file_wrong_pwd': '📦 Wrong password accounts ({count})',
+    'reauth_file_network': '📦 Network error accounts ({count})',
+    'reauth_file_other': '📦 Accounts with other errors ({count})',
+    
+    # 12. Report Content
+    'reauth_report_title': 'Re-authorization Report',
+    'reauth_report_time': 'Generated Time:',
+    'reauth_report_total': 'Total Accounts:',
+    'reauth_report_success': 'Success:',
+    'reauth_report_frozen': 'Frozen:',
+    'reauth_report_banned': 'Banned:',
+    'reauth_report_pwd_error': 'Password Error:',
+    'reauth_report_network': 'Network Error:',
+    'reauth_report_other': 'Other Error:',
+    'reauth_report_file': 'File:',
+    'reauth_report_error': 'Error:',
+    
+    # Report category titles
+    'reauth_report_category_success': 'SUCCESS',
+    'reauth_report_category_frozen': 'FROZEN',
+    'reauth_report_category_banned': 'BANNED',
+    'reauth_report_category_wrong_password': 'WRONG_PASSWORD',
+    'reauth_report_category_network_error': 'NETWORK_ERROR',
+    'reauth_report_category_other_error': 'OTHER_ERROR',
+    
+    # Report detail fields
+    'reauth_report_phone': 'Phone:',
+    'reauth_report_device_model': 'Device Model:',
+    'reauth_report_system_version': 'System Version:',
+    'reauth_report_app_version': 'App Version:',
+    'reauth_report_connection': 'Connection:',
+    'reauth_report_new_password': 'New Password:',
+    
+    # Connection method values
+    'reauth_connection_proxy': 'Using Proxy',
+    'reauth_connection_local': 'Local Connection',
+    'reauth_connection_local_fallback': 'Local Connection (fallback after proxy failed)',
+    
+    # Report generation failed
+    'reauth_report_gen_failed': 'Report generation failed:',
+    'reauth_report_total_success': 'Total: {total}, Success: {success}',
+    
+    # Additional messages
+    'reauth_need_member': '⚠️ Re-authorization feature requires membership\n\nPlease activate membership first',
+    'reauth_session_expired': '❌ Session expired',
+    'reauth_session_expired_restart': '❌ Session expired, please restart',
+    'reauth_no_valid_files': '❌ No valid files found',
+    'reauth_ensure_format': 'Please ensure ZIP contains Session or TData format files',
+    'reauth_failed': '❌ Re-authorization failed',
+    'reauth_error': 'Error: {error}',
+    'reauth_file_type': 'File type: {type}',
 }

@@ -1618,4 +1618,177 @@ TEXTS = {
     'cleanup_frozen_detected': '账户已冻结',
     'cleanup_connection_failed': '连接失败',
     'cleanup_timeout_error': '清理超时',
+    
+    # ===== 重新授权功能 =====
+    # 1. 功能介绍页面
+    'reauth_title': '📱 重新授权功能',
+    'reauth_desc_title': '功能说明：',
+    'reauth_desc1': '· 踢掉账号在其他设备的所有登录',
+    'reauth_desc2': '· 确保只有新创建的会话有效',
+    'reauth_desc3': '· 防止账号被多人同时使用',
+    'reauth_desc4': '· 支持自动删除旧密码并设置新密码',
+    'reauth_desc5': '· 支持代理连接（超时回退本地）',
+    'reauth_desc6': '· 使用随机设备参数防止风控',
+    'reauth_workflow_title': '工作流程：',
+    'reauth_workflow1': '1. 上传账户文件（Session/TData/ZIP）',
+    'reauth_workflow2': '2. 输入旧密码（或自动识别JSON中的2FA）',
+    'reauth_workflow3': '3. 输入新密码',
+    'reauth_workflow4': '4. 系统自动完成重新授权',
+    'reauth_workflow5': '5. 结果分类打包（成功/失败）',
+    'reauth_fail_title': '失败分类：',
+    'reauth_fail_frozen': '· 冻结：账号已被冻结',
+    'reauth_fail_banned': '· 封禁：账号已被封禁',
+    'reauth_fail_wrong_pwd': '· 旧密码错误：旧密码不正确',
+    'reauth_fail_network': '· 网络错误：连接超时或网络问题',
+    'reauth_notes_title': '注意事项：',
+    'reauth_note1': '⚠️ 重新授权后，旧会话将立即失效',
+    'reauth_note2': '⚠️ 请确保提供正确的旧密码',
+    'reauth_note3': '⚠️ 建议设置新密码以提高账号安全性',
+    'reauth_upload_prompt': '📤 请上传账号文件',
+    'reauth_supported_formats': '支持格式：.session / TData文件夹 / .zip压缩包',
+    
+    # 2. 按钮
+    'reauth_btn_back': '◀️ 返回',
+    'reauth_btn_auto_2fa': '🔍 自动识别2FA',
+    'reauth_btn_manual_2fa': '✏️ 手动输入2FA',
+    'reauth_btn_cancel': '❌ 取消',
+    'reauth_btn_confirm': '✅ 确认开始',
+    
+    # 3. 上传文件后
+    'reauth_processing_file': '正在处理文件',
+    'reauth_found_accounts': '✅ 找到 {count} 个账号文件',
+    'reauth_file_type_session': '文件类型：SESSION',
+    'reauth_file_type_tdata': '文件类型：TDATA',
+    
+    # 4. 密码选择
+    'reauth_pwd_method_title': '请选择旧密码输入方式：',
+    'reauth_pwd_auto': '· 自动识别：从文件中自动查找密码',
+    'reauth_pwd_manual': '· 手动输入：手动输入旧密码',
+    'reauth_pwd_auto_support': '💡 自动识别支持：',
+    'reauth_pwd_auto_session': '- Session格式：JSON中的twofa/password/2fa字段',
+    'reauth_pwd_auto_tdata': '- TData格式：任何包含2fa/twofa/password的.txt文件（不区分大小写）',
+    'reauth_pwd_auto_example': '例如：2FA.txt, twoFA.TXT, password.txt, 两步验证.txt 等',
+    
+    # 5. 密码识别结果
+    'reauth_pwd_detect_complete': '✅ 密码自动识别完成',
+    'reauth_pwd_stats': '统计：',
+    'reauth_pwd_total': '· 总文件数：{count} 个',
+    'reauth_pwd_detected': '· 识别成功：{count} 个',
+    'reauth_pwd_not_detected': '· 未识别：{count} 个',
+    'reauth_pwd_empty_note': '💡 未识别到密码的账号将使用空密码处理',
+    
+    # 6. 手动输入旧密码
+    'reauth_manual_old_pwd_title': '📝 手动输入旧密码',
+    'reauth_manual_old_pwd_prompt': '请输入旧密码（如果账号有2FA密码）',
+    'reauth_manual_old_pwd_tip': '💡 如果没有密码，请输入 "无" 或 "skip"',
+    'reauth_old_pwd_saved': '✅ 旧密码已保存',
+    
+    # 7. 新密码输入
+    'reauth_new_pwd_prompt': '请输入新密码（用于重新授权后的账号）',
+    'reauth_new_pwd_tip': '💡 如果不需要设置新密码，请输入 "无" 或 "skip"',
+    
+    # 8. 最终确认
+    'reauth_final_confirm': '📋 最终确认',
+    'reauth_account_info': '账号信息：',
+    'reauth_account_count': '· 账号数量：{count} 个',
+    'reauth_pwd_settings': '密码设置：',
+    'reauth_old_pwd': '· 旧密码：{value}',
+    'reauth_new_pwd': '· 新密码：{value}',
+    'reauth_pwd_none': '无',
+    'reauth_pwd_masked': '***',
+    'reauth_process_flow': '处理流程：',
+    'reauth_flow1': '1. 重置所有会话（踢掉其他设备）',
+    'reauth_flow2': '2. 删除旧密码',
+    'reauth_flow3': '3. 创建新会话（随机设备参数）',
+    'reauth_flow4': '4. 设置新密码',
+    'reauth_flow5': '5. 验证旧会话失效',
+    'reauth_flow6': '6. 打包分类结果',
+    'reauth_important': '⚠️ 重要提示：',
+    'reauth_important1': '· 操作不可撤销',
+    'reauth_important2': '· 处理时间取决于账号数量',
+    'reauth_important3': '· 完成后将生成详细报告',
+    'reauth_confirm_question': '确认开始重新授权？',
+    
+    # 9. 处理进度
+    'reauth_in_progress': '🔄 正在重新授权中...',
+    'reauth_please_wait': '请稍候，完成后会发送详细报告',
+    'reauth_starting': '🚀 开始重新授权...',
+    'reauth_start': '▶️ 开始重新授权',
+    'reauth_progress': '进度：{current}/{total} ({percent}%)',
+    'reauth_stat_account_count': '📊 账户数量',
+    'reauth_stat_success': '✅ 授权成功',
+    'reauth_stat_frozen': '❄️ 冻结账户',
+    'reauth_stat_banned': '🚫 封禁账户',
+    'reauth_stat_2fa_error': '🔑 2FA错误',
+    'reauth_stat_network_error': '🌐 网络错误',
+    
+    # 10. 处理结果
+    'reauth_complete': '✅ 重新授权完成',
+    'reauth_result_stats': '统计信息：',
+    'reauth_result_total': '· 总数：{count}',
+    'reauth_result_success': '· ✅ 成功：{count}',
+    'reauth_result_frozen': '· ❄️ 冻结：{count}',
+    'reauth_result_banned': '· 🚫 封禁：{count}',
+    'reauth_result_pwd_error': '· 🔑 密码错误：{count}',
+    'reauth_result_network': '· 🌐 网络错误：{count}',
+    'reauth_result_other': '· ⚠️ 其他错误：{count}',
+    'reauth_success_rate': '成功率：{percent}%',
+    'reauth_see_report': '📄 详细报告见下方文件',
+    
+    # 11. 输出文件
+    'reauth_file_report': '📄 重新授权详细报告',
+    'reauth_file_success': '📦 授权成功的账号 ({count} 个)',
+    'reauth_file_frozen': '📦 冻结的账号 ({count} 个)',
+    'reauth_file_banned': '📦 封禁的账号 ({count} 个)',
+    'reauth_file_wrong_pwd': '📦 密码错误的账号 ({count} 个)',
+    'reauth_file_network': '📦 网络错误的账号 ({count} 个)',
+    'reauth_file_other': '📦 其他错误的账号 ({count} 个)',
+    
+    # 12. 报告内容
+    'reauth_report_title': '重新授权报告',
+    'reauth_report_time': '生成时间:',
+    'reauth_report_total': '总账号数:',
+    'reauth_report_success': '成功:',
+    'reauth_report_frozen': '冻结:',
+    'reauth_report_banned': '封禁:',
+    'reauth_report_pwd_error': '密码错误:',
+    'reauth_report_network': '网络错误:',
+    'reauth_report_other': '其他错误:',
+    'reauth_report_file': '文件:',
+    'reauth_report_error': '错误:',
+    
+    # 报告分类标题
+    'reauth_report_category_success': '成功',
+    'reauth_report_category_frozen': '冻结',
+    'reauth_report_category_banned': '封禁',
+    'reauth_report_category_wrong_password': '密码错误',
+    'reauth_report_category_network_error': '网络错误',
+    'reauth_report_category_other_error': '其他错误',
+    
+    # 报告详细字段
+    'reauth_report_phone': '手机号:',
+    'reauth_report_device_model': '设备型号:',
+    'reauth_report_system_version': '系统版本:',
+    'reauth_report_app_version': '应用版本:',
+    'reauth_report_connection': '连接方式:',
+    'reauth_report_new_password': '新密码:',
+    
+    # 连接方式值
+    'reauth_connection_proxy': '使用代理',
+    'reauth_connection_local': '本地连接',
+    'reauth_connection_local_fallback': '本地连接 (代理失败后回退)',
+    
+    # 报告生成失败
+    'reauth_report_gen_failed': '报告生成失败:',
+    'reauth_report_total_success': '总计: {total}, 成功: {success}',
+    
+    # 额外消息
+    'reauth_need_member': '⚠️ 重新授权功能需要会员权限\n\n请先开通会员',
+    'reauth_session_expired': '❌ 会话已过期',
+    'reauth_session_expired_restart': '❌ 会话已过期，请重新开始',
+    'reauth_no_valid_files': '❌ 未找到有效文件',
+    'reauth_ensure_format': '请确保ZIP包含Session或TData格式的文件',
+    'reauth_failed': '❌ 重新授权失败',
+    'reauth_error': '错误: {error}',
+    'reauth_file_type': '文件类型：{type}',
 }

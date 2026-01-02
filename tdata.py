@@ -12443,7 +12443,7 @@ class EnhancedBot:
                     InlineKeyboardButton(t(user_id, 'btn_cleanup'), callback_data="cleanup_start")
                 ],
                 [
-                    InlineKeyboardButton("🔑 重新授权", callback_data="reauthorize_start"),
+                    InlineKeyboardButton(t(user_id, 'btn_reauthorize'), callback_data="reauthorize_start"),
                     InlineKeyboardButton("🕰️ 查询注册时间", callback_data="check_registration_start")
                 ],
                 [
@@ -21575,49 +21575,49 @@ admin3</code>
         if not is_member and not self.db.is_admin(user_id):
             self.safe_edit_message(
                 query,
-                "⚠️ 重新授权功能需要会员权限\n\n请先开通会员",
+                t(user_id, 'reauth_need_member'),
                 reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton("💳 开通会员", callback_data="vip_menu"),
-                    InlineKeyboardButton("◀️ 返回", callback_data="back_to_main")
+                    InlineKeyboardButton(t(user_id, 'btn_vip_menu'), callback_data="vip_menu"),
+                    InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="back_to_main")
                 ]])
             )
             return
         
-        text = """
-📱 <b>重新授权功能</b>
+        text = f"""
+{t(user_id, 'reauth_title')}
 
-<b>功能说明：</b>
-• 踢掉账号在其他设备的所有登录
-• 确保只有新创建的会话有效
-• 防止账号被多人同时使用
-• 支持自动删除旧密码并设置新密码
-• 支持代理连接（超时回退本地）
-• 使用随机设备参数防止风控
+<b>{t(user_id, 'reauth_desc_title')}</b>
+{t(user_id, 'reauth_desc1')}
+{t(user_id, 'reauth_desc2')}
+{t(user_id, 'reauth_desc3')}
+{t(user_id, 'reauth_desc4')}
+{t(user_id, 'reauth_desc5')}
+{t(user_id, 'reauth_desc6')}
 
-<b>工作流程：</b>
-1. 上传账户文件（Session/TData/ZIP）
-2. 输入旧密码（或自动识别JSON中的2FA）
-3. 输入新密码
-4. 系统自动完成重新授权
-5. 结果分类打包（成功/失败）
+<b>{t(user_id, 'reauth_workflow_title')}</b>
+{t(user_id, 'reauth_workflow1')}
+{t(user_id, 'reauth_workflow2')}
+{t(user_id, 'reauth_workflow3')}
+{t(user_id, 'reauth_workflow4')}
+{t(user_id, 'reauth_workflow5')}
 
-<b>失败分类：</b>
-• 冻结：账号已被冻结
-• 封禁：账号已被封禁
-• 旧密码错误：旧密码不正确
-• 网络错误：连接超时或网络问题
+<b>{t(user_id, 'reauth_fail_title')}</b>
+{t(user_id, 'reauth_fail_frozen')}
+{t(user_id, 'reauth_fail_banned')}
+{t(user_id, 'reauth_fail_wrong_pwd')}
+{t(user_id, 'reauth_fail_network')}
 
-<b>注意事项：</b>
-⚠️ 重新授权后，旧会话将立即失效
-⚠️ 请确保提供正确的旧密码
-⚠️ 建议设置新密码以提高账号安全性
+<b>{t(user_id, 'reauth_notes_title')}</b>
+{t(user_id, 'reauth_note1')}
+{t(user_id, 'reauth_note2')}
+{t(user_id, 'reauth_note3')}
 
-📤 <b>请上传账号文件</b>
-支持格式：.session / TData文件夹 / .zip压缩包
+<b>{t(user_id, 'reauth_upload_prompt')}</b>
+{t(user_id, 'reauth_supported_formats')}
 """
         
         keyboard = InlineKeyboardMarkup([[
-            InlineKeyboardButton("◀️ 返回", callback_data="back_to_main")
+            InlineKeyboardButton(t(user_id, 'reauth_btn_back'), callback_data="back_to_main")
         ]])
         
         self.safe_edit_message(query, text, parse_mode='HTML', reply_markup=keyboard)
@@ -21656,7 +21656,7 @@ admin3</code>
         """处理重新授权文件上传"""
         user_id = update.effective_user.id
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, f"📥 <b>{t(user_id, 'reauth_processing_file')}...</b>", 'HTML')
         if not progress_msg:
             return
         
@@ -21677,7 +21677,7 @@ admin3</code>
             files, extract_dir, file_type = self.processor.scan_zip_file(temp_zip, user_id, unique_task_id)
             
             if not files:
-                self.safe_edit_message_text(progress_msg, "❌ <b>未找到有效文件</b>\n\n请确保ZIP包含Session或TData格式的文件", parse_mode='HTML')
+                self.safe_edit_message_text(progress_msg, f"❌ <b>{t(user_id, 'reauth_no_valid_files')}</b>\n\n{t(user_id, 'reauth_ensure_format')}", parse_mode='HTML')
                 return
             
             # 保存任务信息
@@ -21690,26 +21690,26 @@ admin3</code>
             }
             
             # 显示选择密码输入方式的按钮
-            text = f"""✅ <b>找到 {len(files)} 个账号文件</b>
+            text = f"""{t(user_id, 'reauth_found_accounts').format(count=len(files))}
 
-<b>文件类型：</b>{file_type.upper()}
+<b>{t(user_id, 'reauth_file_type').format(type=file_type.upper())}</b>
 
-<b>请选择旧密码输入方式：</b>
-• 自动识别：从文件中自动查找密码
-• 手动输入：手动输入旧密码
+<b>{t(user_id, 'reauth_pwd_method_title')}</b>
+{t(user_id, 'reauth_pwd_auto')}
+{t(user_id, 'reauth_pwd_manual')}
 
-💡 <i>自动识别支持：</i>
-- Session格式：JSON中的twofa/password/2fa字段
-- TData格式：任何包含2fa/twofa/password的.txt文件（不区分大小写）
-  例如：2FA.txt, twoFA.TXT, password.txt, 两步验证.txt 等
+{t(user_id, 'reauth_pwd_auto_support')}
+{t(user_id, 'reauth_pwd_auto_session')}
+{t(user_id, 'reauth_pwd_auto_tdata')}
+  {t(user_id, 'reauth_pwd_auto_example')}
 """
             
             keyboard = InlineKeyboardMarkup([
                 [
-                    InlineKeyboardButton("🔍 自动识别2FA", callback_data="reauth_auto_detect"),
-                    InlineKeyboardButton("✍️ 手动输入2FA", callback_data="reauth_manual_input")
+                    InlineKeyboardButton(t(user_id, 'reauth_btn_auto_2fa'), callback_data="reauth_auto_detect"),
+                    InlineKeyboardButton(t(user_id, 'reauth_btn_manual_2fa'), callback_data="reauth_manual_input")
                 ],
-                [InlineKeyboardButton("❌ 取消", callback_data="reauthorize_cancel")]
+                [InlineKeyboardButton(t(user_id, 'reauth_btn_cancel'), callback_data="reauthorize_cancel")]
             ])
             
             self.safe_edit_message_text(
@@ -21726,7 +21726,7 @@ admin3</code>
             
             self.safe_edit_message_text(
                 progress_msg,
-                f"❌ <b>处理失败</b>\n\n错误: {str(e)}",
+                f"❌ <b>{t(user_id, 'reauth_failed')}</b>\n\n{t(user_id, 'reauth_error').format(error=str(e))}",
                 parse_mode='HTML'
             )
             
@@ -21739,7 +21739,7 @@ admin3</code>
         query.answer()
         
         if user_id not in self.pending_reauthorize:
-            self.safe_edit_message(query, "❌ 会话已过期")
+            self.safe_edit_message(query, t(user_id, 'reauth_session_expired'))
             return
         
         task = self.pending_reauthorize[user_id]
@@ -21747,7 +21747,7 @@ admin3</code>
         file_type = task['file_type']
         
         # 自动检测每个文件的密码
-        progress_text = f"🔍 <b>正在自动识别密码...</b>\n\n处理中..."
+        progress_text = f"🔍 <b>{t(user_id, 'reauth_processing_file')}...</b>\n\n{t(user_id, 'status_processing')}"
         self.safe_edit_message(query, progress_text, parse_mode='HTML')
         
         detected_count = 0
@@ -21767,18 +21767,18 @@ admin3</code>
         task['password_mode'] = 'auto'
         
         # 显示检测结果
-        result_text = f"""✅ <b>密码自动识别完成</b>
+        result_text = f"""{t(user_id, 'reauth_pwd_detect_complete')}
 
-<b>统计：</b>
-• 总文件数：{len(files)} 个
-• 识别成功：{detected_count} 个
-• 未识别：{len(files) - detected_count} 个
+<b>{t(user_id, 'reauth_pwd_stats')}</b>
+{t(user_id, 'reauth_pwd_total').format(count=len(files))}
+{t(user_id, 'reauth_pwd_detected').format(count=detected_count)}
+{t(user_id, 'reauth_pwd_not_detected').format(count=len(files) - detected_count)}
 
-💡 <i>未识别到密码的账号将使用空密码处理</i>
+{t(user_id, 'reauth_pwd_empty_note')}
 
-<b>请输入新密码（用于重新授权后的账号）</b>
+<b>{t(user_id, 'reauth_new_pwd_prompt')}</b>
 
-💡 <i>如果不需要设置新密码，请输入 \"无\" 或 \"skip\"</i>
+{t(user_id, 'reauth_new_pwd_tip')}
 """
         
         self.safe_edit_message(query, result_text, parse_mode='HTML')
@@ -21791,17 +21791,17 @@ admin3</code>
         query.answer()
         
         if user_id not in self.pending_reauthorize:
-            self.safe_edit_message(query, "❌ 会话已过期")
+            self.safe_edit_message(query, t(user_id, 'reauth_session_expired'))
             return
         
         task = self.pending_reauthorize[user_id]
         task['password_mode'] = 'manual'
         
-        text = """📝 <b>手动输入旧密码</b>
+        text = f"""<b>{t(user_id, 'reauth_manual_old_pwd_title')}</b>
 
-请输入旧密码（如果账号有2FA密码）
+{t(user_id, 'reauth_manual_old_pwd_prompt')}
 
-💡 <i>如果没有密码，请输入 \"无\" 或 \"skip\"</i>
+{t(user_id, 'reauth_manual_old_pwd_tip')}
 """
         
         self.safe_edit_message(query, text, parse_mode='HTML')
@@ -21812,7 +21812,7 @@ admin3</code>
     def handle_reauthorize_old_password_input(self, update: Update, context: CallbackContext, user_id: int, text: str):
         """处理旧密码输入（手动模式）"""
         if user_id not in self.pending_reauthorize:
-            self.safe_send_message(update, "❌ 会话已过期，请重新开始")
+            self.safe_send_message(update, t(user_id, 'reauth_session_expired_restart'))
             return
         
         task = self.pending_reauthorize[user_id]
@@ -21827,7 +21827,7 @@ admin3</code>
         # 询问新密码
         msg = self.safe_send_message(
             update,
-            "✅ <b>旧密码已保存</b>\n\n请输入新密码（用于重新授权后的账号）\n\n💡 <i>如果不需要设置新密码，请输入 \"无\" 或 \"skip\"</i>",
+            f"{t(user_id, 'reauth_old_pwd_saved')}\n\n{t(user_id, 'reauth_new_pwd_prompt')}\n\n{t(user_id, 'reauth_new_pwd_tip')}",
             parse_mode='HTML'
         )
         
@@ -21837,7 +21837,7 @@ admin3</code>
     def handle_reauthorize_new_password_input(self, update: Update, context: CallbackContext, user_id: int, text: str):
         """处理新密码输入"""
         if user_id not in self.pending_reauthorize:
-            self.safe_send_message(update, "❌ 会话已过期，请重新开始")
+            self.safe_send_message(update, t(user_id, 'reauth_session_expired_restart'))
             return
         
         task = self.pending_reauthorize[user_id]
@@ -21850,49 +21850,49 @@ admin3</code>
             task['new_password'] = text
         
         # 显示确认信息
-        old_pwd_display = "无" if not task.get('old_password') else "***"
-        new_pwd_display = "无" if not task.get('new_password') else "***"
+        old_pwd_display = t(user_id, 'reauth_pwd_none') if not task.get('old_password') else t(user_id, 'reauth_pwd_masked')
+        new_pwd_display = t(user_id, 'reauth_pwd_none') if not task.get('new_password') else t(user_id, 'reauth_pwd_masked')
         
         text = f"""
-📋 <b>最终确认</b>
+<b>{t(user_id, 'reauth_final_confirm')}</b>
 
-<b>账号信息：</b>
-• 账号数量：{task['total_files']} 个
-• 文件类型：{task['file_type'].upper()}
+<b>{t(user_id, 'reauth_account_info')}</b>
+{t(user_id, 'reauth_account_count').format(count=task['total_files'])}
+{t(user_id, 'reauth_file_type').format(type=task['file_type'].upper())}
 
-<b>密码设置：</b>
-• 旧密码：{old_pwd_display}
-• 新密码：{new_pwd_display}
+<b>{t(user_id, 'reauth_pwd_settings')}</b>
+{t(user_id, 'reauth_old_pwd').format(value=old_pwd_display)}
+{t(user_id, 'reauth_new_pwd').format(value=new_pwd_display)}
 
-<b>处理流程：</b>
-1. 重置所有会话（踢掉其他设备）
-2. 删除旧密码
-3. 创建新会话（随机设备参数）
-4. 设置新密码
-5. 验证旧会话失效
-6. 打包分类结果
+<b>{t(user_id, 'reauth_process_flow')}</b>
+{t(user_id, 'reauth_flow1')}
+{t(user_id, 'reauth_flow2')}
+{t(user_id, 'reauth_flow3')}
+{t(user_id, 'reauth_flow4')}
+{t(user_id, 'reauth_flow5')}
+{t(user_id, 'reauth_flow6')}
 
-⚠️ <b>重要提示：</b>
-• 操作不可撤销
-• 处理时间取决于账号数量
-• 完成后将生成详细报告
+<b>{t(user_id, 'reauth_important')}</b>
+{t(user_id, 'reauth_important1')}
+{t(user_id, 'reauth_important2')}
+{t(user_id, 'reauth_important3')}
 
-<b>确认开始重新授权？</b>
+<b>{t(user_id, 'reauth_confirm_question')}</b>
 """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("✅ 确认开始", callback_data="reauthorize_confirm")],
-            [InlineKeyboardButton("❌ 取消", callback_data="reauthorize_cancel")]
+            [InlineKeyboardButton(t(user_id, 'reauth_btn_confirm'), callback_data="reauthorize_confirm")],
+            [InlineKeyboardButton(t(user_id, 'reauth_btn_cancel'), callback_data="reauthorize_cancel")]
         ])
         
         self.safe_send_message(update, text, parse_mode='HTML', reply_markup=keyboard)
     
     def handle_reauthorize_execute(self, update: Update, context: CallbackContext, query, user_id: int):
         """执行重新授权"""
-        query.answer("⏳ 开始重新授权...")
+        query.answer(t(user_id, 'reauth_starting'))
         
         if user_id not in self.pending_reauthorize:
-            self.safe_edit_message(query, "❌ 会话已过期")
+            self.safe_edit_message(query, t(user_id, 'reauth_session_expired'))
             return
         
         task = self.pending_reauthorize[user_id]
@@ -21907,7 +21907,7 @@ admin3</code>
                 traceback.print_exc()
                 context.bot.send_message(
                     chat_id=user_id,
-                    text=f"❌ <b>重新授权失败</b>\n\n错误: {str(e)}",
+                    text=f"❌ <b>{t(user_id, 'reauth_failed')}</b>\n\n{t(user_id, 'reauth_error').format(error=str(e))}",
                     parse_mode='HTML'
                 )
             finally:
@@ -21919,35 +21919,35 @@ admin3</code>
         
         self.safe_edit_message(
             query,
-            "⏳ <b>正在重新授权中...</b>\n\n请稍候，完成后会发送详细报告",
+            f"<b>{t(user_id, 'reauth_in_progress')}</b>\n\n{t(user_id, 'reauth_please_wait')}",
             parse_mode='HTML'
         )
     
-    def _create_reauth_progress_keyboard(self, total: int, success: int, frozen: int, wrong_pwd: int, banned: int, network_error: int) -> InlineKeyboardMarkup:
+    def _create_reauth_progress_keyboard(self, user_id: int, total: int, success: int, frozen: int, wrong_pwd: int, banned: int, network_error: int) -> InlineKeyboardMarkup:
         """创建重新授权进度按钮 - 6行2列布局"""
         return InlineKeyboardMarkup([
             [
-                InlineKeyboardButton(f"📊 账户数量", callback_data="reauthorize_noop"),
+                InlineKeyboardButton(t(user_id, 'reauth_stat_account_count'), callback_data="reauthorize_noop"),
                 InlineKeyboardButton(f"{total}", callback_data="reauthorize_noop")
             ],
             [
-                InlineKeyboardButton(f"✅ 授权成功", callback_data="reauthorize_noop"),
+                InlineKeyboardButton(t(user_id, 'reauth_stat_success'), callback_data="reauthorize_noop"),
                 InlineKeyboardButton(f"{success}", callback_data="reauthorize_noop")
             ],
             [
-                InlineKeyboardButton(f"❄️ 冻结账户", callback_data="reauthorize_noop"),
+                InlineKeyboardButton(t(user_id, 'reauth_stat_frozen'), callback_data="reauthorize_noop"),
                 InlineKeyboardButton(f"{frozen}", callback_data="reauthorize_noop")
             ],
             [
-                InlineKeyboardButton(f"🚫 封禁账户", callback_data="reauthorize_noop"),
+                InlineKeyboardButton(t(user_id, 'reauth_stat_banned'), callback_data="reauthorize_noop"),
                 InlineKeyboardButton(f"{banned}", callback_data="reauthorize_noop")
             ],
             [
-                InlineKeyboardButton(f"🔐 2FA错误", callback_data="reauthorize_noop"),
+                InlineKeyboardButton(t(user_id, 'reauth_stat_2fa_error'), callback_data="reauthorize_noop"),
                 InlineKeyboardButton(f"{wrong_pwd}", callback_data="reauthorize_noop")
             ],
             [
-                InlineKeyboardButton(f"⚠️ 网络错误", callback_data="reauthorize_noop"),
+                InlineKeyboardButton(t(user_id, 'reauth_stat_network_error'), callback_data="reauthorize_noop"),
                 InlineKeyboardButton(f"{network_error}", callback_data="reauthorize_noop")
             ]
         ])
@@ -21967,11 +21967,11 @@ admin3</code>
         total_files = len(files)
         
         # 创建初始按钮布局
-        keyboard = self._create_reauth_progress_keyboard(total_files, 0, 0, 0, 0, 0)
+        keyboard = self._create_reauth_progress_keyboard(user_id, total_files, 0, 0, 0, 0, 0)
         
         progress_msg = context.bot.send_message(
             chat_id=user_id,
-            text=f"🚀 <b>开始重新授权</b>\n\n进度：0/{total_files} (0%)",
+            text=f"🚀 <b>{t(user_id, 'reauth_start')}</b>\n\n{t(user_id, 'reauth_progress').format(current=0, total=total_files, percent=0)}",
             parse_mode='HTML',
             reply_markup=keyboard
         )
@@ -22009,7 +22009,7 @@ admin3</code>
                     
                     # 创建实时统计按钮
                     keyboard = self._create_reauth_progress_keyboard(
-                        total, success_count, frozen_count, wrong_pwd_count, banned_count, network_error_count
+                        user_id, total, success_count, frozen_count, wrong_pwd_count, banned_count, network_error_count
                     )
                     
                     logger.info(f"📊 重新授权进度: {current}/{total} ({progress}%) - 成功:{success_count} 冻结:{frozen_count} 封禁:{banned_count} 密码错误:{wrong_pwd_count} 网络:{network_error_count}")
@@ -22018,7 +22018,7 @@ admin3</code>
                     context.bot.edit_message_text(
                         chat_id=user_id,
                         message_id=progress_msg.message_id,
-                        text=f"🚀 <b>重新授权中</b>\n\n进度：{current}/{total} ({progress}%)",
+                        text=f"🚀 <b>{t(user_id, 'reauth_start')}</b>\n\n{t(user_id, 'reauth_progress').format(current=current, total=total, percent=progress)}",
                         parse_mode='HTML',
                         reply_markup=keyboard
                     )
@@ -22914,46 +22914,60 @@ admin3</code>
         try:
             with open(report_path, 'w', encoding='utf-8') as f:
                 f.write("=" * 80 + "\n")
-                f.write("重新授权报告\n")
+                f.write(f"{t(user_id, 'reauth_report_title')}\n")
                 f.write("=" * 80 + "\n")
-                f.write(f"生成时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n")
-                f.write(f"总账号数: {total}\n")
-                f.write(f"成功: {success_count}\n")
-                f.write(f"冻结: {frozen_count}\n")
-                f.write(f"封禁: {banned_count}\n")
-                f.write(f"密码错误: {wrong_pwd_count}\n")
-                f.write(f"网络错误: {network_error_count}\n")
-                f.write(f"其他错误: {other_error_count}\n")
+                f.write(f"{t(user_id, 'reauth_report_time')} {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}\n")
+                f.write(f"{t(user_id, 'reauth_report_total')} {total}\n")
+                f.write(f"{t(user_id, 'reauth_report_success')} {success_count}\n")
+                f.write(f"{t(user_id, 'reauth_report_frozen')} {frozen_count}\n")
+                f.write(f"{t(user_id, 'reauth_report_banned')} {banned_count}\n")
+                f.write(f"{t(user_id, 'reauth_report_pwd_error')} {wrong_pwd_count}\n")
+                f.write(f"{t(user_id, 'reauth_report_network')} {network_error_count}\n")
+                f.write(f"{t(user_id, 'reauth_report_other')} {other_error_count}\n")
                 f.write("=" * 80 + "\n\n")
                 
                 # 详细结果
                 for category, items in results.items():
                     if items:
-                        f.write(f"\n{category.upper()} ({len(items)})\n")
+                        # 翻译分类标题
+                        category_key = f'reauth_report_category_{category}'
+                        category_title = t(user_id, category_key)
+                        f.write(f"\n{category_title} ({len(items)})\n")
                         f.write("-" * 80 + "\n")
                         for file_path, file_name, result in items:
-                            f.write(f"文件: {file_name}\n")
+                            f.write(f"{t(user_id, 'reauth_report_file')} {file_name}\n")
                             if 'phone' in result:
-                                f.write(f"手机号: {result['phone']}\n")
+                                f.write(f"{t(user_id, 'reauth_report_phone')} {result['phone']}\n")
                             
                             # 成功的账户显示详细信息
                             if category == 'success':
                                 if 'device_model' in result:
-                                    f.write(f"设备型号: {result['device_model']}\n")
+                                    f.write(f"{t(user_id, 'reauth_report_device_model')} {result['device_model']}\n")
                                 if 'system_version' in result:
-                                    f.write(f"系统版本: {result['system_version']}\n")
+                                    f.write(f"{t(user_id, 'reauth_report_system_version')} {result['system_version']}\n")
                                 if 'app_version' in result:
-                                    f.write(f"应用版本: {result['app_version']}\n")
+                                    f.write(f"{t(user_id, 'reauth_report_app_version')} {result['app_version']}\n")
                                 if 'proxy_used' in result:
-                                    f.write(f"连接方式: {result['proxy_used']}")
+                                    # 翻译连接方式
+                                    proxy_value = result['proxy_used']
+                                    if '使用代理' in proxy_value:
+                                        proxy_value_translated = t(user_id, 'reauth_connection_proxy')
+                                    elif '本地连接 (代理失败后回退)' in proxy_value:
+                                        proxy_value_translated = t(user_id, 'reauth_connection_local_fallback')
+                                    elif '本地连接' in proxy_value:
+                                        proxy_value_translated = t(user_id, 'reauth_connection_local')
+                                    else:
+                                        proxy_value_translated = proxy_value
+                                    
+                                    f.write(f"{t(user_id, 'reauth_report_connection')} {proxy_value_translated}")
                                     if result.get('proxy_type') and result['proxy_type'] != 'N/A':
                                         f.write(f" ({result['proxy_type'].upper()})")
                                     f.write("\n")
                                 if 'new_password' in result:
-                                    f.write(f"新密码: {result['new_password']}\n")
+                                    f.write(f"{t(user_id, 'reauth_report_new_password')} {result['new_password']}\n")
                             
                             if 'error' in result:
-                                f.write(f"错误: {result['error']}\n")
+                                f.write(f"{t(user_id, 'reauth_report_error')} {result['error']}\n")
                             f.write("\n")
             logger.info(f"✅ 报告文件已生成: {report_path}")
             print(f"✅ 报告文件已生成: {report_path}", flush=True)
@@ -22963,8 +22977,8 @@ admin3</code>
             # 创建一个简化的报告
             try:
                 with open(report_path, 'w', encoding='utf-8') as f:
-                    f.write(f"报告生成失败: {e}\n\n")
-                    f.write(f"总计: {total}, 成功: {success_count}\n")
+                    f.write(f"{t(user_id, 'reauth_report_gen_failed')} {e}\n\n")
+                    f.write(f"{t(user_id, 'reauth_report_total_success').format(total=total, success=success_count)}\n")
             except:
                 pass
         
@@ -23121,20 +23135,20 @@ admin3</code>
         
         # 发送统计信息 - 添加异常保护
         summary = f"""
-✅ <b>重新授权完成</b>
+{t(user_id, 'reauth_complete')}
 
-<b>统计信息：</b>
-• 总数：{total}
-• ✅ 成功：{success_count}
-• ❄️ 冻结：{frozen_count}
-• 🚫 封禁：{banned_count}
-• 🔐 密码错误：{wrong_pwd_count}
-• 🌐 网络错误：{network_error_count}
-• ❌ 其他错误：{other_error_count}
+<b>{t(user_id, 'reauth_result_stats')}</b>
+{t(user_id, 'reauth_result_total').format(count=total)}
+{t(user_id, 'reauth_result_success').format(count=success_count)}
+{t(user_id, 'reauth_result_frozen').format(count=frozen_count)}
+{t(user_id, 'reauth_result_banned').format(count=banned_count)}
+{t(user_id, 'reauth_result_pwd_error').format(count=wrong_pwd_count)}
+{t(user_id, 'reauth_result_network').format(count=network_error_count)}
+{t(user_id, 'reauth_result_other').format(count=other_error_count)}
 
-<b>成功率：</b> {int(success_count/total*100) if total > 0 else 0}%
+<b>{t(user_id, 'reauth_success_rate').format(percent=int(success_count/total*100) if total > 0 else 0)}</b>
 
-📄 详细报告见下方文件
+{t(user_id, 'reauth_see_report')}
 """
         
         try:
@@ -23160,7 +23174,7 @@ admin3</code>
                         chat_id=user_id,
                         document=f,
                         filename=report_filename,
-                        caption="📊 重新授权详细报告",
+                        caption=t(user_id, 'reauth_file_report'),
                         timeout=60  # 60秒超时
                     )
                 logger.info("✅ 报告文件已发送")
@@ -23185,14 +23199,14 @@ admin3</code>
             
             try:
                 type_names = {
-                    'success': '成功',
-                    'frozen': '冻结',
-                    'banned': '封禁',
-                    'wrong_password': '密码错误',
-                    'network_error': '网络错误',
-                    'other_error': '其他错误'
+                    'success': t(user_id, 'reauth_file_success').format(count=count),
+                    'frozen': t(user_id, 'reauth_file_frozen').format(count=count),
+                    'banned': t(user_id, 'reauth_file_banned').format(count=count),
+                    'wrong_password': t(user_id, 'reauth_file_wrong_pwd').format(count=count),
+                    'network_error': t(user_id, 'reauth_file_network').format(count=count),
+                    'other_error': t(user_id, 'reauth_file_other').format(count=count)
                 }
-                caption = f"📦 {type_names.get(zip_type, zip_type)}的账号 ({count} 个)"
+                caption = type_names.get(zip_type, f"{zip_type} ({count})")
                 
                 # 尝试发送，带重试机制
                 max_retries = 3
