@@ -24991,10 +24991,6 @@ admin3</code>
             # 这个方法可以找到任何对话中的最早消息，即使Telegram官方对话被删除也能工作
             # 只有在官方API失败时才使用此方法
             if not registration_date:
-            # 方法1：扫描所有对话，查找最早的消息（最全面的方法）
-            # 这个方法可以找到任何对话中的最早消息，即使Telegram官方对话被删除也能工作
-            # 只有在官方API失败时才使用此方法
-            if not registration_date:
             
                 try:
                     logger.info(f"[{file_name}] 📊 方法1: 扫描所有对话以查找最早消息...")
@@ -25006,83 +25002,83 @@ admin3</code>
                         timeout=30  # 30秒超时
                     )
                     logger.info(f"[{file_name}]   ✅ 获取到 {len(dialogs)} 个对话")
-                
-                oldest_date = None
-                oldest_dialog_name = None
-                scanned_count = 0
-                skipped_bots = 0
-                
-                # 遍历每个对话，找到最早的消息（最多检查100个对话）
-                for idx, dialog in enumerate(dialogs, 1):
-                    try:
-                        # 跳过机器人对话（777000除外，因为它是官方账号）
-                        # Skip bot dialogs except 777000 (Telegram official)
-                        from telethon.tl.types import User
-                        entity = dialog.entity
-                        if isinstance(entity, User) and entity.bot and entity.id != 777000:
-                            skipped_bots += 1
-                            continue
-                        
-                        # 获取对话名称用于日志
-                        dialog_name = "Unknown"
-                        if hasattr(dialog, 'title'):
-                            dialog_name = dialog.title
-                        elif hasattr(dialog, 'name'):
-                            dialog_name = dialog.name
-                        
-                        # 每10个对话输出一次进度
-                        if idx % 10 == 0:
-                            logger.info(f"[{file_name}]   进度: {idx}/{len(dialogs)} 对话已扫描...")
-                        
-                        # 获取该对话的第一条消息（设置超时避免阻塞）
-                        messages = await asyncio.wait_for(
-                            client.get_messages(
-                                dialog.entity,
-                                limit=1,
-                                offset_id=0,  # 从最开始获取
-                                reverse=True   # 按时间正序
-                            ),
-                            timeout=5  # 每个对话5秒超时
-                        )
-                        
-                        scanned_count += 1
-                        
-                        if messages and len(messages) > 0 and messages[0].date:
-                            msg_date = messages[0].date
-                            # 如果这是目前找到的最早日期，记录下来
-                            if not oldest_date or msg_date < oldest_date:
-                                oldest_date = msg_date
-                                # 尝试获取对话名称，优先使用title，再尝试name
-                                if hasattr(dialog, 'title'):
-                                    oldest_dialog_name = dialog.title
-                                elif hasattr(dialog, 'name'):
-                                    oldest_dialog_name = dialog.name
-                                else:
-                                    oldest_dialog_name = 'Unknown'
-                                logger.info(f"[{file_name}]   🔍 发现更早消息: {msg_date.strftime('%Y-%m-%d %H:%M:%S')} (对话: {oldest_dialog_name[:30]})")
-                                
-                    except asyncio.TimeoutError:
-                        # 单个对话超时，继续下一个
-                        logger.warning(f"[{file_name}]   ⏱️ 对话查询超时，跳过")
-                        continue
-                    except Exception as e:
-                        # 某些对话可能无法访问，跳过即可
-                        continue
-                
-                logger.info(f"[{file_name}]   📊 扫描统计: 总对话={len(dialogs)}, 已扫描={scanned_count}, 跳过机器人={skipped_bots}")
-                
-                if oldest_date:
-                    registration_date = oldest_date.strftime("%Y-%m-%d")
-                    registration_source = "all_chats"
-                    logger.info(f"[{file_name}]   ✅ 方法1成功: 从所有对话中找到最早消息")
-                    logger.info(f"[{file_name}]   📅 注册时间: {registration_date} (来源对话: {oldest_dialog_name[:50]})")
-                else:
-                    logger.info(f"[{file_name}]   ⚠️ 方法1未找到消息，尝试方法2...")
                     
-            except asyncio.TimeoutError:
-                logger.warning(f"[{file_name}]   ⏱️ 方法1: 获取对话列表超时，跳过全对话扫描")
-            except Exception as e:
-                logger.warning(f"[{file_name}]   ❌ 方法1失败: {e}")
+                    oldest_date = None
+                    oldest_dialog_name = None
+                    scanned_count = 0
+                    skipped_bots = 0
+                    
+                    # 遍历每个对话，找到最早的消息（最多检查100个对话）
+                    for idx, dialog in enumerate(dialogs, 1):
+                        try:
+                            # 跳过机器人对话（777000除外，因为它是官方账号）
+                            # Skip bot dialogs except 777000 (Telegram official)
+                            from telethon.tl.types import User
+                            entity = dialog.entity
+                            if isinstance(entity, User) and entity.bot and entity.id != 777000:
+                                skipped_bots += 1
+                                continue
+                            
+                            # 获取对话名称用于日志
+                            dialog_name = "Unknown"
+                            if hasattr(dialog, 'title'):
+                                dialog_name = dialog.title
+                            elif hasattr(dialog, 'name'):
+                                dialog_name = dialog.name
+                            
+                            # 每10个对话输出一次进度
+                            if idx % 10 == 0:
+                                logger.info(f"[{file_name}]   进度: {idx}/{len(dialogs)} 对话已扫描...")
+                            
+                            # 获取该对话的第一条消息（设置超时避免阻塞）
+                            messages = await asyncio.wait_for(
+                                client.get_messages(
+                                    dialog.entity,
+                                    limit=1,
+                                    offset_id=0,  # 从最开始获取
+                                    reverse=True   # 按时间正序
+                                ),
+                                timeout=5  # 每个对话5秒超时
+                            )
+                            
+                            scanned_count += 1
+                            
+                            if messages and len(messages) > 0 and messages[0].date:
+                                msg_date = messages[0].date
+                                # 如果这是目前找到的最早日期，记录下来
+                                if not oldest_date or msg_date < oldest_date:
+                                    oldest_date = msg_date
+                                    # 尝试获取对话名称，优先使用title，再尝试name
+                                    if hasattr(dialog, 'title'):
+                                        oldest_dialog_name = dialog.title
+                                    elif hasattr(dialog, 'name'):
+                                        oldest_dialog_name = dialog.name
+                                    else:
+                                        oldest_dialog_name = 'Unknown'
+                                    logger.info(f"[{file_name}]   🔍 发现更早消息: {msg_date.strftime('%Y-%m-%d %H:%M:%S')} (对话: {oldest_dialog_name[:30]})")
+                                    
+                        except asyncio.TimeoutError:
+                            # 单个对话超时，继续下一个
+                            logger.warning(f"[{file_name}]   ⏱️ 对话查询超时，跳过")
+                            continue
+                        except Exception as e:
+                            # 某些对话可能无法访问，跳过即可
+                            continue
+                    
+                    logger.info(f"[{file_name}]   📊 扫描统计: 总对话={len(dialogs)}, 已扫描={scanned_count}, 跳过机器人={skipped_bots}")
+                    
+                    if oldest_date:
+                        registration_date = oldest_date.strftime("%Y-%m-%d")
+                        registration_source = "all_chats"
+                        logger.info(f"[{file_name}]   ✅ 方法1成功: 从所有对话中找到最早消息")
+                        logger.info(f"[{file_name}]   📅 注册时间: {registration_date} (来源对话: {oldest_dialog_name[:50]})")
+                    else:
+                        logger.info(f"[{file_name}]   ⚠️ 方法1未找到消息，尝试方法2...")
+                        
+                except asyncio.TimeoutError:
+                    logger.warning(f"[{file_name}]   ⏱️ 方法1: 获取对话列表超时，跳过全对话扫描")
+                except Exception as e:
+                    logger.warning(f"[{file_name}]   ❌ 方法1失败: {e}")
             
             # 方法2：从与 @Telegram (777000) 的对话中获取第一条消息时间
             # 只有在方法0和1都失败时才使用此方法作为备份
