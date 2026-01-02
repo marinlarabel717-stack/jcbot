@@ -1756,6 +1756,26 @@ TEXTS = {
     'reauth_report_file': 'File:',
     'reauth_report_error': 'Error:',
     
+    # Report category titles
+    'reauth_report_category_success': 'SUCCESS',
+    'reauth_report_category_frozen': 'FROZEN',
+    'reauth_report_category_banned': 'BANNED',
+    'reauth_report_category_wrong_password': 'WRONG_PASSWORD',
+    'reauth_report_category_network_error': 'NETWORK_ERROR',
+    'reauth_report_category_other_error': 'OTHER_ERROR',
+    
+    # Report detail fields
+    'reauth_report_phone': 'Phone:',
+    'reauth_report_device_model': 'Device Model:',
+    'reauth_report_system_version': 'System Version:',
+    'reauth_report_app_version': 'App Version:',
+    'reauth_report_connection': 'Connection:',
+    'reauth_report_new_password': 'New Password:',
+    
+    # Report generation failed
+    'reauth_report_gen_failed': 'Report generation failed:',
+    'reauth_report_total_success': 'Total: {total}, Success: {success}',
+    
     # Additional messages
     'reauth_need_member': '⚠️ Re-authorization feature requires membership\n\nPlease activate membership first',
     'reauth_session_expired': '❌ Session expired',

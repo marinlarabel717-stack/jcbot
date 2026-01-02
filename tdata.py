@@ -22929,28 +22929,31 @@ admin3</code>
                 # 详细结果
                 for category, items in results.items():
                     if items:
-                        f.write(f"\n{category.upper()} ({len(items)})\n")
+                        # 翻译分类标题
+                        category_key = f'reauth_report_category_{category}'
+                        category_title = t(user_id, category_key)
+                        f.write(f"\n{category_title} ({len(items)})\n")
                         f.write("-" * 80 + "\n")
                         for file_path, file_name, result in items:
                             f.write(f"{t(user_id, 'reauth_report_file')} {file_name}\n")
                             if 'phone' in result:
-                                f.write(f"手机号: {result['phone']}\n")
+                                f.write(f"{t(user_id, 'reauth_report_phone')} {result['phone']}\n")
                             
                             # 成功的账户显示详细信息
                             if category == 'success':
                                 if 'device_model' in result:
-                                    f.write(f"设备型号: {result['device_model']}\n")
+                                    f.write(f"{t(user_id, 'reauth_report_device_model')} {result['device_model']}\n")
                                 if 'system_version' in result:
-                                    f.write(f"系统版本: {result['system_version']}\n")
+                                    f.write(f"{t(user_id, 'reauth_report_system_version')} {result['system_version']}\n")
                                 if 'app_version' in result:
-                                    f.write(f"应用版本: {result['app_version']}\n")
+                                    f.write(f"{t(user_id, 'reauth_report_app_version')} {result['app_version']}\n")
                                 if 'proxy_used' in result:
-                                    f.write(f"连接方式: {result['proxy_used']}")
+                                    f.write(f"{t(user_id, 'reauth_report_connection')} {result['proxy_used']}")
                                     if result.get('proxy_type') and result['proxy_type'] != 'N/A':
                                         f.write(f" ({result['proxy_type'].upper()})")
                                     f.write("\n")
                                 if 'new_password' in result:
-                                    f.write(f"新密码: {result['new_password']}\n")
+                                    f.write(f"{t(user_id, 'reauth_report_new_password')} {result['new_password']}\n")
                             
                             if 'error' in result:
                                 f.write(f"{t(user_id, 'reauth_report_error')} {result['error']}\n")
@@ -22963,8 +22966,8 @@ admin3</code>
             # 创建一个简化的报告
             try:
                 with open(report_path, 'w', encoding='utf-8') as f:
-                    f.write(f"报告生成失败: {e}\n\n")
-                    f.write(f"总计: {total}, 成功: {success_count}\n")
+                    f.write(f"{t(user_id, 'reauth_report_gen_failed')} {e}\n\n")
+                    f.write(f"{t(user_id, 'reauth_report_total_success').format(total=total, success=success_count)}\n")
             except:
                 pass
         

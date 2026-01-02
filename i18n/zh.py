@@ -1757,6 +1757,26 @@ TEXTS = {
     'reauth_report_file': '文件:',
     'reauth_report_error': '错误:',
     
+    # 报告分类标题
+    'reauth_report_category_success': '成功',
+    'reauth_report_category_frozen': '冻结',
+    'reauth_report_category_banned': '封禁',
+    'reauth_report_category_wrong_password': '密码错误',
+    'reauth_report_category_network_error': '网络错误',
+    'reauth_report_category_other_error': '其他错误',
+    
+    # 报告详细字段
+    'reauth_report_phone': '手机号:',
+    'reauth_report_device_model': '设备型号:',
+    'reauth_report_system_version': '系统版本:',
+    'reauth_report_app_version': '应用版本:',
+    'reauth_report_connection': '连接方式:',
+    'reauth_report_new_password': '新密码:',
+    
+    # 报告生成失败
+    'reauth_report_gen_failed': '报告生成失败:',
+    'reauth_report_total_success': '总计: {total}, 成功: {success}',
+    
     # 额外消息
     'reauth_need_member': '⚠️ 重新授权功能需要会员权限\n\n请先开通会员',
     'reauth_session_expired': '❌ 会话已过期',
