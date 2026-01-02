@@ -12444,7 +12444,7 @@ class EnhancedBot:
                 ],
                 [
                     InlineKeyboardButton(t(user_id, 'btn_reauthorize'), callback_data="reauthorize_start"),
-                    InlineKeyboardButton("🕰️ 查询注册时间", callback_data="check_registration_start")
+                    InlineKeyboardButton(t(user_id, 'btn_check_registration'), callback_data="check_registration_start")
                 ],
                 [
                     InlineKeyboardButton("📝 修改资料", callback_data="profile_update_start"),
@@ -23277,41 +23277,41 @@ admin3</code>
             is_member, level, expiry = self.db.check_membership(user_id)
             if not is_member:
                 query.edit_message_text(
-                    text="❌ 查询注册时间功能需要会员权限\n\n请先开通会员",
+                    text=t(user_id, 'regtime_need_member'),
                     reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton("💳 开通会员", callback_data="vip_menu"),
-                        InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")
+                        InlineKeyboardButton(t(user_id, 'btn_vip_menu'), callback_data="vip_menu"),
+                        InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_main")
                     ]]),
                     parse_mode='HTML'
                 )
                 return
         
-        text = """
-<b>🕰️ 查询注册时间</b>
+        text = f"""
+<b>{t(user_id, 'regtime_title')}</b>
 
-该功能将查询账号的准确注册时间，并按日期分类：
-• 📅 按完整日期（年-月-日）分类
-• 🎯 多种方法获取最准确的注册时间
+{t(user_id, 'regtime_intro')}
+{t(user_id, 'regtime_feature1')}
+{t(user_id, 'regtime_feature2')}
 
-<b>📊 数据获取方法（按优先级）：</b>
-1. ✅ 从与@Telegram官方对话获取第一条消息时间（最准确）
-2. ✅ 从收藏夹(Saved Messages)获取第一条消息时间（较准确）
-3. 📊 基于用户ID估算（仅作为后备方案）
+<b>{t(user_id, 'regtime_methods_title')}</b>
+{t(user_id, 'regtime_method1')}
+{t(user_id, 'regtime_method2')}
+{t(user_id, 'regtime_method3')}
 
-<b>⚠️ 注意事项：</b>
-1. 支持 Session 和 TData 格式
-2. 需要使用官方 Telegram API
-3. 查询速度取决于账号数量和网络状况
-4. 建议批量处理不超过100个账号
-5. 会自动使用最准确的方法获取注册时间
+<b>{t(user_id, 'regtime_notes_title')}</b>
+{t(user_id, 'regtime_note1')}
+{t(user_id, 'regtime_note2')}
+{t(user_id, 'regtime_note3')}
+{t(user_id, 'regtime_note4')}
+{t(user_id, 'regtime_note5')}
 
-<b>📤 请上传账号文件：</b>
-• Session格式：上传.session文件（可打包成zip）
-• TData格式：上传包含tdata目录的zip文件
+<b>{t(user_id, 'regtime_upload_title')}</b>
+{t(user_id, 'regtime_upload_session')}
+{t(user_id, 'regtime_upload_tdata')}
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_main")]
         ])
         
         query.edit_message_text(
@@ -23358,7 +23358,7 @@ admin3</code>
         """处理查询注册时间文件上传"""
         user_id = update.effective_user.id
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, f"📥 <b>{t(user_id, 'regtime_processing_file')}...</b>", 'HTML')
         if not progress_msg:
             return
         
@@ -23379,7 +23379,7 @@ admin3</code>
             files, extract_dir, file_type = self.processor.scan_zip_file(temp_zip, user_id, unique_task_id)
             
             if not files:
-                self.safe_edit_message_text(progress_msg, "❌ <b>未找到有效文件</b>\n\n请确保ZIP包含Session或TData格式的文件", parse_mode='HTML')
+                self.safe_edit_message_text(progress_msg, t(user_id, 'regtime_no_valid_files'), parse_mode='HTML')
                 return
             
             # 保存任务信息
@@ -23393,29 +23393,30 @@ admin3</code>
             }
             
             # 显示确认按钮
-            text = f"""✅ <b>找到 {len(files)} 个账号文件</b>
+            file_type_str = t(user_id, 'regtime_file_type_session') if file_type == 'session' else t(user_id, 'regtime_file_type_tdata')
+            text = f"""{t(user_id, 'regtime_found_accounts').format(count=len(files))}
 
-<b>文件类型：</b>{file_type.upper()}
+<b>{file_type_str}</b>
 
-<b>处理说明：</b>
-• 优先从@Telegram官方对话获取准确注册时间
-• 备用方案：收藏夹消息或用户ID估算
-• 按相同日期（年-月-日）分类账号
-• 生成分类报告和打包文件
+<b>{t(user_id, 'regtime_process_title')}</b>
+{t(user_id, 'regtime_process1')}
+{t(user_id, 'regtime_process2')}
+{t(user_id, 'regtime_process3')}
+{t(user_id, 'regtime_process4')}
 
-<b>🎯 数据准确性：</b>
-我们会使用多种方法确保获取最准确的注册时间：
-1. Telegram官方对话第一条消息（最准确）
-2. 收藏夹第一条消息（较准确）
-3. 用户ID估算（仅作后备）
+<b>{t(user_id, 'regtime_accuracy_title')}</b>
+{t(user_id, 'regtime_accuracy_intro')}
+{t(user_id, 'regtime_accuracy1')}
+{t(user_id, 'regtime_accuracy2')}
+{t(user_id, 'regtime_accuracy3')}
 
-准备开始查询吗？
+{t(user_id, 'regtime_ready_question')}
 """
             
             keyboard = InlineKeyboardMarkup([
                 [
-                    InlineKeyboardButton("✅ 开始查询", callback_data="check_reg_execute"),
-                    InlineKeyboardButton("❌ 取消", callback_data="check_reg_cancel")
+                    InlineKeyboardButton(t(user_id, 'regtime_btn_start'), callback_data="check_reg_execute"),
+                    InlineKeyboardButton(t(user_id, 'regtime_btn_cancel'), callback_data="check_reg_cancel")
                 ]
             ])
             
@@ -23433,7 +23434,7 @@ admin3</code>
             
             self.safe_edit_message_text(
                 progress_msg,
-                f"❌ <b>处理失败</b>\n\n错误: {str(e)}",
+                f"{t(user_id, 'regtime_processing_failed')}\n\n{t(user_id, 'regtime_processing_error').format(error=str(e))}",
                 parse_mode='HTML'
             )
             
@@ -24521,7 +24522,7 @@ admin3</code>
         query.answer()
         
         if user_id not in self.pending_registration_check:
-            self.safe_edit_message(query, "❌ 会话已过期，请重新上传文件")
+            self.safe_edit_message(query, t(user_id, 'regtime_session_expired'))
             return
         
         task = self.pending_registration_check[user_id]
@@ -24544,7 +24545,7 @@ admin3</code>
         # 更新消息
         self.safe_edit_message(
             query,
-            f"🔄 <b>正在查询 {len(files)} 个账号...</b>\n\n请稍候，这可能需要几分钟",
+            f"🔄 <b>{t(user_id, 'regtime_querying')} {len(files)} {t(user_id, 'accounts_unit')}...</b>\n\n{t(user_id, 'regtime_may_take_minutes')}",
             parse_mode='HTML'
         )
     
@@ -24583,14 +24584,14 @@ admin3</code>
                     # 每处理10个更新一次进度
                     if processed % 10 == 0 or processed == total:
                         try:
-                            progress_text = f"""🔄 <b>查询进度</b>
+                            progress_text = f"""{t(user_id, 'regtime_progress_title')}
 
-• 总数：{total}
-• 已处理：{processed}
-• 成功：{len(results['success'])}
-• 失败：{len(results['error']) + len(results['frozen']) + len(results['banned'])}
+{t(user_id, 'regtime_progress_total').format(count=total)}
+{t(user_id, 'regtime_progress_processed').format(count=processed)}
+{t(user_id, 'regtime_progress_success').format(count=len(results['success']))}
+{t(user_id, 'regtime_progress_failed').format(count=len(results['error']) + len(results['frozen']) + len(results['banned']))}
 
-⏳ 请稍候...
+{t(user_id, 'regtime_please_wait')}
 """
                             context.bot.edit_message_text(
                                 chat_id=user_id,
