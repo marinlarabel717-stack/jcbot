@@ -1449,11 +1449,11 @@ async def safe_process_with_retry(func, *args, max_retries=3, **kwargs):
                 continue
     raise last_error
 
-async def safe_process_session(session_path: str, api_id: int, api_hash: str, 
-                                proxy: Optional[Dict], profile_data: Dict,
-                                proxy_manager: 'ProxyManager' = None,
-                                db: 'Database' = None) -> Dict:
-    """安全处理 session，避免数据库锁定
+async def _process_session_internal(session_path: str, api_id: int, api_hash: str, 
+                                    proxy: Optional[Dict], profile_data: Dict,
+                                    proxy_manager: 'ProxyManager' = None,
+                                    db: 'Database' = None) -> Dict:
+    """内部session处理函数（不含超时逻辑）
     
     Args:
         session_path: session 文件路径
@@ -1608,6 +1608,48 @@ async def safe_process_session(session_path: str, api_id: int, api_hash: str,
                 pass
         cleanup_temp_session(temp_dir)
 
+async def safe_process_session(session_path: str, api_id: int, api_hash: str, 
+                                proxy: Optional[Dict], profile_data: Dict,
+                                proxy_manager: 'ProxyManager' = None,
+                                db: 'Database' = None,
+                                timeout: int = 30) -> Dict:
+    """安全处理 session，避免数据库锁定，带超时保护
+    
+    Args:
+        session_path: session 文件路径
+        api_id: Telegram API ID
+        api_hash: Telegram API Hash
+        proxy: 代理配置字典
+        profile_data: 资料更新数据
+        proxy_manager: 代理管理器实例（可选）
+        db: 数据库实例（可选）
+        timeout: 处理超时时间（秒），默认30秒
+        
+    Returns:
+        处理结果字典
+    """
+    try:
+        # 使用asyncio.wait_for添加超时保护
+        result = await asyncio.wait_for(
+            _process_session_internal(session_path, api_id, api_hash, proxy, profile_data, proxy_manager, db),
+            timeout=timeout
+        )
+        return result
+    except asyncio.TimeoutError:
+        logger.warning(f"账号处理超时（{timeout}秒）: {session_path}")
+        return {
+            'success': False,
+            'error': f'操作超时（{timeout}秒）',
+            'error_type': 'Timeout'
+        }
+    except Exception as e:
+        logger.error(f"账号处理失败: {e}")
+        return {
+            'success': False,
+            'error': str(e),
+            'error_type': type(e).__name__
+        }
+
 async def batch_convert_tdata_to_session(tdata_list: List[Tuple[str, str]], 
                                          bot_instance: 'EnhancedBot') -> List[Dict]:
     """并发转换 TData 为 Session
@@ -1633,10 +1675,22 @@ async def batch_convert_tdata_to_session(tdata_list: List[Tuple[str, str]],
                     api_id = 2040
                     api_hash = 'b18441a1ff607e10a989891a5462e627'
                 
-                # 调用bot实例的convert_tdata_to_session方法
-                status, info, name = await bot_instance.convert_tdata_to_session(
-                    tdata_path, tdata_name, api_id, api_hash
-                )
+                # 添加30秒超时保护
+                try:
+                    status, info, name = await asyncio.wait_for(
+                        bot_instance.convert_tdata_to_session(
+                            tdata_path, tdata_name, api_id, api_hash
+                        ),
+                        timeout=TDATA_CONVERT_TIMEOUT
+                    )
+                except asyncio.TimeoutError:
+                    return {
+                        'success': False, 
+                        'error': f'TData转换超时（{TDATA_CONVERT_TIMEOUT}秒）', 
+                        'error_type': 'Timeout',
+                        'tdata': tdata_path,
+                        'name': tdata_name
+                    }
                 
                 if status == "转换成功":
                     # 从sessions目录查找转换后的session文件
@@ -4880,6 +4934,11 @@ class FileProcessor:
                     # 使用tdata_root_path而不是dir_path，这是TDesktop实际需要的路径
                     tdata_folders.append((tdata_root_path, display_name))
                     print(f"📂 找到TData目录: {display_name} (路径: {dir_name})")
+                    
+                    # 【修复】防止os.walk递归进入已识别的tdata目录，避免重复扫描
+                    # 从dirs列表中移除此目录，阻止os.walk深入其子目录
+                    if dir_name in dirs:
+                        dirs.remove(dir_name)
         
         except Exception as e:
             print(f"❌ 文件扫描失败: {e}")
