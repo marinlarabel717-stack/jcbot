@@ -690,7 +690,6 @@ class ProfileManager:
                 'FI': Faker('fi_FI'),   # 芬兰语
                 'TH': Faker('th_TH'),   # 泰语
                 'VN': Faker('vi_VN'),   # 越南语
-                'MY': Faker('ms_MY'),   # 马来语
                 'PH': Faker('fil_PH'),  # 菲律宾语
                 'IN': Faker('en_IN'),   # 印度（使用英语）
                 'PK': Faker('en_IN'),   # 巴基斯坦（使用英语）
@@ -13248,7 +13247,7 @@ class EnhancedBot:
 <b>示例：</b>
 • <code>123456789</code> - 按ID搜索
 • <code>@username</code> - 按用户名搜索
-• <code>张三</code> - 按昵称搜索
+• <code>9hao</code> - 按昵称搜索
 
 请发送要搜索的内容...
         """
@@ -25922,9 +25921,9 @@ admin3</code>
 {t(user_id, 'profile_custom_upload_txt_skip')}
 
 <b>{t(user_id, 'profile_custom_upload_txt_example')}</b>
-<code>张三
-李四
-王五</code>
+<code>a8ppp
+session9haobot
+o5eth</code>
 
 {t(user_id, 'profile_upload_timeout')}
 """
@@ -25954,9 +25953,9 @@ admin3</code>
 {t(user_id, 'profile_custom_manual_input_skip')}
 
 <b>{t(user_id, 'profile_custom_manual_input_example')}</b>
-<code>张三
-李四
-王五</code>
+<code>a8ppp
+session9haobot
+o5eth</code>
 
 {t(user_id, 'profile_custom_input_timeout')}
 """
