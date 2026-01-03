@@ -2052,6 +2052,10 @@ TEXTS = {
     'profile_custom_encoding_error': '❌ 文件编码错误\n\n请使用UTF-8编码保存文件',
     'profile_custom_file_empty': '❌ 文件内容为空',
     'profile_custom_processing_failed': '❌ <b>处理失败</b>\n\n错误: {error}',
+    'profile_photo_processing': '📥 <b>正在处理图片...</b>',
+    'profile_photo_uploaded_success': '✅ <b>图片已上传</b>\n\n已成功保存头像图片',
+    'profile_photo_upload_failed': '❌ <b>图片上传失败</b>\n\n错误: {error}',
+    'button_back_previous': '⬅️ 返回上一步',
     
     # 9. 确认页面
     'profile_confirm_title': '📝 准备开始修改资料',

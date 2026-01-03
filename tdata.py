@@ -14946,7 +14946,7 @@ class EnhancedBot:
                 print(f"🗑️ 清理任务信息: user_id={user_id}")
     
     def handle_photo(self, update: Update, context: CallbackContext):
-        """处理图片上传（用于广播媒体）"""
+        """处理图片上传（用于广播媒体和资料头像）"""
         user_id = update.effective_user.id
         
         # 检查用户状态
@@ -14957,8 +14957,19 @@ class EnhancedBot:
             row = c.fetchone()
             conn.close()
             
-            if not row or row[0] != "waiting_broadcast_media":
-                # 不是在等待广播媒体上传，忽略
+            if not row:
+                return
+            
+            user_status = row[0]
+            
+            # 处理资料头像上传
+            if user_status == "profile_custom_upload_photo":
+                self.handle_profile_photo_upload(update, context, user_id)
+                return
+            
+            # 处理广播媒体上传
+            if user_status != "waiting_broadcast_media":
+                # 不是在等待上传，忽略
                 return
         except:
             return
@@ -25869,7 +25880,12 @@ admin3</code>
 {t(user_id, 'profile_upload_timeout')}
 """
             
-            query.edit_message_text(text=text, parse_mode='HTML')
+            # 添加返回按钮
+            keyboard = InlineKeyboardMarkup([[
+                InlineKeyboardButton(t(user_id, 'button_back_previous'), callback_data=f"profile_custom_field_{field_name}")
+            ]])
+            
+            query.edit_message_text(text=text, parse_mode='HTML', reply_markup=keyboard)
             
             # 设置用户状态为等待文件上传
             self.db.save_user(user_id, "", "", f"profile_custom_upload_{field_name}")
@@ -26045,6 +26061,61 @@ admin3</code>
         os.makedirs(upload_dir, exist_ok=True)
         return upload_dir
     
+    def handle_profile_photo_upload(self, update: Update, context: CallbackContext, user_id: int):
+        """处理资料头像的单张图片上传"""
+        if user_id not in self.pending_profile_update:
+            self.safe_send_message(update, t(user_id, 'profile_custom_session_expired_restart'), 'HTML')
+            return
+        
+        config = self.pending_profile_update[user_id]['config']
+        
+        progress_msg = self.safe_send_message(update, t(user_id, 'profile_photo_processing'), 'HTML')
+        if not progress_msg:
+            return
+        
+        try:
+            # 获取最大尺寸的图片
+            photo = update.message.photo[-1]
+            
+            # 创建上传目录
+            upload_dir = self._create_avatar_upload_dir(user_id)
+            
+            # 下载图片
+            file = photo.get_file()
+            file_path = os.path.join(upload_dir, f"avatar_{user_id}.jpg")
+            file.download(file_path)
+            
+            # 保存到配置
+            config.custom_photos = [file_path]
+            config.update_photo = True
+            config.photo_action = 'custom'
+            
+            # 清除用户状态
+            self.db.save_user(user_id, "", "", "profile_custom_config")
+            
+            # 显示确认消息
+            keyboard = InlineKeyboardMarkup([[
+                InlineKeyboardButton(t(user_id, 'profile_custom_field_back_to_menu'), callback_data="profile_custom_back")
+            ]])
+            
+            self.safe_edit_message_text(
+                progress_msg,
+                t(user_id, 'profile_photo_uploaded_success'),
+                reply_markup=keyboard,
+                parse_mode='HTML'
+            )
+            
+        except Exception as e:
+            logger.error(f"处理资料头像上传失败: {e}")
+            import traceback
+            traceback.print_exc()
+            
+            self.safe_edit_message_text(
+                progress_msg,
+                t(user_id, 'profile_photo_upload_failed').format(error=str(e)),
+                parse_mode='HTML'
+            )
+    
     def handle_profile_custom_file_upload(self, update: Update, context: CallbackContext, user_id: int, field_name: str, document):
         """处理自定义资料的文件上传"""
         if user_id not in self.pending_profile_update:
@@ -26121,6 +26192,15 @@ admin3</code>
                 
             else:
                 # 处理文本文件（姓名、简介、用户名）
+                # 验证是否为 .txt 文件
+                if not temp_file.lower().endswith('.txt'):
+                    self.safe_edit_message_text(
+                        progress_msg,
+                        f"❌ <b>文件格式错误</b>\n\n请上传 .txt 文本文件，当前文件: {document.file_name}",
+                        parse_mode='HTML'
+                    )
+                    return
+                
                 try:
                     with open(temp_file, 'r', encoding='utf-8') as f:
                         lines = [line.strip() for line in f if line.strip()]
