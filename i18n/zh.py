@@ -2199,4 +2199,86 @@ TEXTS = {
     'profile_field_avatar': '头像',
     'profile_field_bio': '简介',
     'profile_field_username': '用户名',
+    
+    # ===== 检查通讯录限制功能 =====
+    # 1. 功能介绍页面
+    'contact_limit_title': '🔍 检查通讯录限制',
+    'contact_limit_upload': '📤 请上传包含 Session 或 TData 的 ZIP 文件',
+    'contact_limit_format_title': '支持格式：',
+    'contact_limit_format_session': '• Session 文件 (.session)',
+    'contact_limit_format_tdata': '• TData 文件夹',
+    'contact_limit_principle_title': '检测原理：',
+    'contact_limit_principle1': '• 尝试添加测试联系人',
+    'contact_limit_principle2': '• 根据结果判断账号状态',
+    'contact_limit_principle3': '• 自动删除测试联系人',
+    'contact_limit_wait': '⏳ 检测过程中请耐心等待...',
+    'contact_limit_cancel': '💡 如需取消，请点击 /start 返回主菜单',
+    
+    # 2. 找到账号
+    'contact_limit_found': '📊 找到 {total} 个账号，去重后 {unique} 个，开始检测...',
+    'contact_limit_estimate': '⏳ 预计需要 {time}',
+    
+    # 3. 处理进度
+    'contact_limit_progress': '📊 检测进度: [{current}/{total}]',
+    'contact_limit_current': '❌ 当前:',
+    'contact_limit_status': '状态:',
+    'contact_limit_stats': '统计:',
+    'contact_limit_completed': '• 已完成:',
+    'contact_limit_remaining': '• 剩余:',
+    'contact_limit_percent': '• 进度:',
+    'contact_limit_elapsed': '⏱️ 已用时:',
+    
+    # 4. 检测完成
+    'contact_limit_complete': '✅ 检测完成！',
+    'contact_limit_time': '⏱️ 用时: {time}',
+    'contact_limit_report_sent': '📊 已发送检测报告和分类打包文件',
+    
+    # 5. 输出文件
+    'contact_limit_report_file': '📊 通讯录限制检测报告',
+    'contact_limit_normal': '✅ 正常: {count} 个',
+    'contact_limit_limited': '⚠️ 受限: {count} 个',
+    'contact_limit_banned': '🚫 封号: {count} 个',
+    'contact_limit_failed': '❌ 失败: {count} 个',
+    'contact_limit_check_failed_zip': '检查通讯录失败',
+    
+    # 6. 报告内容
+    'contact_limit_report_title': '📊 通讯录限制检测报告',
+    'contact_limit_report_time': '检测时间: {time} (北京时间)',
+    'contact_limit_report_total': '总计检测: {count} 个账号',
+    'contact_limit_report_principle': '检测原理说明：',
+    'contact_limit_report_normal_desc': '✅ 正常：能成功导入测试联系人并找到用户',
+    'contact_limit_report_limited_desc': '⚠️ 受限：导入成功但找不到用户 / 触发FloodWait / 导入失败',
+    'contact_limit_report_banned_desc': '❌ 封号：账号被封禁或停用',
+    'contact_limit_report_failed_desc': '❌ 失败：检测过程出错或未授权',
+    'contact_limit_report_stats': '统计结果',
+    'contact_limit_report_normal_count': '✅ 正常账号: {count} 个',
+    'contact_limit_report_limited_count': '⚠️ 通讯录受限: {count} 个',
+    'contact_limit_report_banned_count': '❌ 已封号: {count} 个',
+    'contact_limit_report_failed_count': '❌ 检测失败: {count} 个',
+    'contact_limit_report_detail': '📋 详细列表',
+    'contact_limit_report_normal_list': '【✅ 正常账号】',
+    'contact_limit_report_limited_list': '【⚠️ 通讯录受限】',
+    'contact_limit_report_banned_list': '【❌ 已封号】',
+    'contact_limit_report_failed_list': '【❌ 检测失败】',
+    'contact_limit_report_none': '无',
+    
+    # 7. 状态类型
+    'contact_limit_status_normal': '✅ 正常',
+    'contact_limit_status_limited': '⚠️ 受限',
+    'contact_limit_status_banned': '🚫 封号',
+    'contact_limit_status_failed': '❌ 失败',
+    'contact_limit_status_connection_error': '⚠️ 连接错误: {error}',
+    'contact_limit_status_auth_error': '授权已失效',
+    'contact_limit_status_flood_wait': '触发FloodWait',
+    'contact_limit_status_import_failed': '导入失败',
+    'contact_limit_status_user_not_found': '找不到用户',
+    
+    # 8. 时间单位
+    'contact_limit_minute': '分钟',
+    'contact_limit_second': '秒',
+    
+    # 9. ZIP文件命名
+    'contact_limit_zip_normal': '检查通讯录正常',
+    'contact_limit_zip_limited': '检查通讯录受限',
+    'contact_limit_zip_failed': '检查通讯录失败',
 }

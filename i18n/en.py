@@ -2198,4 +2198,86 @@ TEXTS = {
     'profile_field_avatar': 'Avatar',
     'profile_field_bio': 'Bio',
     'profile_field_username': 'Username',
+    
+    # ===== Check Contact Limit Feature =====
+    # 1. Feature Introduction Page
+    'contact_limit_title': '🔍 Check Contact Limit',
+    'contact_limit_upload': '📤 Please upload ZIP file containing Session or TData',
+    'contact_limit_format_title': 'Supported formats:',
+    'contact_limit_format_session': '• Session files (.session)',
+    'contact_limit_format_tdata': '• TData folders',
+    'contact_limit_principle_title': 'Detection principle:',
+    'contact_limit_principle1': '• Attempt to add test contact',
+    'contact_limit_principle2': '• Determine account status based on result',
+    'contact_limit_principle3': '• Automatically delete test contact',
+    'contact_limit_wait': '⏳ Please wait patiently during detection...',
+    'contact_limit_cancel': '💡 To cancel, click /start to return to main menu',
+    
+    # 2. Found Accounts
+    'contact_limit_found': '📊 Found {total} accounts, {unique} after deduplication, starting detection...',
+    'contact_limit_estimate': '⏳ Estimated time: {time}',
+    
+    # 3. Processing Progress
+    'contact_limit_progress': '📊 Detection progress: [{current}/{total}]',
+    'contact_limit_current': '❌ Current:',
+    'contact_limit_status': 'Status:',
+    'contact_limit_stats': 'Statistics:',
+    'contact_limit_completed': '• Completed:',
+    'contact_limit_remaining': '• Remaining:',
+    'contact_limit_percent': '• Progress:',
+    'contact_limit_elapsed': '⏱️ Elapsed:',
+    
+    # 4. Detection Complete
+    'contact_limit_complete': '✅ Detection complete!',
+    'contact_limit_time': '⏱️ Time: {time}',
+    'contact_limit_report_sent': '📊 Detection report and categorized files sent',
+    
+    # 5. Output Files
+    'contact_limit_report_file': '📊 Contact Limit Detection Report',
+    'contact_limit_normal': '✅ Normal: {count}',
+    'contact_limit_limited': '⚠️ Limited: {count}',
+    'contact_limit_banned': '🚫 Banned: {count}',
+    'contact_limit_failed': '❌ Failed: {count}',
+    'contact_limit_check_failed_zip': 'Contact check failed',
+    
+    # 6. Report Content
+    'contact_limit_report_title': '📊 Contact Limit Detection Report',
+    'contact_limit_report_time': 'Detection time: {time} (Beijing time)',
+    'contact_limit_report_total': 'Total detected: {count} accounts',
+    'contact_limit_report_principle': 'Detection principle explanation:',
+    'contact_limit_report_normal_desc': '✅ Normal: Successfully imported test contact and found user',
+    'contact_limit_report_limited_desc': '⚠️ Limited: Import successful but user not found / FloodWait triggered / Import failed',
+    'contact_limit_report_banned_desc': '❌ Banned: Account banned or deactivated',
+    'contact_limit_report_failed_desc': '❌ Failed: Detection error or unauthorized',
+    'contact_limit_report_stats': 'Statistics',
+    'contact_limit_report_normal_count': '✅ Normal accounts: {count}',
+    'contact_limit_report_limited_count': '⚠️ Contact limited: {count}',
+    'contact_limit_report_banned_count': '❌ Banned: {count}',
+    'contact_limit_report_failed_count': '❌ Detection failed: {count}',
+    'contact_limit_report_detail': '📋 Detailed List',
+    'contact_limit_report_normal_list': '【✅ Normal Accounts】',
+    'contact_limit_report_limited_list': '【⚠️ Contact Limited】',
+    'contact_limit_report_banned_list': '【❌ Banned】',
+    'contact_limit_report_failed_list': '【❌ Detection Failed】',
+    'contact_limit_report_none': 'None',
+    
+    # 7. Status Types
+    'contact_limit_status_normal': '✅ Normal',
+    'contact_limit_status_limited': '⚠️ Limited',
+    'contact_limit_status_banned': '🚫 Banned',
+    'contact_limit_status_failed': '❌ Failed',
+    'contact_limit_status_connection_error': '⚠️ Connection error: {error}',
+    'contact_limit_status_auth_error': 'Authorization expired',
+    'contact_limit_status_flood_wait': 'FloodWait triggered',
+    'contact_limit_status_import_failed': 'Import failed',
+    'contact_limit_status_user_not_found': 'User not found',
+    
+    # 8. Time Units
+    'contact_limit_minute': 'minute(s)',
+    'contact_limit_second': 'second(s)',
+    
+    # 9. ZIP File Naming
+    'contact_limit_zip_normal': 'ContactCheck_Normal',
+    'contact_limit_zip_limited': 'ContactCheck_Limited',
+    'contact_limit_zip_failed': 'ContactCheck_Failed',
 }

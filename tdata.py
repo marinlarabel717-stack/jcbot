@@ -26389,32 +26389,32 @@ admin3</code>
             is_member, level, expiry = self.db.check_membership(user_id)
             if not is_member:
                 query.edit_message_text(
-                    text="❌ 通讯录限制检测功能需要会员权限\n\n请先开通会员",
+                    text=f"{t(user_id, 'cleanup_need_member')}",
                     reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton("💳 开通会员", callback_data="vip_menu"),
+                        InlineKeyboardButton(t(user_id, 'btn_vip_menu'), callback_data="vip_menu"),
                         InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")
                     ]]),
                     parse_mode='HTML'
                 )
                 return
         
-        text = """
-<b>🔍 检查通讯录限制</b>
+        text = f"""
+<b>{t(user_id, 'contact_limit_title')}</b>
 
-📤 <b>请上传包含 Session 或 TData 的 ZIP 文件</b>
+{t(user_id, 'contact_limit_upload')}
 
-<b>支持格式：</b>
-• Session 文件 (.session)
-• TData 文件夹
+<b>{t(user_id, 'contact_limit_format_title')}</b>
+{t(user_id, 'contact_limit_format_session')}
+{t(user_id, 'contact_limit_format_tdata')}
 
-<b>检测原理：</b>
-• 尝试添加测试联系人
-• 根据结果判断账号状态
-• 自动删除测试联系人
+<b>{t(user_id, 'contact_limit_principle_title')}</b>
+{t(user_id, 'contact_limit_principle1')}
+{t(user_id, 'contact_limit_principle2')}
+{t(user_id, 'contact_limit_principle3')}
 
-<b>⏳ 检测过程中请耐心等待...</b>
+<b>{t(user_id, 'contact_limit_wait')}</b>
 
-💡 如需取消，请点击 /start 返回主菜单
+{t(user_id, 'contact_limit_cancel')}
         """
         
         query.edit_message_text(
@@ -26688,7 +26688,7 @@ admin3</code>
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir, ignore_errors=True)
     
-    async def batch_check_contact_limit(self, accounts, api_id, api_hash, proxies, progress_callback=None):
+    async def batch_check_contact_limit(self, accounts, api_id, api_hash, proxies, user_id, progress_callback=None):
         """并发检测通讯录限制
         
         Args:
@@ -26696,6 +26696,7 @@ admin3</code>
             api_id: API ID
             api_hash: API Hash
             proxies: 代理列表
+            user_id: 用户ID（用于翻译）
             progress_callback: 进度回调函数，接收(current, total, phone, status, message)参数
         """
         from itertools import cycle
@@ -26722,6 +26723,9 @@ admin3</code>
                     status = result.get('status', CONTACT_STATUS_ERROR)
                     message = result.get('message', '未知')
                     
+                    # 翻译状态消息
+                    translated_message = self.translate_contact_status_message(user_id, status, message)
+                    
                     # 根据状态选择图标
                     icon = '🔍'
                     if status == CONTACT_STATUS_NORMAL:
@@ -26734,7 +26738,7 @@ admin3</code>
                         icon = '❌'
                     
                     try:
-                        await progress_callback(completed[0], total, masked_phone, icon, message)
+                        await progress_callback(completed[0], total, masked_phone, icon, translated_message)
                     except Exception as e:
                         logger.warning(f"进度回调失败: {e}")
                 
@@ -26778,53 +26782,88 @@ admin3</code>
         
         return processed_results
     
-    async def generate_contact_limit_report(self, results, output_dir):
+    def translate_contact_status_message(self, user_id, status, original_message):
+        """翻译通讯录检测状态消息"""
+        # 根据状态码返回翻译的消息
+        if status == CONTACT_STATUS_NORMAL:
+            return t(user_id, 'contact_limit_status_normal')
+        elif status == CONTACT_STATUS_LIMITED:
+            # 检查是否是FloodWait
+            if 'FloodWait' in original_message or 'flood' in original_message.lower():
+                return t(user_id, 'contact_limit_status_flood_wait')
+            return t(user_id, 'contact_limit_status_limited')
+        elif status == CONTACT_STATUS_BANNED:
+            return t(user_id, 'contact_limit_status_banned')
+        elif status == CONTACT_STATUS_UNAUTHORIZED:
+            return t(user_id, 'contact_limit_status_auth_error')
+        elif status == CONTACT_STATUS_ERROR:
+            # 检查错误类型
+            if '连接错误' in original_message or 'Connection' in original_message:
+                # 提取错误信息
+                error_part = original_message.split(':')[-1].strip() if ':' in original_message else original_message
+                return t(user_id, 'contact_limit_status_connection_error').format(error=error_part[:30])
+            return original_message  # 保留原始错误消息
+        return original_message
+    
+    async def generate_contact_limit_report(self, results, output_dir, user_id):
         """生成通讯录限制检测报告"""
         
+        # 翻译所有结果中的status message
+        translated_results = []
+        for r in results:
+            translated_r = r.copy()
+            if 'message' in translated_r:
+                translated_r['message'] = self.translate_contact_status_message(
+                    user_id, 
+                    r.get('status'), 
+                    r.get('message', '')
+                )
+            translated_results.append(translated_r)
+        
         # 分类统计 - 使用常量
-        normal = [r for r in results if r.get('status') == CONTACT_STATUS_NORMAL]
-        limited = [r for r in results if r.get('status') == CONTACT_STATUS_LIMITED]
-        banned = [r for r in results if r.get('status') == CONTACT_STATUS_BANNED]
-        failed = [r for r in results if r.get('status') in [CONTACT_STATUS_ERROR, CONTACT_STATUS_UNAUTHORIZED]]
+        normal = [r for r in translated_results if r.get('status') == CONTACT_STATUS_NORMAL]
+        limited = [r for r in translated_results if r.get('status') == CONTACT_STATUS_LIMITED]
+        banned = [r for r in translated_results if r.get('status') == CONTACT_STATUS_BANNED]
+        failed = [r for r in translated_results if r.get('status') in [CONTACT_STATUS_ERROR, CONTACT_STATUS_UNAUTHORIZED]]
         
         # 生成报告文本
         report = f"""
-📊 通讯录限制检测报告
+{t(user_id, 'contact_limit_report_title')}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
-检测时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S')} (北京时间)
-总计检测: {len(results)} 个账号
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-检测原理说明：
-✅ 正常：能成功导入测试联系人并找到用户
-⚠️ 受限：导入成功但找不到用户 / 触发FloodWait / 导入失败
-❌ 封号：账号被封禁或停用
-❌ 失败：检测过程出错或未授权
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-统计结果
+{t(user_id, 'contact_limit_report_time').format(time=datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S'))}
+{t(user_id, 'contact_limit_report_total').format(count=len(results))}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✅ 正常账号: {len(normal)} 个
-⚠️ 通讯录受限: {len(limited)} 个
-❌ 已封号: {len(banned)} 个
-❌ 检测失败: {len(failed)} 个
+{t(user_id, 'contact_limit_report_principle')}
+{t(user_id, 'contact_limit_report_normal_desc')}
+{t(user_id, 'contact_limit_report_limited_desc')}
+{t(user_id, 'contact_limit_report_banned_desc')}
+{t(user_id, 'contact_limit_report_failed_desc')}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 详细列表
+{t(user_id, 'contact_limit_report_stats')}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-【✅ 正常账号】
-{chr(10).join([f"  • {r['phone']}" for r in normal]) or '  无'}
+{t(user_id, 'contact_limit_report_normal_count').format(count=len(normal))}
+{t(user_id, 'contact_limit_report_limited_count').format(count=len(limited))}
+{t(user_id, 'contact_limit_report_banned_count').format(count=len(banned))}
+{t(user_id, 'contact_limit_report_failed_count').format(count=len(failed))}
 
-【⚠️ 通讯录受限】
-{chr(10).join([f"  • {r['phone']} - {r.get('message', '受限')}" for r in limited]) or '  无'}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+{t(user_id, 'contact_limit_report_detail')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-【❌ 已封号】
-{chr(10).join([f"  • {r['phone']}" for r in banned]) or '  无'}
+{t(user_id, 'contact_limit_report_normal_list')}
+{chr(10).join([f"  • {r['phone']}" for r in normal]) or f"  {t(user_id, 'contact_limit_report_none')}"}
 
-【❌ 检测失败】
-{chr(10).join([f"  • {r['phone']} - {r['message']}" for r in failed]) or '  无'}
+{t(user_id, 'contact_limit_report_limited_list')}
+{chr(10).join([f"  • {r['phone']} - {r.get('message', t(user_id, 'contact_limit_status_limited'))}" for r in limited]) or f"  {t(user_id, 'contact_limit_report_none')}"}
+
+{t(user_id, 'contact_limit_report_banned_list')}
+{chr(10).join([f"  • {r['phone']}" for r in banned]) or f"  {t(user_id, 'contact_limit_report_none')}"}
+
+{t(user_id, 'contact_limit_report_failed_list')}
+{chr(10).join([f"  • {r['phone']} - {r['message']}" for r in failed]) or f"  {t(user_id, 'contact_limit_report_none')}"}
 """
         
         # 保存报告
@@ -26840,23 +26879,23 @@ admin3</code>
             'failed': failed
         }
     
-    async def pack_contact_limit_results(self, results_dict, output_dir):
+    async def pack_contact_limit_results(self, results_dict, output_dir, user_id):
         """分类打包检测结果 - 每个分类单独一个ZIP，保留原始文件结构"""
         timestamp = datetime.now(BEIJING_TZ).strftime('%Y%m%d_%H%M%S')
         zip_files = {}
         
-        # 文件命名：检查通讯录{类型}-{账号数量}_{时间戳}.zip
+        # 文件命名：使用翻译后的名称
         categories = {
-            'normal': ('检查通讯录正常', results_dict['normal']),
-            'limited': ('检查通讯录受限', results_dict['limited']),
-            'banned': ('检查通讯录失败', results_dict['banned']),  # banned 归类为失败
-            'failed': ('检查通讯录失败', results_dict['failed'])
+            'normal': (t(user_id, 'contact_limit_zip_normal'), results_dict['normal']),
+            'limited': (t(user_id, 'contact_limit_zip_limited'), results_dict['limited']),
+            'banned': (t(user_id, 'contact_limit_zip_failed'), results_dict['banned']),  # banned 归类为失败
+            'failed': (t(user_id, 'contact_limit_zip_failed'), results_dict['failed'])
         }
         
         # 合并 banned 和 failed
         combined_failed = results_dict['banned'] + results_dict['failed']
         if combined_failed:
-            categories['failed'] = ('检查通讯录失败', combined_failed)
+            categories['failed'] = (t(user_id, 'contact_limit_zip_failed'), combined_failed)
             categories.pop('banned', None)
         
         for key, (name, items) in categories.items():
@@ -27022,10 +27061,15 @@ admin3</code>
         deduplicated_paths = [acc['original_path'] for acc in unique_accounts]
         
         # 更新进度
+        user_id = update.effective_user.id
+        # 计算预计时间
+        estimated_minutes = len(deduplicated_paths) * 2 // 60 + 1
+        time_unit = t(user_id, 'contact_limit_minute')
+        
         self.safe_edit_message_text(
             progress_msg,
-            f"📊 <b>找到 {len(accounts)} 个账号，去重后 {len(deduplicated_paths)} 个，开始检测...</b>\n\n"
-            f"⏳ 预计需要 {len(deduplicated_paths) * 2 // 60 + 1} 分钟",
+            f"{t(user_id, 'contact_limit_found').format(total=len(accounts), unique=len(deduplicated_paths))}\n\n"
+            f"{t(user_id, 'contact_limit_estimate').format(time=f'{estimated_minutes} {time_unit}')}",
             'HTML'
         )
         
@@ -27049,18 +27093,19 @@ admin3</code>
                 return
             last_update_time[0] = now
             
+            elapsed_seconds = int(now - start_time)
             progress_text = f"""
-<b>📊 检测进度: [{current}/{total}]</b>
+<b>{t(user_id, 'contact_limit_progress').format(current=current, total=total)}</b>
 
-{icon} <b>当前:</b> {phone}
-<b>状态:</b> {message}
+{icon} <b>{t(user_id, 'contact_limit_current')}</b> {phone}
+<b>{t(user_id, 'contact_limit_status')}</b> {message}
 
-<b>统计:</b>
-• 已完成: {current}
-• 剩余: {total - current}
-• 进度: {current * 100 // total}%
+<b>{t(user_id, 'contact_limit_stats')}</b>
+{t(user_id, 'contact_limit_completed')} {current}
+{t(user_id, 'contact_limit_remaining')} {total - current}
+{t(user_id, 'contact_limit_percent')} {current * 100 // total}%
 
-⏱️ 已用时: {int(now - start_time)}秒
+{t(user_id, 'contact_limit_elapsed')} {elapsed_seconds}{t(user_id, 'contact_limit_second')}
 """
             
             try:
@@ -27077,7 +27122,7 @@ admin3</code>
         try:
             results = await asyncio.wait_for(
                 self.batch_check_contact_limit(
-                    deduplicated_paths, api_id, api_hash, proxies, progress_callback
+                    deduplicated_paths, api_id, api_hash, proxies, user_id, progress_callback
                 ),
                 timeout=BATCH_TIMEOUT
             )
@@ -27100,7 +27145,7 @@ admin3</code>
         # 生成报告 - 确保无论如何都发送结果文件
         output_dir = tempfile.mkdtemp()
         try:
-            report_path, results_dict = await self.generate_contact_limit_report(results, output_dir)
+            report_path, results_dict = await self.generate_contact_limit_report(results, output_dir, user_id)
             
             # 发送报告文件
             with open(report_path, 'rb') as f:
@@ -27108,15 +27153,15 @@ admin3</code>
                     chat_id=update.effective_chat.id,
                     document=f,
                     filename=os.path.basename(report_path),
-                    caption=f"📊 通讯录限制检测报告\n\n"
-                           f"✅ 正常: {len(results_dict['normal'])} 个\n"
-                           f"⚠️ 受限: {len(results_dict['limited'])} 个\n"
-                           f"❌ 封号: {len(results_dict['banned'])} 个\n"
-                           f"❌ 失败: {len(results_dict['failed'])} 个"
+                    caption=f"{t(user_id, 'contact_limit_report_file')}\n\n"
+                           f"{t(user_id, 'contact_limit_normal').format(count=len(results_dict['normal']))}\n"
+                           f"{t(user_id, 'contact_limit_limited').format(count=len(results_dict['limited']))}\n"
+                           f"{t(user_id, 'contact_limit_banned').format(count=len(results_dict['banned']))}\n"
+                           f"{t(user_id, 'contact_limit_failed').format(count=len(results_dict['failed']))}"
                 )
             
             # 打包分类结果
-            zip_files = await self.pack_contact_limit_results(results_dict, output_dir)
+            zip_files = await self.pack_contact_limit_results(results_dict, output_dir, user_id)
             
             # 发送分类打包文件
             for key, zip_path in zip_files.items():
@@ -27133,9 +27178,9 @@ admin3</code>
             elapsed = time.time() - start_time
             self.safe_edit_message_text(
                 progress_msg,
-                f"✅ <b>检测完成！</b>\n\n"
-                f"⏱️ 用时: {elapsed:.1f}秒\n"
-                f"📊 已发送检测报告和分类打包文件",
+                f"{t(user_id, 'contact_limit_complete')}\n\n"
+                f"{t(user_id, 'contact_limit_time').format(time=f'{elapsed:.1f}')}\n"
+                f"{t(user_id, 'contact_limit_report_sent')}",
                 'HTML'
             )
             
