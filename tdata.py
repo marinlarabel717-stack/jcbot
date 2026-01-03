@@ -11464,6 +11464,8 @@ class EnhancedBot:
         )        
     def help_command(self, update: Update, context: CallbackContext):
         """处理 /help 命令和帮助按钮"""
+        user_id = update.effective_user.id
+        
         help_text = """
 📖 <b>使用帮助</b>
 
@@ -11498,7 +11500,7 @@ class EnhancedBot:
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")]
         ])
         
         if update.callback_query:
@@ -13068,7 +13070,7 @@ class EnhancedBot:
             [
                 InlineKeyboardButton("📢 群发通知", callback_data="broadcast_menu")
             ],
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
@@ -14634,7 +14636,7 @@ class EnhancedBot:
         # 发送进度消息
         progress_msg = self.safe_send_message(
             update,
-            "📥 <b>正在处理您的文件...</b>",
+            t(user_id, 'processing_your_file'),
             'HTML'
         )
         
@@ -16935,7 +16937,7 @@ class EnhancedBot:
         
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("🎟️ 兑换卡密", callback_data="vip_redeem")],
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
@@ -17006,7 +17008,7 @@ class EnhancedBot:
             """
             
             keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+                [InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")]
             ])
             
             self.safe_send_message(update, text, 'HTML', keyboard)
@@ -26149,7 +26151,7 @@ admin3</code>
         
         config = self.pending_profile_update[user_id]['config']
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, t(user_id, 'processing_your_file'), 'HTML')
         if not progress_msg:
             return
         
@@ -26390,7 +26392,7 @@ admin3</code>
                     text="❌ 通讯录限制检测功能需要会员权限\n\n请先开通会员",
                     reply_markup=InlineKeyboardMarkup([[
                         InlineKeyboardButton("💳 开通会员", callback_data="vip_menu"),
-                        InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")
+                        InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")
                     ]]),
                     parse_mode='HTML'
                 )
@@ -26941,7 +26943,7 @@ admin3</code>
         user_id = update.effective_user.id
         start_time = time.time()
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理您的文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, t(user_id, 'processing_your_file'), 'HTML')
         if not progress_msg:
             return
         
