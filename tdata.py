@@ -11464,6 +11464,8 @@ class EnhancedBot:
         )        
     def help_command(self, update: Update, context: CallbackContext):
         """处理 /help 命令和帮助按钮"""
+        user_id = update.effective_user.id
+        
         help_text = """
 📖 <b>使用帮助</b>
 
@@ -11498,7 +11500,7 @@ class EnhancedBot:
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")]
         ])
         
         if update.callback_query:
@@ -13068,7 +13070,7 @@ class EnhancedBot:
             [
                 InlineKeyboardButton("📢 群发通知", callback_data="broadcast_menu")
             ],
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
@@ -13530,6 +13532,12 @@ class EnhancedBot:
             return
         elif user_status == "waiting_merge_files":
             self.handle_merge_file_upload(update, context, document)
+            return
+        
+        # 自定义资料上传不需要ZIP格式检查（支持txt和图片文件）
+        if user_status.startswith("profile_custom_upload_"):
+            field_name = user_status.replace("profile_custom_upload_", "")
+            self.handle_profile_custom_file_upload(update, context, user_id, field_name, document)
             return
         
         # 其他功能需要ZIP格式
@@ -14628,7 +14636,7 @@ class EnhancedBot:
         # 发送进度消息
         progress_msg = self.safe_send_message(
             update,
-            "📥 <b>正在处理您的文件...</b>",
+            t(user_id, 'processing_your_file'),
             'HTML'
         )
         
@@ -14946,7 +14954,7 @@ class EnhancedBot:
                 print(f"🗑️ 清理任务信息: user_id={user_id}")
     
     def handle_photo(self, update: Update, context: CallbackContext):
-        """处理图片上传（用于广播媒体）"""
+        """处理图片上传（用于广播媒体和资料头像）"""
         user_id = update.effective_user.id
         
         # 检查用户状态
@@ -14957,8 +14965,19 @@ class EnhancedBot:
             row = c.fetchone()
             conn.close()
             
-            if not row or row[0] != "waiting_broadcast_media":
-                # 不是在等待广播媒体上传，忽略
+            if not row:
+                return
+            
+            user_status = row[0]
+            
+            # 处理资料头像上传
+            if user_status == "profile_custom_upload_photo":
+                self.handle_profile_photo_upload(update, context, user_id)
+                return
+            
+            # 处理广播媒体上传
+            if user_status != "waiting_broadcast_media":
+                # 不是在等待上传，忽略
                 return
         except:
             return
@@ -16918,7 +16937,7 @@ class EnhancedBot:
         
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("🎟️ 兑换卡密", callback_data="vip_redeem")],
-            [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+            [InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
@@ -16989,7 +17008,7 @@ class EnhancedBot:
             """
             
             keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")]
+                [InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")]
             ])
             
             self.safe_send_message(update, text, 'HTML', keyboard)
@@ -25818,7 +25837,21 @@ admin3</code>
         
         # 解析动作
         parts = data.replace("profile_custom_field_", "").split("_", 1)
-        if len(parts) < 2:
+        
+        # 如果没有动作（即只有字段名），则显示字段配置菜单（返回上一步）
+        if len(parts) < 2 or parts[1] == "":
+            field_name = parts[0]
+            # 清除用户状态（从上传/输入状态返回）
+            self.db.save_user(user_id, "", "", "profile_custom_config")
+            # Helper function to get translated field display name
+            field_map = {
+                'name': 'profile_field_name',
+                'photo': 'profile_field_avatar',
+                'bio': 'profile_field_bio',
+                'username': 'profile_field_username'
+            }
+            field_display = t(user_id, field_map.get(field_name, 'profile_field_name'))
+            self._show_custom_field_config(query, user_id, field_name, field_display)
             return
         
         field_name, action = parts[0], parts[1]
@@ -25869,7 +25902,12 @@ admin3</code>
 {t(user_id, 'profile_upload_timeout')}
 """
             
-            query.edit_message_text(text=text, parse_mode='HTML')
+            # 添加返回按钮
+            keyboard = InlineKeyboardMarkup([[
+                InlineKeyboardButton(t(user_id, 'button_back_previous'), callback_data=f"profile_custom_field_{field_name}")
+            ]])
+            
+            query.edit_message_text(text=text, parse_mode='HTML', reply_markup=keyboard)
             
             # 设置用户状态为等待文件上传
             self.db.save_user(user_id, "", "", f"profile_custom_upload_{field_name}")
@@ -25896,7 +25934,12 @@ admin3</code>
 {t(user_id, 'profile_custom_input_timeout')}
 """
             
-            query.edit_message_text(text=text, parse_mode='HTML')
+            # 添加返回按钮
+            keyboard = InlineKeyboardMarkup([[
+                InlineKeyboardButton(t(user_id, 'button_back_previous'), callback_data=f"profile_custom_field_{field_name}")
+            ]])
+            
+            query.edit_message_text(text=text, parse_mode='HTML', reply_markup=keyboard)
             
             # 设置用户状态为等待文本输入
             self.db.save_user(user_id, "", "", f"profile_custom_input_{field_name}")
@@ -26045,6 +26088,61 @@ admin3</code>
         os.makedirs(upload_dir, exist_ok=True)
         return upload_dir
     
+    def handle_profile_photo_upload(self, update: Update, context: CallbackContext, user_id: int):
+        """处理资料头像的单张图片上传"""
+        if user_id not in self.pending_profile_update:
+            self.safe_send_message(update, t(user_id, 'profile_custom_session_expired_restart'), 'HTML')
+            return
+        
+        config = self.pending_profile_update[user_id]['config']
+        
+        progress_msg = self.safe_send_message(update, t(user_id, 'profile_photo_processing'), 'HTML')
+        if not progress_msg:
+            return
+        
+        try:
+            # 获取最大尺寸的图片
+            photo = update.message.photo[-1]
+            
+            # 创建上传目录
+            upload_dir = self._create_avatar_upload_dir(user_id)
+            
+            # 下载图片
+            file = photo.get_file()
+            file_path = os.path.join(upload_dir, f"avatar_{user_id}.jpg")
+            file.download(file_path)
+            
+            # 保存到配置
+            config.custom_photos = [file_path]
+            config.update_photo = True
+            config.photo_action = 'custom'
+            
+            # 清除用户状态
+            self.db.save_user(user_id, "", "", "profile_custom_config")
+            
+            # 显示确认消息
+            keyboard = InlineKeyboardMarkup([[
+                InlineKeyboardButton(t(user_id, 'profile_custom_field_back_to_menu'), callback_data="profile_custom_back")
+            ]])
+            
+            self.safe_edit_message_text(
+                progress_msg,
+                t(user_id, 'profile_photo_uploaded_success'),
+                reply_markup=keyboard,
+                parse_mode='HTML'
+            )
+            
+        except Exception as e:
+            logger.error(f"处理资料头像上传失败: {e}")
+            import traceback
+            traceback.print_exc()
+            
+            self.safe_edit_message_text(
+                progress_msg,
+                t(user_id, 'profile_photo_upload_failed').format(error=str(e)),
+                parse_mode='HTML'
+            )
+    
     def handle_profile_custom_file_upload(self, update: Update, context: CallbackContext, user_id: int, field_name: str, document):
         """处理自定义资料的文件上传"""
         if user_id not in self.pending_profile_update:
@@ -26053,7 +26151,7 @@ admin3</code>
         
         config = self.pending_profile_update[user_id]['config']
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, t(user_id, 'processing_your_file'), 'HTML')
         if not progress_msg:
             return
         
@@ -26121,6 +26219,15 @@ admin3</code>
                 
             else:
                 # 处理文本文件（姓名、简介、用户名）
+                # 验证是否为 .txt 文件
+                if not temp_file.lower().endswith('.txt'):
+                    self.safe_edit_message_text(
+                        progress_msg,
+                        f"❌ <b>文件格式错误</b>\n\n请上传 .txt 文本文件，当前文件: {document.file_name}",
+                        parse_mode='HTML'
+                    )
+                    return
+                
                 try:
                     with open(temp_file, 'r', encoding='utf-8') as f:
                         lines = [line.strip() for line in f if line.strip()]
@@ -26250,7 +26357,7 @@ admin3</code>
         query.edit_message_text(
             text=text,
             parse_mode='HTML',
-            reply_markup=get_back_to_menu_keyboard()
+            reply_markup=get_back_to_menu_keyboard(user_id)
         )
         
         # 设置用户状态为等待文件上传
@@ -26285,7 +26392,7 @@ admin3</code>
                     text="❌ 通讯录限制检测功能需要会员权限\n\n请先开通会员",
                     reply_markup=InlineKeyboardMarkup([[
                         InlineKeyboardButton("💳 开通会员", callback_data="vip_menu"),
-                        InlineKeyboardButton("🔙 返回主菜单", callback_data="back_to_main")
+                        InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")
                     ]]),
                     parse_mode='HTML'
                 )
@@ -26313,7 +26420,7 @@ admin3</code>
         query.edit_message_text(
             text=text,
             parse_mode='HTML',
-            reply_markup=get_back_to_menu_keyboard()
+            reply_markup=get_back_to_menu_keyboard(user_id)
         )
         
         # 设置用户状态为等待上传
@@ -26836,7 +26943,7 @@ admin3</code>
         user_id = update.effective_user.id
         start_time = time.time()
         
-        progress_msg = self.safe_send_message(update, "📥 <b>正在处理您的文件...</b>", 'HTML')
+        progress_msg = self.safe_send_message(update, t(user_id, 'processing_your_file'), 'HTML')
         if not progress_msg:
             return
         

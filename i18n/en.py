@@ -2051,6 +2051,10 @@ TEXTS = {
     'profile_custom_encoding_error': '❌ File encoding error\n\nPlease save file with UTF-8 encoding',
     'profile_custom_file_empty': '❌ File content is empty',
     'profile_custom_processing_failed': '❌ <b>Processing failed</b>\n\nError: {error}',
+    'profile_photo_processing': '📥 <b>Processing image...</b>',
+    'profile_photo_uploaded_success': '✅ <b>Image uploaded</b>\n\nAvatar photo saved successfully',
+    'profile_photo_upload_failed': '❌ <b>Image upload failed</b>\n\nError: {error}',
+    'button_back_previous': '⬅️ Back',
     
     # 9. Confirmation Page
     'profile_confirm_title': '📝 Ready to start editing profile',
