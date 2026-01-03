@@ -12269,85 +12269,85 @@ class EnhancedBot:
         self.safe_edit_message(query, optimization_text, 'HTML', keyboard)
     
     def show_proxy_panel(self, update: Update, query):
-        """显示代理管理面板"""
+        """Display Proxy Management Panel"""
         user_id = query.from_user.id
         
-        # 权限检查（仅管理员可访问）
+        # Permission check (Admin only)
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可以访问代理管理面板")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 获取代理状态信息
+        # Get proxy status information
         proxy_enabled_db = self.db.get_proxy_enabled()
         proxy_mode_active = self.proxy_manager.is_proxy_mode_active(self.db)
         
-        # 统计住宅代理数量
+        # Count residential proxies
         residential_count = sum(1 for p in self.proxy_manager.proxies if p.get('is_residential', False))
         
-        # 构建代理管理面板信息
+        # Build proxy management panel information
         proxy_text = f"""
-<b>📡 代理管理面板</b>
+<b>{t(user_id, 'proxy_panel_title')}</b>
 
-<b>📊 当前状态</b>
-• 系统配置: {'🟢USE_PROXY=true' if config.USE_PROXY else '🔴USE_PROXY=false'}
-• 代理开关: {'🟢已启用' if proxy_enabled_db else '🔴已禁用'}
-• 代理文件: {config.PROXY_FILE}
-• 可用代理: {len(self.proxy_manager.proxies)}个
-• 住宅代理: {residential_count}个
-• 普通超时: {config.PROXY_TIMEOUT}秒
-• 住宅超时: {config.RESIDENTIAL_PROXY_TIMEOUT}秒
-• 实际模式: {'🟢代理模式' if proxy_mode_active else '🔴本地模式'}
+<b>{t(user_id, 'proxy_clean_current_status')}</b>
+• System Config: {'🟢USE_PROXY=true' if config.USE_PROXY else '🔴USE_PROXY=false'}
+• Proxy Switch: {'🟢Enabled' if proxy_enabled_db else '🔴Disabled'}
+• Proxy File: {config.PROXY_FILE}
+• {t(user_id, 'proxy_panel_available')}: {len(self.proxy_manager.proxies)}
+• Residential Proxies: {residential_count}
+• Normal Timeout: {config.PROXY_TIMEOUT}s
+• Residential Timeout: {config.RESIDENTIAL_PROXY_TIMEOUT}s
+• Actual Mode: {'🟢Proxy Mode' if proxy_mode_active else '🔴Local Mode'}
 
-<b>📝 代理格式支持</b>
+<b>📝 Supported Proxy Formats</b>
 • HTTP: ip:port
-• HTTP认证: ip:port:username:password  
+• HTTP Auth: ip:port:username:password  
 • SOCKS5: socks5:ip:port:username:password
 • SOCKS4: socks4:ip:port
-• ABCProxy住宅代理: host.abcproxy.vip:port:username:password
+• ABCProxy Residential: host.abcproxy.vip:port:username:password
 
-<b>🛠️ 操作说明</b>
-• 启用/禁用：控制代理开关状态
-• 重新加载：从文件重新读取代理列表
-• 测试代理：检测代理连接性能
-• 查看状态：显示详细代理信息
-• 代理统计：查看使用数据统计
+<b>🛠️ Operation Instructions</b>
+• Enable/Disable: Control proxy switch
+• Reload: Reload proxy list from file
+• Test: Check proxy connectivity
+• View Status: Show detailed proxy info
+• Statistics: View usage data
         """
         
-        # 创建操作按钮
+        # Create operation buttons
         buttons = []
         
-        # 代理开关控制按钮
+        # Proxy switch control button
         if proxy_enabled_db:
-            buttons.append([InlineKeyboardButton("🔴 禁用代理", callback_data="proxy_disable")])
+            buttons.append([InlineKeyboardButton("🔴 Disable Proxy", callback_data="proxy_disable")])
         else:
-            buttons.append([InlineKeyboardButton("🟢 启用代理", callback_data="proxy_enable")])
+            buttons.append([InlineKeyboardButton("🟢 Enable Proxy", callback_data="proxy_enable")])
         
-        # 代理管理操作按钮
+        # Proxy management operation buttons
         buttons.extend([
             [
-                InlineKeyboardButton("🔄 重新加载代理", callback_data="proxy_reload"),
-                InlineKeyboardButton("📊 代理状态", callback_data="proxy_status")
+                InlineKeyboardButton("🔄 Reload Proxies", callback_data="proxy_reload"),
+                InlineKeyboardButton(t(user_id, 'proxy_panel_btn_status'), callback_data="proxy_status")
             ],
             [
-                InlineKeyboardButton("🧪 测试代理", callback_data="proxy_test"),
-                InlineKeyboardButton("📈 代理统计", callback_data="proxy_stats")
+                InlineKeyboardButton(t(user_id, 'proxy_panel_btn_test'), callback_data="proxy_test"),
+                InlineKeyboardButton(t(user_id, 'proxy_panel_btn_stats'), callback_data="proxy_stats")
             ],
             [
-                InlineKeyboardButton("🧹 清理失效代理", callback_data="proxy_cleanup"),
-                InlineKeyboardButton("⚡ 速度优化", callback_data="proxy_optimize")
+                InlineKeyboardButton(t(user_id, 'proxy_panel_btn_clean'), callback_data="proxy_cleanup"),
+                InlineKeyboardButton(t(user_id, 'proxy_panel_btn_optimize'), callback_data="proxy_optimize")
             ],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ])
         
         keyboard = InlineKeyboardMarkup(buttons)
         
-        # 发送/编辑消息显示代理管理面板
+        # Send/edit message to display proxy management panel
         try:
             self.safe_edit_message(query, proxy_text, 'HTML', keyboard)
         except Exception as e:
-            # 如果编辑失败，尝试发送新消息
+            # If edit fails, try sending new message
             self.safe_send_message(update, proxy_text, 'HTML', keyboard)
     
     def handle_callbacks(self, update: Update, context: CallbackContext):
