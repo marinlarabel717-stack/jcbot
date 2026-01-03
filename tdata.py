@@ -13532,6 +13532,12 @@ class EnhancedBot:
             self.handle_merge_file_upload(update, context, document)
             return
         
+        # 自定义资料上传不需要ZIP格式检查（支持txt和图片文件）
+        if user_status.startswith("profile_custom_upload_"):
+            field_name = user_status.replace("profile_custom_upload_", "")
+            self.handle_profile_custom_file_upload(update, context, user_id, field_name, document)
+            return
+        
         # 其他功能需要ZIP格式
         if not document.file_name.lower().endswith('.zip'):
             self.safe_send_message(update, t(user_id, 'error_upload_zip_only'))
@@ -25829,7 +25835,21 @@ admin3</code>
         
         # 解析动作
         parts = data.replace("profile_custom_field_", "").split("_", 1)
-        if len(parts) < 2:
+        
+        # 如果没有动作（即只有字段名），则显示字段配置菜单（返回上一步）
+        if len(parts) < 2 or parts[1] == "":
+            field_name = parts[0]
+            # 清除用户状态（从上传/输入状态返回）
+            self.db.save_user(user_id, "", "", "profile_custom_config")
+            # Helper function to get translated field display name
+            field_map = {
+                'name': 'profile_field_name',
+                'photo': 'profile_field_avatar',
+                'bio': 'profile_field_bio',
+                'username': 'profile_field_username'
+            }
+            field_display = t(user_id, field_map.get(field_name, 'profile_field_name'))
+            self._show_custom_field_config(query, user_id, field_name, field_display)
             return
         
         field_name, action = parts[0], parts[1]
@@ -25912,7 +25932,12 @@ admin3</code>
 {t(user_id, 'profile_custom_input_timeout')}
 """
             
-            query.edit_message_text(text=text, parse_mode='HTML')
+            # 添加返回按钮
+            keyboard = InlineKeyboardMarkup([[
+                InlineKeyboardButton(t(user_id, 'button_back_previous'), callback_data=f"profile_custom_field_{field_name}")
+            ]])
+            
+            query.edit_message_text(text=text, parse_mode='HTML', reply_markup=keyboard)
             
             # 设置用户状态为等待文本输入
             self.db.save_user(user_id, "", "", f"profile_custom_input_{field_name}")
