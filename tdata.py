@@ -11234,7 +11234,14 @@ class EnhancedBot:
         if self.db.is_admin(user_id):
             member_status = t(user_id, 'status_admin')
         elif is_member:
-            member_status = f"🎁 {level}"
+            # 翻译会员等级
+            if level == "会员":
+                translated_level = t(user_id, 'member_level_member')
+            elif level == "管理员":
+                translated_level = t(user_id, 'member_level_admin')
+            else:
+                translated_level = level  # 保留其他未知等级
+            member_status = f"🎁 {translated_level}"
         else:
             member_status = t(user_id, 'status_no_member')
         
@@ -12473,7 +12480,14 @@ class EnhancedBot:
             if self.db.is_admin(user_id):
                 member_status = t(user_id, 'status_admin')
             elif is_member:
-                member_status = f"🎁 {level}"
+                # 翻译会员等级
+                if level == "会员":
+                    translated_level = t(user_id, 'member_level_member')
+                elif level == "管理员":
+                    translated_level = t(user_id, 'member_level_admin')
+                else:
+                    translated_level = level  # 保留其他未知等级
+                member_status = f"🎁 {translated_level}"
             else:
                 member_status = t(user_id, 'status_no_member')
             
