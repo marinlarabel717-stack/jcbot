@@ -2039,6 +2039,20 @@ TEXTS = {
     'profile_custom_manual_input_example': '示例：',
     'profile_custom_input_timeout': '⏱ 请在5分钟内发送内容...',
     
+    # 自定义配置状态消息
+    'profile_custom_session_expired': '❌ 会话已过期',
+    'profile_custom_session_expired_restart': '❌ 会话已过期，请重新开始',
+    'profile_custom_task_expired': '❌ 任务已过期，请重新上传文件',
+    'profile_custom_cleared': '✅ 已清除设置',
+    'profile_custom_configured': '✅ 已设置 {count} 个{field}',
+    'profile_custom_view_title': '📊 已设置的{field} ({count}个)',
+    'profile_custom_view_more': '... 还有 {count} 个',
+    'profile_custom_input_empty': '❌ 输入为空，请重新输入',
+    'profile_custom_no_images': '❌ 未找到有效的图片文件\n\n支持格式：jpg、png、jpeg、webp、gif',
+    'profile_custom_encoding_error': '❌ 文件编码错误\n\n请使用UTF-8编码保存文件',
+    'profile_custom_file_empty': '❌ 文件内容为空',
+    'profile_custom_processing_failed': '❌ <b>处理失败</b>\n\n错误: {error}',
+    
     # 9. 确认页面
     'profile_confirm_title': '📝 准备开始修改资料',
     'profile_file_info': '📁 文件信息:',

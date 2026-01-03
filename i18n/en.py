@@ -2038,6 +2038,20 @@ TEXTS = {
     'profile_custom_manual_input_example': 'Example:',
     'profile_custom_input_timeout': '⏱ Please send content within 5 minutes...',
     
+    # Custom configuration status messages
+    'profile_custom_session_expired': '❌ Session expired',
+    'profile_custom_session_expired_restart': '❌ Session expired, please restart',
+    'profile_custom_task_expired': '❌ Task expired, please re-upload file',
+    'profile_custom_cleared': '✅ Configuration cleared',
+    'profile_custom_configured': '✅ Configured {count} {field}',
+    'profile_custom_view_title': '📊 Configured {field} ({count})',
+    'profile_custom_view_more': '... {count} more',
+    'profile_custom_input_empty': '❌ Input is empty, please re-enter',
+    'profile_custom_no_images': '❌ No valid image files found\n\nSupported formats: jpg, png, jpeg, webp, gif',
+    'profile_custom_encoding_error': '❌ File encoding error\n\nPlease save file with UTF-8 encoding',
+    'profile_custom_file_empty': '❌ File content is empty',
+    'profile_custom_processing_failed': '❌ <b>Processing failed</b>\n\nError: {error}',
+    
     # 9. Confirmation Page
     'profile_confirm_title': '📝 Ready to start editing profile',
     'profile_file_info': '📁 File information:',

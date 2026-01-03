@@ -25715,7 +25715,7 @@ admin3</code>
         query.answer()
         
         if user_id not in self.pending_profile_update:
-            query.answer("❌ 会话已过期")
+            query.answer(t(user_id, 'profile_custom_session_expired'))
             return
         
         config = self.pending_profile_update[user_id]['config']
@@ -25878,7 +25878,7 @@ admin3</code>
         
         elif action == "manual":
             # 请求用户手动输入
-            field_display = {'name': '姓名', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+            field_display = get_field_display(field_name)
             
             text = f"""
 <b>{t(user_id, 'profile_custom_manual_input_title').format(field=field_display)}</b>
@@ -25935,7 +25935,7 @@ admin3</code>
             elif field_name == 'username':
                 config.custom_usernames = []
             
-            query.answer("✅ 已清除设置")
+            query.answer(t(user_id, 'profile_custom_cleared'))
             self._show_custom_field_config(query, user_id, field_name, get_field_display(field_name))
         
         elif action == "view":
@@ -25954,13 +25954,13 @@ admin3</code>
             
             # 只显示前N个（使用常量）
             display_items = items[:self.MAX_DISPLAY_ITEMS]
-            text = f"<b>📊 已设置的{field_display} ({len(items)}个)</b>\n\n"
+            text = f"<b>{t(user_id, 'profile_custom_view_title').format(field=field_display, count=len(items))}</b>\n\n"
             
             for i, item in enumerate(display_items, 1):
                 text += f"{i}. {item}\n"
             
             if len(items) > self.MAX_DISPLAY_ITEMS:
-                text += f"\n... 还有 {len(items) - self.MAX_DISPLAY_ITEMS} 个"
+                text += f"\n{t(user_id, 'profile_custom_view_more').format(count=len(items) - self.MAX_DISPLAY_ITEMS)}"
             
             query.answer(text[:self.ALERT_TEXT_MAX_LENGTH], show_alert=True)
         
@@ -25989,7 +25989,7 @@ admin3</code>
     def handle_profile_custom_text_input(self, update: Update, context: CallbackContext, user_id: int, field_name: str, text: str):
         """处理自定义资料的文本输入"""
         if user_id not in self.pending_profile_update:
-            self.safe_send_message(update, "❌ 会话已过期，请重新开始", 'HTML')
+            self.safe_send_message(update, t(user_id, 'profile_custom_session_expired_restart'), 'HTML')
             return
         
         config = self.pending_profile_update[user_id]['config']
@@ -25998,11 +25998,19 @@ admin3</code>
         lines = [line.strip() for line in text.split('\n') if line.strip()]
         
         if not lines:
-            self.safe_send_message(update, "❌ 输入为空，请重新输入", 'HTML')
+            self.safe_send_message(update, t(user_id, 'profile_custom_input_empty'), 'HTML')
             return
         
-        # 根据字段类型保存
-        field_display = {'name': '姓名', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+        # Helper function to get translated field display name
+        def get_field_display(field):
+            field_map = {
+                'name': 'profile_field_name',
+                'bio': 'profile_field_bio',
+                'username': 'profile_field_username'
+            }
+            return t(user_id, field_map.get(field, 'profile_field_name'))
+        
+        field_display = get_field_display(field_name)
         
         if field_name == 'name':
             config.custom_names = lines
@@ -26026,7 +26034,7 @@ admin3</code>
         
         self.safe_send_message(
             update,
-            f"✅ 已设置 {len(lines)} 个{field_display}",
+            t(user_id, 'profile_custom_configured').format(count=len(lines), field=field_display),
             'HTML',
             reply_markup=keyboard
         )
@@ -26040,7 +26048,7 @@ admin3</code>
     def handle_profile_custom_file_upload(self, update: Update, context: CallbackContext, user_id: int, field_name: str, document):
         """处理自定义资料的文件上传"""
         if user_id not in self.pending_profile_update:
-            self.safe_send_message(update, "❌ 会话已过期，请重新开始", 'HTML')
+            self.safe_send_message(update, t(user_id, 'profile_custom_session_expired_restart'), 'HTML')
             return
         
         config = self.pending_profile_update[user_id]['config']
@@ -26057,7 +26065,17 @@ admin3</code>
             # 下载文件
             document.get_file().download(temp_file)
             
-            field_display = {'name': '姓名', 'photo': '头像', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+            # Helper function to get translated field display name
+            def get_field_display(field):
+                field_map = {
+                    'name': 'profile_field_name',
+                    'photo': 'profile_field_avatar',
+                    'bio': 'profile_field_bio',
+                    'username': 'profile_field_username'
+                }
+                return t(user_id, field_map.get(field, 'profile_field_name'))
+            
+            field_display = get_field_display(field_name)
             
             if field_name == 'photo':
                 # 处理图片文件
@@ -26092,7 +26110,7 @@ admin3</code>
                 if not items:
                     self.safe_edit_message_text(
                         progress_msg,
-                        "❌ 未找到有效的图片文件\n\n支持格式：jpg、png、jpeg、webp、gif",
+                        t(user_id, 'profile_custom_no_images'),
                         parse_mode='HTML'
                     )
                     return
@@ -26114,7 +26132,7 @@ admin3</code>
                     except:
                         self.safe_edit_message_text(
                             progress_msg,
-                            "❌ 文件编码错误\n\n请使用UTF-8编码保存文件",
+                            t(user_id, 'profile_custom_encoding_error'),
                             parse_mode='HTML'
                         )
                         return
@@ -26122,7 +26140,7 @@ admin3</code>
                 if not lines:
                     self.safe_edit_message_text(
                         progress_msg,
-                        "❌ 文件内容为空",
+                        t(user_id, 'profile_custom_file_empty'),
                         parse_mode='HTML'
                     )
                     return
@@ -26152,7 +26170,7 @@ admin3</code>
             
             self.safe_edit_message_text(
                 progress_msg,
-                f"✅ 已设置 {len(items)} 个{field_display}",
+                t(user_id, 'profile_custom_configured').format(count=len(items), field=field_display),
                 reply_markup=keyboard,
                 parse_mode='HTML'
             )
@@ -26164,7 +26182,7 @@ admin3</code>
             
             self.safe_edit_message_text(
                 progress_msg,
-                f"❌ <b>处理失败</b>\n\n错误: {str(e)}",
+                t(user_id, 'profile_custom_processing_failed').format(error=str(e)),
                 parse_mode='HTML'
             )
         finally:
@@ -26177,7 +26195,7 @@ admin3</code>
         query.answer()
         
         if user_id not in self.pending_profile_update:
-            self.safe_edit_message(query, "❌ 任务已过期，请重新上传文件")
+            self.safe_edit_message(query, t(user_id, 'profile_custom_task_expired'))
             return
         
         task = self.pending_profile_update[user_id]
