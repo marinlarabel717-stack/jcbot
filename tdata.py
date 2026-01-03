@@ -12269,85 +12269,85 @@ class EnhancedBot:
         self.safe_edit_message(query, optimization_text, 'HTML', keyboard)
     
     def show_proxy_panel(self, update: Update, query):
-        """显示代理管理面板"""
+        """Display Proxy Management Panel"""
         user_id = query.from_user.id
         
-        # 权限检查（仅管理员可访问）
+        # Permission check (Admin only)
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可以访问代理管理面板")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 获取代理状态信息
+        # Get proxy status information
         proxy_enabled_db = self.db.get_proxy_enabled()
         proxy_mode_active = self.proxy_manager.is_proxy_mode_active(self.db)
         
-        # 统计住宅代理数量
+        # Count residential proxies
         residential_count = sum(1 for p in self.proxy_manager.proxies if p.get('is_residential', False))
         
-        # 构建代理管理面板信息
+        # Build proxy management panel information
         proxy_text = f"""
-<b>📡 代理管理面板</b>
+<b>{t(user_id, 'proxy_panel_title')}</b>
 
-<b>📊 当前状态</b>
-• 系统配置: {'🟢USE_PROXY=true' if config.USE_PROXY else '🔴USE_PROXY=false'}
-• 代理开关: {'🟢已启用' if proxy_enabled_db else '🔴已禁用'}
-• 代理文件: {config.PROXY_FILE}
-• 可用代理: {len(self.proxy_manager.proxies)}个
-• 住宅代理: {residential_count}个
-• 普通超时: {config.PROXY_TIMEOUT}秒
-• 住宅超时: {config.RESIDENTIAL_PROXY_TIMEOUT}秒
-• 实际模式: {'🟢代理模式' if proxy_mode_active else '🔴本地模式'}
+<b>{t(user_id, 'proxy_clean_current_status')}</b>
+• System Config: {'🟢USE_PROXY=true' if config.USE_PROXY else '🔴USE_PROXY=false'}
+• Proxy Switch: {'🟢Enabled' if proxy_enabled_db else '🔴Disabled'}
+• Proxy File: {config.PROXY_FILE}
+• {t(user_id, 'proxy_panel_available')}: {len(self.proxy_manager.proxies)}
+• Residential Proxies: {residential_count}
+• Normal Timeout: {config.PROXY_TIMEOUT}s
+• Residential Timeout: {config.RESIDENTIAL_PROXY_TIMEOUT}s
+• Actual Mode: {'🟢Proxy Mode' if proxy_mode_active else '🔴Local Mode'}
 
-<b>📝 代理格式支持</b>
+<b>📝 Supported Proxy Formats</b>
 • HTTP: ip:port
-• HTTP认证: ip:port:username:password  
+• HTTP Auth: ip:port:username:password  
 • SOCKS5: socks5:ip:port:username:password
 • SOCKS4: socks4:ip:port
-• ABCProxy住宅代理: host.abcproxy.vip:port:username:password
+• ABCProxy Residential: host.abcproxy.vip:port:username:password
 
-<b>🛠️ 操作说明</b>
-• 启用/禁用：控制代理开关状态
-• 重新加载：从文件重新读取代理列表
-• 测试代理：检测代理连接性能
-• 查看状态：显示详细代理信息
-• 代理统计：查看使用数据统计
+<b>🛠️ Operation Instructions</b>
+• Enable/Disable: Control proxy switch
+• Reload: Reload proxy list from file
+• Test: Check proxy connectivity
+• View Status: Show detailed proxy info
+• Statistics: View usage data
         """
         
-        # 创建操作按钮
+        # Create operation buttons
         buttons = []
         
-        # 代理开关控制按钮
+        # Proxy switch control button
         if proxy_enabled_db:
-            buttons.append([InlineKeyboardButton("🔴 禁用代理", callback_data="proxy_disable")])
+            buttons.append([InlineKeyboardButton("🔴 Disable Proxy", callback_data="proxy_disable")])
         else:
-            buttons.append([InlineKeyboardButton("🟢 启用代理", callback_data="proxy_enable")])
+            buttons.append([InlineKeyboardButton("🟢 Enable Proxy", callback_data="proxy_enable")])
         
-        # 代理管理操作按钮
+        # Proxy management operation buttons
         buttons.extend([
             [
-                InlineKeyboardButton("🔄 重新加载代理", callback_data="proxy_reload"),
-                InlineKeyboardButton("📊 代理状态", callback_data="proxy_status")
+                InlineKeyboardButton("🔄 Reload Proxies", callback_data="proxy_reload"),
+                InlineKeyboardButton(t(user_id, 'proxy_panel_btn_status'), callback_data="proxy_status")
             ],
             [
-                InlineKeyboardButton("🧪 测试代理", callback_data="proxy_test"),
-                InlineKeyboardButton("📈 代理统计", callback_data="proxy_stats")
+                InlineKeyboardButton(t(user_id, 'proxy_panel_btn_test'), callback_data="proxy_test"),
+                InlineKeyboardButton(t(user_id, 'proxy_panel_btn_stats'), callback_data="proxy_stats")
             ],
             [
-                InlineKeyboardButton("🧹 清理失效代理", callback_data="proxy_cleanup"),
-                InlineKeyboardButton("⚡ 速度优化", callback_data="proxy_optimize")
+                InlineKeyboardButton(t(user_id, 'proxy_panel_btn_clean'), callback_data="proxy_cleanup"),
+                InlineKeyboardButton(t(user_id, 'proxy_panel_btn_optimize'), callback_data="proxy_optimize")
             ],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ])
         
         keyboard = InlineKeyboardMarkup(buttons)
         
-        # 发送/编辑消息显示代理管理面板
+        # Send/edit message to display proxy management panel
         try:
             self.safe_edit_message(query, proxy_text, 'HTML', keyboard)
         except Exception as e:
-            # 如果编辑失败，尝试发送新消息
+            # If edit fails, try sending new message
             self.safe_send_message(update, proxy_text, 'HTML', keyboard)
     
     def handle_callbacks(self, update: Update, context: CallbackContext):
@@ -13028,60 +13028,62 @@ class EnhancedBot:
         self.safe_edit_message(query, status_text, 'HTML')
     
     def handle_admin_panel(self, query):
-        """管理员面板"""
+        """Admin Panel"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
-        # 获取统计信息
+        # Get statistics
         stats = self.db.get_user_statistics()
         admin_count = len(self.db.get_all_admins()) if self.db.get_all_admins() else 0
         
+        admin_permission = t(user_id, 'admin_super_admin') if user_id in config.ADMIN_IDS else t(user_id, 'admin_normal_admin')
+        
         admin_text = f"""
-<b>👑 管理员控制面板</b>
+<b>{t(user_id, 'admin_panel_title')}</b>
 
-<b>📊 系统统计</b>
-• 总用户数: {stats.get('total_users', 0)}
-• 今日活跃: {stats.get('today_active', 0)}
-• 本周活跃: {stats.get('week_active', 0)}
-• 有效会员: {stats.get('active_members', 0)}
-• 体验会员: {stats.get('trial_members', 0)}
-• 近期新用户: {stats.get('recent_users', 0)}
+<b>{t(user_id, 'admin_system_stats')}</b>
+• {t(user_id, 'admin_total_users')}: {stats.get('total_users', 0)}
+• {t(user_id, 'admin_today_active')}: {stats.get('today_active', 0)}
+• {t(user_id, 'admin_week_active')}: {stats.get('week_active', 0)}
+• {t(user_id, 'admin_active_members')}: {stats.get('active_members', 0)}
+• {t(user_id, 'admin_trial_members')}: {stats.get('trial_members', 0)}
+• {t(user_id, 'admin_recent_users')}: {stats.get('recent_users', 0)}
 
-<b>👑 管理员信息</b>
-• 管理员数量: {admin_count}个
-• 您的权限: {'👑 超级管理员' if user_id in config.ADMIN_IDS else '🔧 普通管理员'}
-• 系统时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
+<b>{t(user_id, 'admin_info')}</b>
+• {t(user_id, 'admin_count')}: {admin_count}
+• {t(user_id, 'admin_your_permission')}: {admin_permission}
+• {t(user_id, 'admin_system_time')}: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
 
-<b>🔧 快速操作</b>
-点击下方按钮进行管理操作
+<b>{t(user_id, 'admin_quick_actions')}</b>
+{t(user_id, 'admin_quick_actions_desc')}
         """
         
-        # 创建管理按钮
+        # Create admin buttons
         buttons = [
             [
-                InlineKeyboardButton("👥 用户管理", callback_data="admin_users"),
-                InlineKeyboardButton("📊 用户统计", callback_data="admin_stats")
+                InlineKeyboardButton(t(user_id, 'admin_btn_user_management'), callback_data="admin_users"),
+                InlineKeyboardButton(t(user_id, 'admin_btn_user_stats'), callback_data="admin_stats")
             ],
             [
-                InlineKeyboardButton("📡 代理管理", callback_data="proxy_panel"),
-                InlineKeyboardButton("👑 管理员管理", callback_data="admin_manage")
+                InlineKeyboardButton(t(user_id, 'admin_btn_proxy_management'), callback_data="proxy_panel"),
+                InlineKeyboardButton(t(user_id, 'admin_btn_admin_management'), callback_data="admin_manage")
             ],
             [
-                InlineKeyboardButton("🔍 搜索用户", callback_data="admin_search"),
-                InlineKeyboardButton("📋 最近用户", callback_data="admin_recent")
+                InlineKeyboardButton(t(user_id, 'admin_btn_search_user'), callback_data="admin_search"),
+                InlineKeyboardButton(t(user_id, 'admin_btn_recent_users'), callback_data="admin_recent")
             ],
             [
-                InlineKeyboardButton("💳 卡密开通", callback_data="admin_card_menu"),
-                InlineKeyboardButton("👤 人工开通", callback_data="admin_manual_menu")
+                InlineKeyboardButton(t(user_id, 'admin_btn_card_activation'), callback_data="admin_card_menu"),
+                InlineKeyboardButton(t(user_id, 'admin_btn_manual_activation'), callback_data="admin_manual_menu")
             ],
             [
-                InlineKeyboardButton("撤销会员", callback_data="admin_revoke_menu")
+                InlineKeyboardButton(t(user_id, 'admin_btn_revoke_membership'), callback_data="admin_revoke_menu")
             ],
             [
-                InlineKeyboardButton("📢 群发通知", callback_data="broadcast_menu")
+                InlineKeyboardButton(t(user_id, 'admin_btn_broadcast'), callback_data="broadcast_menu")
             ],
             [InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")]
         ]
@@ -13089,28 +13091,28 @@ class EnhancedBot:
         keyboard = InlineKeyboardMarkup(buttons)
         self.safe_edit_message(query, admin_text, 'HTML', keyboard)
     def handle_admin_users(self, query):
-        """用户管理界面"""
+        """User Management Interface"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 获取活跃用户列表
+        # Get active user list
         active_users = self.db.get_active_users(days=7, limit=15)
         
-        text = "<b>👥 用户管理</b>\n\n<b>📋 最近活跃用户（7天内）</b>\n\n"
+        text = f"<b>{t(user_id, 'user_management_title')}</b>\n\n<b>{t(user_id, 'user_management_recent_active')}</b>\n\n"
         
         if active_users:
             for i, (uid, username, first_name, register_time, last_active, status) in enumerate(active_users[:10], 1):
-                # 检查会员状态
+                # Check membership status
                 is_member, level, _ = self.db.check_membership(uid)
-                member_icon = "🎁" if is_member else "❌"
+                member_icon = "💎" if is_member else "❌"
                 admin_icon = "👑" if self.db.is_admin(uid) else ""
                 
-                display_name = first_name or username or f"用户{uid}"
+                display_name = first_name or username or f"{t(user_id, 'user_management_user_prefix')}{uid}"
                 if len(display_name) > 15:
                     display_name = display_name[:15] + "..."
                 
@@ -13121,152 +13123,155 @@ class EnhancedBot:
                         last_time = datetime.strptime(last_active, '%Y-%m-%d %H:%M:%S')
                         time_diff = datetime.now(BEIJING_TZ).replace(tzinfo=None) - last_time
                         if time_diff.days == 0:
-                            time_str = f"{time_diff.seconds//3600}小时前"
+                            time_str = t(user_id, 'user_management_time_hours_ago').format(hours=time_diff.seconds//3600)
                         else:
-                            time_str = f"{time_diff.days}天前"
+                            time_str = t(user_id, 'user_management_time_days_ago').format(days=time_diff.days)
                         text += f"   🕒 {time_str}\n"
                     except:
                         text += f"   🕒 {last_active}\n"
                 text += "\n"
         else:
-            text += "暂无活跃用户\n"
+            text += t(user_id, 'user_management_no_active') + "\n"
         
-        text += f"\n📊 <b>图例</b>\n👑 = 管理员 | 🎁 = 会员 | ❌ = 普通用户"
+        text += f"\n{t(user_id, 'user_management_legend')}\n{t(user_id, 'user_management_legend_admin')} | {t(user_id, 'user_management_legend_vip')} | {t(user_id, 'user_management_legend_normal')}"
         
         buttons = [
             [
-                InlineKeyboardButton("🔍 搜索用户", callback_data="admin_search"),
-                InlineKeyboardButton("📋 最近注册", callback_data="admin_recent")
+                InlineKeyboardButton(t(user_id, 'user_management_btn_search'), callback_data="admin_search"),
+                InlineKeyboardButton(t(user_id, 'user_management_btn_recent'), callback_data="admin_recent")
             ],
             [
-                InlineKeyboardButton("📊 用户统计", callback_data="admin_stats"),
-                InlineKeyboardButton("🔄 刷新列表", callback_data="admin_users")
+                InlineKeyboardButton(t(user_id, 'user_management_btn_stats'), callback_data="admin_stats"),
+                InlineKeyboardButton(t(user_id, 'user_management_btn_refresh'), callback_data="admin_users")
             ],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
         self.safe_edit_message(query, text, 'HTML', keyboard)
 
     def handle_admin_stats(self, query):
-        """用户统计界面"""
+        """User Statistics Interface"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
         stats = self.db.get_user_statistics()
         
-        # 计算比率
+        # Calculate ratios
         total = stats.get('total_users', 0)
         active_rate = (stats.get('week_active', 0) / total * 100) if total > 0 else 0
         member_rate = (stats.get('active_members', 0) / total * 100) if total > 0 else 0
         
         text = f"""
-<b>📊 用户统计报告</b>
+<b>{t(user_id, 'user_stats_title')}</b>
 
-<b>🔢 基础数据</b>
-• 总用户数: {stats.get('total_users', 0)}
-• 今日活跃: {stats.get('today_active', 0)}
-• 本周活跃: {stats.get('week_active', 0)} ({active_rate:.1f}%)
-• 近期新用户: {stats.get('recent_users', 0)} (7天内)
+<b>{t(user_id, 'user_stats_basic_data')}</b>
+• {t(user_id, 'user_stats_total_users')}: {stats.get('total_users', 0)}
+• {t(user_id, 'user_stats_today_active')}: {stats.get('today_active', 0)}
+• {t(user_id, 'user_stats_week_active')}: {stats.get('week_active', 0)} ({active_rate:.1f}%)
+• {t(user_id, 'user_stats_recent_new')}: {stats.get('recent_users', 0)} {t(user_id, 'user_stats_recent_days')}
 
-<b>💎 会员数据</b>
-• 有效会员: {stats.get('active_members', 0)} ({member_rate:.1f}%)
-• 体验会员: {stats.get('trial_members', 0)}
-• 转换率: {member_rate:.1f}%
+<b>{t(user_id, 'user_stats_member_data')}</b>
+• {t(user_id, 'user_stats_active_members')}: {stats.get('active_members', 0)} ({member_rate:.1f}%)
+• {t(user_id, 'user_stats_trial_members')}: {stats.get('trial_members', 0)}
+• {t(user_id, 'user_stats_conversion_rate')}: {member_rate:.1f}%
 
-<b>📈 活跃度分析</b>
-• 周活跃率: {active_rate:.1f}%
-• 日活跃率: {(stats.get('today_active', 0) / total * 100) if total > 0 else 0:.1f}%
+<b>{t(user_id, 'user_stats_activity_analysis')}</b>
+• {t(user_id, 'user_stats_week_rate')}: {active_rate:.1f}%
+• {t(user_id, 'user_stats_day_rate')}: {(stats.get('today_active', 0) / total * 100) if total > 0 else 0:.1f}%
 
-<b>⏰ 统计时间</b>
+<b>{t(user_id, 'user_stats_time')}</b>
 {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
         """
         
         buttons = [
             [
-                InlineKeyboardButton("👥 用户管理", callback_data="admin_users"),
-                InlineKeyboardButton("🔄 刷新统计", callback_data="admin_stats")
+                InlineKeyboardButton(t(user_id, 'admin_btn_user_management'), callback_data="admin_users"),
+                InlineKeyboardButton(t(user_id, 'user_stats_btn_refresh'), callback_data="admin_stats")
             ],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
         self.safe_edit_message(query, text, 'HTML', keyboard)
 
     def handle_admin_manage(self, query):
-        """管理员管理界面"""
+        """Admin Management Interface"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 获取管理员列表
+        # Get admin list
         admins = self.db.get_all_admins()
         
-        text = "<b>👑 管理员管理</b>\n\n<b>📋 当前管理员列表</b>\n\n"
+        text = f"<b>{t(user_id, 'admin_manage_title')}</b>\n\n<b>{t(user_id, 'admin_manage_list')}</b>\n\n"
         
         if admins:
             for i, (admin_id, username, first_name, added_time) in enumerate(admins, 1):
                 is_super = admin_id in config.ADMIN_IDS
-                admin_type = "👑 超级管理员" if is_super else "🔧 普通管理员"
+                admin_type = t(user_id, 'admin_manage_super') if is_super else t(user_id, 'admin_manage_normal')
                 
-                display_name = first_name or username or f"管理员{admin_id}"
+                display_name = first_name or username or f"{t(user_id, 'admin_manage_admin_prefix')}{admin_id}"
                 if len(display_name) > 15:
                     display_name = display_name[:15] + "..."
                 
                 text += f"{i}. {admin_type}\n"
                 text += f"   ID: <code>{admin_id}</code>\n"
-                text += f"   昵称: {display_name}\n"
-                if username and username != "配置文件管理员":
-                    text += f"   用户名: @{username}\n"
-                text += f"   添加时间: {added_time}\n\n"
+                text += f"   {t(user_id, 'admin_manage_nickname')}: {display_name}\n"
+                if username and username != t(user_id, 'admin_manage_config_admin'):
+                    text += f"   {t(user_id, 'admin_manage_username')}: @{username}\n"
+                display_time = added_time if added_time != "系统内置" else t(user_id, 'admin_manage_system_builtin')
+                text += f"   {t(user_id, 'admin_manage_added_time')}: {display_time}\n\n"
         else:
-            text += "暂无管理员\n"
+            text += t(user_id, 'admin_manage_no_admins') + "\n"
         
-        text += f"\n<b>💡 说明</b>\n• 超级管理员来自配置文件\n• 普通管理员可通过命令添加"
+        text += f"\n<b>{t(user_id, 'admin_manage_description')}</b>\n• {t(user_id, 'admin_manage_desc_super')}\n• {t(user_id, 'admin_manage_desc_normal')}"
         
         buttons = [
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
         self.safe_edit_message(query, text, 'HTML', keyboard)
 
     def handle_admin_search(self, query):
-        """搜索用户界面"""
+        """Search User Interface"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        text = """
-<b>🔍 用户搜索</b>
+        text = f"""
+<b>{t(user_id, 'search_user_title')}</b>
 
-<b>搜索说明：</b>
-• 输入用户ID（纯数字）
-• 输入用户名（@username 或 username）
-• 输入昵称关键词
+<b>{t(user_id, 'search_user_prompt')}</b>
+{t(user_id, 'search_user_methods')}
+• {t(user_id, 'search_user_by_id')}
+• {t(user_id, 'search_user_by_username')}
+• {t(user_id, 'search_user_by_nickname')}
 
-<b>示例：</b>
-• <code>123456789</code> - 按ID搜索
-• <code>@username</code> - 按用户名搜索
-• <code>9hao</code> - 按昵称搜索
+<b>{t(user_id, 'search_user_example')}</b>
+• {t(user_id, 'search_user_example_id')}
+• {t(user_id, 'search_user_example_username')}
+• {t(user_id, 'search_user_example_nickname')}
 
-请发送要搜索的内容...
+{t(user_id, 'search_user_timeout')}
+{t(user_id, 'search_user_send_prompt')}
         """
         
-        # 设置用户状态为等待搜索输入
+        # Set user status to waiting for search input
         self.db.save_user(
             user_id,
             query.from_user.username or "",
@@ -13275,34 +13280,34 @@ class EnhancedBot:
         )
         
         buttons = [
-            [InlineKeyboardButton("❌ 取消搜索", callback_data="admin_users")]
+            [InlineKeyboardButton(t(user_id, 'search_user_btn_cancel'), callback_data="admin_users")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
         self.safe_edit_message(query, text, 'HTML', keyboard)
 
     def handle_admin_recent(self, query):
-        """最近注册用户"""
+        """Recently Registered Users"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
         recent_users = self.db.get_recent_users(limit=15)
         
-        text = "<b>📋 最近注册用户</b>\n\n"
+        text = f"<b>{t(user_id, 'recent_users_title')}</b>\n\n"
         
         if recent_users:
             for i, (uid, username, first_name, register_time, last_active, status) in enumerate(recent_users, 1):
-                # 检查会员状态
+                # Check membership status
                 is_member, level, _ = self.db.check_membership(uid)
-                member_icon = "🎁" if is_member else "❌"
+                member_icon = "💎" if is_member else "❌"
                 admin_icon = "👑" if self.db.is_admin(uid) else ""
                 
-                display_name = first_name or username or f"用户{uid}"
+                display_name = first_name or username or f"{t(user_id, 'user_management_user_prefix')}{uid}"
                 if len(display_name) > 15:
                     display_name = display_name[:15] + "..."
                 
@@ -13314,24 +13319,24 @@ class EnhancedBot:
                         reg_time = datetime.strptime(register_time, '%Y-%m-%d %H:%M:%S')
                         time_diff = datetime.now(BEIJING_TZ).replace(tzinfo=None) - reg_time
                         if time_diff.days == 0:
-                            time_str = f"{time_diff.seconds//3600}小时前注册"
+                            time_str = t(user_id, 'user_management_time_hours_ago').format(hours=time_diff.seconds//3600)
                         else:
-                            time_str = f"{time_diff.days}天前注册"
-                        text += f"   📅 {time_str}\n"
+                            time_str = t(user_id, 'user_management_time_days_ago').format(days=time_diff.days)
+                        text += f"   📅 {t(user_id, 'recent_users_registered').format(time=time_str)}\n"
                     except:
                         text += f"   📅 {register_time}\n"
                 text += "\n"
         else:
-            text += "暂无用户数据\n"
+            text += t(user_id, 'recent_users_no_data') + "\n"
         
-        text += f"\n📊 <b>图例</b>\n👑 = 管理员 | 🎁 = 会员 | ❌ = 普通用户"
+        text += f"\n{t(user_id, 'user_management_legend')}\n{t(user_id, 'user_management_legend_admin')} | {t(user_id, 'user_management_legend_vip')} | {t(user_id, 'user_management_legend_normal')}"
         
         buttons = [
             [
-                InlineKeyboardButton("👥 用户管理", callback_data="admin_users"),
-                InlineKeyboardButton("🔄 刷新列表", callback_data="admin_recent")
+                InlineKeyboardButton(t(user_id, 'admin_btn_user_management'), callback_data="admin_users"),
+                InlineKeyboardButton(t(user_id, 'recent_users_btn_refresh'), callback_data="admin_recent")
             ],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
@@ -17069,99 +17074,98 @@ class EnhancedBot:
             self.safe_send_message(update, text, 'HTML', keyboard)
     
     def handle_admin_card_menu(self, query):
-        """管理员卡密开通菜单"""
+        """Admin Card Activation Menu"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        text = """
-<b>💳 卡密开通</b>
+        text = f"""
+<b>{t(user_id, 'card_activation_title')}</b>
 
-<b>📋 功能说明</b>
-• 选择天数生成卡密
-• 每次生成1个卡密
-• 卡密为8位大写字母数字组合
-• 每个卡密仅可使用一次
+<b>{t(user_id, 'card_activation_description')}</b>
+• {t(user_id, 'card_activation_desc_select')}
+• {t(user_id, 'card_activation_desc_count')}
+• {t(user_id, 'card_activation_desc_format')}
+• {t(user_id, 'card_activation_desc_usage')}
 
-<b>🎯 选择有效期</b>
-请选择要生成的卡密有效期
+<b>{t(user_id, 'card_activation_select_validity')}</b>
+{t(user_id, 'card_activation_select_prompt')}
         """
         
         keyboard = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton("1天", callback_data="admin_card_days_1"),
-                InlineKeyboardButton("7天", callback_data="admin_card_days_7")
+                InlineKeyboardButton(t(user_id, 'gift_membership_1day'), callback_data="admin_card_days_1"),
+                InlineKeyboardButton(t(user_id, 'gift_membership_7days'), callback_data="admin_card_days_7")
             ],
             [
-                InlineKeyboardButton("30天", callback_data="admin_card_days_30"),
-                InlineKeyboardButton("60天", callback_data="admin_card_days_60")
+                InlineKeyboardButton(t(user_id, 'gift_membership_30days'), callback_data="admin_card_days_30"),
+                InlineKeyboardButton(t(user_id, 'gift_membership_60days'), callback_data="admin_card_days_60")
             ],
             [
-                InlineKeyboardButton("90天", callback_data="admin_card_days_90"),
-                InlineKeyboardButton("360天", callback_data="admin_card_days_360")
+                InlineKeyboardButton(t(user_id, 'gift_membership_90days'), callback_data="admin_card_days_90"),
+                InlineKeyboardButton(t(user_id, 'gift_membership_360days'), callback_data="admin_card_days_360")
             ],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
     
     def handle_admin_card_generate(self, query, days: int):
-        """管理员生成卡密"""
+        """Admin Generate Card"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 生成卡密
-        success, code, message = self.db.create_redeem_code("会员", days, None, user_id)
+        # Generate card
+        success, code, message = self.db.create_redeem_code(t(user_id, 'member_level_member'), days, None, user_id)
         
         if success:
             text = f"""
-✅ <b>卡密生成成功！</b>
+{t(user_id, 'card_activation_success')}
 
-<b>📋 卡密信息</b>
-• 卡密: <code>{code}</code>
-• 等级: 会员
-• 有效期: {days}天
-• 状态: 未使用
+<b>{t(user_id, 'card_activation_info')}</b>
+• {t(user_id, 'card_activation_code')}: <code>{code}</code>
+• {t(user_id, 'user_detail_level')}: {t(user_id, 'member_level_member')}
+• {t(user_id, 'card_activation_validity')}: {days}{t(user_id, 'gift_membership_1day').replace('1', '')}
+• {t(user_id, 'card_activation_status')}: {t(user_id, 'card_activation_unused')}
 
-<b>💡 提示</b>
-• 请妥善保管卡密
-• 每个卡密仅可使用一次
-• 点击卡密可复制
+<b>{t(user_id, 'card_activation_tips')}</b>
+• {t(user_id, 'card_activation_tip_save')}
+• {t(user_id, 'card_activation_tip_copy')}
             """
         else:
             text = f"""
-❌ <b>生成失败</b>
+❌ <b>{t(user_id, 'redeem_failed')}</b>
 
 {message}
             """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔄 继续生成", callback_data="admin_card_menu")],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'card_activation_btn_continue'), callback_data="admin_card_menu")],
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
     
     def handle_admin_manual_menu(self, query):
-        """管理员人工开通菜单"""
+        """Admin Manual Activation Menu"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 设置用户状态
+        # Set user status
         self.db.save_user(
             user_id,
             query.from_user.username or "",
@@ -17169,25 +17173,25 @@ class EnhancedBot:
             "waiting_manual_user"
         )
         
-        text = """
-<b>👤 人工开通会员</b>
+        text = f"""
+<b>{t(user_id, 'manual_activation_title')}</b>
 
-<b>📋 请输入要开通的用户</b>
+<b>{t(user_id, 'manual_activation_prompt')}</b>
 
-支持以下格式：
-• 用户ID：<code>123456789</code>
-• 用户名：<code>@username</code> 或 <code>username</code>
+{t(user_id, 'manual_activation_formats')}
+• {t(user_id, 'manual_activation_format_id')}: <code>123456789</code>
+• {t(user_id, 'manual_activation_format_username')}: <code>@username</code> or <code>username</code>
 
-<b>💡 提示</b>
-• 用户必须先与机器人交互过
-• 输入后会显示天数选择
-• 会员时长自动累加
+<b>💡 {t(user_id, 'card_activation_tips')}</b>
+• {t(user_id, 'manual_activation_requirement')}
+• {t(user_id, 'manual_activation_note1')}
+• {t(user_id, 'manual_activation_note2')}
 
-⏰ <i>5分钟内未输入将自动取消</i>
+⏰ <i>{t(user_id, 'search_user_timeout')}</i>
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("❌ 取消", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'btn_cancel'), callback_data="admin_panel")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
@@ -17361,16 +17365,16 @@ class EnhancedBot:
     # ================================
     
     def handle_admin_revoke_menu(self, query):
-        """管理员撤销会员菜单"""
+        """Admin Revoke Membership Menu"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 设置用户状态
+        # Set user status
         self.db.save_user(
             user_id,
             query.from_user.username or "",
@@ -17378,24 +17382,24 @@ class EnhancedBot:
             "waiting_revoke_user"
         )
         
-        text = """
-<b>撤销会员</b>
+        text = f"""
+<b>{t(user_id, 'revoke_membership_title')}</b>
 
-<b>📋 请输入要撤销的用户名（@name）或用户ID：</b>
+<b>{t(user_id, 'revoke_membership_prompt')}</b>
 
-支持以下格式：
-• 用户ID：<code>123456789</code>
-• 用户名：<code>@username</code> 或 <code>username</code>
+{t(user_id, 'manual_activation_formats')}
+• {t(user_id, 'manual_activation_format_id')}: <code>123456789</code>
+• {t(user_id, 'manual_activation_format_username')}: <code>@username</code> or <code>username</code>
 
-<b>💡 提示</b>
-• 用户必须先与机器人交互过
-• 撤销后会删除用户的所有会员权限
+<b>💡 {t(user_id, 'card_activation_tips')}</b>
+• {t(user_id, 'manual_activation_requirement')}
+• {t(user_id, 'revoke_membership_note')}
 
-⏰ <i>5分钟内有效</i>
+⏰ <i>{t(user_id, 'revoke_membership_timeout')}</i>
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("❌ 取消", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'btn_cancel'), callback_data="admin_panel")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
