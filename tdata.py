@@ -16916,7 +16916,15 @@ class EnhancedBot:
         if self.db.is_admin(user_id):
             member_status = t(user_id, 'member_status_admin')
         elif is_member:
-            member_status = f"{t(user_id, 'member_status_member')} {level}\n{t(user_id, 'member_status_expire').format(time=expiry)}"
+            # 翻译会员等级
+            if level == "会员":
+                translated_level = t(user_id, 'member_level_member')
+            elif level == "管理员":
+                translated_level = t(user_id, 'member_level_admin')
+            else:
+                translated_level = level  # 保留其他未知等级
+            
+            member_status = f"{t(user_id, 'member_status_member')} {translated_level}\n{t(user_id, 'member_status_expire').format(time=expiry)}"
         else:
             member_status = t(user_id, 'member_status_none')
         
@@ -16992,16 +17000,24 @@ class EnhancedBot:
             # 获取新的会员状态
             is_member, level, expiry = self.db.check_membership(user_id)
             
+            # 翻译会员等级
+            if level == "会员":
+                translated_level = t(user_id, 'member_level_member')
+            elif level == "管理员":
+                translated_level = t(user_id, 'member_level_admin')
+            else:
+                translated_level = level  # 保留其他未知等级
+            
             text = f"""
 <b>{t(user_id, 'redeem_success')}</b>
 
 <b>{t(user_id, 'redeem_info_title')}</b>
 {t(user_id, 'redeem_info_code').format(code=code.upper())}
-{t(user_id, 'redeem_info_level').format(level=level)}
+{t(user_id, 'redeem_info_level').format(level=translated_level)}
 {t(user_id, 'redeem_info_days').format(days=days)}
 
 <b>{t(user_id, 'redeem_current_status')}</b>
-{t(user_id, 'redeem_current_level').format(level=level)}
+{t(user_id, 'redeem_current_level').format(level=translated_level)}
 {t(user_id, 'redeem_current_expire').format(time=expiry)}
 
 {t(user_id, 'redeem_thanks')}
@@ -17017,6 +17033,12 @@ class EnhancedBot:
             error_msg = message
             if "已被使用" in message:
                 error_msg = t(user_id, 'redeem_error_used')
+            elif "不存在" in message:
+                error_msg = t(user_id, 'redeem_error_not_exist')
+            elif "已过期" in message:
+                error_msg = t(user_id, 'redeem_error_expired')
+            elif "状态无效" in message:
+                error_msg = t(user_id, 'redeem_error_invalid')
             
             text = f"""
 <b>{t(user_id, 'redeem_failed')}</b>

@@ -2329,6 +2329,9 @@ TEXTS = {
     # 6. 兑换失败
     'redeem_failed': '❌ 兑换失败',
     'redeem_error_used': '卡密已被使用',
+    'redeem_error_not_exist': '卡密不存在',
+    'redeem_error_expired': '卡密已过期',
+    'redeem_error_invalid': '卡密状态无效',
     'redeem_error_check': '请检查您的卡密是否正确',
     
     # 7. 会员等级名称

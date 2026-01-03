@@ -2328,6 +2328,9 @@ TEXTS = {
     # 6. Redemption Failed
     'redeem_failed': '❌ Redemption Failed',
     'redeem_error_used': 'Code has already been used',
+    'redeem_error_not_exist': 'Code does not exist',
+    'redeem_error_expired': 'Code has expired',
+    'redeem_error_invalid': 'Invalid code status',
     'redeem_error_check': 'Please check if your code is correct',
     
     # 7. Membership Level Names
