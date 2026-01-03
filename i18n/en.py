@@ -2280,4 +2280,60 @@ TEXTS = {
     'contact_limit_zip_normal': 'ContactCheck_Normal',
     'contact_limit_zip_limited': 'ContactCheck_Limited',
     'contact_limit_zip_failed': 'ContactCheck_Failed',
+    
+    # ===== Activate/Redeem Membership Feature =====
+    # 1. Membership Center Page
+    'member_center_title': '💳 Membership Center',
+    'member_current_status': '📊 Current Status',
+    'member_feature_title': '💡 Features',
+    'member_feature1': '• Redeem card code to activate membership',
+    'member_feature2': '• Membership duration auto-accumulates',
+    'member_feature3': '• Supports multiple redemptions',
+    'member_operation_title': '🎯 Operation Options',
+    'member_operation_desc': 'Please select the operation you want to perform',
+    
+    # 2. Membership Status Types
+    'member_status_admin': '👑 Admin (Permanent)',
+    'member_status_none': '❌ No Membership',
+    'member_status_member': '💎 Member',
+    'member_status_expire': '• Expiry time: {time}',
+    
+    # 3. Operation Buttons
+    'member_btn_redeem': '🎫 Redeem Code',
+    'member_btn_back_main': 'Back to Main Menu',
+    'member_btn_back_center': 'Back to Membership Center',
+    'member_btn_retry': '🔄 Redeem Again',
+    'member_btn_cancel': '❌ Cancel',
+    
+    # 4. Redeem Code Page
+    'redeem_title': '🎟️ Redeem Code',
+    'redeem_input_prompt': '📋 Please enter the code (up to 10 characters)',
+    'redeem_tip_title': '💡 Tips:',
+    'redeem_tip1': '• Enter the code you received',
+    'redeem_tip2': '• Code is case-insensitive',
+    'redeem_tip3': '• Duration auto-accumulates after successful redemption',
+    'redeem_timeout': '⏰ Auto-cancel if no input within 5 minutes',
+    
+    # 5. Redemption Success
+    'redeem_success': '✅ Redemption Successful!',
+    'redeem_info_title': '📋 Redemption Info',
+    'redeem_info_code': '• Code: {code}',
+    'redeem_info_level': '• Membership level: {level}',
+    'redeem_info_days': '• Days added: {days} day(s)',
+    'redeem_current_status': '💎 Current Membership Status',
+    'redeem_current_level': '• Membership level: {level}',
+    'redeem_current_expire': '• Expiry time: {time}',
+    'redeem_thanks': 'Thank you for your support!',
+    
+    # 6. Redemption Failed
+    'redeem_failed': '❌ Redemption Failed',
+    'redeem_error_used': 'Code has already been used',
+    'redeem_error_not_exist': 'Code does not exist',
+    'redeem_error_expired': 'Code has expired',
+    'redeem_error_invalid': 'Invalid code status',
+    'redeem_error_check': 'Please check if your code is correct',
+    
+    # 7. Membership Level Names
+    'member_level_member': 'Member',
+    'member_level_admin': 'Admin',
 }
