@@ -1449,11 +1449,11 @@ async def safe_process_with_retry(func, *args, max_retries=3, **kwargs):
                 continue
     raise last_error
 
-async def safe_process_session(session_path: str, api_id: int, api_hash: str, 
-                                proxy: Optional[Dict], profile_data: Dict,
-                                proxy_manager: 'ProxyManager' = None,
-                                db: 'Database' = None) -> Dict:
-    """安全处理 session，避免数据库锁定
+async def _process_session_internal(session_path: str, api_id: int, api_hash: str, 
+                                    proxy: Optional[Dict], profile_data: Dict,
+                                    proxy_manager: 'ProxyManager' = None,
+                                    db: 'Database' = None) -> Dict:
+    """内部session处理函数（不含超时逻辑）
     
     Args:
         session_path: session 文件路径
@@ -1608,6 +1608,48 @@ async def safe_process_session(session_path: str, api_id: int, api_hash: str,
                 pass
         cleanup_temp_session(temp_dir)
 
+async def safe_process_session(session_path: str, api_id: int, api_hash: str, 
+                                proxy: Optional[Dict], profile_data: Dict,
+                                proxy_manager: 'ProxyManager' = None,
+                                db: 'Database' = None,
+                                timeout: int = 30) -> Dict:
+    """安全处理 session，避免数据库锁定，带超时保护
+    
+    Args:
+        session_path: session 文件路径
+        api_id: Telegram API ID
+        api_hash: Telegram API Hash
+        proxy: 代理配置字典
+        profile_data: 资料更新数据
+        proxy_manager: 代理管理器实例（可选）
+        db: 数据库实例（可选）
+        timeout: 处理超时时间（秒），默认30秒
+        
+    Returns:
+        处理结果字典
+    """
+    try:
+        # 使用asyncio.wait_for添加超时保护
+        result = await asyncio.wait_for(
+            _process_session_internal(session_path, api_id, api_hash, proxy, profile_data, proxy_manager, db),
+            timeout=timeout
+        )
+        return result
+    except asyncio.TimeoutError:
+        logger.warning(f"账号处理超时（{timeout}秒）: {session_path}")
+        return {
+            'success': False,
+            'error': f'操作超时（{timeout}秒）',
+            'error_type': 'Timeout'
+        }
+    except Exception as e:
+        logger.error(f"账号处理失败: {e}")
+        return {
+            'success': False,
+            'error': str(e),
+            'error_type': type(e).__name__
+        }
+
 async def batch_convert_tdata_to_session(tdata_list: List[Tuple[str, str]], 
                                          bot_instance: 'EnhancedBot') -> List[Dict]:
     """并发转换 TData 为 Session
@@ -1633,10 +1675,22 @@ async def batch_convert_tdata_to_session(tdata_list: List[Tuple[str, str]],
                     api_id = 2040
                     api_hash = 'b18441a1ff607e10a989891a5462e627'
                 
-                # 调用bot实例的convert_tdata_to_session方法
-                status, info, name = await bot_instance.convert_tdata_to_session(
-                    tdata_path, tdata_name, api_id, api_hash
-                )
+                # 添加30秒超时保护
+                try:
+                    status, info, name = await asyncio.wait_for(
+                        bot_instance.convert_tdata_to_session(
+                            tdata_path, tdata_name, api_id, api_hash
+                        ),
+                        timeout=TDATA_CONVERT_TIMEOUT
+                    )
+                except asyncio.TimeoutError:
+                    return {
+                        'success': False, 
+                        'error': f'TData转换超时（{TDATA_CONVERT_TIMEOUT}秒）', 
+                        'error_type': 'Timeout',
+                        'tdata': tdata_path,
+                        'name': tdata_name
+                    }
                 
                 if status == "转换成功":
                     # 从sessions目录查找转换后的session文件
@@ -4880,6 +4934,11 @@ class FileProcessor:
                     # 使用tdata_root_path而不是dir_path，这是TDesktop实际需要的路径
                     tdata_folders.append((tdata_root_path, display_name))
                     print(f"📂 找到TData目录: {display_name} (路径: {dir_name})")
+                    
+                    # 【修复】防止os.walk递归进入已识别的tdata目录，避免重复扫描
+                    # 从dirs列表中移除此目录，阻止os.walk深入其子目录
+                    if dir_name in dirs:
+                        dirs.remove(dir_name)
         
         except Exception as e:
             print(f"❌ 文件扫描失败: {e}")
@@ -25656,7 +25715,7 @@ admin3</code>
         query.answer()
         
         if user_id not in self.pending_profile_update:
-            query.answer("❌ 会话已过期")
+            query.answer(t(user_id, 'profile_custom_session_expired'))
             return
         
         config = self.pending_profile_update[user_id]['config']
@@ -25780,34 +25839,34 @@ admin3</code>
             
             if field_name == 'photo':
                 text = f"""
-<b>📤 上传{field_display}文件</b>
+<b>{t(user_id, 'profile_custom_upload_photo_title').format(field=field_display)}</b>
 
-<b>支持的格式：</b>
-• 单个图片：jpg、png、jpeg、webp
-• 多个图片：打包成zip文件
-• 每个图片会按顺序分配给账号
+<b>{t(user_id, 'profile_custom_upload_photo_format')}</b>
+{t(user_id, 'profile_custom_upload_photo_single')}
+{t(user_id, 'profile_custom_upload_photo_multi')}
+{t(user_id, 'profile_custom_upload_photo_assign')}
 
-<b>💡 注意：</b>
-• 图片建议尺寸：640x640 或更高
-• 文件大小建议不超过5MB
+<b>{t(user_id, 'profile_custom_upload_photo_notice')}</b>
+{t(user_id, 'profile_custom_upload_photo_size')}
+{t(user_id, 'profile_custom_upload_photo_limit')}
 
-⏱ 请在5分钟内上传文件...
+{t(user_id, 'profile_upload_timeout')}
 """
             else:
                 text = f"""
-<b>📤 上传{field_display}txt文件</b>
+<b>{t(user_id, 'profile_custom_upload_txt_title').format(field=field_display)}</b>
 
-<b>文件格式：</b>
-• 每行一个{field_display}
-• UTF-8编码
-• 支持空行（将被跳过）
+<b>{t(user_id, 'profile_custom_upload_txt_format')}</b>
+{t(user_id, 'profile_custom_upload_txt_line').format(field=field_display)}
+{t(user_id, 'profile_custom_upload_txt_encoding')}
+{t(user_id, 'profile_custom_upload_txt_skip')}
 
-<b>示例：</b>
+<b>{t(user_id, 'profile_custom_upload_txt_example')}</b>
 <code>张三
 李四
 王五</code>
 
-⏱ 请在5分钟内上传文件...
+{t(user_id, 'profile_upload_timeout')}
 """
             
             query.edit_message_text(text=text, parse_mode='HTML')
@@ -25819,22 +25878,22 @@ admin3</code>
         
         elif action == "manual":
             # 请求用户手动输入
-            field_display = {'name': '姓名', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+            field_display = get_field_display(field_name)
             
             text = f"""
-<b>✍️ 手动输入{field_display}</b>
+<b>{t(user_id, 'profile_custom_manual_input_title').format(field=field_display)}</b>
 
-<b>输入格式：</b>
-• 每行一个{field_display}
-• 可以输入多个，用换行分隔
-• 支持空行（将被跳过）
+<b>{t(user_id, 'profile_custom_manual_input_format')}</b>
+{t(user_id, 'profile_custom_manual_input_line').format(field=field_display)}
+{t(user_id, 'profile_custom_manual_input_multi')}
+{t(user_id, 'profile_custom_manual_input_skip')}
 
-<b>示例：</b>
+<b>{t(user_id, 'profile_custom_manual_input_example')}</b>
 <code>张三
 李四
 王五</code>
 
-⏱ 请在5分钟内发送内容...
+{t(user_id, 'profile_custom_input_timeout')}
 """
             
             query.edit_message_text(text=text, parse_mode='HTML')
@@ -25876,7 +25935,7 @@ admin3</code>
             elif field_name == 'username':
                 config.custom_usernames = []
             
-            query.answer("✅ 已清除设置")
+            query.answer(t(user_id, 'profile_custom_cleared'))
             self._show_custom_field_config(query, user_id, field_name, get_field_display(field_name))
         
         elif action == "view":
@@ -25895,13 +25954,13 @@ admin3</code>
             
             # 只显示前N个（使用常量）
             display_items = items[:self.MAX_DISPLAY_ITEMS]
-            text = f"<b>📊 已设置的{field_display} ({len(items)}个)</b>\n\n"
+            text = f"<b>{t(user_id, 'profile_custom_view_title').format(field=field_display, count=len(items))}</b>\n\n"
             
             for i, item in enumerate(display_items, 1):
                 text += f"{i}. {item}\n"
             
             if len(items) > self.MAX_DISPLAY_ITEMS:
-                text += f"\n... 还有 {len(items) - self.MAX_DISPLAY_ITEMS} 个"
+                text += f"\n{t(user_id, 'profile_custom_view_more').format(count=len(items) - self.MAX_DISPLAY_ITEMS)}"
             
             query.answer(text[:self.ALERT_TEXT_MAX_LENGTH], show_alert=True)
         
@@ -25930,7 +25989,7 @@ admin3</code>
     def handle_profile_custom_text_input(self, update: Update, context: CallbackContext, user_id: int, field_name: str, text: str):
         """处理自定义资料的文本输入"""
         if user_id not in self.pending_profile_update:
-            self.safe_send_message(update, "❌ 会话已过期，请重新开始", 'HTML')
+            self.safe_send_message(update, t(user_id, 'profile_custom_session_expired_restart'), 'HTML')
             return
         
         config = self.pending_profile_update[user_id]['config']
@@ -25939,11 +25998,19 @@ admin3</code>
         lines = [line.strip() for line in text.split('\n') if line.strip()]
         
         if not lines:
-            self.safe_send_message(update, "❌ 输入为空，请重新输入", 'HTML')
+            self.safe_send_message(update, t(user_id, 'profile_custom_input_empty'), 'HTML')
             return
         
-        # 根据字段类型保存
-        field_display = {'name': '姓名', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+        # Helper function to get translated field display name
+        def get_field_display(field):
+            field_map = {
+                'name': 'profile_field_name',
+                'bio': 'profile_field_bio',
+                'username': 'profile_field_username'
+            }
+            return t(user_id, field_map.get(field, 'profile_field_name'))
+        
+        field_display = get_field_display(field_name)
         
         if field_name == 'name':
             config.custom_names = lines
@@ -25962,12 +26029,12 @@ admin3</code>
         
         # 发送确认消息和返回按钮
         keyboard = InlineKeyboardMarkup([[
-            InlineKeyboardButton("🔙 返回配置菜单", callback_data="profile_custom_back")
+            InlineKeyboardButton(t(user_id, 'profile_custom_field_back_to_menu'), callback_data="profile_custom_back")
         ]])
         
         self.safe_send_message(
             update,
-            f"✅ 已设置 {len(lines)} 个{field_display}",
+            t(user_id, 'profile_custom_configured').format(count=len(lines), field=field_display),
             'HTML',
             reply_markup=keyboard
         )
@@ -25981,7 +26048,7 @@ admin3</code>
     def handle_profile_custom_file_upload(self, update: Update, context: CallbackContext, user_id: int, field_name: str, document):
         """处理自定义资料的文件上传"""
         if user_id not in self.pending_profile_update:
-            self.safe_send_message(update, "❌ 会话已过期，请重新开始", 'HTML')
+            self.safe_send_message(update, t(user_id, 'profile_custom_session_expired_restart'), 'HTML')
             return
         
         config = self.pending_profile_update[user_id]['config']
@@ -25998,7 +26065,17 @@ admin3</code>
             # 下载文件
             document.get_file().download(temp_file)
             
-            field_display = {'name': '姓名', 'photo': '头像', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
+            # Helper function to get translated field display name
+            def get_field_display(field):
+                field_map = {
+                    'name': 'profile_field_name',
+                    'photo': 'profile_field_avatar',
+                    'bio': 'profile_field_bio',
+                    'username': 'profile_field_username'
+                }
+                return t(user_id, field_map.get(field, 'profile_field_name'))
+            
+            field_display = get_field_display(field_name)
             
             if field_name == 'photo':
                 # 处理图片文件
@@ -26033,7 +26110,7 @@ admin3</code>
                 if not items:
                     self.safe_edit_message_text(
                         progress_msg,
-                        "❌ 未找到有效的图片文件\n\n支持格式：jpg、png、jpeg、webp、gif",
+                        t(user_id, 'profile_custom_no_images'),
                         parse_mode='HTML'
                     )
                     return
@@ -26055,7 +26132,7 @@ admin3</code>
                     except:
                         self.safe_edit_message_text(
                             progress_msg,
-                            "❌ 文件编码错误\n\n请使用UTF-8编码保存文件",
+                            t(user_id, 'profile_custom_encoding_error'),
                             parse_mode='HTML'
                         )
                         return
@@ -26063,7 +26140,7 @@ admin3</code>
                 if not lines:
                     self.safe_edit_message_text(
                         progress_msg,
-                        "❌ 文件内容为空",
+                        t(user_id, 'profile_custom_file_empty'),
                         parse_mode='HTML'
                     )
                     return
@@ -26088,12 +26165,12 @@ admin3</code>
             
             # 显示确认消息
             keyboard = InlineKeyboardMarkup([[
-                InlineKeyboardButton("🔙 返回配置菜单", callback_data="profile_custom_back")
+                InlineKeyboardButton(t(user_id, 'profile_custom_field_back_to_menu'), callback_data="profile_custom_back")
             ]])
             
             self.safe_edit_message_text(
                 progress_msg,
-                f"✅ 已设置 {len(items)} 个{field_display}",
+                t(user_id, 'profile_custom_configured').format(count=len(items), field=field_display),
                 reply_markup=keyboard,
                 parse_mode='HTML'
             )
@@ -26105,7 +26182,7 @@ admin3</code>
             
             self.safe_edit_message_text(
                 progress_msg,
-                f"❌ <b>处理失败</b>\n\n错误: {str(e)}",
+                t(user_id, 'profile_custom_processing_failed').format(error=str(e)),
                 parse_mode='HTML'
             )
         finally:
@@ -26118,7 +26195,7 @@ admin3</code>
         query.answer()
         
         if user_id not in self.pending_profile_update:
-            self.safe_edit_message(query, "❌ 任务已过期，请重新上传文件")
+            self.safe_edit_message(query, t(user_id, 'profile_custom_task_expired'))
             return
         
         task = self.pending_profile_update[user_id]
