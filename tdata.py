@@ -26357,7 +26357,7 @@ admin3</code>
         query.edit_message_text(
             text=text,
             parse_mode='HTML',
-            reply_markup=get_back_to_menu_keyboard()
+            reply_markup=get_back_to_menu_keyboard(user_id)
         )
         
         # 设置用户状态为等待文件上传
@@ -26420,7 +26420,7 @@ admin3</code>
         query.edit_message_text(
             text=text,
             parse_mode='HTML',
-            reply_markup=get_back_to_menu_keyboard()
+            reply_markup=get_back_to_menu_keyboard(user_id)
         )
         
         # 设置用户状态为等待上传
