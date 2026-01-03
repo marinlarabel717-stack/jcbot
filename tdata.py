@@ -26688,7 +26688,7 @@ admin3</code>
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir, ignore_errors=True)
     
-    async def batch_check_contact_limit(self, accounts, api_id, api_hash, proxies, progress_callback=None):
+    async def batch_check_contact_limit(self, accounts, api_id, api_hash, proxies, user_id, progress_callback=None):
         """并发检测通讯录限制
         
         Args:
@@ -26696,6 +26696,7 @@ admin3</code>
             api_id: API ID
             api_hash: API Hash
             proxies: 代理列表
+            user_id: 用户ID（用于翻译）
             progress_callback: 进度回调函数，接收(current, total, phone, status, message)参数
         """
         from itertools import cycle
@@ -26722,6 +26723,9 @@ admin3</code>
                     status = result.get('status', CONTACT_STATUS_ERROR)
                     message = result.get('message', '未知')
                     
+                    # 翻译状态消息
+                    translated_message = self.translate_contact_status_message(user_id, status, message)
+                    
                     # 根据状态选择图标
                     icon = '🔍'
                     if status == CONTACT_STATUS_NORMAL:
@@ -26734,7 +26738,7 @@ admin3</code>
                         icon = '❌'
                     
                     try:
-                        await progress_callback(completed[0], total, masked_phone, icon, message)
+                        await progress_callback(completed[0], total, masked_phone, icon, translated_message)
                     except Exception as e:
                         logger.warning(f"进度回调失败: {e}")
                 
@@ -26778,14 +26782,49 @@ admin3</code>
         
         return processed_results
     
+    def translate_contact_status_message(self, user_id, status, original_message):
+        """翻译通讯录检测状态消息"""
+        # 根据状态码返回翻译的消息
+        if status == CONTACT_STATUS_NORMAL:
+            return t(user_id, 'contact_limit_status_normal')
+        elif status == CONTACT_STATUS_LIMITED:
+            # 检查是否是FloodWait
+            if 'FloodWait' in original_message or 'flood' in original_message.lower():
+                return t(user_id, 'contact_limit_status_flood_wait')
+            return t(user_id, 'contact_limit_status_limited')
+        elif status == CONTACT_STATUS_BANNED:
+            return t(user_id, 'contact_limit_status_banned')
+        elif status == CONTACT_STATUS_UNAUTHORIZED:
+            return t(user_id, 'contact_limit_status_auth_error')
+        elif status == CONTACT_STATUS_ERROR:
+            # 检查错误类型
+            if '连接错误' in original_message or 'Connection' in original_message:
+                # 提取错误信息
+                error_part = original_message.split(':')[-1].strip() if ':' in original_message else original_message
+                return t(user_id, 'contact_limit_status_connection_error').format(error=error_part[:30])
+            return original_message  # 保留原始错误消息
+        return original_message
+    
     async def generate_contact_limit_report(self, results, output_dir, user_id):
         """生成通讯录限制检测报告"""
         
+        # 翻译所有结果中的status message
+        translated_results = []
+        for r in results:
+            translated_r = r.copy()
+            if 'message' in translated_r:
+                translated_r['message'] = self.translate_contact_status_message(
+                    user_id, 
+                    r.get('status'), 
+                    r.get('message', '')
+                )
+            translated_results.append(translated_r)
+        
         # 分类统计 - 使用常量
-        normal = [r for r in results if r.get('status') == CONTACT_STATUS_NORMAL]
-        limited = [r for r in results if r.get('status') == CONTACT_STATUS_LIMITED]
-        banned = [r for r in results if r.get('status') == CONTACT_STATUS_BANNED]
-        failed = [r for r in results if r.get('status') in [CONTACT_STATUS_ERROR, CONTACT_STATUS_UNAUTHORIZED]]
+        normal = [r for r in translated_results if r.get('status') == CONTACT_STATUS_NORMAL]
+        limited = [r for r in translated_results if r.get('status') == CONTACT_STATUS_LIMITED]
+        banned = [r for r in translated_results if r.get('status') == CONTACT_STATUS_BANNED]
+        failed = [r for r in translated_results if r.get('status') in [CONTACT_STATUS_ERROR, CONTACT_STATUS_UNAUTHORIZED]]
         
         # 生成报告文本
         report = f"""
@@ -27083,7 +27122,7 @@ admin3</code>
         try:
             results = await asyncio.wait_for(
                 self.batch_check_contact_limit(
-                    deduplicated_paths, api_id, api_hash, proxies, progress_callback
+                    deduplicated_paths, api_id, api_hash, proxies, user_id, progress_callback
                 ),
                 timeout=BATCH_TIMEOUT
             )
