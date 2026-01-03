@@ -16914,29 +16914,29 @@ class EnhancedBot:
         is_member, level, expiry = self.db.check_membership(user_id)
         
         if self.db.is_admin(user_id):
-            member_status = "👑 管理员（永久有效）"
+            member_status = t(user_id, 'member_status_admin')
         elif is_member:
-            member_status = f"💎 {level}\n• 到期时间: {expiry}"
+            member_status = f"{t(user_id, 'member_status_member')} {level}\n{t(user_id, 'member_status_expire').format(time=expiry)}"
         else:
-            member_status = "❌ 暂无会员"
+            member_status = t(user_id, 'member_status_none')
         
         text = f"""
-<b>💳 会员中心</b>
+<b>{t(user_id, 'member_center_title')}</b>
 
-<b>📊 当前状态</b>
+<b>{t(user_id, 'member_current_status')}</b>
 {member_status}
 
-<b>💡 功能说明</b>
-• 兑换卡密即可开通会员
-• 会员时长自动累加
-• 支持多次兑换叠加
+<b>{t(user_id, 'member_feature_title')}</b>
+{t(user_id, 'member_feature1')}
+{t(user_id, 'member_feature2')}
+{t(user_id, 'member_feature3')}
 
-<b>🎯 操作选项</b>
-请选择您要执行的操作
+<b>{t(user_id, 'member_operation_title')}</b>
+{t(user_id, 'member_operation_desc')}
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🎟️ 兑换卡密", callback_data="vip_redeem")],
+            [InlineKeyboardButton(t(user_id, 'member_btn_redeem'), callback_data="vip_redeem")],
             [InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")]
         ])
         
@@ -16955,21 +16955,21 @@ class EnhancedBot:
             "waiting_redeem_code"
         )
         
-        text = """
-<b>🎟️ 兑换卡密</b>
+        text = f"""
+<b>{t(user_id, 'redeem_title')}</b>
 
-<b>📋 请输入卡密（10位以内）</b>
+<b>{t(user_id, 'redeem_input_prompt')}</b>
 
-💡 提示：
-• 请输入您获得的卡密
-• 卡密不区分大小写
-• 兑换成功后时长自动累加
+{t(user_id, 'redeem_tip_title')}
+{t(user_id, 'redeem_tip1')}
+{t(user_id, 'redeem_tip2')}
+{t(user_id, 'redeem_tip3')}
 
-⏰ <i>5分钟内未输入将自动取消</i>
+<i>{t(user_id, 'redeem_timeout')}</i>
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("❌ 取消", callback_data="vip_menu")]
+            [InlineKeyboardButton(t(user_id, 'member_btn_cancel'), callback_data="vip_menu")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
@@ -16982,7 +16982,7 @@ class EnhancedBot:
         # 验证兑换码
         code = code.strip()
         if len(code) > 10:
-            self.safe_send_message(update, "❌ 卡密长度不能超过10位")
+            self.safe_send_message(update, f"❌ {t(user_id, 'redeem_input_prompt')}")
             return
         
         # 执行兑换
@@ -16993,18 +16993,18 @@ class EnhancedBot:
             is_member, level, expiry = self.db.check_membership(user_id)
             
             text = f"""
-✅ <b>兑换成功！</b>
+<b>{t(user_id, 'redeem_success')}</b>
 
-<b>📋 兑换信息</b>
-• 卡密: <code>{code.upper()}</code>
-• 会员等级: {level}
-• 增加天数: {days}天
+<b>{t(user_id, 'redeem_info_title')}</b>
+{t(user_id, 'redeem_info_code').format(code=code.upper())}
+{t(user_id, 'redeem_info_level').format(level=level)}
+{t(user_id, 'redeem_info_days').format(days=days)}
 
-<b>💎 当前会员状态</b>
-• 会员等级: {level}
-• 到期时间: {expiry}
+<b>{t(user_id, 'redeem_current_status')}</b>
+{t(user_id, 'redeem_current_level').format(level=level)}
+{t(user_id, 'redeem_current_expire').format(time=expiry)}
 
-感谢您的支持！
+{t(user_id, 'redeem_thanks')}
             """
             
             keyboard = InlineKeyboardMarkup([
@@ -17013,17 +17013,22 @@ class EnhancedBot:
             
             self.safe_send_message(update, text, 'HTML', keyboard)
         else:
+            # Translate error message
+            error_msg = message
+            if "已被使用" in message:
+                error_msg = t(user_id, 'redeem_error_used')
+            
             text = f"""
-❌ <b>兑换失败</b>
+<b>{t(user_id, 'redeem_failed')}</b>
 
-{message}
+{error_msg}
 
-请检查您的卡密是否正确
+{t(user_id, 'redeem_error_check')}
             """
             
             keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton("🔄 重新兑换", callback_data="vip_redeem")],
-                [InlineKeyboardButton("🔙 返回会员中心", callback_data="vip_menu")]
+                [InlineKeyboardButton(t(user_id, 'member_btn_retry'), callback_data="vip_redeem")],
+                [InlineKeyboardButton(t(user_id, 'member_btn_back_center'), callback_data="vip_menu")]
             ])
             
             self.safe_send_message(update, text, 'HTML', keyboard)

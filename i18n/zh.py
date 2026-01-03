@@ -2281,4 +2281,57 @@ TEXTS = {
     'contact_limit_zip_normal': '检查通讯录正常',
     'contact_limit_zip_limited': '检查通讯录受限',
     'contact_limit_zip_failed': '检查通讯录失败',
+    
+    # ===== 开通/兑换会员功能 =====
+    # 1. 会员中心页面
+    'member_center_title': '💳 会员中心',
+    'member_current_status': '📊 当前状态',
+    'member_feature_title': '💡 功能说明',
+    'member_feature1': '• 兑换卡密即可开通会员',
+    'member_feature2': '• 会员时长自动累加',
+    'member_feature3': '• 支持多次兑换叠加',
+    'member_operation_title': '🎯 操作选项',
+    'member_operation_desc': '请选择您要执行的操作',
+    
+    # 2. 会员状态类型
+    'member_status_admin': '👑 管理员（永久有效）',
+    'member_status_none': '❌ 暂无会员',
+    'member_status_member': '💎 会员',
+    'member_status_expire': '• 到期时间: {time}',
+    
+    # 3. 操作按钮
+    'member_btn_redeem': '🎫 兑换卡密',
+    'member_btn_back_main': '返回主菜单',
+    'member_btn_back_center': '返回会员中心',
+    'member_btn_retry': '🔄 重新兑换',
+    'member_btn_cancel': '❌ 取消',
+    
+    # 4. 兑换卡密页面
+    'redeem_title': '🎟️ 兑换卡密',
+    'redeem_input_prompt': '📋 请输入卡密（10位以内）',
+    'redeem_tip_title': '💡 提示：',
+    'redeem_tip1': '• 请输入您获得的卡密',
+    'redeem_tip2': '• 卡密不区分大小写',
+    'redeem_tip3': '• 兑换成功后时长自动累加',
+    'redeem_timeout': '⏰ 5分钟内未输入将自动取消',
+    
+    # 5. 兑换成功
+    'redeem_success': '✅ 兑换成功！',
+    'redeem_info_title': '📋 兑换信息',
+    'redeem_info_code': '• 卡密: {code}',
+    'redeem_info_level': '• 会员等级: {level}',
+    'redeem_info_days': '• 增加天数: {days}天',
+    'redeem_current_status': '💎 当前会员状态',
+    'redeem_current_level': '• 会员等级: {level}',
+    'redeem_current_expire': '• 到期时间: {time}',
+    'redeem_thanks': '感谢您的支持！',
+    
+    # 6. 兑换失败
+    'redeem_failed': '❌ 兑换失败',
+    'redeem_error_used': '卡密已被使用',
+    'redeem_error_check': '请检查您的卡密是否正确',
+    
+    # 7. 会员等级名称
+    'member_level_member': '会员',
+    'member_level_admin': '管理员',
 }
