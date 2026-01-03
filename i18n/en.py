@@ -2275,4 +2275,9 @@ TEXTS = {
     # 8. Time Units
     'contact_limit_minute': 'minute(s)',
     'contact_limit_second': 'second(s)',
+    
+    # 9. ZIP File Naming
+    'contact_limit_zip_normal': 'ContactCheck_Normal',
+    'contact_limit_zip_limited': 'ContactCheck_Limited',
+    'contact_limit_zip_failed': 'ContactCheck_Failed',
 }

@@ -26879,23 +26879,23 @@ admin3</code>
             'failed': failed
         }
     
-    async def pack_contact_limit_results(self, results_dict, output_dir):
+    async def pack_contact_limit_results(self, results_dict, output_dir, user_id):
         """分类打包检测结果 - 每个分类单独一个ZIP，保留原始文件结构"""
         timestamp = datetime.now(BEIJING_TZ).strftime('%Y%m%d_%H%M%S')
         zip_files = {}
         
-        # 文件命名：检查通讯录{类型}-{账号数量}_{时间戳}.zip
+        # 文件命名：使用翻译后的名称
         categories = {
-            'normal': ('检查通讯录正常', results_dict['normal']),
-            'limited': ('检查通讯录受限', results_dict['limited']),
-            'banned': ('检查通讯录失败', results_dict['banned']),  # banned 归类为失败
-            'failed': ('检查通讯录失败', results_dict['failed'])
+            'normal': (t(user_id, 'contact_limit_zip_normal'), results_dict['normal']),
+            'limited': (t(user_id, 'contact_limit_zip_limited'), results_dict['limited']),
+            'banned': (t(user_id, 'contact_limit_zip_failed'), results_dict['banned']),  # banned 归类为失败
+            'failed': (t(user_id, 'contact_limit_zip_failed'), results_dict['failed'])
         }
         
         # 合并 banned 和 failed
         combined_failed = results_dict['banned'] + results_dict['failed']
         if combined_failed:
-            categories['failed'] = ('检查通讯录失败', combined_failed)
+            categories['failed'] = (t(user_id, 'contact_limit_zip_failed'), combined_failed)
             categories.pop('banned', None)
         
         for key, (name, items) in categories.items():
@@ -27161,7 +27161,7 @@ admin3</code>
                 )
             
             # 打包分类结果
-            zip_files = await self.pack_contact_limit_results(results_dict, output_dir)
+            zip_files = await self.pack_contact_limit_results(results_dict, output_dir, user_id)
             
             # 发送分类打包文件
             for key, zip_path in zip_files.items():

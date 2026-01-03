@@ -2276,4 +2276,9 @@ TEXTS = {
     # 8. 时间单位
     'contact_limit_minute': '分钟',
     'contact_limit_second': '秒',
+    
+    # 9. ZIP文件命名
+    'contact_limit_zip_normal': '检查通讯录正常',
+    'contact_limit_zip_limited': '检查通讯录受限',
+    'contact_limit_zip_failed': '检查通讯录失败',
 }
