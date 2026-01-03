@@ -2,7 +2,7 @@ import json
 import os
 
 DEFAULT_LANGUAGE = 'zh'
-SUPPORTED_LANGUAGES = ['zh', 'en']
+SUPPORTED_LANGUAGES = ['zh', 'en', 'ru', 'ar', 'bn', 'fa', 'vi']
 
 # 用户语言设置文件
 USER_LANGUAGE_FILE = 'user_language.json'
@@ -10,11 +10,21 @@ USER_LANGUAGE_FILE = 'user_language.json'
 # Import translation dictionaries at module level for better performance
 from i18n.zh import TEXTS as ZH_TEXTS
 from i18n.en import TEXTS as EN_TEXTS
+from i18n.ru import TEXTS as RU_TEXTS
+from i18n.ar import TEXTS as AR_TEXTS
+from i18n.bn import TEXTS as BN_TEXTS
+from i18n.fa import TEXTS as FA_TEXTS
+from i18n.vi import TEXTS as VI_TEXTS
 
 # Translation dictionary lookup
 TRANSLATIONS = {
     'zh': ZH_TEXTS,
-    'en': EN_TEXTS
+    'en': EN_TEXTS,
+    'ru': RU_TEXTS,
+    'ar': AR_TEXTS,
+    'bn': BN_TEXTS,
+    'fa': FA_TEXTS,
+    'vi': VI_TEXTS,
 }
 
 def load_user_languages():
