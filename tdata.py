@@ -17074,99 +17074,98 @@ class EnhancedBot:
             self.safe_send_message(update, text, 'HTML', keyboard)
     
     def handle_admin_card_menu(self, query):
-        """管理员卡密开通菜单"""
+        """Admin Card Activation Menu"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        text = """
-<b>💳 卡密开通</b>
+        text = f"""
+<b>{t(user_id, 'card_activation_title')}</b>
 
-<b>📋 功能说明</b>
-• 选择天数生成卡密
-• 每次生成1个卡密
-• 卡密为8位大写字母数字组合
-• 每个卡密仅可使用一次
+<b>{t(user_id, 'card_activation_description')}</b>
+• {t(user_id, 'card_activation_desc_select')}
+• {t(user_id, 'card_activation_desc_count')}
+• {t(user_id, 'card_activation_desc_format')}
+• {t(user_id, 'card_activation_desc_usage')}
 
-<b>🎯 选择有效期</b>
-请选择要生成的卡密有效期
+<b>{t(user_id, 'card_activation_select_validity')}</b>
+{t(user_id, 'card_activation_select_prompt')}
         """
         
         keyboard = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton("1天", callback_data="admin_card_days_1"),
-                InlineKeyboardButton("7天", callback_data="admin_card_days_7")
+                InlineKeyboardButton(t(user_id, 'gift_membership_1day'), callback_data="admin_card_days_1"),
+                InlineKeyboardButton(t(user_id, 'gift_membership_7days'), callback_data="admin_card_days_7")
             ],
             [
-                InlineKeyboardButton("30天", callback_data="admin_card_days_30"),
-                InlineKeyboardButton("60天", callback_data="admin_card_days_60")
+                InlineKeyboardButton(t(user_id, 'gift_membership_30days'), callback_data="admin_card_days_30"),
+                InlineKeyboardButton(t(user_id, 'gift_membership_60days'), callback_data="admin_card_days_60")
             ],
             [
-                InlineKeyboardButton("90天", callback_data="admin_card_days_90"),
-                InlineKeyboardButton("360天", callback_data="admin_card_days_360")
+                InlineKeyboardButton(t(user_id, 'gift_membership_90days'), callback_data="admin_card_days_90"),
+                InlineKeyboardButton(t(user_id, 'gift_membership_360days'), callback_data="admin_card_days_360")
             ],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
     
     def handle_admin_card_generate(self, query, days: int):
-        """管理员生成卡密"""
+        """Admin Generate Card"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 生成卡密
-        success, code, message = self.db.create_redeem_code("会员", days, None, user_id)
+        # Generate card
+        success, code, message = self.db.create_redeem_code(t(user_id, 'member_level_member'), days, None, user_id)
         
         if success:
             text = f"""
-✅ <b>卡密生成成功！</b>
+{t(user_id, 'card_activation_success')}
 
-<b>📋 卡密信息</b>
-• 卡密: <code>{code}</code>
-• 等级: 会员
-• 有效期: {days}天
-• 状态: 未使用
+<b>{t(user_id, 'card_activation_info')}</b>
+• {t(user_id, 'card_activation_code')}: <code>{code}</code>
+• {t(user_id, 'user_detail_level')}: {t(user_id, 'member_level_member')}
+• {t(user_id, 'card_activation_validity')}: {days}{t(user_id, 'gift_membership_1day').replace('1', '')}
+• {t(user_id, 'card_activation_status')}: {t(user_id, 'card_activation_unused')}
 
-<b>💡 提示</b>
-• 请妥善保管卡密
-• 每个卡密仅可使用一次
-• 点击卡密可复制
+<b>{t(user_id, 'card_activation_tips')}</b>
+• {t(user_id, 'card_activation_tip_save')}
+• {t(user_id, 'card_activation_tip_copy')}
             """
         else:
             text = f"""
-❌ <b>生成失败</b>
+❌ <b>{t(user_id, 'redeem_failed')}</b>
 
 {message}
             """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔄 继续生成", callback_data="admin_card_menu")],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'card_activation_btn_continue'), callback_data="admin_card_menu")],
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
     
     def handle_admin_manual_menu(self, query):
-        """管理员人工开通菜单"""
+        """Admin Manual Activation Menu"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 设置用户状态
+        # Set user status
         self.db.save_user(
             user_id,
             query.from_user.username or "",
@@ -17174,25 +17173,25 @@ class EnhancedBot:
             "waiting_manual_user"
         )
         
-        text = """
-<b>👤 人工开通会员</b>
+        text = f"""
+<b>{t(user_id, 'manual_activation_title')}</b>
 
-<b>📋 请输入要开通的用户</b>
+<b>{t(user_id, 'manual_activation_prompt')}</b>
 
-支持以下格式：
-• 用户ID：<code>123456789</code>
-• 用户名：<code>@username</code> 或 <code>username</code>
+{t(user_id, 'manual_activation_formats')}
+• {t(user_id, 'manual_activation_format_id')}: <code>123456789</code>
+• {t(user_id, 'manual_activation_format_username')}: <code>@username</code> or <code>username</code>
 
-<b>💡 提示</b>
-• 用户必须先与机器人交互过
-• 输入后会显示天数选择
-• 会员时长自动累加
+<b>💡 {t(user_id, 'card_activation_tips')}</b>
+• {t(user_id, 'manual_activation_requirement')}
+• {t(user_id, 'manual_activation_note1')}
+• {t(user_id, 'manual_activation_note2')}
 
-⏰ <i>5分钟内未输入将自动取消</i>
+⏰ <i>{t(user_id, 'search_user_timeout')}</i>
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("❌ 取消", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'btn_cancel'), callback_data="admin_panel")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
@@ -17366,16 +17365,16 @@ class EnhancedBot:
     # ================================
     
     def handle_admin_revoke_menu(self, query):
-        """管理员撤销会员菜单"""
+        """Admin Revoke Membership Menu"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 设置用户状态
+        # Set user status
         self.db.save_user(
             user_id,
             query.from_user.username or "",
@@ -17383,24 +17382,24 @@ class EnhancedBot:
             "waiting_revoke_user"
         )
         
-        text = """
-<b>撤销会员</b>
+        text = f"""
+<b>{t(user_id, 'revoke_membership_title')}</b>
 
-<b>📋 请输入要撤销的用户名（@name）或用户ID：</b>
+<b>{t(user_id, 'revoke_membership_prompt')}</b>
 
-支持以下格式：
-• 用户ID：<code>123456789</code>
-• 用户名：<code>@username</code> 或 <code>username</code>
+{t(user_id, 'manual_activation_formats')}
+• {t(user_id, 'manual_activation_format_id')}: <code>123456789</code>
+• {t(user_id, 'manual_activation_format_username')}: <code>@username</code> or <code>username</code>
 
-<b>💡 提示</b>
-• 用户必须先与机器人交互过
-• 撤销后会删除用户的所有会员权限
+<b>💡 {t(user_id, 'card_activation_tips')}</b>
+• {t(user_id, 'manual_activation_requirement')}
+• {t(user_id, 'revoke_membership_note')}
 
-⏰ <i>5分钟内有效</i>
+⏰ <i>{t(user_id, 'revoke_membership_timeout')}</i>
         """
         
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("❌ 取消", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'btn_cancel'), callback_data="admin_panel")]
         ])
         
         self.safe_edit_message(query, text, 'HTML', keyboard)
