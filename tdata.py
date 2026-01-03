@@ -26021,7 +26021,7 @@ admin3</code>
         
         # 发送确认消息和返回按钮
         keyboard = InlineKeyboardMarkup([[
-            InlineKeyboardButton("🔙 返回配置菜单", callback_data="profile_custom_back")
+            InlineKeyboardButton(t(user_id, 'profile_custom_field_back_to_menu'), callback_data="profile_custom_back")
         ]])
         
         self.safe_send_message(
@@ -26147,7 +26147,7 @@ admin3</code>
             
             # 显示确认消息
             keyboard = InlineKeyboardMarkup([[
-                InlineKeyboardButton("🔙 返回配置菜单", callback_data="profile_custom_back")
+                InlineKeyboardButton(t(user_id, 'profile_custom_field_back_to_menu'), callback_data="profile_custom_back")
             ]])
             
             self.safe_edit_message_text(
