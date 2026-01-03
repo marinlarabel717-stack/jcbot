@@ -13028,60 +13028,62 @@ class EnhancedBot:
         self.safe_edit_message(query, status_text, 'HTML')
     
     def handle_admin_panel(self, query):
-        """管理员面板"""
+        """Admin Panel"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
-        # 获取统计信息
+        # Get statistics
         stats = self.db.get_user_statistics()
         admin_count = len(self.db.get_all_admins()) if self.db.get_all_admins() else 0
         
+        admin_permission = t(user_id, 'admin_super_admin') if user_id in config.ADMIN_IDS else t(user_id, 'admin_normal_admin')
+        
         admin_text = f"""
-<b>👑 管理员控制面板</b>
+<b>{t(user_id, 'admin_panel_title')}</b>
 
-<b>📊 系统统计</b>
-• 总用户数: {stats.get('total_users', 0)}
-• 今日活跃: {stats.get('today_active', 0)}
-• 本周活跃: {stats.get('week_active', 0)}
-• 有效会员: {stats.get('active_members', 0)}
-• 体验会员: {stats.get('trial_members', 0)}
-• 近期新用户: {stats.get('recent_users', 0)}
+<b>{t(user_id, 'admin_system_stats')}</b>
+• {t(user_id, 'admin_total_users')}: {stats.get('total_users', 0)}
+• {t(user_id, 'admin_today_active')}: {stats.get('today_active', 0)}
+• {t(user_id, 'admin_week_active')}: {stats.get('week_active', 0)}
+• {t(user_id, 'admin_active_members')}: {stats.get('active_members', 0)}
+• {t(user_id, 'admin_trial_members')}: {stats.get('trial_members', 0)}
+• {t(user_id, 'admin_recent_users')}: {stats.get('recent_users', 0)}
 
-<b>👑 管理员信息</b>
-• 管理员数量: {admin_count}个
-• 您的权限: {'👑 超级管理员' if user_id in config.ADMIN_IDS else '🔧 普通管理员'}
-• 系统时间: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
+<b>{t(user_id, 'admin_info')}</b>
+• {t(user_id, 'admin_count')}: {admin_count}
+• {t(user_id, 'admin_your_permission')}: {admin_permission}
+• {t(user_id, 'admin_system_time')}: {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
 
-<b>🔧 快速操作</b>
-点击下方按钮进行管理操作
+<b>{t(user_id, 'admin_quick_actions')}</b>
+{t(user_id, 'admin_quick_actions_desc')}
         """
         
-        # 创建管理按钮
+        # Create admin buttons
         buttons = [
             [
-                InlineKeyboardButton("👥 用户管理", callback_data="admin_users"),
-                InlineKeyboardButton("📊 用户统计", callback_data="admin_stats")
+                InlineKeyboardButton(t(user_id, 'admin_btn_user_management'), callback_data="admin_users"),
+                InlineKeyboardButton(t(user_id, 'admin_btn_user_stats'), callback_data="admin_stats")
             ],
             [
-                InlineKeyboardButton("📡 代理管理", callback_data="proxy_panel"),
-                InlineKeyboardButton("👑 管理员管理", callback_data="admin_manage")
+                InlineKeyboardButton(t(user_id, 'admin_btn_proxy_management'), callback_data="proxy_panel"),
+                InlineKeyboardButton(t(user_id, 'admin_btn_admin_management'), callback_data="admin_manage")
             ],
             [
-                InlineKeyboardButton("🔍 搜索用户", callback_data="admin_search"),
-                InlineKeyboardButton("📋 最近用户", callback_data="admin_recent")
+                InlineKeyboardButton(t(user_id, 'admin_btn_search_user'), callback_data="admin_search"),
+                InlineKeyboardButton(t(user_id, 'admin_btn_recent_users'), callback_data="admin_recent")
             ],
             [
-                InlineKeyboardButton("💳 卡密开通", callback_data="admin_card_menu"),
-                InlineKeyboardButton("👤 人工开通", callback_data="admin_manual_menu")
+                InlineKeyboardButton(t(user_id, 'admin_btn_card_activation'), callback_data="admin_card_menu"),
+                InlineKeyboardButton(t(user_id, 'admin_btn_manual_activation'), callback_data="admin_manual_menu")
             ],
             [
-                InlineKeyboardButton("撤销会员", callback_data="admin_revoke_menu")
+                InlineKeyboardButton(t(user_id, 'admin_btn_revoke_membership'), callback_data="admin_revoke_menu")
             ],
             [
-                InlineKeyboardButton("📢 群发通知", callback_data="broadcast_menu")
+                InlineKeyboardButton(t(user_id, 'admin_btn_broadcast'), callback_data="broadcast_menu")
             ],
             [InlineKeyboardButton(f"🔙 {t(user_id, 'btn_back_to_menu')}", callback_data="back_to_main")]
         ]
@@ -13089,28 +13091,28 @@ class EnhancedBot:
         keyboard = InlineKeyboardMarkup(buttons)
         self.safe_edit_message(query, admin_text, 'HTML', keyboard)
     def handle_admin_users(self, query):
-        """用户管理界面"""
+        """User Management Interface"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 获取活跃用户列表
+        # Get active user list
         active_users = self.db.get_active_users(days=7, limit=15)
         
-        text = "<b>👥 用户管理</b>\n\n<b>📋 最近活跃用户（7天内）</b>\n\n"
+        text = f"<b>{t(user_id, 'user_management_title')}</b>\n\n<b>{t(user_id, 'user_management_recent_active')}</b>\n\n"
         
         if active_users:
             for i, (uid, username, first_name, register_time, last_active, status) in enumerate(active_users[:10], 1):
-                # 检查会员状态
+                # Check membership status
                 is_member, level, _ = self.db.check_membership(uid)
-                member_icon = "🎁" if is_member else "❌"
+                member_icon = "💎" if is_member else "❌"
                 admin_icon = "👑" if self.db.is_admin(uid) else ""
                 
-                display_name = first_name or username or f"用户{uid}"
+                display_name = first_name or username or f"{t(user_id, 'user_management_user_prefix')}{uid}"
                 if len(display_name) > 15:
                     display_name = display_name[:15] + "..."
                 
@@ -13121,28 +13123,28 @@ class EnhancedBot:
                         last_time = datetime.strptime(last_active, '%Y-%m-%d %H:%M:%S')
                         time_diff = datetime.now(BEIJING_TZ).replace(tzinfo=None) - last_time
                         if time_diff.days == 0:
-                            time_str = f"{time_diff.seconds//3600}小时前"
+                            time_str = t(user_id, 'user_management_time_hours_ago').format(hours=time_diff.seconds//3600)
                         else:
-                            time_str = f"{time_diff.days}天前"
+                            time_str = t(user_id, 'user_management_time_days_ago').format(days=time_diff.days)
                         text += f"   🕒 {time_str}\n"
                     except:
                         text += f"   🕒 {last_active}\n"
                 text += "\n"
         else:
-            text += "暂无活跃用户\n"
+            text += t(user_id, 'user_management_no_active') + "\n"
         
-        text += f"\n📊 <b>图例</b>\n👑 = 管理员 | 🎁 = 会员 | ❌ = 普通用户"
+        text += f"\n{t(user_id, 'user_management_legend')}\n{t(user_id, 'user_management_legend_admin')} | {t(user_id, 'user_management_legend_vip')} | {t(user_id, 'user_management_legend_normal')}"
         
         buttons = [
             [
-                InlineKeyboardButton("🔍 搜索用户", callback_data="admin_search"),
-                InlineKeyboardButton("📋 最近注册", callback_data="admin_recent")
+                InlineKeyboardButton(t(user_id, 'user_management_btn_search'), callback_data="admin_search"),
+                InlineKeyboardButton(t(user_id, 'user_management_btn_recent'), callback_data="admin_recent")
             ],
             [
-                InlineKeyboardButton("📊 用户统计", callback_data="admin_stats"),
-                InlineKeyboardButton("🔄 刷新列表", callback_data="admin_users")
+                InlineKeyboardButton(t(user_id, 'user_management_btn_stats'), callback_data="admin_stats"),
+                InlineKeyboardButton(t(user_id, 'user_management_btn_refresh'), callback_data="admin_users")
             ],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
