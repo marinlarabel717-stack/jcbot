@@ -25839,34 +25839,34 @@ admin3</code>
             
             if field_name == 'photo':
                 text = f"""
-<b>📤 上传{field_display}文件</b>
+<b>{t(user_id, 'profile_custom_upload_photo_title').format(field=field_display)}</b>
 
-<b>支持的格式：</b>
-• 单个图片：jpg、png、jpeg、webp
-• 多个图片：打包成zip文件
-• 每个图片会按顺序分配给账号
+<b>{t(user_id, 'profile_custom_upload_photo_format')}</b>
+{t(user_id, 'profile_custom_upload_photo_single')}
+{t(user_id, 'profile_custom_upload_photo_multi')}
+{t(user_id, 'profile_custom_upload_photo_assign')}
 
-<b>💡 注意：</b>
-• 图片建议尺寸：640x640 或更高
-• 文件大小建议不超过5MB
+<b>{t(user_id, 'profile_custom_upload_photo_notice')}</b>
+{t(user_id, 'profile_custom_upload_photo_size')}
+{t(user_id, 'profile_custom_upload_photo_limit')}
 
-⏱ 请在5分钟内上传文件...
+{t(user_id, 'profile_upload_timeout')}
 """
             else:
                 text = f"""
-<b>📤 上传{field_display}txt文件</b>
+<b>{t(user_id, 'profile_custom_upload_txt_title').format(field=field_display)}</b>
 
-<b>文件格式：</b>
-• 每行一个{field_display}
-• UTF-8编码
-• 支持空行（将被跳过）
+<b>{t(user_id, 'profile_custom_upload_txt_format')}</b>
+{t(user_id, 'profile_custom_upload_txt_line').format(field=field_display)}
+{t(user_id, 'profile_custom_upload_txt_encoding')}
+{t(user_id, 'profile_custom_upload_txt_skip')}
 
-<b>示例：</b>
+<b>{t(user_id, 'profile_custom_upload_txt_example')}</b>
 <code>张三
 李四
 王五</code>
 
-⏱ 请在5分钟内上传文件...
+{t(user_id, 'profile_upload_timeout')}
 """
             
             query.edit_message_text(text=text, parse_mode='HTML')
@@ -25881,19 +25881,19 @@ admin3</code>
             field_display = {'name': '姓名', 'bio': '简介', 'username': '用户名'}.get(field_name, field_name)
             
             text = f"""
-<b>✍️ 手动输入{field_display}</b>
+<b>{t(user_id, 'profile_custom_manual_input_title').format(field=field_display)}</b>
 
-<b>输入格式：</b>
-• 每行一个{field_display}
-• 可以输入多个，用换行分隔
-• 支持空行（将被跳过）
+<b>{t(user_id, 'profile_custom_manual_input_format')}</b>
+{t(user_id, 'profile_custom_manual_input_line').format(field=field_display)}
+{t(user_id, 'profile_custom_manual_input_multi')}
+{t(user_id, 'profile_custom_manual_input_skip')}
 
-<b>示例：</b>
+<b>{t(user_id, 'profile_custom_manual_input_example')}</b>
 <code>张三
 李四
 王五</code>
 
-⏱ 请在5分钟内发送内容...
+{t(user_id, 'profile_custom_input_timeout')}
 """
             
             query.edit_message_text(text=text, parse_mode='HTML')
