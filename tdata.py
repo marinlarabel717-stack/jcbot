@@ -13151,124 +13151,127 @@ class EnhancedBot:
         self.safe_edit_message(query, text, 'HTML', keyboard)
 
     def handle_admin_stats(self, query):
-        """用户统计界面"""
+        """User Statistics Interface"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
         stats = self.db.get_user_statistics()
         
-        # 计算比率
+        # Calculate ratios
         total = stats.get('total_users', 0)
         active_rate = (stats.get('week_active', 0) / total * 100) if total > 0 else 0
         member_rate = (stats.get('active_members', 0) / total * 100) if total > 0 else 0
         
         text = f"""
-<b>📊 用户统计报告</b>
+<b>{t(user_id, 'user_stats_title')}</b>
 
-<b>🔢 基础数据</b>
-• 总用户数: {stats.get('total_users', 0)}
-• 今日活跃: {stats.get('today_active', 0)}
-• 本周活跃: {stats.get('week_active', 0)} ({active_rate:.1f}%)
-• 近期新用户: {stats.get('recent_users', 0)} (7天内)
+<b>{t(user_id, 'user_stats_basic_data')}</b>
+• {t(user_id, 'user_stats_total_users')}: {stats.get('total_users', 0)}
+• {t(user_id, 'user_stats_today_active')}: {stats.get('today_active', 0)}
+• {t(user_id, 'user_stats_week_active')}: {stats.get('week_active', 0)} ({active_rate:.1f}%)
+• {t(user_id, 'user_stats_recent_new')}: {stats.get('recent_users', 0)} {t(user_id, 'user_stats_recent_days')}
 
-<b>💎 会员数据</b>
-• 有效会员: {stats.get('active_members', 0)} ({member_rate:.1f}%)
-• 体验会员: {stats.get('trial_members', 0)}
-• 转换率: {member_rate:.1f}%
+<b>{t(user_id, 'user_stats_member_data')}</b>
+• {t(user_id, 'user_stats_active_members')}: {stats.get('active_members', 0)} ({member_rate:.1f}%)
+• {t(user_id, 'user_stats_trial_members')}: {stats.get('trial_members', 0)}
+• {t(user_id, 'user_stats_conversion_rate')}: {member_rate:.1f}%
 
-<b>📈 活跃度分析</b>
-• 周活跃率: {active_rate:.1f}%
-• 日活跃率: {(stats.get('today_active', 0) / total * 100) if total > 0 else 0:.1f}%
+<b>{t(user_id, 'user_stats_activity_analysis')}</b>
+• {t(user_id, 'user_stats_week_rate')}: {active_rate:.1f}%
+• {t(user_id, 'user_stats_day_rate')}: {(stats.get('today_active', 0) / total * 100) if total > 0 else 0:.1f}%
 
-<b>⏰ 统计时间</b>
+<b>{t(user_id, 'user_stats_time')}</b>
 {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S CST')}
         """
         
         buttons = [
             [
-                InlineKeyboardButton("👥 用户管理", callback_data="admin_users"),
-                InlineKeyboardButton("🔄 刷新统计", callback_data="admin_stats")
+                InlineKeyboardButton(t(user_id, 'admin_btn_user_management'), callback_data="admin_users"),
+                InlineKeyboardButton(t(user_id, 'user_stats_btn_refresh'), callback_data="admin_stats")
             ],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
         self.safe_edit_message(query, text, 'HTML', keyboard)
 
     def handle_admin_manage(self, query):
-        """管理员管理界面"""
+        """Admin Management Interface"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        # 获取管理员列表
+        # Get admin list
         admins = self.db.get_all_admins()
         
-        text = "<b>👑 管理员管理</b>\n\n<b>📋 当前管理员列表</b>\n\n"
+        text = f"<b>{t(user_id, 'admin_manage_title')}</b>\n\n<b>{t(user_id, 'admin_manage_list')}</b>\n\n"
         
         if admins:
             for i, (admin_id, username, first_name, added_time) in enumerate(admins, 1):
                 is_super = admin_id in config.ADMIN_IDS
-                admin_type = "👑 超级管理员" if is_super else "🔧 普通管理员"
+                admin_type = t(user_id, 'admin_manage_super') if is_super else t(user_id, 'admin_manage_normal')
                 
-                display_name = first_name or username or f"管理员{admin_id}"
+                display_name = first_name or username or f"{t(user_id, 'admin_manage_admin_prefix')}{admin_id}"
                 if len(display_name) > 15:
                     display_name = display_name[:15] + "..."
                 
                 text += f"{i}. {admin_type}\n"
                 text += f"   ID: <code>{admin_id}</code>\n"
-                text += f"   昵称: {display_name}\n"
-                if username and username != "配置文件管理员":
-                    text += f"   用户名: @{username}\n"
-                text += f"   添加时间: {added_time}\n\n"
+                text += f"   {t(user_id, 'admin_manage_nickname')}: {display_name}\n"
+                if username and username != t(user_id, 'admin_manage_config_admin'):
+                    text += f"   {t(user_id, 'admin_manage_username')}: @{username}\n"
+                display_time = added_time if added_time != "系统内置" else t(user_id, 'admin_manage_system_builtin')
+                text += f"   {t(user_id, 'admin_manage_added_time')}: {display_time}\n\n"
         else:
-            text += "暂无管理员\n"
+            text += t(user_id, 'admin_manage_no_admins') + "\n"
         
-        text += f"\n<b>💡 说明</b>\n• 超级管理员来自配置文件\n• 普通管理员可通过命令添加"
+        text += f"\n<b>{t(user_id, 'admin_manage_description')}</b>\n• {t(user_id, 'admin_manage_desc_super')}\n• {t(user_id, 'admin_manage_desc_normal')}"
         
         buttons = [
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
         self.safe_edit_message(query, text, 'HTML', keyboard)
 
     def handle_admin_search(self, query):
-        """搜索用户界面"""
+        """Search User Interface"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
-        text = """
-<b>🔍 用户搜索</b>
+        text = f"""
+<b>{t(user_id, 'search_user_title')}</b>
 
-<b>搜索说明：</b>
-• 输入用户ID（纯数字）
-• 输入用户名（@username 或 username）
-• 输入昵称关键词
+<b>{t(user_id, 'search_user_prompt')}</b>
+{t(user_id, 'search_user_methods')}
+• {t(user_id, 'search_user_by_id')}
+• {t(user_id, 'search_user_by_username')}
+• {t(user_id, 'search_user_by_nickname')}
 
-<b>示例：</b>
-• <code>123456789</code> - 按ID搜索
-• <code>@username</code> - 按用户名搜索
-• <code>9hao</code> - 按昵称搜索
+<b>{t(user_id, 'search_user_example')}</b>
+• {t(user_id, 'search_user_example_id')}
+• {t(user_id, 'search_user_example_username')}
+• {t(user_id, 'search_user_example_nickname')}
 
-请发送要搜索的内容...
+{t(user_id, 'search_user_timeout')}
+{t(user_id, 'search_user_send_prompt')}
         """
         
-        # 设置用户状态为等待搜索输入
+        # Set user status to waiting for search input
         self.db.save_user(
             user_id,
             query.from_user.username or "",
@@ -13277,34 +13280,34 @@ class EnhancedBot:
         )
         
         buttons = [
-            [InlineKeyboardButton("❌ 取消搜索", callback_data="admin_users")]
+            [InlineKeyboardButton(t(user_id, 'search_user_btn_cancel'), callback_data="admin_users")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
         self.safe_edit_message(query, text, 'HTML', keyboard)
 
     def handle_admin_recent(self, query):
-        """最近注册用户"""
+        """Recently Registered Users"""
         user_id = query.from_user.id
         
         if not self.db.is_admin(user_id):
-            query.answer("❌ 仅管理员可访问")
+            query.answer(t(user_id, 'admin_panel_access_denied'))
             return
         
         query.answer()
         
         recent_users = self.db.get_recent_users(limit=15)
         
-        text = "<b>📋 最近注册用户</b>\n\n"
+        text = f"<b>{t(user_id, 'recent_users_title')}</b>\n\n"
         
         if recent_users:
             for i, (uid, username, first_name, register_time, last_active, status) in enumerate(recent_users, 1):
-                # 检查会员状态
+                # Check membership status
                 is_member, level, _ = self.db.check_membership(uid)
-                member_icon = "🎁" if is_member else "❌"
+                member_icon = "💎" if is_member else "❌"
                 admin_icon = "👑" if self.db.is_admin(uid) else ""
                 
-                display_name = first_name or username or f"用户{uid}"
+                display_name = first_name or username or f"{t(user_id, 'user_management_user_prefix')}{uid}"
                 if len(display_name) > 15:
                     display_name = display_name[:15] + "..."
                 
@@ -13316,24 +13319,24 @@ class EnhancedBot:
                         reg_time = datetime.strptime(register_time, '%Y-%m-%d %H:%M:%S')
                         time_diff = datetime.now(BEIJING_TZ).replace(tzinfo=None) - reg_time
                         if time_diff.days == 0:
-                            time_str = f"{time_diff.seconds//3600}小时前注册"
+                            time_str = t(user_id, 'user_management_time_hours_ago').format(hours=time_diff.seconds//3600)
                         else:
-                            time_str = f"{time_diff.days}天前注册"
-                        text += f"   📅 {time_str}\n"
+                            time_str = t(user_id, 'user_management_time_days_ago').format(days=time_diff.days)
+                        text += f"   📅 {t(user_id, 'recent_users_registered').format(time=time_str)}\n"
                     except:
                         text += f"   📅 {register_time}\n"
                 text += "\n"
         else:
-            text += "暂无用户数据\n"
+            text += t(user_id, 'recent_users_no_data') + "\n"
         
-        text += f"\n📊 <b>图例</b>\n👑 = 管理员 | 🎁 = 会员 | ❌ = 普通用户"
+        text += f"\n{t(user_id, 'user_management_legend')}\n{t(user_id, 'user_management_legend_admin')} | {t(user_id, 'user_management_legend_vip')} | {t(user_id, 'user_management_legend_normal')}"
         
         buttons = [
             [
-                InlineKeyboardButton("👥 用户管理", callback_data="admin_users"),
-                InlineKeyboardButton("🔄 刷新列表", callback_data="admin_recent")
+                InlineKeyboardButton(t(user_id, 'admin_btn_user_management'), callback_data="admin_users"),
+                InlineKeyboardButton(t(user_id, 'recent_users_btn_refresh'), callback_data="admin_recent")
             ],
-            [InlineKeyboardButton("🔙 返回管理面板", callback_data="admin_panel")]
+            [InlineKeyboardButton(t(user_id, 'admin_btn_back_panel'), callback_data="admin_panel")]
         ]
         
         keyboard = InlineKeyboardMarkup(buttons)
