@@ -405,210 +405,210 @@ TEXTS = {
     
     # ===== إنشاء جماعي ميزة =====
     # 1. ميزة Introduction الصفحة
-    'batch_create_title': '📦 إنشاء جماعي مجموعات/قنوات',
+    'batch_create_title': '📦 إنشاء جماعي لمجموعات/قنوات',
     'batch_create_features': 'الميزات:',
-    'batch_create_feature1': '· جماعي إنشاء Telegram مجموعات و قنوات',
-    'batch_create_feature2': '· دعم عشوائي device parameters و بروكسي login',
-    'batch_create_feature3': '· تلقائي-verify حساب الصلاحية',
-    'batch_create_feature4': '· يومي إنشاء الحد: 10 لكل حساب',
-    'batch_create_feature5': '· دعم مخصص naming rules و الأوصاف',
-    'batch_create_feature6': '· دعم مخصص أو عشوائي اسم المستخدم التوليد',
-    'batch_create_feature7': '· معالجة up إلى 10 حساب simultaneously',
-    'batch_create_steps': 'الاستخدام الخطوات:',
-    'batch_create_step1': '1. رفع Session أو TData ملف (ZIP المدعومة)',
-    'batch_create_step2': '2. النظام تلقائي-verifies حساب و shows متاح العدد',
-    'batch_create_step3': '3. Configure إنشاء parameters (النوع, naming rules, etc.)',
-    'batch_create_step4': '4. تأكيد و بدء جماعي إنشاء',
-    'batch_create_step5': '5. استلام تفصيلي تقرير و الرابط قائمة بعد completion',
+    'batch_create_feature1': '· إنشاء جماعي لمجموعات وقنوات Telegram',
+    'batch_create_feature2': '· دعم معاملات الجهاز العشوائية وتسجيل الدخول بالبروكسي',
+    'batch_create_feature3': '· التحقق التلقائي من صلاحية الحساب',
+    'batch_create_feature4': '· حد الإنشاء اليومي: 10 لكل حساب',
+    'batch_create_feature5': '· دعم قواعد التسمية والأوصاف المخصصة',
+    'batch_create_feature6': '· دعم إنشاء أسماء مستخدمين مخصصة أو عشوائية',
+    'batch_create_feature7': '· معالجة ما يصل إلى 10 حسابات في وقت واحد',
+    'batch_create_steps': 'خطوات الاستخدام:',
+    'batch_create_step1': '1. رفع ملف Session أو TData (ZIP مدعوم)',
+    'batch_create_step2': '2. يتحقق النظام تلقائيًا من الحساب ويعرض العدد المتاح',
+    'batch_create_step3': '3. تكوين معاملات الإنشاء (النوع، قواعد التسمية، إلخ)',
+    'batch_create_step4': '4. تأكيد وبدء الإنشاء الجماعي',
+    'batch_create_step5': '5. استلام تقرير تفصيلي وقائمة الروابط بعد الاكتمال',
     'batch_create_notes': 'ملاحظات:',
-    'batch_create_note1': '⚠️ استخدام responsibly إلى avoid triggering Telegram الحدود',
-    'batch_create_note2': '⚠️ Suggest إنشاء في batches, don\'t إنشاء too many في once',
-    'batch_create_note3': '⚠️ تم الإنشاء مجموعات/قنوات belong إلى المقابل حساب',
-    'batch_create_upload_prompt': '📤 يرجى رفع حساب ملف',
-    'batch_create_supported_formats': 'المدعومة الصيغ: .session / TData مجلد / .zip أرشيف',
+    'batch_create_note1': '⚠️ استخدم بمسؤولية لتجنب تشغيل حدود Telegram',
+    'batch_create_note2': '⚠️ يُنصح بالإنشاء على دفعات، لا تنشئ الكثير دفعة واحدة',
+    'batch_create_note3': '⚠️ المجموعات/القنوات المُنشأة تنتمي إلى الحساب المقابل',
+    'batch_create_upload_prompt': '📤 يرجى رفع ملف الحساب',
+    'batch_create_supported_formats': 'الصيغ المدعومة: .session / مجلد TData / أرشيف .zip',
     
     # 2. حساب Verification
-    'batch_create_found_files': '✅ موجود {العدد} حساب ملف',
-    'batch_create_verifying': '⏳ Verifying حساب...',
+    'batch_create_found_files': '✅ تم العثور على {العدد} ملف حساب',
+    'batch_create_verifying': '⏳ جاري التحقق من الحسابات...',
     'batch_create_verifying_progress': 'التقدم: {done}/{إجمالي}',
-    'batch_create_verify_complete': '✅ حساب verification مكتمل',
+    'batch_create_verify_complete': '✅ اكتمل التحقق من الحساب',
     'batch_create_statistics': 'الإحصائيات:',
-    'batch_create_total_accounts': '· الإجمالي حساب: {العدد}',
-    'batch_create_valid_accounts': '· صالح حساب: {العدد}',
-    'batch_create_invalid_accounts': '· غير صالح حساب: {العدد}',
-    'batch_create_can_create_today': '· يمكن إنشاء today: {العدد}',
-    'batch_create_next_step': 'التالي خطوة:',
-    'batch_create_select_type': 'يرجى اختر the النوع إلى إنشاء',
+    'batch_create_total_accounts': '· إجمالي الحسابات: {العدد}',
+    'batch_create_valid_accounts': '· حسابات صالحة: {العدد}',
+    'batch_create_invalid_accounts': '· حسابات غير صالحة: {العدد}',
+    'batch_create_can_create_today': '· يمكن الإنشاء اليوم: {العدد}',
+    'batch_create_next_step': 'الخطوة التالية:',
+    'batch_create_select_type': 'يرجى اختيار النوع للإنشاء',
     'batch_create_btn_group': 'إنشاء مجموعة',
     'batch_create_btn_channel': 'إنشاء قناة',
     'batch_create_btn_cancel': 'إلغاء',
     'batch_create_btn_back': 'رجوع',
     
     # 3. الخطوة 1: تعيين إنشاء العدد
-    'batch_create_group_title': '📦 إنشاء جماعي مجموعات',
-    'batch_create_channel_title': '📦 إنشاء جماعي قنوات',
-    'batch_create_account_info': 'حساب معلومات:',
-    'batch_create_step1_title': 'الخطوة 1/4: تعيين إنشاء العدد',
-    'batch_create_step1_prompt': 'يرجى أدخل the الرقم إلى إنشاء لكل حساب (1-10):',
-    'batch_create_step1_example': '💡 مثال: أدخل 5 إلى إنشاء 5 مجموعات لكل صالح حساب',
-    'batch_create_step1_example_channel': '💡 مثال: أدخل 5 إلى إنشاء 5 قنوات لكل صالح حساب',
+    'batch_create_group_title': '📦 إنشاء جماعي للمجموعات',
+    'batch_create_channel_title': '📦 إنشاء جماعي للقنوات',
+    'batch_create_account_info': 'معلومات الحساب:',
+    'batch_create_step1_title': 'الخطوة 1/4: تعيين عدد الإنشاء',
+    'batch_create_step1_prompt': 'يرجى إدخال الرقم للإنشاء لكل حساب (1-10):',
+    'batch_create_step1_example': '💡 مثال: أدخل 5 لإنشاء 5 مجموعات لكل حساب صالح',
+    'batch_create_step1_example_channel': '💡 مثال: أدخل 5 لإنشاء 5 قنوات لكل حساب صالح',
     
     # 4. الخطوة 2: تعيين المديرون
-    'batch_create_count_set_group': '✅ العدد تعيين: {العدد} لكل مجموعة/حساب',
-    'batch_create_count_set_channel': '✅ العدد تعيين: {العدد} لكل قناة/حساب',
-    'batch_create_step2_title': 'الخطوة 2/4: تعيين المديرون (اختياري, متعدد المدعومة)',
-    'batch_create_step2_prompt': 'يرجى إرسال usernames إلى إضافة as المديرون:',
+    'batch_create_count_set_group': '✅ تم تعيين العدد: {العدد} لكل مجموعة/حساب',
+    'batch_create_count_set_channel': '✅ تم تعيين العدد: {العدد} لكل قناة/حساب',
+    'batch_create_step2_title': 'الخطوة 2/4: تعيين المديرين (اختياري، متعدد مدعوم)',
+    'batch_create_step2_prompt': 'يرجى إرسال أسماء المستخدمين لإضافتهم كمديرين:',
     'batch_create_step2_format': 'الصيغة:',
-    'batch_create_step2_format1': '· فردي المدير: أدخل اسم المستخدم directly',
-    'batch_create_step2_format2': '· متعدد المديرون: واحد اسم المستخدم لكل سطر',
+    'batch_create_step2_format1': '· مدير واحد: أدخل اسم المستخدم مباشرة',
+    'batch_create_step2_format2': '· مديرون متعددون: اسم مستخدم واحد لكل سطر',
     'batch_create_step2_example': 'مثال:',
-    'batch_create_step2_tip1': '💡 مع أو without @ symbol',
-    'batch_create_step2_tip2': '💡 لـ تخطي, إرسال "تخطي" أو "none"',
-    'batch_create_step2_tip3': '💡 فشل المديرون will عرض تفصيلي reasons في تقرير',
+    'batch_create_step2_tip1': '💡 مع أو بدون رمز @',
+    'batch_create_step2_tip2': '💡 للتخطي، أرسل "تخطي" أو "none"',
+    'batch_create_step2_tip3': '💡 المديرون الفاشلون سيظهرون بأسباب تفصيلية في التقرير',
     'batch_create_btn_skip': 'تخطي',
     
     # 5. الخطوة 3: تعيين الاسم و الوصف
-    'batch_create_admins_set': '✅ المديرون تعيين: {المديرون}',
+    'batch_create_admins_set': '✅ تم تعيين المديرين: {المديرون}',
     'batch_create_admins_count': '({العدد} إجمالي)',
-    'batch_create_admins_none': 'None',
-    'batch_create_step3_title_group': 'الخطوة 3/4: تعيين مجموعة الاسم و الوصف',
-    'batch_create_step3_title_channel': 'الخطوة 3/4: تعيين قناة الاسم و الوصف',
-    'batch_create_step3_prompt': 'يرجى رفع a TXT ملف مع الأسماء و الأوصاف, أو أدخل يدوياً (لـ small amounts)',
-    'batch_create_step3_prompt_channel': 'يرجى رفع a TXT ملف مع الأسماء و الأوصاف, أو أدخل يدوياً (لـ small amounts)',
+    'batch_create_admins_none': 'لا يوجد',
+    'batch_create_step3_title_group': 'الخطوة 3/4: تعيين اسم ووصف المجموعة',
+    'batch_create_step3_title_channel': 'الخطوة 3/4: تعيين اسم ووصف القناة',
+    'batch_create_step3_prompt': 'يرجى رفع ملف TXT بالأسماء والأوصاف، أو الإدخال يدويًا (للكميات الصغيرة)',
+    'batch_create_step3_prompt_channel': 'يرجى رفع ملف TXT بالأسماء والأوصاف، أو الإدخال يدويًا (للكميات الصغيرة)',
     'batch_create_step3_format': 'الصيغة:',
-    'batch_create_step3_format_group': 'مجموعة الاسم|مجموعة الوصف',
-    'batch_create_step3_format_channel': 'قناة الاسم|قناة الوصف',
-    'batch_create_step3_tip1': '💡 الوصف يمكن be فارغ (like سطر 3)',
-    'batch_create_step3_tip2': '💡 يحتاج إلى تحضير في least {العدد} أسطر',
-    'batch_create_step3_tip3': '💡 إذا أسطر are insufficient, existing الأسماء will be reused',
-    'batch_create_step3_upload': 'يرجى رفع TXT ملف أو أدخل directly:',
+    'batch_create_step3_format_group': 'اسم المجموعة|وصف المجموعة',
+    'batch_create_step3_format_channel': 'اسم القناة|وصف القناة',
+    'batch_create_step3_tip1': '💡 يمكن أن يكون الوصف فارغًا (مثل السطر 3)',
+    'batch_create_step3_tip2': '💡 يحتاج إلى تحضير على الأقل {العدد} أسطر',
+    'batch_create_step3_tip3': '💡 إذا كانت الأسطر غير كافية، سيتم إعادة استخدام الأسماء الموجودة',
+    'batch_create_step3_upload': 'يرجى رفع ملف TXT أو الإدخال مباشرة:',
     
     # 6. الخطوة 4: تعيين الروابط
-    'batch_create_names_saved_group': '✅ تم الحفظ {العدد} مجموعة الأسماء',
-    'batch_create_names_saved_channel': '✅ تم الحفظ {العدد} قناة الأسماء',
-    'batch_create_step4_title_group': 'الخطوة 4/4: تعيين مجموعة الروابط',
-    'batch_create_step4_title_channel': 'الخطوة 4/4: تعيين قناة الروابط',
-    'batch_create_step4_prompt': 'يرجى اختر الرابط الإعداد الطريقة:',
-    'batch_create_step4_option1': '· مخصص رفع: رفع TXT ملف مع مخصص usernames',
-    'batch_create_step4_option2': '· تلقائي إنشاء: النظام عشوائياً generates unique usernames',
-    'batch_create_step4_tip1': '💡 مخصص اسم المستخدم الصيغة: واحد لكل سطر, مع أو without @',
-    'batch_create_step4_tip2': '💡 إذا اسم المستخدم exists أو غير متاح, will تلقائي-تخطي',
+    'batch_create_names_saved_group': '✅ تم حفظ {العدد} اسم مجموعة',
+    'batch_create_names_saved_channel': '✅ تم حفظ {العدد} اسم قناة',
+    'batch_create_step4_title_group': 'الخطوة 4/4: تعيين روابط المجموعة',
+    'batch_create_step4_title_channel': 'الخطوة 4/4: تعيين روابط القناة',
+    'batch_create_step4_prompt': 'يرجى اختيار طريقة إعداد الرابط:',
+    'batch_create_step4_option1': '· رفع مخصص: رفع ملف TXT بأسماء مستخدمين مخصصة',
+    'batch_create_step4_option2': '· إنشاء تلقائي: يُنشئ النظام أسماء مستخدمين فريدة عشوائيًا',
+    'batch_create_step4_tip1': '💡 صيغة اسم المستخدم المخصص: واحد لكل سطر، مع أو بدون @',
+    'batch_create_step4_tip2': '💡 إذا كان اسم المستخدم موجودًا أو غير متاح، سيتم التخطي تلقائيًا',
     'batch_create_btn_custom': 'مخصص',
-    'batch_create_btn_auto': 'تلقائي إنشاء',
+    'batch_create_btn_auto': 'إنشاء تلقائي',
     
     # 7. مخصص اسم المستخدم رفع
-    'batch_create_custom_title': 'رفع مخصص Usernames',
-    'batch_create_custom_prompt': 'يرجى رفع TXT ملف مع usernames, أو أدخل directly:',
-    'batch_create_custom_format': 'الصيغة: واحد اسم المستخدم لكل سطر',
+    'batch_create_custom_title': 'رفع أسماء مستخدمين مخصصة',
+    'batch_create_custom_prompt': 'يرجى رفع ملف TXT بأسماء المستخدمين، أو الإدخال مباشرة:',
+    'batch_create_custom_format': 'الصيغة: اسم مستخدم واحد لكل سطر',
     'batch_create_custom_example': 'مثال:',
-    'batch_create_custom_tip1': '💡 مع أو without @ symbol',
-    'batch_create_custom_tip2': '💡 إذا اسم المستخدم exists, will تلقائي-تخطي',
+    'batch_create_custom_tip1': '💡 مع أو بدون رمز @',
+    'batch_create_custom_tip2': '💡 إذا كان اسم المستخدم موجودًا، سيتم التخطي تلقائيًا',
     
     # 8. Final Confirmation
-    'batch_create_confirm_title': '📋 Final Confirmation',
-    'batch_create_confirm_type_group': 'إنشاء النوع: مجموعة',
-    'batch_create_confirm_type_channel': 'إنشاء النوع: قناة',
-    'batch_create_confirm_account_stats': 'حساب الإحصائيات:',
-    'batch_create_confirm_valid_count': '· صالح حساب: {العدد}',
+    'batch_create_confirm_title': '📋 التأكيد النهائي',
+    'batch_create_confirm_type_group': 'نوع الإنشاء: مجموعة',
+    'batch_create_confirm_type_channel': 'نوع الإنشاء: قناة',
+    'batch_create_confirm_account_stats': 'إحصائيات الحساب:',
+    'batch_create_confirm_valid_count': '· حسابات صالحة: {العدد}',
     'batch_create_confirm_per_account': '· إنشاء لكل حساب: {العدد}',
-    'batch_create_confirm_total_estimate': '· المتوقع إجمالي: {العدد}',
+    'batch_create_confirm_total_estimate': '· الإجمالي المتوقع: {العدد}',
     'batch_create_confirm_config': 'التكوين:',
     'batch_create_confirm_admins': '· المديرون: {العدد} ({المديرون})',
-    'batch_create_confirm_names': '· الاسم العدد: {العدد}',
-    'batch_create_confirm_link_auto': '· الرابط وضع: تلقائي إنشاء',
-    'batch_create_confirm_link_custom': '· الرابط وضع: مخصص',
-    'batch_create_confirm_concurrency': 'التزامن الإعدادات:',
-    'batch_create_confirm_concurrent_accounts': '· المتزامنة حساب: {العدد}',
-    'batch_create_confirm_threads': '· الخيوط: {العدد}',
-    'batch_create_confirm_important': '⚠️ Important:',
-    'batch_create_confirm_tip1': '· إنشاء لا يمكن be التراجع',
-    'batch_create_confirm_tip2': '· تلقائي-handles intervals إلى avoid rate الحدود',
-    'batch_create_confirm_tip3': '· إذا اسم المستخدم exists, will تلقائي-تخطي',
-    'batch_create_confirm_tip4': '· تفصيلي تقرير will be تم الإنشاء بعد completion',
-    'batch_create_confirm_question': 'تأكيد إلى بدء إنشاء?',
-    'batch_create_btn_confirm': 'تأكيد إنشاء',
+    'batch_create_confirm_names': '· عدد الأسماء: {العدد}',
+    'batch_create_confirm_link_auto': '· وضع الرابط: إنشاء تلقائي',
+    'batch_create_confirm_link_custom': '· وضع الرابط: مخصص',
+    'batch_create_confirm_concurrency': 'إعدادات التزامن:',
+    'batch_create_confirm_concurrent_accounts': '· حسابات متزامنة: {العدد}',
+    'batch_create_confirm_threads': '· خيوط: {العدد}',
+    'batch_create_confirm_important': '⚠️ مهم:',
+    'batch_create_confirm_tip1': '· لا يمكن التراجع عن الإنشاء',
+    'batch_create_confirm_tip2': '· يتعامل تلقائيًا مع الفواصل الزمنية لتجنب حدود المعدل',
+    'batch_create_confirm_tip3': '· إذا كان اسم المستخدم موجودًا، سيتم التخطي تلقائيًا',
+    'batch_create_confirm_tip4': '· سيتم إنشاء تقرير تفصيلي بعد الاكتمال',
+    'batch_create_confirm_question': 'تأكيد لبدء الإنشاء؟',
+    'batch_create_btn_confirm': 'تأكيد الإنشاء',
     
     # 9. إنشاء التقدم
-    'batch_create_creating': '⏳ إنشاء...',
-    'batch_create_wait_report': 'يرجى الانتظار, تفصيلي تقرير will be تم الإرسال بعد completion',
-    'batch_create_starting': '🚀 بدء جماعي إنشاء',
+    'batch_create_creating': '⏳ جاري الإنشاء...',
+    'batch_create_wait_report': 'يرجى الانتظار، سيتم إرسال تقرير تفصيلي بعد الاكتمال',
+    'batch_create_starting': '🚀 بدء الإنشاء الجماعي',
     'batch_create_progress': 'التقدم: {done}/{إجمالي} ({percent}%)',
-    'batch_create_status_preparing': 'الحالة: Preparing...',
-    'batch_create_btn_view_log': 'عرض سجل',
+    'batch_create_status_preparing': 'الحالة: جاري التحضير...',
+    'batch_create_btn_view_log': 'عرض السجل',
     
     # 10. إنشاء مكتمل
-    'batch_create_complete': '✅ جماعي إنشاء مكتمل',
+    'batch_create_complete': '✅ اكتمل الإنشاء الجماعي',
     'batch_create_stats_total': '· الإجمالي: {العدد}',
     'batch_create_stats_success': '· نجاح: {العدد}',
     'batch_create_stats_failed': '· فشل: {العدد}',
-    'batch_create_stats_skipped': '· Skipped: {العدد}',
-    'batch_create_success_rate': 'نجاح rate: {percent}%',
-    'batch_create_report_below': '📄 See تفصيلي تقرير في ملف below',
-    'batch_create_detailed_report': '📊 جماعي إنشاء تفصيلي تقرير',
-    'batch_create_success_list': '✅ بنجاح تم الإنشاء قائمة',
+    'batch_create_stats_skipped': '· متخطى: {العدد}',
+    'batch_create_success_rate': 'معدل النجاح: {percent}%',
+    'batch_create_report_below': '📄 انظر التقرير التفصيلي في الملف أدناه',
+    'batch_create_detailed_report': '📊 تقرير تفصيلي للإنشاء الجماعي',
+    'batch_create_success_list': '✅ قائمة المُنشأة بنجاح',
     
     # 11. تقرير TXT Template - تفصيلي تقرير
-    'report_batch_create_title': 'إنشاء جماعي مجموعات/قنوات - النتيجة تقرير',
+    'report_batch_create_title': 'إنشاء جماعي لمجموعات/قنوات - تقرير النتيجة',
     'report_batch_create_generated': 'تم الإنشاء: {الوقت}',
     'report_batch_create_stats': 'الإحصائيات:',
     'report_batch_create_total': '  الإجمالي: {العدد}',
     'report_batch_create_success': '  نجاح: {العدد}',
     'report_batch_create_failed': '  فشل: {العدد}',
-    'report_batch_create_skipped': '  Skipped: {العدد}',
-    'report_batch_create_success_list': 'بنجاح تم الإنشاء قائمة:',
+    'report_batch_create_skipped': '  متخطى: {العدد}',
+    'report_batch_create_success_list': 'قائمة المُنشأة بنجاح:',
     'report_batch_create_type': 'النوع: {النوع}',
     'report_batch_create_type_group': 'مجموعة',
     'report_batch_create_type_channel': 'قناة',
     'report_batch_create_name': 'الاسم: {الاسم}',
     'report_batch_create_desc': 'الوصف: {desc}',
-    'report_batch_create_desc_none': 'None',
+    'report_batch_create_desc_none': 'لا يوجد',
     'report_batch_create_username': 'اسم المستخدم: {اسم المستخدم}',
     'report_batch_create_link': 'الرابط: {الرابط}',
-    'report_batch_create_creator_account': 'Creator حساب: {حساب}',
-    'report_batch_create_creator_username': 'Creator اسم المستخدم: {اسم المستخدم}',
-    'report_batch_create_creator_id': 'Creator ID: {id}',
+    'report_batch_create_creator_account': 'حساب المُنشئ: {حساب}',
+    'report_batch_create_creator_username': 'اسم مستخدم المُنشئ: {اسم المستخدم}',
+    'report_batch_create_creator_id': 'معرّف المُنشئ: {id}',
     'report_batch_create_admins': 'المديرون: {المديرون}',
-    'report_batch_create_admins_none': '@None',
-    'report_batch_create_admin_failed': 'المدير إضافة فشل:',
-    'report_batch_create_admin_failed_reason': '  - {المدير}: اسم المستخدم @{المدير} does لا exist أو غير صالح',
+    'report_batch_create_admins_none': '@لا_يوجد',
+    'report_batch_create_admin_failed': 'فشل إضافة المدير:',
+    'report_batch_create_admin_failed_reason': '  - {المدير}: اسم المستخدم @{المدير} غير موجود أو غير صالح',
     
     # 12. تقرير TXT Template - نجاح قائمة
-    'report_success_list_title': 'إنشاء جماعي - نجاح قائمة',
+    'report_success_list_title': 'إنشاء جماعي - قائمة النجاح',
     'report_success_list_generated': 'تم الإنشاء: {الوقت}',
-    'report_success_list_count': 'نجاح العدد: {العدد}',
-    'report_success_list_group_name': 'مجموعة الاسم: {الاسم}',
-    'report_success_list_channel_name': 'قناة الاسم: {الاسم}',
-    'report_success_list_desc': 'مجموعة الوصف: {desc}',
-    'report_success_list_channel_desc': 'قناة الوصف: {desc}',
-    'report_success_list_link': 'مجموعة الرابط: {الرابط}',
-    'report_success_list_channel_link': 'قناة الرابط: {الرابط}',
-    'report_success_list_creator': 'Creator حساب: {حساب}',
-    'report_success_list_creator_username': 'Creator اسم المستخدم: {اسم المستخدم}',
-    'report_success_list_admin_username': 'المدير اسم المستخدم: {المدير}',
+    'report_success_list_count': 'عدد النجاح: {العدد}',
+    'report_success_list_group_name': 'اسم المجموعة: {الاسم}',
+    'report_success_list_channel_name': 'اسم القناة: {الاسم}',
+    'report_success_list_desc': 'وصف المجموعة: {desc}',
+    'report_success_list_channel_desc': 'وصف القناة: {desc}',
+    'report_success_list_link': 'رابط المجموعة: {الرابط}',
+    'report_success_list_channel_link': 'رابط القناة: {الرابط}',
+    'report_success_list_creator': 'حساب المُنشئ: {حساب}',
+    'report_success_list_creator_username': 'اسم مستخدم المُنشئ: {اسم المستخدم}',
+    'report_success_list_admin_username': 'اسم مستخدم المدير: {المدير}',
     
     # 13. تقرير TXT Template - فشل قائمة
-    'report_failure_list_title': '❌ فشل تفاصيل قائمة',
-    'report_failure_list_header': 'إنشاء جماعي - فشل قائمة (تفصيلي Reasons)',
+    'report_failure_list_title': '❌ قائمة تفاصيل الفشل',
+    'report_failure_list_header': 'إنشاء جماعي - قائمة الفشل (أسباب تفصيلية)',
     'report_failure_list_generated': 'تم الإنشاء: {الوقت}',
-    'report_failure_list_count': 'فشل العدد: {العدد}',
-    'report_failure_list_group_name': 'مجموعة الاسم: {الاسم}',
-    'report_failure_list_channel_name': 'قناة الاسم: {الاسم}',
-    'report_failure_list_group_desc': 'مجموعة الوصف: {desc}',
-    'report_failure_list_channel_desc': 'قناة الوصف: {desc}',
-    'report_failure_list_creator': 'Creator حساب: {حساب}',
-    'report_failure_list_reason': 'فشل reason: {reason}',
+    'report_failure_list_count': 'عدد الفشل: {العدد}',
+    'report_failure_list_group_name': 'اسم المجموعة: {الاسم}',
+    'report_failure_list_channel_name': 'اسم القناة: {الاسم}',
+    'report_failure_list_group_desc': 'وصف المجموعة: {desc}',
+    'report_failure_list_channel_desc': 'وصف القناة: {desc}',
+    'report_failure_list_creator': 'حساب المُنشئ: {حساب}',
+    'report_failure_list_reason': 'سبب الفشل: {reason}',
     
     # إنشاء جماعي - حساب مجمّد
-    'batch_create_account_frozen_skipped': 'حساب مجمّد, إنشاء skipped',
+    'batch_create_account_frozen_skipped': 'حساب مجمّد، تم تخطي الإنشاء',
     
     # إنشاء جماعي - خطأ رسائل
-    'batch_create_feature_disabled': '❌ جماعي إنشاء ميزة is معطّل',
-    'batch_create_session_expired': '❌ Session منتهي الصلاحية',
-    'batch_create_session_expired_restart': '❌ Session منتهي الصلاحية, يرجى restart',
-    'batch_create_count_range_error': '❌ العدد يجب be between 1-10, يرجى re-أدخل',
-    'batch_create_failed': '❌ إنشاء فشل',
+    'batch_create_feature_disabled': '❌ ميزة الإنشاء الجماعي معطّلة',
+    'batch_create_session_expired': '❌ انتهت صلاحية الجلسة',
+    'batch_create_session_expired_restart': '❌ انتهت صلاحية الجلسة، يرجى إعادة التشغيل',
+    'batch_create_count_range_error': '❌ يجب أن يكون العدد بين 1-10، يرجى إعادة الإدخال',
+    'batch_create_failed': '❌ فشل الإنشاء',
     'batch_create_error': 'خطأ: {خطأ}',
-    'error_upload_zip_only': '❌ يرجى رفع ZIP الصيغة أرشيف',
+    'error_upload_zip_only': '❌ يرجى رفع أرشيف بصيغة ZIP',
     
     # إنشاء جماعي - التقدم رسائل
     'batch_create_progress_completed': 'مكتمل {العدد}',
