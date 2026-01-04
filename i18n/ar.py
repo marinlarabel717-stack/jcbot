@@ -143,7 +143,7 @@ TEXTS = {
     'check_mode_local': 'الوضع المحلي',
     'all_files_sent': '📤 جميع ملفات تم الإرسال بنجاح!',
     'send_summary': '📊 Send ملخص',
-    'files_sent_count': '· نجحfully sent: {count} ملفات',
+    'الملفات_sent_count': '· نجحfully sent: {count} ملفات',
     'check_mode_summary': '· فحص mode: {mode}',
     'check_duration': '· فحص duration: {seconds}s',
     'thanks_message': 'Thanks for using the enhanced bot! To check again, click /start',
@@ -159,7 +159,7 @@ TEXTS = {
     'local_connection': '🏠 اتصال محلي',
     'performance_stats': '⚡ إحصائيات الأداء',
     'average_speed': 'متوسط السرعة',
-    'sending_files': '🚀 إرسال مصنفة ملفات, يرجى الانتظار...',
+    'sending_الملفات': '🚀 إرسال ملفات مصنفة, يرجى الانتظار...',
     'processing_file': '📥 جارٍ المعالجة your file...',
     'accounts_unit': '',
     'seconds_unit': 's',
@@ -211,7 +211,7 @@ TEXTS = {
     # التحويل progress
     'processing_your_file': '📥 جارٍ المعالجة your file...',
     'start_conversion': '🔄 بدء conversion...',
-    'found_files': '📁 Found {count} ملفات',
+    'found_الملفات': '📁 Found {count} ملفات',
     'initializing': '⏳ Initializing...',
     'conversion_in_progress': '🔄 التنسيق conversion in progress...',
     'conversion_current_progress': '📊 Current التقدم',
@@ -221,7 +221,7 @@ TEXTS = {
     'conversion_success_count': '✅ تحويل success: {count}',
     'conversion_error_count': '❌ تحويل error: {count}',
     'conversion_remaining': '⏱️ Est. remaining: {time}s',
-    'processing_files': 'جارٍ المعالجة your ملفات',
+    'processing_الملفات': 'جارٍ المعالجة your ملفات',
     
     # التحويل complete (intermediate state)
     'conversion_complete': '🎉 تحويل complete!',
@@ -278,7 +278,7 @@ TEXTS = {
     'error_connection_timeout': 'الاتصال timeout',
     'error_network_faiتم': 'Network connection faiتم',
     'error_conversion_faiتم': 'تحويل faiتم',
-    'error_no_valid_files': 'No valid ملفات found',
+    'error_no_valid_الملفات': 'No valid ملفات found',
     'error_ensure_correct_format': 'Please ensure ZIP contains the correct format',
     'error_click_function_button': 'Please click the corresponding function button first',
     
@@ -311,7 +311,7 @@ TEXTS = {
     'change_2fa_processing': 'جارٍ المعالجة your ملفات',
     
     # كلمة المرور input prompts
-    'change_2fa_found_files': '📁 Found {count} account ملفات',
+    'change_2fa_found_الملفات': '📁 Found {count} account ملفات',
     'change_2fa_file_type': '📊 نوع الملف: {type}',
     'change_2fa_enter_password': '🔐 Please enter password info:',
     'change_2fa_format1': 'التنسيق 1 (Recommended): New password only',
@@ -353,7 +353,7 @@ TEXTS = {
     # إرسال complete
     'change_2fa_all_sent': '🎉 جميع ملفات تم الإرسال بنجاح!',
     'change_2fa_send_summary': '📋 Send ملخص',
-    'change_2fa_files_sent': '· ملفs sent: {count}',
+    'change_2fa_الملفات_sent': '· ملفs sent: {count}',
     'change_2fa_total_accounts': '· المجموع حسابات: {count}',
     'change_2fa_success_count': '· ✅ نجح: {count}',
     'change_2fa_faiتم_count': '· ❌ فشل: {count}',
@@ -428,7 +428,7 @@ TEXTS = {
     'batch_create_supported_formats': 'التنسيقات المدعومة: .session / TData folder / .zip archive',
     
     # 2. الحساب Verification
-    'batch_create_found_files': '✅ Found {count} account ملفات',
+    'batch_create_found_الملفات': '✅ Found {count} account ملفات',
     'batch_create_verifying': '⏳ Verifying حسابات...',
     'batch_create_verifying_progress': 'التقدم: {done}/{total}',
     'batch_create_verify_complete': '✅ الحساب verification complete',
@@ -723,7 +723,7 @@ TEXTS = {
     'forget_2fa_proxy_count': '📡 الوكيل: {count} available',
     'forget_2fa_initializing': '⏳ Initializing...',
     'forget_2fa_processing_file': '📥 جارٍ المعالجة your file...',
-    'forget_2fa_no_valid_files': '❌ No valid ملفات found',
+    'forget_2fa_no_valid_الملفات': '❌ No valid ملفات found',
     'forget_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format ملفات',
     'forget_2fa_sending_results': '📦 إرسال result ملفات...',
     'forget_2fa_send_faiتم': '❌ فشل to send result ملفات',
@@ -765,7 +765,7 @@ TEXTS = {
     'delete_2fa_back_menu': 'رجوع to القائمة الرئيسية',
     
     # 2. كلمة المرور Input Method اخترion
-    'delete_2fa_found_files': '📁 Found {count} account ملفات',
+    'delete_2fa_found_الملفات': '📁 Found {count} account ملفات',
     'delete_2fa_file_type': '📊 نوع الملف: {type}',
     'delete_2fa_select_method': '🔐 Please select password input method:',
     'delete_2fa_auto_detect_title': '🔍 Auto-detect كلمة المرور',
@@ -875,7 +875,7 @@ TEXTS = {
     'delete_2fa_found_count': '📊 Found {count} ملفات',
     'delete_2fa_please_wait': '⏳ جارٍ المعالجة, يرجى الانتظار...',
     'delete_2fa_processing_file': '📥 جارٍ المعالجة your file...',
-    'delete_2fa_no_valid_files': '❌ No valid ملفات found',
+    'delete_2fa_no_valid_الملفات': '❌ No valid ملفات found',
     'delete_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account ملفات',
     'delete_2fa_faiتم_msg': '❌ حذف 2FA faiتم',
     'delete_2fa_error_msg': 'خطأ: {error}',
@@ -953,7 +953,7 @@ TEXTS = {
     'add_2fa_no_pending_task': '❌ No pending إضافة 2FA task, please start over',
     'add_2fa_operation_timeout': '❌ Operation timeout, please start over',
     'add_2fa_password_empty': '❌ 2FA password cannot be empty, please re-enter',
-    'add_2fa_no_valid_files': '❌ No valid ملفات found',
+    'add_2fa_no_valid_الملفات': '❌ No valid ملفات found',
     'add_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account ملفات',
     'add_2fa_processing_file': '📥 جارٍ المعالجة your file...',
     'add_2fa_processing_config': '🔄 إضافةing 2FA config...',
@@ -1399,7 +1399,7 @@ TEXTS = {
     'api_failure_details': '❌ Failure Details',
     'api_sending_txt': '📄 إرسال TXT file...',
     
-    # Result files
+    # Result الملفات
     'api_result_filename': 'TG_API_{count}_حسابات.txt',
     'api_result_desc': '📋 API Links (Phone + Link)',
     'api_use_again': "✅ To use again /start (Faiتم accounts won't be sent)",
@@ -1487,22 +1487,22 @@ TEXTS = {
     'merge_result_tdata': '· TData حسابات: {count}',
     'merge_result_session': '· Session ملفات: {count} (support pure Session or Session+JSON)',
     'merge_generated': '📦 Generated ملفs',
-    'merge_total_files': 'المجموع {count} ملفات (normal and duplicate ملفات packed separately)',
+    'merge_total_الملفات': 'المجموع {count} ملفات (normal and duplicate ملفات packed separately)',
     
     # 6. Output ملف Descriptions
-    'merge_session_files': 'Session ملفs ({count} items)',
-    'merge_tdata_files': 'TData ملفs ({count} items)',
+    'merge_session_الملفات': 'Session ملفs ({count} items)',
+    'merge_tdata_الملفات': 'TData ملفs ({count} items)',
     
     # 7. خطأ and Hint Messages
     'merge_no_task': '❌ No pending merge task',
     'merge_zip_only_error': '❌ Only .zip ملفات supported, please re-upload',
     'merge_download_faiتم': '❌ ملف download faiتم: {error}',
     'merge_continue_upload_hint': '✅ Please continue uploading ZIP ملفات',
-    'merge_received_files': 'Received ملفات: {count}',
+    'merge_received_الملفات': 'Received ملفات: {count}',
     'merge_upload_next': '• Please upload next ZIP file',
     'merge_or_complete': '• Or click button below to complete merge',
     'merge_cancelتم': '❌ Merge operation cancelتم',
-    'merge_no_files': '❌ No ملفات uploaded',
+    'merge_no_الملفات': '❌ No ملفات uploaded',
     
     # ===== One-Click Cleanup Feature =====
     # 1. Feature Introduction Page
@@ -1604,7 +1604,7 @@ TEXTS = {
     # 9. خطأs and Other Messages
     'cleanup_feature_disabتم': '❌ One-click cleanup feature is disabتم',
     'cleanup_need_member': '❌ العضوية required for one-click cleanup',
-    'cleanup_no_valid_files': '❌ No valid ملفات found',
+    'cleanup_no_valid_الملفات': '❌ No valid ملفات found',
     'cleanup_ensure_format': 'Please ensure ZIP contains Session or TData format ملفات',
     'cleanup_no_pending_task': '❌ No pending cleanup task',
     'cleanup_operation_timeout': '❌ Operation timeout, please restart',
@@ -1790,7 +1790,7 @@ TEXTS = {
     'reauth_need_member': '⚠️ Re-authorization feature requires membership\n\nPlease activate membership first',
     'reauth_session_expired': '❌ Session expired',
     'reauth_session_expired_restart': '❌ Session expired, please restart',
-    'reauth_no_valid_files': '❌ No valid ملفات found',
+    'reauth_no_valid_الملفات': '❌ No valid ملفات found',
     'reauth_ensure_format': 'Please ensure ZIP contains Session or TData format ملفات',
     'reauth_faiتم': '❌ Re-authorization faiتم',
     'reauth_error': 'خطأ: {error}',
@@ -1916,7 +1916,7 @@ TEXTS = {
     # 11. إضافةitional Messages
     'regtime_need_member': '❌ Registration time query feature requires membership\n\nPlease activate membership first',
     'regtime_session_expired': '❌ Session expired, please re-upload ملفات',
-    'regtime_no_valid_files': '❌ No valid ملفات found\n\nPlease ensure ZIP contains Session or TData format ملفات',
+    'regtime_no_valid_الملفات': '❌ No valid ملفات found\n\nPlease ensure ZIP contains Session or TData format ملفات',
     'regtime_processing_faiتم': '❌ جارٍ المعالجة faiتم',
     'regtime_processing_error': 'خطأ: {error}',
     
@@ -2135,7 +2135,7 @@ TEXTS = {
     'profile_result_success': '• نجح: {count} ✅',
     'profile_result_faiتم': '• فشل: {count} ❌',
     'profile_error_stats': '📋 خطأ type statistics:',
-    'profile_files_sent': '📁 ملفs sent:',
+    'profile_الملفات_sent': '📁 ملفs sent:',
     'profile_file_report': '• Detaiتم report:',
     'profile_file_success': '• نجحful حسابات:',
     'profile_file_faiتم': '• فشل حسابات:',

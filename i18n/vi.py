@@ -17,12 +17,12 @@ TEXTS = {
     'membership_admin': 'Quản Trị Viên',
     'default_user': 'Người Dùng',
     
-    # Proxy status
-    'proxy_status': 'Trạng Thái Proxy',
-    'proxy_mode': 'Chế Độ Proxy',
+    # proxy status
+    'proxy_status': 'Trạng Thái proxy',
+    'proxy_mode': 'Chế Độ proxy',
     'proxy_mode_enabđã': '🟢Đã Bật',
     'proxy_mode_local': '🔴Kết Nối Cục Bộ',
-    'proxy_count_label': 'Số Lượng Proxy',
+    'proxy_count_label': 'Số Lượng proxy',
     'proxy_count_value': '{count} proxy',
     'current_time': 'Thời Gian Hiện Tại',
     
@@ -45,7 +45,7 @@ TEXTS = {
     'btn_check_contact_limit': '🔍 Kiểm Tra Hạn Chế Liên Hệ',
     'btn_vip_menu': '💳 Kích Hoạt/Đổi Thành Viên',
     'btn_admin_panel': '👑 Bảng Quản Trị',
-    'btn_proxy_panel': '📡 Quản Lý Proxy',
+    'btn_proxy_panel': '📡 Quản Lý proxy',
     
     # Ngôn ngữ switch
     'btn_language_menu': '🌐 Chuyển Ngôn Ngữ',
@@ -71,10 +71,10 @@ TEXTS = {
     'status_failed': '❌ Thất Bại',
     'status_cancelled': '❌ Đã Hủy',
     
-    # Proxy status
-    'proxy_enabled': '🌐 Chế Độ Proxy: Đã Bật',
-    'proxy_disabled': '🌐 Chế Độ Proxy: Đã Tắt',
-    'proxy_count': '🌐 Chế Độ Proxy: Đã Bật ({count} proxy)',
+    # proxy status
+    'proxy_enabled': '🌐 Chế Độ proxy: Đã Bật',
+    'proxy_disabled': '🌐 Chế Độ proxy: Đã Tắt',
+    'proxy_count': '🌐 Chế Độ proxy: Đã Bật ({count} proxy)',
     
     # ===== Tài khoản Kiểm tra =====
     # Tải lên prompt interface
@@ -104,7 +104,7 @@ TEXTS = {
     'account_check_mode': '· Chế Độ: {mode}',
     'account_check_speed': '· Tốc Độ: {speed} tài khoản/sec',
     'account_check_remaining': '· Est. remaining: {time} min',
-    'account_check_proxy_stats': '🔄 Thống kê sử dụng Proxy',
+    'account_check_proxy_stats': '🔄 Thống kê sử dụng proxy',
     'account_check_proxies_used': '· Proxies used: {count}',
     'account_check_fallback_local': '· Fallback local: {count}',
     'account_check_faiđã_proxies': '· Thất Bại proxy: {count}',
@@ -148,14 +148,14 @@ TEXTS = {
     'check_duration': '· Kiểm tra duration: {seconds}s',
     'thanks_message': 'Thanks for using the enhanced bot! To check again, click /start',
     
-    # Proxy stats and other statistics
+    # proxy stats and other statistics
     'total_accounts': 'Tổng Số Tài Khoản',
-    'proxy_usage_stats': '📡 Thống kê sử dụng Proxy',
+    'proxy_usage_stats': '📡 Thống kê sử dụng proxy',
     'proxies_used_stat': 'Proxies Used',
     'fallback_local_stat': 'Fallback Cục bộ',
     'faiđã_proxies_stat': 'Thất Bại Proxies',
     'local_only_stat': 'Cục bộ Only',
-    'proxy_connection': '📡 Proxy Kết nối',
+    'proxy_connection': '📡 proxy Kết nối',
     'local_connection': '🏠 Kết Nối Cục Bộ',
     'performance_stats': '⚡ Thống kê hiệu suất',
     'average_speed': 'Trung bình Tốc Độ',
@@ -620,11 +620,11 @@ TEXTS = {
     'forget_2fa_important': '⚠️ Important Notes:',
     'forget_2fa_note1': '· Will initiate Telegram official password reset process',
     'forget_2fa_note2': '· Mật khẩu will be removed after 7-day cooling period',
-    'forget_2fa_note3': '· Proxy connection preferred (to avoid restrictions)',
+    'forget_2fa_note3': '· proxy connection preferred (to avoid restrictions)',
     'forget_2fa_note4': '· Auto fallback to local connection if proxy fails',
     'forget_2fa_note5': '· Auto random delay between tài khoản (5-15s)',
     'forget_2fa_proxy_warning': '⚠️ Warning: Insufficient proxy! Only {count} available, recommend at least 10',
-    'forget_2fa_proxy_status': '📡 Current Trạng Thái Proxy',
+    'forget_2fa_proxy_status': '📡 Current Trạng Thái proxy',
     'forget_2fa_proxy_mode_enabđã': '· Chế độ proxy: 🟢Đã Bật',
     'forget_2fa_proxy_mode_disabđã': '· Chế độ proxy: 🔴Đã Tắt',
     'forget_2fa_proxy_available': '· Available proxy: {count}',
@@ -653,7 +653,7 @@ TEXTS = {
     'forget_2fa_status_no_reset': 'Trạng thái: ⚠️ Không có Reset Needed',
     'forget_2fa_status_cooling': 'Trạng thái: ⏳ In Cooling Period',
     'forget_2fa_status_faiđã': 'Trạng thái: ❌ Thất Bại',
-    'forget_2fa_proxy_using': 'Proxy: ✅ Using Proxy',
+    'forget_2fa_proxy_using': 'Proxy: ✅ Using proxy',
     'forget_2fa_proxy_local': 'Proxy: ❌ Kết Nối Cục Bộ',
     
     # 3. Đang xử lý Hoàn thành
@@ -696,7 +696,7 @@ TEXTS = {
     'report_forget_2fa_item_reset': '✅ {filename}',
     'report_forget_2fa_phone': 'Phone: {phone}',
     'report_forget_2fa_status_reset_waiting': 'Trạng thái: Mật khẩu reset requested, waiting for cooling period, until: {date}',
-    'report_forget_2fa_proxy_using': 'Proxy: ✅ Using Proxy',
+    'report_forget_2fa_proxy_using': 'Proxy: ✅ Using proxy',
     'report_forget_2fa_proxy_local': 'Proxy: ❌ Kết Nối Cục Bộ',
     'report_forget_2fa_cooling_until': 'Cooling period until: {date}',
     'report_forget_2fa_duration': 'Duration: {time}s',
@@ -720,7 +720,7 @@ TEXTS = {
     # 9. Initialization and Đang xử lý Messages
     'forget_2fa_found_accounts': '📊 Found {count} tài khoản',
     'forget_2fa_format': '📁 Định Dạng: {format}',
-    'forget_2fa_proxy_count': '📡 Proxy: {count} available',
+    'forget_2fa_proxy_count': '📡 proxy: {count} available',
     'forget_2fa_initializing': '⏳ Initializing...',
     'forget_2fa_processing_file': '📥 Đang Xử Lý your file...',
     'forget_2fa_no_valid_files': '❌ Không có valid tệp found',
@@ -1778,7 +1778,7 @@ TEXTS = {
     'reauth_report_new_password': 'New Mật khẩu:',
     
     # Kết nối method values
-    'reauth_connection_proxy': 'Using Proxy',
+    'reauth_connection_proxy': 'Using proxy',
     'reauth_connection_local': 'Kết Nối Cục Bộ',
     'reauth_connection_local_fallback': 'Kết Nối Cục Bộ (fallback after proxy faiđã)',
     
@@ -2363,7 +2363,7 @@ TEXTS = {
     'admin_quick_actions_desc': 'Click buttons below to manage',
     'admin_btn_user_management': '👥 Người Dùng Management',
     'admin_btn_user_stats': '📊 Người Dùng Statistics',
-    'admin_btn_proxy_management': '📡 Quản Lý Proxy',
+    'admin_btn_proxy_management': '📡 Quản Lý proxy',
     'admin_btn_admin_management': '👑 Quản trị viên Management',
     'admin_btn_search_user': '🔍 Search Người Dùng',
     'admin_btn_recent_users': '📋 Recent Người Dùngs',
@@ -2492,23 +2492,23 @@ TEXTS = {
     'ban_user_time': 'Ban Thời gian',
     'ban_user_desc': 'This user has been banned and cannot use the bot.',
     
-    # 10. Proxy Management Panel
-    'proxy_panel_title': '📡 Quản Lý Proxy Panel',
-    'proxy_panel_overview': '📊 Proxy Overview',
+    # 10. proxy Management Panel
+    'proxy_panel_title': '📡 Quản Lý proxy Panel',
+    'proxy_panel_overview': '📊 proxy Overview',
     'proxy_panel_total': 'Tổng Proxies',
     'proxy_panel_available': 'Available Proxies',
     'proxy_panel_invalid': 'Invalid Proxies',
     'proxy_panel_success_rate': 'Thành Công Rate',
     'proxy_panel_select_op': '🔧 Chọn Operation:',
-    'proxy_panel_btn_status': '📊 Trạng Thái Proxy',
+    'proxy_panel_btn_status': '📊 Trạng Thái proxy',
     'proxy_panel_btn_test': '🔄 Test Proxies',
-    'proxy_panel_btn_stats': '📈 Proxy Statistics',
+    'proxy_panel_btn_stats': '📈 proxy Statistics',
     'proxy_panel_btn_clean': '🗑 Clean Invalid',
     'proxy_panel_btn_optimize': '⚡ Tốc Độ Optimization',
-    'proxy_panel_btn_back': 'Quay Lại to Proxy Panel',
+    'proxy_panel_btn_back': 'Quay Lại to proxy Panel',
     
-    # 11. Proxy Trạng thái
-    'proxy_status_title': '📊 Proxy Detaiđã Trạng thái',
+    # 11. proxy Trạng thái
+    'proxy_status_title': '📊 proxy Detaiđã Trạng thái',
     'proxy_status_basic': '📈 Basic Statistics',
     'proxy_status_performance': '⚡ Performance Metrics',
     'proxy_status_avg_response': 'Trung bình Phản hồi',
@@ -2519,7 +2519,7 @@ TEXTS = {
     'proxy_status_btn_refresh': '🔄 Refresh Trạng thái',
     
     # 12. Test Proxies
-    'proxy_test_title': '🔄 Proxy Test',
+    'proxy_test_title': '🔄 proxy Test',
     'proxy_test_description': '📋 Test Description',
     'proxy_test_desc_connectivity': 'Will test connectivity of all proxy',
     'proxy_test_desc_time': 'Testing may take a few minutes',
@@ -2532,7 +2532,7 @@ TEXTS = {
     'proxy_test_available': 'Available',
     'proxy_test_invalid': 'Invalid',
     'proxy_test_wait': 'Vui lòng đợi...',
-    'proxy_test_complete': '✅ Proxy Test Hoàn thành!',
+    'proxy_test_complete': '✅ proxy Test Hoàn thành!',
     'proxy_test_results': '📊 Test Results',
     'proxy_test_total': 'Tổng Tested',
     'proxy_test_duration': '⏱ Duration',
@@ -2540,8 +2540,8 @@ TEXTS = {
     'proxy_test_btn_clean': '🗑 Clean Invalid Proxies',
     'proxy_test_btn_retest': '🔄 Retest',
     
-    # 13. Proxy Statistics
-    'proxy_stats_title': '📈 Proxy Statistics Info',
+    # 13. proxy Statistics
+    'proxy_stats_title': '📈 proxy Statistics Info',
     'proxy_stats_usage': '📊 Usage Statistics',
     'proxy_stats_today_requests': 'Today\'s Requests',
     'proxy_stats_success_requests': 'Thành Côngful Requests',
@@ -2570,7 +2570,7 @@ TEXTS = {
     'proxy_clean_results': '📊 Clean Results',
     'proxy_clean_cleaned': 'Cleaned',
     'proxy_clean_remaining': 'Remaining Proxies',
-    'proxy_clean_faiđã': '❌ Proxy Clean Thất Bại',
+    'proxy_clean_faiđã': '❌ proxy Clean Thất Bại',
     'proxy_clean_no_proxies': 'Không có available proxy',
     
     # 15. Tốc độ Optimization
