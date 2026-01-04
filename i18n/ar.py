@@ -116,21 +116,21 @@ TEXTS = {
     'account_check_timeout': '· فحص انتهاء المهلة: {ثانية}s',
     
     # حساب الحالة categories
-    'status_no_restriction': 'No قيد',
+    'status_no_restriction': 'بدون قيود',
     'status_spambot': 'سبام',
     'status_frozen': 'مجمّد',
     'status_banned': 'محظور',
     'status_connection_error': 'خطأ',
     
     # النتيجة ملف ZIP naming
-    'zip_no_restriction': 'Noقيد_{العدد}',
-    'zip_spambot': 'Spam_{العدد}',
-    'zip_frozen': 'Frozen_{العدد}',
-    'zip_banned': 'Banned_{العدد}',
-    'zip_connection_error': 'اتصالError_{العدد}',
+    'zip_no_restriction': 'بدون_قيود_{العدد}',
+    'zip_spambot': 'سبام_{العدد}',
+    'zip_frozen': 'مجمّد_{العدد}',
+    'zip_banned': 'محظور_{العدد}',
+    'zip_connection_error': 'خطأ_اتصال_{العدد}',
     
     # ملف الأوصاف
-    'file_desc_no_restriction': '📦 No قيد - {العدد} حساب',
+    'file_desc_no_restriction': '📦 بدون قيود - {العدد} حساب',
     'file_desc_spambot': '📦 سبام - {العدد} حساب',
     'file_desc_frozen': '📦 مجمّد - {العدد} حساب',
     'file_desc_banned': '📦 محظور - {العدد} حساب',
@@ -169,239 +169,239 @@ TEXTS = {
     # ===== تحويل الصيغة =====
     # Function introduction الصفحة
     'format_conversion_title': '🔄 تحويل الصيغة',
-    'format_conversion_supported': '📁 المدعومة تحويلs',
+    'format_conversion_supported': '📁 التحويلات المدعومة',
     'format_conversion_tdata_to_session': '1️⃣ Tdata → Session',
-    'format_conversion_tdata_to_session_desc1': '· تحويل Telegram سطح المكتب tdata الصيغة إلى Session الصيغة',
-    'format_conversion_tdata_to_session_desc2': '· لـ الأدوات التي يتطلب Session الصيغة',
+    'format_conversion_tdata_to_session_desc1': '· تحويل صيغة Telegram سطح المكتب Tdata إلى صيغة Session',
+    'format_conversion_tdata_to_session_desc2': '· للأدوات التي تتطلب صيغة Session',
     'format_conversion_session_to_tdata': '2️⃣ Session → Tdata',
-    'format_conversion_session_to_tdata_desc1': '· تحويل Session الصيغة إلى Telegram سطح المكتب tdata الصيغة',
-    'format_conversion_session_to_tdata_desc2': '· لـ Telegram سطح المكتب العميل',
+    'format_conversion_session_to_tdata_desc1': '· تحويل صيغة Session إلى صيغة Telegram سطح المكتب Tdata',
+    'format_conversion_session_to_tdata_desc2': '· لعميل Telegram سطح المكتب',
     'format_conversion_features': '⚡️ الميزات',
-    'format_conversion_feature_batch': '· جماعي المتزامنة تحويل لـ الكفاءة',
-    'format_conversion_feature_progress': '· حقيقي-الوقت التقدم عرض',
-    'format_conversion_feature_classify': '· تلقائي-تصنيف نجاح و فشل',
-    'format_conversion_feature_error': '· شامل خطأ معالجة',
+    'format_conversion_feature_batch': '· تحويل متزامن جماعي للكفاءة',
+    'format_conversion_feature_progress': '· عرض التقدم في الوقت الفعلي',
+    'format_conversion_feature_classify': '· تصنيف تلقائي للنجاح والفشل',
+    'format_conversion_feature_error': '· معالجة شاملة للأخطاء',
     'format_conversion_instructions': '📤 التعليمات',
-    'format_conversion_select_type': 'يرجى اختر the تحويل النوع:',
+    'format_conversion_select_type': 'يرجى اختيار نوع التحويل:',
     
     # Tdata → Session رفع طلب
     'tdata_to_session_title': '📤 Tdata → Session تحويل',
-    'tdata_to_session_prepare': '📁 يرجى تحضير the following ملف',
-    'tdata_to_session_prepare1': '· ZIP أرشيف يحتوي على Tdata مجلدات',
-    'tdata_to_session_prepare2': '· كل Tdata مجلد should يحتوي على D877F783D5D3EF8C دليل',
-    'conversion_info': '🔧 تحويل معلومات',
-    'tdata_to_session_info1': '· النظام will كشف تلقائي الكل Tdata مجلدات',
-    'tdata_to_session_info2': '· جماعي تحويل إلى Session الصيغة',
-    'tdata_to_session_info3': '· إنشاء المقابل .session و .json ملف',
-    'high_performance': '⚡️ عالٍ الأداء',
-    'high_performance_concurrent': '· المتزامنة تحويل لـ السرعة',
-    'high_performance_realtime': '· حقيقي-الوقت التقدم عرض',
-    'high_performance_classify': '· تلقائي-تصنيف نجاح/فشل',
-    'upload_zip_prompt': 'يرجى رفع الخاص بك ZIP ملف...',
+    'tdata_to_session_prepare': '📁 يرجى تحضير الملفات التالية',
+    'tdata_to_session_prepare1': '· أرشيف ZIP يحتوي على مجلدات Tdata',
+    'tdata_to_session_prepare2': '· كل مجلد Tdata يجب أن يحتوي على دليل D877F783D5D3EF8C',
+    'conversion_info': '🔧 معلومات التحويل',
+    'tdata_to_session_info1': '· سيكتشف النظام تلقائيًا جميع مجلدات Tdata',
+    'tdata_to_session_info2': '· تحويل جماعي إلى صيغة Session',
+    'tdata_to_session_info3': '· إنشاء ملفات .session و .json المقابلة',
+    'high_performance': '⚡️ أداء عالٍ',
+    'high_performance_concurrent': '· تحويل متزامن للسرعة',
+    'high_performance_realtime': '· عرض التقدم في الوقت الفعلي',
+    'high_performance_classify': '· تصنيف تلقائي للنجاح/الفشل',
+    'upload_zip_prompt': 'يرجى رفع ملف ZIP الخاص بك...',
     
     # Session → Tdata رفع طلب
     'session_to_tdata_title': '📥 Session → Tdata تحويل',
-    'session_to_tdata_prepare': '📁 يرجى تحضير the following ملف',
-    'session_to_tdata_prepare1': '· ZIP أرشيف يحتوي على .session ملف',
-    'session_to_tdata_prepare2': '· اختياري: المقابل .json التكوين ملف',
-    'session_to_tdata_info1': '· النظام will كشف تلقائي الكل Session ملف',
-    'session_to_tdata_info2': '· جماعي تحويل إلى Tdata الصيغة',
-    'session_to_tdata_info3': '· إنشاء المقابل Tdata مجلدات',
+    'session_to_tdata_prepare': '📁 يرجى تحضير الملفات التالية',
+    'session_to_tdata_prepare1': '· أرشيف ZIP يحتوي على ملفات .session',
+    'session_to_tdata_prepare2': '· اختياري: ملفات تكوين .json المقابلة',
+    'session_to_tdata_info1': '· سيكتشف النظام تلقائيًا جميع ملفات Session',
+    'session_to_tdata_info2': '· تحويل جماعي إلى صيغة Tdata',
+    'session_to_tdata_info3': '· إنشاء مجلدات Tdata المقابلة',
     
     # تحويل التقدم
-    'processing_your_file': '📥 جاري المعالجة الخاص بك ملف...',
-    'start_conversion': '🔄 بدء تحويل...',
-    'found_files': '📁 موجود {العدد} ملف',
-    'initializing': '⏳ Initializing...',
-    'conversion_in_progress': '🔄 الصيغة تحويل في التقدم...',
-    'conversion_current_progress': '📊 الحالي التقدم',
-    'conversion_processed': '· Processed: {done}/{إجمالي}',
-    'conversion_speed': '· السرعة: {السرعة}/sec',
-    'conversion_elapsed': '· Elapsed: {الوقت}s',
-    'conversion_success_count': '✅ تحويل نجاح: {العدد}',
-    'conversion_error_count': '❌ تحويل خطأ: {العدد}',
-    'conversion_remaining': '⏱️ المتوقع. المتبقي: {الوقت}s',
-    'processing_files': 'جاري المعالجة الخاص بك ملف',
+    'processing_your_file': '📥 جاري معالجة ملفك...',
+    'start_conversion': '🔄 بدء التحويل...',
+    'found_files': '📁 تم العثور على {العدد} ملف',
+    'initializing': '⏳ جاري التهيئة...',
+    'conversion_in_progress': '🔄 تحويل الصيغة قيد التقدم...',
+    'conversion_current_progress': '📊 التقدم الحالي',
+    'conversion_processed': '· تمت المعالجة: {done}/{إجمالي}',
+    'conversion_speed': '· السرعة: {السرعة}/ثانية',
+    'conversion_elapsed': '· المنقضي: {الوقت}ث',
+    'conversion_success_count': '✅ تحويل ناجح: {العدد}',
+    'conversion_error_count': '❌ خطأ في التحويل: {العدد}',
+    'conversion_remaining': '⏱️ المتبقي المتوقع: {الوقت}ث',
+    'processing_files': 'جاري معالجة ملفاتك',
     
     # تحويل مكتمل (intermediate state)
-    'conversion_complete': '🎉 تحويل مكتمل!',
-    'conversion_stats': '📊 تحويل إحصائيات',
+    'conversion_complete': '🎉 التحويل مكتمل!',
+    'conversion_stats': '📊 إحصائيات التحويل',
     'conversion_total': '· الإجمالي: {العدد}',
     'conversion_success': '· ✅ نجاح: {العدد}',
     'conversion_failed': '· ❌ فشل: {العدد}',
-    'conversion_duration': '· المدة: {الوقت}s',
-    'conversion_speed_stat': '· السرعة: {السرعة}/sec',
-    'packing_results': '📦 Packing النتيجة ملف...',
+    'conversion_duration': '· المدة: {الوقت}ث',
+    'conversion_speed_stat': '· السرعة: {السرعة}/ثانية',
+    'packing_results': '📦 جاري تعبئة ملفات النتيجة...',
     
     # النتيجة ملف naming
-    'zip_session_to_tdata_success': 'session_to_tdata_success-{العدد}',
-    'zip_tdata_to_session_success': 'tdata_to_session_success-{العدد}',
-    'zip_conversion_failed': 'تحويل_failed-{العدد}',
-    'file_desc_conversion_success': '📦 تحويل نجاح ({العدد} حساب)',
-    'file_desc_conversion_failed': '📦 تحويل فشل ({العدد} حساب)',
-    'report_filename_success': 'session_to_tdata_success-تقرير.txt',
-    'report_filename_failed': 'تحويل_failed-تقرير.txt',
-    'report_desc_success': '📋 تحويل نجاح تفصيلي تقرير',
-    'report_desc_failed': '📋 تحويل فشل تفصيلي تقرير',
-    'report_contains_accounts': 'يحتوي على تفاصيل of {العدد} حساب',
+    'zip_session_to_tdata_success': 'نجاح_تحويل_session_to_tdata_{العدد}',
+    'zip_tdata_to_session_success': 'نجاح_تحويل_tdata_to_session_{العدد}',
+    'zip_conversion_failed': 'فشل_التحويل_{العدد}',
+    'file_desc_conversion_success': '📦 تحويل ناجح ({العدد} حساب)',
+    'file_desc_conversion_failed': '📦 فشل التحويل ({العدد} حساب)',
+    'report_filename_success': 'تقرير_نجاح_تحويل_session_to_tdata.txt',
+    'report_filename_failed': 'تقرير_فشل_التحويل.txt',
+    'report_desc_success': '📋 تقرير تفصيلي لنجاح التحويل',
+    'report_desc_failed': '📋 تقرير تفصيلي لفشل التحويل',
+    'report_contains_accounts': 'يحتوي على تفاصيل {العدد} حساب',
     
     # Final completion ملخص
-    'conversion_task_complete': '✅ تحويل مهمة مكتمل!',
+    'conversion_task_complete': '✅ مهمة التحويل مكتملة!',
     'conversion_total_count': '· الإجمالي: {العدد}',
     'conversion_success_percent': '· ✅ نجاح: {العدد} ({percent}%)',
     'conversion_failed_percent': '· ❌ فشل: {العدد} ({percent}%)',
-    'conversion_total_time': '· ⏱️ الإجمالي الوقت: {ثانية}s ({دقيقة}دقيقة)',
-    'conversion_avg_speed': '· 🚀 Avg السرعة: {السرعة}/sec',
-    'all_results_sent': '📥 الكل النتيجة ملف تم الإرسال!',
+    'conversion_total_time': '· ⏱️ الوقت الإجمالي: {ثانية}ث ({دقيقة} دقيقة)',
+    'conversion_avg_speed': '· 🚀 متوسط السرعة: {السرعة}/ثانية',
+    'all_results_sent': '📥 تم إرسال جميع ملفات النتيجة!',
     
     # تقرير TXT template
-    'report_title_success': 'تحويل الصيغة تقرير - نجاح',
-    'report_title_failed': 'تحويل الصيغة تقرير - فشل',
+    'report_title_success': 'تقرير تحويل الصيغة - نجاح',
+    'report_title_failed': 'تقرير تحويل الصيغة - فشل',
     'report_generated_time': 'تم الإنشاء: {الوقت}',
-    'report_conversion_type': 'تحويل النوع: {النوع}',
+    'report_conversion_type': 'نوع التحويل: {النوع}',
     'report_total_count': 'الإجمالي: {العدد}',
-    'report_detail_list': 'تفاصيل قائمة:',
+    'report_detail_list': 'قائمة التفاصيل:',
     'report_file': 'ملف: {filename}',
     'report_info': 'معلومات: الهاتف: {الهاتف} | اسم المستخدم: {اسم المستخدم}',
     'report_time': 'الوقت: {الوقت}',
     'report_error': 'خطأ: {خطأ}',
-    'report_no_username': '@NoUsername',
+    'report_no_username': '@بدون_اسم_مستخدم',
     
     # خطأ رسائل
-    'error_file_type': 'ملف النوع خطأ',
-    'error_need_tdata': 'يحتاج Tdata ملف, لكن موجود {النوع} الصيغة',
-    'error_need_session': 'يحتاج Session ملف, لكن موجود {النوع} الصيغة',
+    'error_file_type': 'خطأ في نوع الملف',
+    'error_need_tdata': 'يحتاج ملف Tdata، لكن تم العثور على صيغة {النوع}',
+    'error_need_session': 'يحتاج ملف Session، لكن تم العثور على صيغة {النوع}',
     'error_unauthorized': 'حساب غير مصرح',
-    'error_auth_key_invalid': 'Auth key غير صالح',
-    'error_file_locked': 'TData ملف is locked',
-    'error_session_locked': 'Session ملف is locked',
-    'error_connection_timeout': 'اتصال انتهاء المهلة',
-    'error_network_failed': 'الشبكة اتصال فشل',
-    'error_conversion_failed': 'تحويل فشل',
-    'error_no_valid_files': 'No صالح ملف موجود',
-    'error_ensure_correct_format': 'يرجى التأكد ZIP يحتوي على the الصحيح الصيغة',
-    'error_click_function_button': 'يرجى النقر على the المقابل function زر الأول',
+    'error_auth_key_invalid': 'مفتاح المصادقة غير صالح',
+    'error_file_locked': 'ملف TData مقفل',
+    'error_session_locked': 'ملف Session مقفل',
+    'error_connection_timeout': 'انتهت مهلة الاتصال',
+    'error_network_failed': 'فشل اتصال الشبكة',
+    'error_conversion_failed': 'فشل التحويل',
+    'error_no_valid_files': 'لم يتم العثور على ملفات صالحة',
+    'error_ensure_correct_format': 'يرجى التأكد من أن ZIP يحتوي على الصيغة الصحيحة',
+    'error_click_function_button': 'يرجى النقر على زر الوظيفة المقابل أولاً',
     
     # ===== Change 2FA ميزة =====
     # Function introduction الصفحة
-    'change_2fa_title': '🔐 جماعي تعديل 2FA كلمة المرور',
-    'change_2fa_core_features': '✨ Core الميزات',
-    'change_2fa_auto_detect': '🔍 تلقائي كلمة المرور الكشف',
-    'change_2fa_tdata_detect': 'TData الصيغة: كشف تلقائي 2fa.txt, twofa.txt, كلمة المرور.txt',
-    'change_2fa_session_detect': 'Session الصيغة: كشف تلقائي كلمة المرور حقول في JSON (يدعم twofa, twoFA, 2fa, كلمة المرور, etc.)',
-    'change_2fa_smart_fallback': 'ذكي احتياطي: استخدام يدوياً تم الإدخال كلمة المرور إذا الكشف فشل',
-    'change_2fa_interactive_input': '✏️ تفاعلي كلمة المرور إدخال',
-    'change_2fa_input_prompt': 'النظام يطلب لـ كلمة المرور بعد ملف رفع',
-    'change_2fa_two_formats': 'Two الصيغ المدعومة: جديد كلمة المرور فقط (موصى به) أو قديم + جديد كلمة المرور',
-    'change_2fa_auto_detect_old': 'النظام كشف تلقائيs قديم كلمة المرور الأول, no يدوي إدخال مطلوب',
-    'change_2fa_timeout': '5-دقيقة إدخال انتهاء المهلة protection',
-    'change_2fa_auto_update': '🔄 تلقائي تحديث كلمة المرور ملفات',
-    'change_2fa_session_update': 'Session الصيغة: موحد twofa حقل, يزيل آخر كلمة المرور حقول',
-    'change_2fa_tdata_update': 'TData الصيغة: تلقائي-تحديث 2fa.txt و آخر كلمة المرور ملف',
-    'change_2fa_sync_update': 'ملفات sync immediately بعد ناجح change',
-    'change_2fa_no_manual_edit': 'No يدوي التكوين ملف editing مطلوب',
+    'change_2fa_title': '🔐 تعديل جماعي لكلمة مرور 2FA',
+    'change_2fa_core_features': '✨ الميزات الأساسية',
+    'change_2fa_auto_detect': '🔍 اكتشاف تلقائي لكلمة المرور',
+    'change_2fa_tdata_detect': 'صيغة TData: اكتشاف تلقائي لـ 2fa.txt، twofa.txt، password.txt',
+    'change_2fa_session_detect': 'صيغة Session: اكتشاف تلقائي لحقول كلمة المرور في JSON (يدعم twofa، twoFA، 2fa، password، إلخ)',
+    'change_2fa_smart_fallback': 'احتياطي ذكي: استخدام كلمة المرور المدخلة يدويًا إذا فشل الاكتشاف',
+    'change_2fa_interactive_input': '✏️ إدخال تفاعلي لكلمة المرور',
+    'change_2fa_input_prompt': 'يطلب النظام كلمة المرور بعد رفع الملف',
+    'change_2fa_two_formats': 'صيغتان مدعومتان: كلمة مرور جديدة فقط (موصى به) أو قديمة + جديدة',
+    'change_2fa_auto_detect_old': 'يكتشف النظام تلقائيًا كلمة المرور القديمة أولاً، لا يلزم إدخال يدوي',
+    'change_2fa_timeout': 'حماية مهلة إدخال 5 دقائق',
+    'change_2fa_auto_update': '🔄 تحديث تلقائي لملفات كلمة المرور',
+    'change_2fa_session_update': 'صيغة Session: حقل twofa موحد، يزيل حقول كلمة المرور الأخرى',
+    'change_2fa_tdata_update': 'صيغة TData: تحديث تلقائي لـ 2fa.txt وملفات كلمة المرور الأخرى',
+    'change_2fa_sync_update': 'مزامنة الملفات فورًا بعد التغيير الناجح',
+    'change_2fa_no_manual_edit': 'لا يلزم تحرير ملفات التكوين يدويًا',
     'change_2fa_notes': '⚠️ ملاحظات',
-    'change_2fa_note1': 'النظام will الأول try إلى كشف تلقائي existing كلمة المرور',
-    'change_2fa_note2': 'موصى به: استخدام "جديد كلمة المرور فقط" الصيغة, let النظام كشف تلقائي قديم كلمة المرور',
-    'change_2fa_note3': 'إذا كشف تلقائيion فشل, الخاص بك تم الإدخال قديم كلمة المرور will be مستخدم',
-    'change_2fa_note4': 'يرجى أدخل كلمة المرور خلال 5 دقيقة, أو مهمة will إلغاء تلقائي',
-    'change_2fa_note5': 'يرجى التأكد حساب is تسجيل دخول في و session ملف is صالح',
-    'change_2fa_note6': 'كلمة المرور ملف will تلقائي-تحديث و be included في النتيجة ZIP بعد نجاح',
-    'change_2fa_upload_prompt': '🚀 يرجى رفع الخاص بك ZIP ملف...',
-    'change_2fa_processing': 'جاري المعالجة الخاص بك ملف',
+    'change_2fa_note1': 'سيحاول النظام أولاً اكتشاف كلمة المرور الموجودة تلقائيًا',
+    'change_2fa_note2': 'موصى به: استخدام صيغة "كلمة مرور جديدة فقط"، دع النظام يكتشف تلقائيًا كلمة المرور القديمة',
+    'change_2fa_note3': 'إذا فشل الاكتشاف التلقائي، سيتم استخدام كلمة المرور القديمة المدخلة',
+    'change_2fa_note4': 'يرجى إدخال كلمة المرور خلال 5 دقائق، وإلا سيتم إلغاء المهمة تلقائيًا',
+    'change_2fa_note5': 'يرجى التأكد من أن الحساب مسجل الدخول وملف session صالح',
+    'change_2fa_note6': 'سيتم تحديث ملف كلمة المرور تلقائيًا وإدراجه في ZIP النتيجة بعد النجاح',
+    'change_2fa_upload_prompt': '🚀 يرجى رفع ملف ZIP الخاص بك...',
+    'change_2fa_processing': 'جاري معالجة ملفك',
     
     # كلمة المرور إدخال يطلب
-    'change_2fa_found_files': '📁 موجود {العدد} حساب ملف',
-    'change_2fa_file_type': '📊 ملف النوع: {النوع}',
-    'change_2fa_enter_password': '🔐 يرجى أدخل كلمة المرور معلومات:',
-    'change_2fa_format1': 'الصيغة 1 (موصى به): جديد كلمة المرور فقط',
+    'change_2fa_found_files': '📁 تم العثور على {العدد} ملف حساب',
+    'change_2fa_file_type': '📊 نوع الملف: {النوع}',
+    'change_2fa_enter_password': '🔐 يرجى إدخال معلومات كلمة المرور:',
+    'change_2fa_format1': 'الصيغة 1 (موصى به): كلمة المرور الجديدة فقط',
     'change_2fa_format1_example': 'NewPassword123',
-    'change_2fa_format1_desc': 'النظام will كشف تلقائي قديم كلمة المرور',
-    'change_2fa_format2': 'الصيغة 2: قديم كلمة المرور جديد كلمة المرور',
+    'change_2fa_format1_desc': 'سيكتشف النظام تلقائيًا كلمة المرور القديمة',
+    'change_2fa_format2': 'الصيغة 2: كلمة المرور القديمة كلمة المرور الجديدة',
     'change_2fa_format2_example': 'OldPass456 NewPassword123',
-    'change_2fa_format2_desc': 'إذا كشف تلقائيion فشل, الخاص بك provided قديم كلمة المرور will be مستخدم',
-    'change_2fa_tips': '💡 Tips:',
-    'change_2fa_tip1': 'موصى به: استخدام الصيغة 1, let النظام كشف تلقائي',
-    'change_2fa_tip2': 'كلمة المرور يمكن يحتوي على letters, الأرقام, special characters',
-    'change_2fa_tip3': 'Separate two passwords مع a space',
-    'change_2fa_wait_password': '⏰ يرجى إرسال كلمة المرور خلال 5 دقيقة...',
+    'change_2fa_format2_desc': 'إذا فشل الاكتشاف التلقائي، سيتم استخدام كلمة المرور القديمة المقدمة',
+    'change_2fa_tips': '💡 نصائح:',
+    'change_2fa_tip1': 'موصى به: استخدام الصيغة 1، دع النظام يكتشف تلقائيًا',
+    'change_2fa_tip2': 'يمكن أن تحتوي كلمة المرور على أحرف وأرقام ورموز خاصة',
+    'change_2fa_tip3': 'افصل كلمتي المرور بمسافة',
+    'change_2fa_wait_password': '⏰ يرجى إرسال كلمة المرور خلال 5 دقائق...',
     
     # التعديل التقدم
-    'change_2fa_starting': '🔄 بدء كلمة المرور change...',
-    'change_2fa_found_count': '📊 موجود {العدد} ملف',
-    'change_2fa_new_password': '🔐 جديد كلمة المرور: {كلمة المرور}',
-    'change_2fa_please_wait': '⏳ جاري المعالجة, يرجى الانتظار...',
-    'change_2fa_in_progress': '🔐 2FA كلمة المرور change في التقدم...',
-    'change_2fa_current_progress': '📊 الحالي التقدم',
-    'change_2fa_processed': 'Processed: {processed}/{إجمالي}',
-    'change_2fa_speed': 'السرعة: {السرعة}/sec',
-    'change_2fa_elapsed': 'Elapsed: {elapsed}s',
-    'change_2fa_success_count': '✅ Change نجاح: {العدد}',
-    'change_2fa_failed_count': '❌ Change فشل: {العدد}',
-    'change_2fa_remaining': '⏱️ المتوقع. المتبقي: {الوقت}s',
+    'change_2fa_starting': '🔄 بدء تغيير كلمة المرور...',
+    'change_2fa_found_count': '📊 تم العثور على {العدد} ملف',
+    'change_2fa_new_password': '🔐 كلمة المرور الجديدة: {كلمة المرور}',
+    'change_2fa_please_wait': '⏳ جاري المعالجة، يرجى الانتظار...',
+    'change_2fa_in_progress': '🔐 تغيير كلمة مرور 2FA قيد التقدم...',
+    'change_2fa_current_progress': '📊 التقدم الحالي',
+    'change_2fa_processed': 'تمت المعالجة: {processed}/{إجمالي}',
+    'change_2fa_speed': 'السرعة: {السرعة}/ثانية',
+    'change_2fa_elapsed': 'المنقضي: {elapsed}ث',
+    'change_2fa_success_count': '✅ تغيير ناجح: {العدد}',
+    'change_2fa_failed_count': '❌ فشل التغيير: {العدد}',
+    'change_2fa_remaining': '⏱️ المتبقي المتوقع: {الوقت}ث',
     
     # التعديل مكتمل
-    'change_2fa_complete': '🎉 2FA كلمة المرور change مكتمل!',
-    'change_2fa_stats': '📊 Change إحصائيات',
+    'change_2fa_complete': '🎉 تغيير كلمة مرور 2FA مكتمل!',
+    'change_2fa_stats': '📊 إحصائيات التغيير',
     'change_2fa_total': '· الإجمالي: {العدد}',
     'change_2fa_success': '· ✅ نجاح: {العدد}',
     'change_2fa_failed': '· ❌ فشل: {العدد}',
-    'change_2fa_duration': '· ⏱️ المدة: {الوقت}s',
-    'change_2fa_speed_stat': '· 🚀 السرعة: {السرعة}/sec',
-    'change_2fa_sending_results': '📦 إرسال النتيجة ملف...',
+    'change_2fa_duration': '· ⏱️ المدة: {الوقت}ث',
+    'change_2fa_speed_stat': '· 🚀 السرعة: {السرعة}/ثانية',
+    'change_2fa_sending_results': '📦 إرسال ملفات النتيجة...',
     
     # إرسال مكتمل
-    'change_2fa_all_sent': '🎉 الكل ملف تم الإرسال بنجاح!',
-    'change_2fa_send_summary': '📋 إرسال ملخص',
-    'change_2fa_files_sent': '· ملفات تم الإرسال: {العدد}',
-    'change_2fa_total_accounts': '· الإجمالي حساب: {العدد}',
+    'change_2fa_all_sent': '🎉 تم إرسال جميع الملفات بنجاح!',
+    'change_2fa_send_summary': '📋 ملخص الإرسال',
+    'change_2fa_files_sent': '· الملفات المرسلة: {العدد}',
+    'change_2fa_total_accounts': '· إجمالي الحسابات: {العدد}',
     'change_2fa_success_count': '· ✅ نجاح: {العدد}',
     'change_2fa_failed_count': '· ❌ فشل: {العدد}',
-    'change_2fa_time_spent': '· ⏱️ المدة: {الوقت}s',
-    'change_2fa_use_again': 'لـ استخدام مرة أخرى, النقر على /بدء',
+    'change_2fa_time_spent': '· ⏱️ المدة: {الوقت}ث',
+    'change_2fa_use_again': 'للاستخدام مرة أخرى، انقر على /بدء',
     
     # النتيجة ملف naming
-    'zip_change_2fa_success': 'Change2FA_Success_{العدد}',
-    'zip_change_2fa_failed': 'Change2FA_Failed_{العدد}',
+    'zip_change_2fa_success': 'نجاح_تغيير_2FA_{العدد}',
+    'zip_change_2fa_failed': 'فشل_تغيير_2FA_{العدد}',
     'file_desc_change_2fa_success': '📦 نجاح ({العدد} حساب)',
     'file_desc_change_2fa_failed': '📦 فشل ({العدد} حساب)',
-    'change_2fa_process_time': '⏰ معالجة الوقت: {الوقت}',
-    'report_change_2fa_success': 'Change2FA_Success_{العدد}_Report.txt',
-    'report_change_2fa_failed': 'Change2FA_Failed_{العدد}_Report.txt',
-    'report_desc_change_2fa_success': '📋 نجاح تفصيلي تقرير',
-    'report_desc_change_2fa_failed': '📋 فشل تفصيلي تقرير',
-    'report_contains_details': 'يحتوي على تفاصيل of {العدد} حساب',
+    'change_2fa_process_time': '⏰ وقت المعالجة: {الوقت}',
+    'report_change_2fa_success': 'تقرير_نجاح_تغيير_2FA_{العدد}.txt',
+    'report_change_2fa_failed': 'تقرير_فشل_تغيير_2FA_{العدد}.txt',
+    'report_desc_change_2fa_success': '📋 تقرير تفصيلي للنجاح',
+    'report_desc_change_2fa_failed': '📋 تقرير تفصيلي للفشل',
+    'report_contains_details': 'يحتوي على تفاصيل {العدد} حساب',
     
     # تقرير TXT template
-    'report_2fa_title_success': '2FA كلمة المرور Change تقرير - نجاح',
-    'report_2fa_title_failed': '2FA كلمة المرور Change تقرير - فشل',
+    'report_2fa_title_success': 'تقرير تغيير كلمة مرور 2FA - نجاح',
+    'report_2fa_title_failed': 'تقرير تغيير كلمة مرور 2FA - فشل',
     'report_2fa_total': 'الإجمالي: {العدد}',
     'report_2fa_generated': 'تم الإنشاء: {الوقت}',
-    'report_2fa_detail_list': 'تفاصيل قائمة:',
+    'report_2fa_detail_list': 'قائمة التفاصيل:',
     'report_2fa_account': 'حساب: {حساب}',
     'report_2fa_details': 'تفاصيل: {معلومات}',
-    'report_2fa_process_time': 'معالجة الوقت: {الوقت}',
-    'report_2fa_old_password_not_found': 'قديم كلمة المرور لا موجود',
-    'report_2fa_conversion_failed': 'تحويل فشل: {خطأ}',
+    'report_2fa_process_time': 'وقت المعالجة: {الوقت}',
+    'report_2fa_old_password_not_found': 'لم يتم العثور على كلمة المرور القديمة',
+    'report_2fa_conversion_failed': 'فشل التحويل: {خطأ}',
     'report_2fa_using_proxy': 'استخدام بروكسي',
-    'report_2fa_success_updated': 'كلمة المرور changed بنجاح, ملف تم التحديث',
+    'report_2fa_success_updated': 'تم تغيير كلمة المرور بنجاح، تم تحديث الملف',
     
     # فشل analysis و solutions
-    'report_2fa_failure_analysis': 'فشل Analysis و Solutions:',
+    'report_2fa_failure_analysis': 'تحليل الفشل والحلول:',
     'report_2fa_reason_unauthorized': 'حساب غير مصرح',
-    'report_2fa_reason_unauthorized_desc1': 'TData ملف قد لا be تسجيل دخول في أو منتهي الصلاحية',
-    'report_2fa_reason_unauthorized_desc2': 'Suggest re-login حساب',
-    'report_2fa_reason_wrong_password': 'Wrong قديم كلمة المرور',
-    'report_2fa_reason_wrong_password_desc1': 'فحص إذا كلمة المرور ملف المحتوى is الصحيح',
-    'report_2fa_reason_wrong_password_desc2': 'تأكيد إذا كلمة المرور حقل في JSON is دقيق',
-    'report_2fa_reason_network': 'الشبكة اتصال فشل',
-    'report_2fa_reason_network_desc1': 'فحص إذا بروكسي الإعدادات are الصحيح',
-    'report_2fa_reason_network_desc2': 'Try محلي اتصال أو change بروكسي',
+    'report_2fa_reason_unauthorized_desc1': 'قد لا يكون ملف TData مسجل الدخول أو منتهي الصلاحية',
+    'report_2fa_reason_unauthorized_desc2': 'يُنصح بإعادة تسجيل الدخول للحساب',
+    'report_2fa_reason_wrong_password': 'كلمة المرور القديمة خاطئة',
+    'report_2fa_reason_wrong_password_desc1': 'تحقق من صحة محتوى ملف كلمة المرور',
+    'report_2fa_reason_wrong_password_desc2': 'تأكد من دقة حقل كلمة المرور في JSON',
+    'report_2fa_reason_network': 'فشل اتصال الشبكة',
+    'report_2fa_reason_network_desc1': 'تحقق من صحة إعدادات البروكسي',
+    'report_2fa_reason_network_desc2': 'جرب الاتصال المحلي أو تغيير البروكسي',
     
     # Additional الحالة رسائل (لـ assembling تفاصيل معلومات)
-    'status_tdata_updated': 'TData ملف تم التحديث',
-    'status_no_json_found': 'لكن JSON ملف لا موجود',
-    'status_file_update_failed': 'لكن ملف تحديث فشل',
+    'status_tdata_updated': 'تم تحديث ملف TData',
+    'status_no_json_found': 'لكن لم يتم العثور على ملف JSON',
+    'status_file_update_failed': 'لكن فشل تحديث الملف',
     
     # ===== إنشاء جماعي ميزة =====
     # 1. ميزة Introduction الصفحة
