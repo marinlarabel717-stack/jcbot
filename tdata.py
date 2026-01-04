@@ -1323,6 +1323,13 @@ def scan_tdata_accounts(base_path: str) -> list:
     accounts = []
     seen_phones = set()  # 用于去重
     
+    def is_likely_phone_number(folder_name: str) -> bool:
+        """检查文件夹名是否像手机号"""
+        # 移除可能的+前缀
+        clean_name = folder_name.lstrip('+')
+        # 手机号通常是10-15位数字
+        return clean_name.isdigit() and 10 <= len(clean_name) <= 15
+    
     def scan_directory(dir_path):
         """递归扫描目录"""
         if not os.path.isdir(dir_path):
@@ -1340,6 +1347,10 @@ def scan_tdata_accounts(base_path: str) -> list:
                 if os.path.isdir(tdata_path):
                     # 检查 tdata 目录下是否有有效的账号数据
                     if is_valid_tdata(tdata_path):
+                        # 验证文件夹名看起来像手机号
+                        if not is_likely_phone_number(item):
+                            logger.warning(f"文件夹 '{item}' 包含有效tdata但不像手机号，仍将其作为账号处理")
+                        
                         phone = item  # 文件夹名就是手机号
                         
                         # 去重：同一个手机号只添加一次
