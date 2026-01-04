@@ -53,10 +53,6 @@ TEXTS = {
     'language_chinese': '🇨🇳 中文',
     'language_english': '🇬🇧 English',
     'language_russian': '🇷🇺 Русский',
-    'language_arabic': '🇸🇦 العربية',
-    'language_bengali': '🇧🇩 বাংলা',
-    'language_persian': '🇮🇷 فارسی',
-    'language_vietnamese': '🇻🇳 Tiếng Việt',
     'language_switched': '✅ 语言已切换为中文',
     
     # 返回按钮
