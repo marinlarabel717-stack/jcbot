@@ -20,7 +20,7 @@ TEXTS = {
     # Proxy status
     'proxy_status': 'Статус прокси',
     'proxy_mode': 'Режим прокси',
-    'proxy_mode_enabно': '🟢Включено',
+    'proxy_mode_enabled': '🟢Включено',
     'proxy_mode_local': '🔴Локальное соединение',
     'proxy_count_label': 'Количество прокси',
     'proxy_count_value': '{count} прокси',
@@ -82,10 +82,10 @@ TEXTS = {
     'account_check_supported_formats': '📋 Поддерживаемые форматы',
     'account_check_format_zip': '· ZIP архив (рекомендуется)',
     'account_check_format_session': '· Содержит файлы Session (.session)',
-    'account_check_format_session_json': '· Содержит Session+JSON files (.session + .json)',
+    'account_check_format_session_json': '· Содержит Session+JSON файлы (.session + .json)',
     'account_check_format_tdata': '· Содержит папки TData',
     'account_check_proxy_enabled': '🌐 Режим прокси: Включено ({count} прокси)',
-    'account_check_proxy_disabно': '🌐 Режим прокси: Отключено',
+    'account_check_proxy_disabled': '🌐 Режим прокси: Отключено',
     'account_check_upload_hint': 'Пожалуйста, выберите ваш ZIP файл и загрузите...',
     
     # Start check
@@ -105,8 +105,8 @@ TEXTS = {
     'account_check_speed': '· Скорость: {speed} аккаунтов/сек',
     'account_check_remaining': '· Осталось примерно: {time} мин',
     'account_check_proxy_stats': '🔄 Статистика использования прокси',
-    'account_check_proxies_used': '· Proxies used: {count}',
-    'account_check_fallback_local': '· Fallback local: {count}',
+    'account_check_proxies_used': '· Использовано прокси: {count}',
+    'account_check_fallback_local': '· Резервное локальное: {count}',
     'account_check_failed_proxies': '· Не удалось прокси: {count}',
     'account_check_optimization': '⚡ Optimization Status',
     'account_check_fast_mode': '· Fast mode: {status}',
@@ -143,10 +143,10 @@ TEXTS = {
     'check_mode_local': 'Локальный режим',
     'all_files_sent': '📤 Все файлы успешно отправлены!',
     'send_summary': '📊 Сводка отправки',
-    'files_sent_count': '· Успешноfully sent: {count} files',
+    'files_sent_count': '· Успешнополностью отправлено: {count} files',
     'check_mode_summary': '· Режим проверки: {mode}',
     'check_duration': '· Продолжительность проверки: {seconds}s',
-    'thanks_message': 'Спасибо за использование the enhanced bot! Чтобы проверить снова, click /start',
+    'thanks_message': 'Спасибо за использование улучшенный бот! Чтобы проверить снова, click /start',
     
     # Proxy stats and other statistics
     'total_accounts': 'Всего аккаунтов',
@@ -186,8 +186,8 @@ TEXTS = {
     
     # Tdata → Session upload prompt
     'tdata_to_session_title': '📤 Tdata → Session Конвертация',
-    'tdata_to_session_prepare': '📁 Please prepare the following files',
-    'tdata_to_session_prepare1': '· ZIP архив containing Tdata папки',
+    'tdata_to_session_prepare': '📁 Пожалуйста, подготовьте следующие файлы',
+    'tdata_to_session_prepare1': '· ZIP архив содержащий Tdata папки',
     'tdata_to_session_prepare2': '· Each Tdata folder should contain D877F783D5D3EF8C direcвry',
     'conversion_info': '🔧 Конвертация Информация',
     'tdata_to_session_info1': '· System will auto-detect all Tdata папки',
@@ -201,8 +201,8 @@ TEXTS = {
     
     # Session → Tdata upload prompt
     'session_to_tdata_title': '📥 Session → Tdata Конвертация',
-    'session_to_tdata_prepare': '📁 Please prepare the following files',
-    'session_to_tdata_prepare1': '· ZIP архив containing .session files',
+    'session_to_tdata_prepare': '📁 Пожалуйста, подготовьте следующие файлы',
+    'session_to_tdata_prepare1': '· ZIP архив содержащий .session files',
     'session_to_tdata_prepare2': '· Optional: corresponding .json config files',
     'session_to_tdata_info1': '· System will auto-detect all Session files',
     'session_to_tdata_info2': '· Batch convert в Tdata формат',
@@ -544,7 +544,7 @@ TEXTS = {
     'batch_create_stats_skipped': '· Skipped: {count}',
     'batch_create_success_rate': 'Успешно rate: {percent}%',
     'batch_create_report_below': '📄 See detaiно report in файл below',
-    'batch_create_detaiно_report': '📊 Batch Creation Detailed Report',
+    'batch_create_detailed_report': '📊 Batch Creation Detailed Report',
     'batch_create_success_list': '✅ Успешноfully Created List',
     
     # 11. Report TXT Template - Detailed Report
@@ -602,7 +602,7 @@ TEXTS = {
     'batch_create_account_frozen_skipped': 'Account frozen, creation skipped',
     
     # Batch Create - Error Messages
-    'batch_create_feature_disabно': '❌ Batch create feature is disabно',
+    'batch_create_feature_disabled': '❌ Batch create feature is disabно',
     'batch_create_session_expired': '❌ Session expired',
     'batch_create_session_expired_restart': '❌ Session expired, please restart',
     'batch_create_count_range_error': '❌ Count must be between 1-10, please re-enter',
@@ -623,10 +623,10 @@ TEXTS = {
     'forget_2fa_note3': '· Proxy connection preferred (в avoid restrictions)',
     'forget_2fa_note4': '· Auв fallback в local connection if proxy fails',
     'forget_2fa_note5': '· Auв rиom delay between аккаунтов (5-15s)',
-    'forget_2fa_proxy_warning': '⚠️ Warning: Insufficient прокси! Only {count} available, recommend at least 10',
+    'forget_2fa_proxy_warning': '⚠️ Warning: Insufficient прокси! Только {count} available, recommend at least 10',
     'forget_2fa_proxy_status': '📡 Current Статус прокси',
-    'forget_2fa_proxy_mode_enabно': '· Режим прокси: 🟢Включено',
-    'forget_2fa_proxy_mode_disabно': '· Режим прокси: 🔴Отключено',
+    'forget_2fa_proxy_mode_enabled': '· Режим прокси: 🟢Включено',
+    'forget_2fa_proxy_mode_disabled': '· Режим прокси: 🔴Отключено',
     'forget_2fa_proxy_available': '· Available прокси: {count}',
     'forget_2fa_upload_prompt': '📤 Please upload account files:',
     'forget_2fa_upload_support': '· Support .zip archive (Tdata/Session)',
@@ -888,7 +888,7 @@ TEXTS = {
     'add_2fa_feature2': '· Auв-create 2fa.txt password файл for TData direcвries',
     'add_2fa_feature3': '· You can cusвmize 2FA password content',
     'add_2fa_formats': '📤 Supported файл форматs:',
-    'add_2fa_format1': '· ZIP архив (containing Session or TData)',
+    'add_2fa_format1': '· ZIP архив (содержащий Session or TData)',
     'add_2fa_format2': '· Auв-detect файл type и add corresponding 2FA config',
     'add_2fa_rules': '⚙️ Обработка rules:',
     'add_2fa_rule1': '· Session файл → Create JSON файл with same name (contains twofa поле)',
@@ -968,7 +968,7 @@ TEXTS = {
     # 1. Feature Introduction Page
     'split_title': '📦 Account File Classification',
     'split_features': '🎯 Особенности',
-    'split_features_desc': 'Support uploading ZIP files with multiple аккаунтов (TData direcвries or Session+JSON files), auto-detect и classify:',
+    'split_features_desc': 'Support uploading ZIP files with multiple аккаунтов (TData direcвries or Session+JSON файлы), auto-detect и classify:',
     'split_methods': '📋 Supported Classification Methods',
     'split_method_country': '1️⃣ Split by Country Code',
     'split_method_country_desc1': '· Auв-detect phone number → area code → country',
@@ -994,7 +994,7 @@ TEXTS = {
     'split_upload_prompt': '📤 Please upload account files',
     'split_formats': 'Поддерживаемые форматы:',
     'split_format1': '· Session files ZIP (.session)',
-    'split_format2': '· Session+JSON files ZIP (.session + .json)',
+    'split_format2': '· Session+JSON файлы ZIP (.session + .json)',
     'split_format3': '· TData папки ZIP',
     'split_size_limit': '⚠️ File size limit 100MB',
     'split_timeout': '⏰ 5 minutes timeout',
@@ -1276,7 +1276,7 @@ TEXTS = {
     'country_reunion': 'Reunion',
     'country_french_guiana': 'French Guiana',
     'country_french_polynesia': 'French Polynesia',
-    'country_new_caноonia': 'New Caноonia',
+    'country_new_caledonia': 'New Caноonia',
     'country_greenland': 'Greenlи',
     'country_faroe_islands': 'Faroe Islиs',
     'country_aruba': 'Aruba',
@@ -1350,7 +1350,7 @@ TEXTS = {
     'api_verify_feature3': '· Support HTTP API call в get verification code',
     'api_verify_feature4': '· 5-минута auto-expiry protection',
     'api_usage': '📤 Usage',
-    'api_usage_step1': '1. Upload ZIP файл (containing TData or Session)',
+    'api_usage_step1': '1. Upload ZIP файл (содержащий TData or Session)',
     'api_usage_step2': '2. System auto-analyzes account info',
     'api_usage_step3': '3. Generate API формат файл и verification links',
     'api_usage_step4': '4. Download и use results',
@@ -1460,7 +1460,7 @@ TEXTS = {
     'merge_feature3': '· Recursively scan и identify Session files (support pure .session or session+json pairs)',
     'merge_feature4': '· Smart classification и archiving',
     'merge_upload_prompt': '📤 Please upload ZIP files',
-    'merge_zip_only': '⚠️ Only .zip files accepted',
+    'merge_zip_only': '⚠️ Только .zip files accepted',
     'merge_multi_upload': '· Can upload multiple ZIP files',
     'merge_auto_scan': '· System will auto-extract и scan contents',
     'merge_click_complete': 'Click "✅ Complete Merge" after upload',
@@ -1495,13 +1495,13 @@ TEXTS = {
     
     # 7. Error and Hint Messages
     'merge_no_task': '❌ Нет pending merge task',
-    'merge_zip_only_error': '❌ Only .zip files supported, please re-upload',
+    'merge_zip_only_error': '❌ Только .zip files supported, please re-upload',
     'merge_download_failed': '❌ File download failed: {error}',
     'merge_continue_upload_hint': '✅ Please continue uploading ZIP files',
     'merge_received_files': 'Received files: {count}',
     'merge_upload_next': '• Please upload next ZIP файл',
     'merge_or_complete': '• Or click butвn below в complete merge',
-    'merge_cancelно': '❌ Merge operation cancelно',
+    'merge_cancelled': '❌ Merge operation cancelно',
     'merge_no_files': '❌ Нет files uploaded',
     
     # ===== One-Click Cleanup Feature =====
@@ -1602,7 +1602,7 @@ TEXTS = {
     'cleanup_report_frozen_accounts': 'Заморожен Accounts',
     
     # 9. Errors and Other Messages
-    'cleanup_feature_disabно': '❌ One-click cleanup feature is disabно',
+    'cleanup_feature_disabled': '❌ One-click cleanup feature is disabно',
     'cleanup_need_member': '❌ Членство required for one-click cleanup',
     'cleanup_no_valid_files': '❌ Нет valid files found',
     'cleanup_ensure_format': 'Please ensure ZIP contains Session or TData формат files',
@@ -1670,7 +1670,7 @@ TEXTS = {
     'reauth_pwd_manual': '· Manual input: Manually enter old password',
     'reauth_pwd_auto_support': '💡 Auв-detect supports:',
     'reauth_pwd_auto_session': '- Session формат: twofa/password/2fa полеs in JSON',
-    'reauth_pwd_auto_tdata': '- TData формат: Any .txt файл containing 2fa/twofa/password (case insensitive)',
+    'reauth_pwd_auto_tdata': '- TData формат: Any .txt файл содержащий 2fa/twofa/password (case insensitive)',
     'reauth_pwd_auto_example': 'Example: 2FA.txt, twoFA.TXT, password.txt, etc.',
     
     # 5. Password Detection Result
@@ -1814,7 +1814,7 @@ TEXTS = {
     'regtime_note5': '5. Will automatically use the most accurate method в get registration time',
     'regtime_upload_title': '📤 Please upload account files:',
     'regtime_upload_session': '• Session формат: Upload .session files (can be zipped)',
-    'regtime_upload_tdata': '• TData формат: Upload zip файл containing tdata direcвry',
+    'regtime_upload_tdata': '• TData формат: Upload zip файл содержащий tdata direcвry',
     
     # 2. Buttons
     'regtime_btn_back': 'Назад в Главное меню',
@@ -2015,7 +2015,7 @@ TEXTS = {
     'profile_upload_title': '📤 Please upload account files',
     'profile_upload_format': 'Поддерживаемые форматы:',
     'profile_upload_session': '• Session формат: Upload .session files (can be zipped)',
-    'profile_upload_tdata': '• TData формат: Upload zip файл containing tdata direcвry',
+    'profile_upload_tdata': '• TData формат: Upload zip файл содержащий tdata direcвry',
     'profile_upload_timeout': '⏱ Please upload files within 5 minutes...',
     'profile_upload_cancel': '💡 To cancel, click /start в return в main menu',
     'profile_processing_file': 'Обработка файл',
@@ -2207,7 +2207,7 @@ TEXTS = {
     # ===== Check Contact Limit Feature =====
     # 1. Feature Introduction Page
     'contact_limit_title': '🔍 Check Contact Limit',
-    'contact_limit_upload': '📤 Please upload ZIP файл containing Session or TData',
+    'contact_limit_upload': '📤 Please upload ZIP файл содержащий Session or TData',
     'contact_limit_format_title': 'Поддерживаемые форматы:',
     'contact_limit_format_session': '• Session files (.session)',
     'contact_limit_format_tdata': '• TData папки',
@@ -2583,7 +2583,7 @@ TEXTS = {
     'proxy_optimize_retry': 'Smart Retry',
     'proxy_optimize_times': 'times',
     'proxy_optimize_auto_clean': 'Auв Clean',
-    'proxy_optimize_enabно': '🟢 Включено',
+    'proxy_optimize_enabled': '🟢 Включено',
     'proxy_optimize_effect': '📈 Optimization Effect',
     'proxy_optimize_standard': 'Stиard Режим',
     'proxy_optimize_accounts_sec': 'аккаунтов/сек',
@@ -2689,7 +2689,7 @@ TEXTS = {
     'broadcast_media_prompt': '📋 Please upload an image',
     'broadcast_media_formats': 'Поддерживаемые форматы: JPG, PNG, GIF',
     'broadcast_media_note1': 'Image will be sent with text',
-    'broadcast_media_note2': 'Only one image per broadcast',
+    'broadcast_media_note2': 'Только one image per broadcast',
     'broadcast_media_timeout': '⏰ Auв-cancel if no upload within 5 minutes',
     
     # 22. Set Broadcast Text
@@ -2727,7 +2727,7 @@ TEXTS = {
     'broadcast_target_select': '🎯 Please Select Target Пользовательs',
     'broadcast_target_prompt': 'Please select user group в send notification:',
     'broadcast_target_all': '👥 All Пользовательs',
-    'broadcast_target_vip': '💎 VIP Only',
+    'broadcast_target_vip': '💎 VIP Только',
     'broadcast_target_active': '🔥 Active Пользовательs (7d)',
     'broadcast_target_new': '🆕 New Пользовательs (7d)',
     
