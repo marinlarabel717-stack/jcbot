@@ -1,11 +1,11 @@
 TEXTS = {
-    # ===== Main Menu =====
+    # ===== Main منو =====
     'bot_title': '🔍 ربات مدیریت اکانت تلگرام V8.0',
     'main_menu_title': '🏠 منوی اصلی',
     'main_menu_welcome': '👋 به ربات مدیریت اکانت تلگرام خوش آمدید!',
     'main_menu_select': 'لطفاً یک عملکرد انتخاب کنید:',
     
-    # User info
+    # کاربر info
     'user_info': 'اطلاعات کاربر',
     'user_nickname': 'نام مستعار',
     'user_id': 'ID',
@@ -17,7 +17,7 @@ TEXTS = {
     'membership_admin': 'مدیر',
     'default_user': 'کاربر',
     
-    # Proxy status
+    # پروکسی status
     'proxy_status': 'وضعیت پروکسی',
     'proxy_mode': 'حالت پروکسی',
     'proxy_mode_enabشد': '🟢فعال',
@@ -47,7 +47,7 @@ TEXTS = {
     'btn_admin_panel': '👑 پنل مدیریت',
     'btn_proxy_panel': '📡 مدیریت پروکسی',
     
-    # Language switch
+    # زبان switch
     'btn_language_menu': '🌐 تغییر زبان',
     'language_menu_title': '🌐 انتخاب زبان',
     'language_chinese': '🇨🇳 中文',
@@ -59,7 +59,7 @@ TEXTS = {
     'language_vietnamese': '🇻🇳 Tiếng Việt',
     'language_switched': '✅ زبان به فارسی تغییر کرد',
     
-    # Back button
+    # بازگشت button
     'btn_back_to_menu': 'بازگشت به منو',
     'btn_back': '◀️ بازگشت',
     'btn_cancel': '❌ لغو',
@@ -71,13 +71,13 @@ TEXTS = {
     'status_failed': '❌ ناموفق',
     'status_cancelled': '❌ لغو شد',
     
-    # Proxy status
+    # پروکسی status
     'proxy_enabled': '🌐 حالت پروکسی: فعال',
     'proxy_disabled': '🌐 حالت پروکسی: غیرفعال',
     'proxy_count': '🌐 حالت پروکسی: فعال ({count} پروکسی)',
     
-    # ===== Account Check =====
-    # Upload prompt interface
+    # ===== اکانت بررسی =====
+    # آپلود prompt interface
     'account_check_upload_title': '📨 لطفاً فایل های اکانت خود را آپلود کنید',
     'account_check_supported_formats': '📋 فرمت های پشتیبانی شده',
     'account_check_format_zip': '· آرشیو ZIP (توصیه شده)',
@@ -96,7 +96,7 @@ TEXTS = {
     'account_check_threads': '⚡ رشته های همزمان: {count}',
     'account_check_please_wait': 'لطفاً صبر کنید, نمایش پیشرفت لحظه‌ای...',
     
-    # Check progress
+    # بررسی progress
     'account_check_in_progress': '⚡ در حال بررسی...',
     'account_check_progress_title': '📊 بررسی پیشرفت',
     'account_check_progress_percent': '· پیشرفت: {percent}% ({done}/{total})',
@@ -104,18 +104,18 @@ TEXTS = {
     'account_check_mode': '· حالت: {mode}',
     'account_check_speed': '· سرعت: {speed} اکانت/sec',
     'account_check_remaining': '· Est. remaining: {time} min',
-    'account_check_proxy_stats': '🔄 Proxy Usage Stats',
+    'account_check_proxy_stats': '🔄 آمار استفاده از پروکسی',
     'account_check_proxies_used': '· Proxies used: {count}',
     'account_check_fallback_local': '· Fallback local: {count}',
     'account_check_faiشد_proxies': '· ناموفق پروکسی: {count}',
-    'account_check_optimization': '⚡ Optimization Status',
+    'account_check_optimization': '⚡ Optimization وضعیت',
     'account_check_fast_mode': '· Fast mode: {status}',
     'account_check_fast_mode_on': '🟢 On',
     'account_check_fast_mode_off': '🔴 Off',
     'account_check_concurrency': '· Concurrency: {count}',
     'account_check_timeout': '· بررسی timeout: {seconds}s',
     
-    # Account status categories
+    # اکانت status categories
     'status_no_restriction': 'بدون محدودیت',
     'status_spambot': 'هرزنامه',
     'status_frozen': 'مسدود شده',
@@ -127,46 +127,46 @@ TEXTS = {
     'zip_spambot': 'هرزنامه_{count}',
     'zip_frozen': 'مسدود شده_{count}',
     'zip_banned': 'ممنوع_{count}',
-    'zip_connection_error': 'Connectionخطا_{count}',
+    'zip_connection_error': 'اتصالخطا_{count}',
     
-    # File descriptions
+    # فایل descriptions
     'file_desc_no_restriction': '📦 بدون محدودیت - {count} اکانت',
     'file_desc_spambot': '📦 هرزنامه - {count} اکانت',
     'file_desc_frozen': '📦 مسدود شده - {count} اکانت',
     'file_desc_banned': '📦 ممنوع - {count} اکانت',
     'file_desc_connection_error': '📦 خطا - {count} اکانت',
     
-    # Check completion and summary
+    # بررسی completion and summary
     'check_time': '⏰ بررسی time: {time}',
     'check_mode_label': '🌐 بررسی mode: {mode}',
     'check_mode_proxy': 'حالت پروکسی',
     'check_mode_local': 'حالت محلی',
-    'all_files_sent': '📤 All فایل sent successfully!',
-    'send_summary': '📊 Send Summary',
+    'all_files_sent': '📤 همه فایل با موفقیت ارسال شد!',
+    'send_summary': '📊 Send خلاصه',
     'files_sent_count': '· موفقfully sent: {count} فایل',
     'check_mode_summary': '· بررسی mode: {mode}',
     'check_duration': '· بررسی duration: {seconds}s',
     'thanks_message': 'Thanks for using the enhanced bot! To check again, click /start',
     
-    # Proxy stats and other statistics
+    # پروکسی stats and other statistics
     'total_accounts': 'مجموع اکانت ها',
-    'proxy_usage_stats': '📡 Proxy Usage Stats',
+    'proxy_usage_stats': '📡 آمار استفاده از پروکسی',
     'proxies_used_stat': 'Proxies Used',
-    'fallback_local_stat': 'Fallback Local',
+    'fallback_local_stat': 'Fallback محلی',
     'faiشد_proxies_stat': 'ناموفق Proxies',
-    'local_only_stat': 'Local Only',
-    'proxy_connection': '📡 Proxy Connection',
+    'local_only_stat': 'محلی Only',
+    'proxy_connection': '📡 پروکسی اتصال',
     'local_connection': '🏠 اتصال محلی',
-    'performance_stats': '⚡ Performance Stats',
-    'average_speed': 'Average سرعت',
-    'sending_files': '🚀 Sending classified فایل, please wait...',
+    'performance_stats': '⚡ آمار عملکرد',
+    'average_speed': 'میانگین سرعت',
+    'sending_files': '🚀 در حال ارسال طبقه‌بندی شده فایل, لطفاً صبر کنید...',
     'processing_file': '📥 در حال پردازش your file...',
     'accounts_unit': '',
     'seconds_unit': 's',
     'minutes_unit': 'min',
     'accounts_per_second': 'اکانت/s',
     
-    # ===== Format Conversion =====
+    # ===== فرمت تبدیل =====
     # Function introduction page
     'format_conversion_title': '🔄 تبدیل فرمت',
     'format_conversion_supported': '📁 Supported تبدیلs',
@@ -208,9 +208,9 @@ TEXTS = {
     'session_to_tdata_info2': '· Batch convert to Tdata format',
     'session_to_tdata_info3': '· Generate corresponding Tdata پوشه',
     
-    # Conversion progress
+    # تبدیل progress
     'processing_your_file': '📥 در حال پردازش your file...',
-    'start_conversion': '🔄 Starting conversion...',
+    'start_conversion': '🔄 شروع conversion...',
     'found_files': '📁 Found {count} فایل',
     'initializing': '⏳ Initializing...',
     'conversion_in_progress': '🔄 فرمت conversion in progress...',
@@ -223,10 +223,10 @@ TEXTS = {
     'conversion_remaining': '⏱️ Est. remaining: {time}s',
     'processing_files': 'در حال پردازش your فایل',
     
-    # Conversion complete (intermediate state)
+    # تبدیل complete (intermediate state)
     'conversion_complete': '🎉 تبدیل complete!',
     'conversion_stats': '📊 تبدیل Stats',
-    'conversion_total': '· Total: {count}',
+    'conversion_total': '· مجموع: {count}',
     'conversion_success': '· ✅ موفق: {count}',
     'conversion_faiشد': '· ❌ ناموفق: {count}',
     'conversion_duration': '· Duration: {time}s',
@@ -241,48 +241,48 @@ TEXTS = {
     'file_desc_conversion_faiشد': '📦 تبدیل faiشد ({count} اکانت)',
     'report_filename_success': 'session_to_tdata_success-report.txt',
     'report_filename_faiشد': 'conversion_faiشد-report.txt',
-    'report_desc_success': '📋 تبدیل موفق Detaiشد Report',
-    'report_desc_faiشد': '📋 تبدیل ناموفق Detaiشد Report',
+    'report_desc_success': '📋 تبدیل موفق Detaiشد گزارش',
+    'report_desc_faiشد': '📋 تبدیل ناموفق Detaiشد گزارش',
     'report_contains_accounts': 'شامل details of {count} اکانت',
     
     # Final completion summary
     'conversion_task_complete': '✅ تبدیل task complete!',
-    'conversion_total_count': '· Total: {count}',
+    'conversion_total_count': '· مجموع: {count}',
     'conversion_success_percent': '· ✅ موفق: {count} ({percent}%)',
     'conversion_faiشد_percent': '· ❌ ناموفق: {count} ({percent}%)',
-    'conversion_total_time': '· ⏱️ Total time: {seconds}s ({minutes}min)',
+    'conversion_total_time': '· ⏱️ مجموع time: {seconds}s ({minutes}min)',
     'conversion_avg_speed': '· 🚀 Avg speed: {speed}/sec',
-    'all_results_sent': '📥 All result فایل sent!',
+    'all_results_sent': '📥 همه result فایل sent!',
     
-    # Report TXT template
-    'report_title_success': 'تبدیل فرمت Report - موفق',
-    'report_title_faiشد': 'تبدیل فرمت Report - ناموفق',
+    # گزارش TXT template
+    'report_title_success': 'تبدیل فرمت گزارش - موفق',
+    'report_title_faiشد': 'تبدیل فرمت گزارش - ناموفق',
     'report_generated_time': 'Generated: {time}',
     'report_conversion_type': 'تبدیل type: {type}',
-    'report_total_count': 'Total: {count}',
+    'report_total_count': 'مجموع: {count}',
     'report_detail_list': 'Detail List:',
-    'report_file': 'File: {filename}',
+    'report_file': 'فایل: {filename}',
     'report_info': 'Info: Phone: {phone} | کاربرname: {username}',
-    'report_time': 'Time: {time}',
+    'report_time': 'زمان: {time}',
     'report_error': 'خطا: {error}',
     'report_no_username': '@Noکاربرname',
     
-    # Error messages
+    # خطا messages
     'error_file_type': 'نوع فایل error',
     'error_need_tdata': 'Need Tdata file, but found {type} format',
     'error_need_session': 'Need Session file, but found {type} format',
-    'error_unauthorized': 'Account unauthorized',
+    'error_unauthorized': 'اکانت unauthorized',
     'error_auth_key_invalid': 'Auth key invalid',
     'error_file_locked': 'TData file is locked',
     'error_session_locked': 'Session file is locked',
-    'error_connection_timeout': 'Connection timeout',
+    'error_connection_timeout': 'اتصال timeout',
     'error_network_faiشد': 'Network connection faiشد',
     'error_conversion_faiشد': 'تبدیل faiشد',
     'error_no_valid_files': 'بدون valid فایل found',
     'error_ensure_correct_format': 'Please ensure ZIP contains the correct format',
     'error_click_function_button': 'Please click the corresponding function button first',
     
-    # ===== Change 2FA Feature =====
+    # ===== تغییر 2FA Feature =====
     # Function introduction page
     'change_2fa_title': '🔐 Batch تغییر 2FA رمز عبور',
     'change_2fa_core_features': '✨ Core Features',
@@ -295,10 +295,10 @@ TEXTS = {
     'change_2fa_two_formats': 'Two formats supported: New password only (توصیه شده) or Old + New password',
     'change_2fa_auto_detect_old': 'System auto-detects old password first, no manual input needed',
     'change_2fa_timeout': '5-minute input timeout protection',
-    'change_2fa_auto_update': '🔄 Auto Update رمز عبور Files',
+    'change_2fa_auto_update': '🔄 Auto به‌روزرسانی رمز عبور فایلs',
     'change_2fa_session_update': 'Session format: Unified twofa field, removes other password fields',
     'change_2fa_tdata_update': 'TData format: Auto-update 2fa.txt and other password فایل',
-    'change_2fa_sync_update': 'Files sync immediately after successful change',
+    'change_2fa_sync_update': 'فایلs sync immediately after successful change',
     'change_2fa_no_manual_edit': 'بدون manual config file editing needed',
     'change_2fa_notes': '⚠️ Notes',
     'change_2fa_note1': 'System will first try to auto-detect existing password',
@@ -310,7 +310,7 @@ TEXTS = {
     'change_2fa_upload_prompt': '🚀 Please upload your ZIP file...',
     'change_2fa_processing': 'در حال پردازش your فایل',
     
-    # Password input prompts
+    # رمز عبور input prompts
     'change_2fa_found_files': '📁 Found {count} account فایل',
     'change_2fa_file_type': '📊 نوع فایل: {type}',
     'change_2fa_enter_password': '🔐 Please enter password info:',
@@ -327,58 +327,58 @@ TEXTS = {
     'change_2fa_wait_password': '⏰ Please send password within 5 minutes...',
     
     # Modification progress
-    'change_2fa_starting': '🔄 Starting password change...',
+    'change_2fa_starting': '🔄 شروع password change...',
     'change_2fa_found_count': '📊 Found {count} فایل',
     'change_2fa_new_password': '🔐 New password: {password}',
-    'change_2fa_please_wait': '⏳ در حال پردازش, please wait...',
+    'change_2fa_please_wait': '⏳ در حال پردازش, لطفاً صبر کنید...',
     'change_2fa_in_progress': '🔐 2FA password change in progress...',
     'change_2fa_current_progress': '📊 Current پیشرفت',
     'change_2fa_processed': 'Processed: {processed}/{total}',
     'change_2fa_speed': 'سرعت: {speed}/sec',
     'change_2fa_elapsed': 'Elapsed: {elapsed}s',
-    'change_2fa_success_count': '✅ Change success: {count}',
-    'change_2fa_faiشد_count': '❌ Change faiشد: {count}',
+    'change_2fa_success_count': '✅ تغییر success: {count}',
+    'change_2fa_faiشد_count': '❌ تغییر faiشد: {count}',
     'change_2fa_remaining': '⏱️ Est. remaining: {time}s',
     
     # Modification complete
     'change_2fa_complete': '🎉 2FA password change complete!',
-    'change_2fa_stats': '📊 Change Stats',
-    'change_2fa_total': '· Total: {count}',
+    'change_2fa_stats': '📊 تغییر Stats',
+    'change_2fa_total': '· مجموع: {count}',
     'change_2fa_success': '· ✅ موفق: {count}',
     'change_2fa_faiشد': '· ❌ ناموفق: {count}',
     'change_2fa_duration': '· ⏱️ Duration: {time}s',
     'change_2fa_speed_stat': '· 🚀 سرعت: {speed}/sec',
-    'change_2fa_sending_results': '📦 Sending result فایل...',
+    'change_2fa_sending_results': '📦 در حال ارسال result فایل...',
     
-    # Sending complete
-    'change_2fa_all_sent': '🎉 All فایل sent successfully!',
-    'change_2fa_send_summary': '📋 Send Summary',
-    'change_2fa_files_sent': '· Files sent: {count}',
-    'change_2fa_total_accounts': '· Total اکانت: {count}',
+    # در حال ارسال complete
+    'change_2fa_all_sent': '🎉 همه فایل با موفقیت ارسال شد!',
+    'change_2fa_send_summary': '📋 Send خلاصه',
+    'change_2fa_files_sent': '· فایلs sent: {count}',
+    'change_2fa_total_accounts': '· مجموع اکانت: {count}',
     'change_2fa_success_count': '· ✅ موفق: {count}',
     'change_2fa_faiشد_count': '· ❌ ناموفق: {count}',
     'change_2fa_time_spent': '· ⏱️ Duration: {time}s',
     'change_2fa_use_again': 'To use again, click /start',
     
     # Result file naming
-    'zip_change_2fa_success': 'Change2FA_موفق_{count}',
-    'zip_change_2fa_faiشد': 'Change2FA_ناموفق_{count}',
+    'zip_change_2fa_success': 'تغییر2FA_موفق_{count}',
+    'zip_change_2fa_faiشد': 'تغییر2FA_ناموفق_{count}',
     'file_desc_change_2fa_success': '📦 موفق ({count} اکانت)',
     'file_desc_change_2fa_faiشد': '📦 ناموفق ({count} اکانت)',
     'change_2fa_process_time': '⏰ Process time: {time}',
-    'report_change_2fa_success': 'Change2FA_موفق_{count}_Report.txt',
-    'report_change_2fa_faiشد': 'Change2FA_ناموفق_{count}_Report.txt',
-    'report_desc_change_2fa_success': '📋 موفق Detaiشد Report',
-    'report_desc_change_2fa_faiشد': '📋 ناموفق Detaiشد Report',
+    'report_change_2fa_success': 'تغییر2FA_موفق_{count}_گزارش.txt',
+    'report_change_2fa_faiشد': 'تغییر2FA_ناموفق_{count}_گزارش.txt',
+    'report_desc_change_2fa_success': '📋 موفق Detaiشد گزارش',
+    'report_desc_change_2fa_faiشد': '📋 ناموفق Detaiشد گزارش',
     'report_contains_details': 'شامل details of {count} اکانت',
     
-    # Report TXT template
-    'report_2fa_title_success': '2FA رمز عبور Change Report - موفق',
-    'report_2fa_title_faiشد': '2FA رمز عبور Change Report - ناموفق',
-    'report_2fa_total': 'Total: {count}',
+    # گزارش TXT template
+    'report_2fa_title_success': '2FA رمز عبور تغییر گزارش - موفق',
+    'report_2fa_title_faiشد': '2FA رمز عبور تغییر گزارش - ناموفق',
+    'report_2fa_total': 'مجموع: {count}',
     'report_2fa_generated': 'Generated: {time}',
     'report_2fa_detail_list': 'Detail List:',
-    'report_2fa_account': 'Account: {account}',
+    'report_2fa_account': 'اکانت: {account}',
     'report_2fa_details': 'Details: {info}',
     'report_2fa_process_time': 'Process time: {time}',
     'report_2fa_old_password_not_found': 'Old password not found',
@@ -388,7 +388,7 @@ TEXTS = {
     
     # Failure analysis and solutions
     'report_2fa_failure_analysis': 'Failure Analysis and Solutions:',
-    'report_2fa_reason_unauthorized': 'Account unauthorized',
+    'report_2fa_reason_unauthorized': 'اکانت unauthorized',
     'report_2fa_reason_unauthorized_desc1': 'TData file may not be logged in or expired',
     'report_2fa_reason_unauthorized_desc2': 'Suggest re-login account',
     'report_2fa_reason_wrong_password': 'Wrong old password',
@@ -398,12 +398,12 @@ TEXTS = {
     'report_2fa_reason_network_desc1': 'بررسی if proxy settings are correct',
     'report_2fa_reason_network_desc2': 'Try local connection or change proxy',
     
-    # Additional status messages (for assembling detail information)
+    # افزودنitional status messages (for assembling detail information)
     'status_tdata_updated': 'TData file updated',
     'status_no_json_found': 'but JSON file not found',
     'status_file_update_faiشد': 'but file update faiشد',
     
-    # ===== Batch Create Feature =====
+    # ===== Batch ایجاد Feature =====
     # 1. Feature Introduction Page
     'batch_create_title': '📦 ایجاد دسته ای Groups/Channels',
     'batch_create_features': 'Features:',
@@ -415,7 +415,7 @@ TEXTS = {
     'batch_create_feature6': '· Support custom or random username generation',
     'batch_create_feature7': '· Process up to 10 اکانت simultaneously',
     'batch_create_steps': 'Usage Steps:',
-    'batch_create_step1': '1. Upload Session or TData فایل (ZIP supported)',
+    'batch_create_step1': '1. آپلود Session or TData فایل (ZIP supported)',
     'batch_create_step2': '2. System auto-verifies اکانت and shows available count',
     'batch_create_step3': '3. Configure creation parameters (type, naming rules, etc.)',
     'batch_create_step4': '4. تأیید and start batch creation',
@@ -423,40 +423,40 @@ TEXTS = {
     'batch_create_notes': 'Notes:',
     'batch_create_note1': '⚠️ Use responsibly to avoid triggering تلگرام limits',
     'batch_create_note2': '⚠️ Suggest creating in batches, don\'t create too many at once',
-    'batch_create_note3': '⚠️ Created groups/channels belong to corresponding اکانت',
+    'batch_create_note3': '⚠️ ایجادd groups/channels belong to corresponding اکانت',
     'batch_create_upload_prompt': '📤 Please upload account فایل',
     'batch_create_supported_formats': 'فرمت های پشتیبانی شده: .session / TData folder / .zip archive',
     
-    # 2. Account Verification
+    # 2. اکانت Verification
     'batch_create_found_files': '✅ Found {count} account فایل',
     'batch_create_verifying': '⏳ Verifying اکانت...',
     'batch_create_verifying_progress': 'پیشرفت: {done}/{total}',
-    'batch_create_verify_complete': '✅ Account verification complete',
+    'batch_create_verify_complete': '✅ اکانت verification complete',
     'batch_create_statistics': 'Statistics:',
-    'batch_create_total_accounts': '· Total اکانت: {count}',
+    'batch_create_total_accounts': '· مجموع اکانت: {count}',
     'batch_create_valid_accounts': '· Valid اکانت: {count}',
     'batch_create_invalid_accounts': '· Invalid اکانت: {count}',
     'batch_create_can_create_today': '· Can create today: {count}',
     'batch_create_next_step': 'Next step:',
     'batch_create_select_type': 'Please select the type to create',
-    'batch_create_btn_group': 'Create Group',
-    'batch_create_btn_channel': 'Create Channel',
+    'batch_create_btn_group': 'ایجاد Group',
+    'batch_create_btn_channel': 'ایجاد Channel',
     'batch_create_btn_cancel': 'لغو',
     'batch_create_btn_back': 'بازگشت',
     
-    # 3. Step 1: Set Creation Count
+    # 3. Step 1: Set Creation تعداد
     'batch_create_group_title': '📦 ایجاد دسته ای Groups',
     'batch_create_channel_title': '📦 ایجاد دسته ای Channels',
-    'batch_create_account_info': 'Account Info:',
-    'batch_create_step1_title': 'Step 1/4: Set Creation Count',
+    'batch_create_account_info': 'اکانت Info:',
+    'batch_create_step1_title': 'Step 1/4: Set Creation تعداد',
     'batch_create_step1_prompt': 'Please enter the number to create per account (1-10):',
     'batch_create_step1_example': '💡 Example: Enter 5 to create 5 groups per valid account',
     'batch_create_step1_example_channel': '💡 Example: Enter 5 to create 5 channels per valid account',
     
-    # 4. Step 2: Set Admins
-    'batch_create_count_set_group': '✅ Count set: {count} per group/account',
-    'batch_create_count_set_channel': '✅ Count set: {count} per channel/account',
-    'batch_create_step2_title': 'Step 2/4: Set Admins (Optional, multiple supported)',
+    # 4. Step 2: Set مدیرs
+    'batch_create_count_set_group': '✅ تعداد set: {count} per group/account',
+    'batch_create_count_set_channel': '✅ تعداد set: {count} per channel/account',
+    'batch_create_step2_title': 'Step 2/4: Set مدیرs (Optional, multiple supported)',
     'batch_create_step2_prompt': 'Please send usernames to add as admins:',
     'batch_create_step2_format': 'فرمت:',
     'batch_create_step2_format1': '· Single admin: Enter username directly',
@@ -468,7 +468,7 @@ TEXTS = {
     'batch_create_btn_skip': 'Skip',
     
     # 5. Step 3: Set Name and Description
-    'batch_create_admins_set': '✅ Admins set: {admins}',
+    'batch_create_admins_set': '✅ مدیرs set: {admins}',
     'batch_create_admins_count': '({count} total)',
     'batch_create_admins_none': 'None',
     'batch_create_step3_title_group': 'Step 3/4: Set Group Name and Description',
@@ -489,31 +489,31 @@ TEXTS = {
     'batch_create_step4_title_group': 'Step 4/4: Set Group Links',
     'batch_create_step4_title_channel': 'Step 4/4: Set Channel Links',
     'batch_create_step4_prompt': 'Please select link setting method:',
-    'batch_create_step4_option1': '· Custom upload: Upload TXT file with custom usernames',
+    'batch_create_step4_option1': '· Custom upload: آپلود TXT file with custom usernames',
     'batch_create_step4_option2': '· Auto generate: System randomly generates unique usernames',
     'batch_create_step4_tip1': '💡 Custom username format: One per line, with or without @',
     'batch_create_step4_tip2': '💡 If username exists or unavailable, will auto-skip',
     'batch_create_btn_custom': 'Custom',
     'batch_create_btn_auto': 'Auto Generate',
     
-    # 7. Custom Username Upload
-    'batch_create_custom_title': 'Upload Custom کاربرnames',
+    # 7. Custom کاربرname آپلود
+    'batch_create_custom_title': 'آپلود Custom کاربرnames',
     'batch_create_custom_prompt': 'Please upload TXT file with usernames, or enter directly:',
     'batch_create_custom_format': 'فرمت: One username per line',
     'batch_create_custom_example': 'Example:',
     'batch_create_custom_tip1': '💡 With or without @ symbol',
     'batch_create_custom_tip2': '💡 If username exists, will auto-skip',
     
-    # 8. Final Confirmation
+    # 8. Final تأییدation
     'batch_create_confirm_title': '📋 Final تأییدation',
     'batch_create_confirm_type_group': 'Creation type: Group',
     'batch_create_confirm_type_channel': 'Creation type: Channel',
-    'batch_create_confirm_account_stats': 'Account Statistics:',
+    'batch_create_confirm_account_stats': 'اکانت Statistics:',
     'batch_create_confirm_valid_count': '· Valid اکانت: {count}',
-    'batch_create_confirm_per_account': '· Create per account: {count}',
+    'batch_create_confirm_per_account': '· ایجاد per account: {count}',
     'batch_create_confirm_total_estimate': '· Estimated total: {count}',
     'batch_create_confirm_config': 'Configuration:',
-    'batch_create_confirm_admins': '· Admins: {count} ({admins})',
+    'batch_create_confirm_admins': '· مدیرs: {count} ({admins})',
     'batch_create_confirm_names': '· Name count: {count}',
     'batch_create_confirm_link_auto': '· Link mode: Auto generate',
     'batch_create_confirm_link_custom': '· Link mode: Custom',
@@ -526,36 +526,36 @@ TEXTS = {
     'batch_create_confirm_tip3': '· If username exists, will auto-skip',
     'batch_create_confirm_tip4': '· Detaiشد report will be generated after completion',
     'batch_create_confirm_question': 'تأیید to start creation?',
-    'batch_create_btn_confirm': 'تأیید Create',
+    'batch_create_btn_confirm': 'تأیید ایجاد',
     
-    # 9. Creation Progress
+    # 9. Creation پیشرفت
     'batch_create_creating': '⏳ Creating...',
     'batch_create_wait_report': 'لطفاً صبر کنید, detaiشد report will be sent after completion',
-    'batch_create_starting': '🚀 Starting batch creation',
+    'batch_create_starting': '🚀 شروع batch creation',
     'batch_create_progress': 'پیشرفت: {done}/{total} ({percent}%)',
-    'batch_create_status_preparing': 'Status: Preparing...',
+    'batch_create_status_preparing': 'وضعیت: Preparing...',
     'batch_create_btn_view_log': 'View Log',
     
-    # 10. Creation Complete
+    # 10. Creation کامل
     'batch_create_complete': '✅ Batch creation complete',
-    'batch_create_stats_total': '· Total: {count}',
+    'batch_create_stats_total': '· مجموع: {count}',
     'batch_create_stats_success': '· موفق: {count}',
     'batch_create_stats_faiشد': '· ناموفق: {count}',
     'batch_create_stats_skipped': '· Skipped: {count}',
     'batch_create_success_rate': 'موفق rate: {percent}%',
     'batch_create_report_below': '📄 See detaiشد report in file below',
-    'batch_create_detaiشد_report': '📊 Batch Creation Detaiشد Report',
-    'batch_create_success_list': '✅ موفقfully Created List',
+    'batch_create_detaiشد_report': '📊 Batch Creation Detaiشد گزارش',
+    'batch_create_success_list': '✅ موفقfully ایجادd List',
     
-    # 11. Report TXT Template - Detaiشد Report
-    'report_batch_create_title': 'ایجاد دسته ای Groups/Channels - Result Report',
+    # 11. گزارش TXT Template - Detaiشد گزارش
+    'report_batch_create_title': 'ایجاد دسته ای Groups/Channels - Result گزارش',
     'report_batch_create_generated': 'Generated: {time}',
     'report_batch_create_stats': 'Statistics:',
-    'report_batch_create_total': '  Total: {count}',
+    'report_batch_create_total': '  مجموع: {count}',
     'report_batch_create_success': '  موفق: {count}',
     'report_batch_create_faiشد': '  ناموفق: {count}',
     'report_batch_create_skipped': '  Skipped: {count}',
-    'report_batch_create_success_list': 'موفقfully Created List:',
+    'report_batch_create_success_list': 'موفقfully ایجادd List:',
     'report_batch_create_type': 'Type: {type}',
     'report_batch_create_type_group': 'group',
     'report_batch_create_type_channel': 'channel',
@@ -567,12 +567,12 @@ TEXTS = {
     'report_batch_create_creator_account': 'Creator account: {account}',
     'report_batch_create_creator_username': 'Creator username: {username}',
     'report_batch_create_creator_id': 'Creator ID: {id}',
-    'report_batch_create_admins': 'Admins: {admins}',
+    'report_batch_create_admins': 'مدیرs: {admins}',
     'report_batch_create_admins_none': '@None',
-    'report_batch_create_admin_faiشد': 'Admin add faiشد:',
+    'report_batch_create_admin_faiشد': 'مدیر add faiشد:',
     'report_batch_create_admin_faiشد_reason': '  - {admin}: کاربرname @{admin} does not exist or invalid',
     
-    # 12. Report TXT Template - Success List
+    # 12. گزارش TXT Template - موفق List
     'report_success_list_title': 'ایجاد دسته ای - موفق List',
     'report_success_list_generated': 'Generated: {time}',
     'report_success_list_count': 'موفق count: {count}',
@@ -584,9 +584,9 @@ TEXTS = {
     'report_success_list_channel_link': 'Channel link: {link}',
     'report_success_list_creator': 'Creator account: {account}',
     'report_success_list_creator_username': 'Creator username: {username}',
-    'report_success_list_admin_username': 'Admin username: {admin}',
+    'report_success_list_admin_username': 'مدیر username: {admin}',
     
-    # 13. Report TXT Template - Failure List
+    # 13. گزارش TXT Template - Failure List
     'report_failure_list_title': '❌ Failure Details List',
     'report_failure_list_header': 'ایجاد دسته ای - Failure List (Detaiشد Reasons)',
     'report_failure_list_generated': 'Generated: {time}',
@@ -598,21 +598,21 @@ TEXTS = {
     'report_failure_list_creator': 'Creator account: {account}',
     'report_failure_list_reason': 'Failure reason: {reason}',
     
-    # Batch Create - Account Frozen
-    'batch_create_account_frozen_skipped': 'Account frozen, creation skipped',
+    # Batch ایجاد - اکانت Frozen
+    'batch_create_account_frozen_skipped': 'اکانت frozen, creation skipped',
     
-    # Batch Create - Error Messages
+    # Batch ایجاد - خطا Messages
     'batch_create_feature_disabشد': '❌ Batch create feature is disabشد',
     'batch_create_session_expired': '❌ Session expired',
     'batch_create_session_expired_restart': '❌ Session expired, please restart',
-    'batch_create_count_range_error': '❌ Count must be between 1-10, please re-enter',
+    'batch_create_count_range_error': '❌ تعداد must be between 1-10, please re-enter',
     'batch_create_faiشد': '❌ Creation faiشد',
     'batch_create_error': 'خطا: {error}',
     'error_upload_zip_only': '❌ Please upload ZIP format archive',
     
-    # Batch Create - Progress Messages
-    'batch_create_progress_completed': 'Completed {count}',
-    'batch_create_status_completed': 'Status: Completed {count}',
+    # Batch ایجاد - پیشرفت Messages
+    'batch_create_progress_completed': 'کاملd {count}',
+    'batch_create_status_completed': 'وضعیت: کاملd {count}',
     
     # ===== Forget 2FA Feature =====
     # 1. Feature Introduction Page
@@ -620,7 +620,7 @@ TEXTS = {
     'forget_2fa_important': '⚠️ Important Notes:',
     'forget_2fa_note1': '· Will initiate تلگرام official password reset process',
     'forget_2fa_note2': '· رمز عبور will be removed after 7-day cooling period',
-    'forget_2fa_note3': '· Proxy connection preferred (to avoid restrictions)',
+    'forget_2fa_note3': '· پروکسی connection preferred (to avoid restrictions)',
     'forget_2fa_note4': '· Auto fallback to local connection if proxy fails',
     'forget_2fa_note5': '· Auto random delay between اکانت (5-15s)',
     'forget_2fa_proxy_warning': '⚠️ Warning: Insufficient پروکسی! Only {count} available, recommend at least 10',
@@ -633,12 +633,12 @@ TEXTS = {
     'forget_2fa_upload_auto': '· Auto-detect file format',
     'forget_2fa_result_categories': '📊 Result Categories:',
     'forget_2fa_category_reset': '· ✅ Reset Requested - موفقfully requested password reset (wait 7 days)',
-    'forget_2fa_category_no_reset': '· ⚠️ بدون Reset Needed - Account has no 2FA password',
+    'forget_2fa_category_no_reset': '· ⚠️ بدون Reset Needed - اکانت has no 2FA password',
     'forget_2fa_category_cooling': '· ⏳ In Cooling Period - Already in cooling period',
-    'forget_2fa_category_faiشد': '· ❌ ناموفق - Connection faiشد/other errors',
+    'forget_2fa_category_faiشد': '· ❌ ناموفق - اتصال faiشد/other errors',
     'forget_2fa_back_menu': 'بازگشت to منوی اصلی',
     
-    # 2. Processing Progress
+    # 2. در حال پردازش پیشرفت
     'forget_2fa_processing': '🔓 در حال پردازش فراموشی 2FA...',
     'forget_2fa_progress': 'پیشرفت: {done}/{total} ({percent}%)',
     'forget_2fa_elapsed': '⏱ Elapsed: {time}s',
@@ -649,28 +649,28 @@ TEXTS = {
     'forget_2fa_stat_faiشد': '❌ ناموفق: {count}',
     'forget_2fa_stat_pending': '📊 Pending: {count}',
     'forget_2fa_current': 'Current: {filename}...',
-    'forget_2fa_status_reset': 'Status: ✅ Reset Requested',
-    'forget_2fa_status_no_reset': 'Status: ⚠️ بدون Reset Needed',
-    'forget_2fa_status_cooling': 'Status: ⏳ In Cooling Period',
-    'forget_2fa_status_faiشد': 'Status: ❌ ناموفق',
-    'forget_2fa_proxy_using': 'Proxy: ✅ Using Proxy',
-    'forget_2fa_proxy_local': 'Proxy: ❌ اتصال محلی',
+    'forget_2fa_status_reset': 'وضعیت: ✅ Reset Requested',
+    'forget_2fa_status_no_reset': 'وضعیت: ⚠️ بدون Reset Needed',
+    'forget_2fa_status_cooling': 'وضعیت: ⏳ In Cooling Period',
+    'forget_2fa_status_faiشد': 'وضعیت: ❌ ناموفق',
+    'forget_2fa_proxy_using': 'پروکسی: ✅ Using پروکسی',
+    'forget_2fa_proxy_local': 'پروکسی: ❌ اتصال محلی',
     
-    # 3. Processing Complete
-    'forget_2fa_complete': '✅ فراموشی 2FA در حال پردازش Complete!',
+    # 3. در حال پردازش کامل
+    'forget_2fa_complete': '✅ فراموشی 2FA در حال پردازش کامل!',
     'forget_2fa_results': '📊 در حال پردازش Results',
-    'forget_2fa_total_accounts': '· Total اکانت: {count}',
+    'forget_2fa_total_accounts': '· مجموع اکانت: {count}',
     'forget_2fa_result_reset': '· ✅ Reset Requested: {count}',
     'forget_2fa_result_no_reset': '· ⚠️ بدون Reset Needed: {count}',
     'forget_2fa_result_cooling': '· ⏳ In Cooling Period: {count}',
     'forget_2fa_result_faiشد': '· ❌ ناموفق: {count}',
-    'forget_2fa_total_time': '⏱ Total time: {time}s',
+    'forget_2fa_total_time': '⏱ مجموع time: {time}s',
     'forget_2fa_batch_id': '🆔 Batch ID: {batch_id}',
     'forget_2fa_notes': '📝 Notes:',
-    'forget_2fa_notes_wait': '· Accounts with reset requested need to wait 7-day cooling period',
+    'forget_2fa_notes_wait': '· اکانتs with reset requested need to wait 7-day cooling period',
     'forget_2fa_notes_remove': '· 2FA password will be removed after cooling period ends',
     
-    # 4. Result File Naming
+    # 4. Result فایل Naming
     'zip_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}',
     'zip_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}',
     'zip_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}',
@@ -679,56 +679,56 @@ TEXTS = {
     'file_desc_forget_2fa_no_reset': '📦 فراموشی 2FA - بدون Reset Needed ({count})',
     'file_desc_forget_2fa_cooling': '📦 فراموشی 2FA - In Cooling Period ({count})',
     'file_desc_forget_2fa_faiشد': '📦 فراموشی 2FA - ناموفق ({count})',
-    'report_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}_Report.txt',
-    'report_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}_Report.txt',
-    'report_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}_Report.txt',
-    'report_forget_2fa_faiشد': 'Forgot2FA_ناموفق_{count}_Report.txt',
-    'report_desc_forget_2fa_reset': '📋 Detaiشد Report - Reset Requested',
-    'report_desc_forget_2fa_no_reset': '📋 Detaiشد Report - بدون Reset Needed',
-    'report_desc_forget_2fa_cooling': '📋 Detaiشد Report - In Cooling Period',
-    'report_desc_forget_2fa_faiشد': '📋 Detaiشد Report - ناموفق',
+    'report_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}_گزارش.txt',
+    'report_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}_گزارش.txt',
+    'report_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}_گزارش.txt',
+    'report_forget_2fa_faiشد': 'Forgot2FA_ناموفق_{count}_گزارش.txt',
+    'report_desc_forget_2fa_reset': '📋 Detaiشد گزارش - Reset Requested',
+    'report_desc_forget_2fa_no_reset': '📋 Detaiشد گزارش - بدون Reset Needed',
+    'report_desc_forget_2fa_cooling': '📋 Detaiشد گزارش - In Cooling Period',
+    'report_desc_forget_2fa_faiشد': '📋 Detaiشد گزارش - ناموفق',
     
-    # 5. Report TXT Template - Reset Requested
-    'report_forget_2fa_title_reset': 'فراموشی 2FA Report - Reset Requested',
-    'report_forget_2fa_total': 'Total: {count}',
+    # 5. گزارش TXT Template - Reset Requested
+    'report_forget_2fa_title_reset': 'فراموشی 2FA گزارش - Reset Requested',
+    'report_forget_2fa_total': 'مجموع: {count}',
     'report_forget_2fa_generated': 'Generated: {time}',
     'report_forget_2fa_detail_list': 'Detail List:',
     'report_forget_2fa_item_reset': '✅ {filename}',
     'report_forget_2fa_phone': 'Phone: {phone}',
-    'report_forget_2fa_status_reset_waiting': 'Status: رمز عبور reset requested, waiting for cooling period, until: {date}',
-    'report_forget_2fa_proxy_using': 'Proxy: ✅ Using Proxy',
-    'report_forget_2fa_proxy_local': 'Proxy: ❌ اتصال محلی',
+    'report_forget_2fa_status_reset_waiting': 'وضعیت: رمز عبور reset requested, waiting for cooling period, until: {date}',
+    'report_forget_2fa_proxy_using': 'پروکسی: ✅ Using پروکسی',
+    'report_forget_2fa_proxy_local': 'پروکسی: ❌ اتصال محلی',
     'report_forget_2fa_cooling_until': 'Cooling period until: {date}',
     'report_forget_2fa_duration': 'Duration: {time}s',
     
-    # 6. Report TXT Template - بدون Reset Needed
-    'report_forget_2fa_title_no_reset': 'فراموشی 2FA Report - بدون Reset Needed',
+    # 6. گزارش TXT Template - بدون Reset Needed
+    'report_forget_2fa_title_no_reset': 'فراموشی 2FA گزارش - بدون Reset Needed',
     'report_forget_2fa_item_no_reset': '⚠️ {filename}',
-    'report_forget_2fa_status_detect_faiشد': 'Status: ناموفق to detect 2FA status: {error}',
-    'report_forget_2fa_status_no_2fa': 'Status: Account has no 2FA password set',
+    'report_forget_2fa_status_detect_faiشد': 'وضعیت: ناموفق to detect 2FA status: {error}',
+    'report_forget_2fa_status_no_2fa': 'وضعیت: اکانت has no 2FA password set',
     
-    # 7. Report TXT Template - In Cooling Period
-    'report_forget_2fa_title_cooling': 'فراموشی 2FA Report - In Cooling Period',
+    # 7. گزارش TXT Template - In Cooling Period
+    'report_forget_2fa_title_cooling': 'فراموشی 2FA گزارش - In Cooling Period',
     'report_forget_2fa_item_cooling': '⏳ {filename}',
-    'report_forget_2fa_status_in_cooling': 'Status: Already in cooling period, until: {date}',
+    'report_forget_2fa_status_in_cooling': 'وضعیت: Already in cooling period, until: {date}',
     
-    # 8. Report TXT Template - Faiشد
-    'report_forget_2fa_title_faiشد': 'فراموشی 2FA Report - ناموفق',
+    # 8. گزارش TXT Template - Faiشد
+    'report_forget_2fa_title_faiشد': 'فراموشی 2FA گزارش - ناموفق',
     'report_forget_2fa_item_faiشد': '❌ {filename}',
-    'report_forget_2fa_status_connection_faiشد': 'Status: Connection faiشد (all پروکسی and local faiشد)',
+    'report_forget_2fa_status_connection_faiشد': 'وضعیت: اتصال faiشد (all پروکسی and local faiشد)',
     
-    # 9. Initialization and Processing Messages
+    # 9. Initialization and در حال پردازش Messages
     'forget_2fa_found_accounts': '📊 Found {count} اکانت',
     'forget_2fa_format': '📁 فرمت: {format}',
-    'forget_2fa_proxy_count': '📡 Proxy: {count} available',
+    'forget_2fa_proxy_count': '📡 پروکسی: {count} available',
     'forget_2fa_initializing': '⏳ Initializing...',
     'forget_2fa_processing_file': '📥 در حال پردازش your file...',
     'forget_2fa_no_valid_files': '❌ بدون valid فایل found',
     'forget_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format فایل',
-    'forget_2fa_sending_results': '📦 Sending result فایل...',
+    'forget_2fa_sending_results': '📦 در حال ارسال result فایل...',
     'forget_2fa_send_faiشد': '❌ ناموفق to send result فایل',
     
-    # 10. Status Mapping Text
+    # 10. وضعیت Mapping Text
     'forget_2fa_status_requested': 'Reset Requested',
     'forget_2fa_status_no_2fa': 'بدون Reset Needed',
     'forget_2fa_status_cooling': 'In Cooling Period',
@@ -736,9 +736,9 @@ TEXTS = {
     'forget_2fa_status_local': 'اتصال محلی',
     'forget_2fa_status_unknown': 'Unknown',
     
-    # ===== Delete 2FA Feature =====
+    # ===== حذف 2FA Feature =====
     # 1. Feature Introduction Page
-    'delete_2fa_title': '❌ Batch Delete 2FA رمز عبور',
+    'delete_2fa_title': '❌ Batch حذف 2FA رمز عبور',
     'delete_2fa_core_features': '✨ Core Features',
     'delete_2fa_auto_detect': '🔍 Auto رمز عبور Detection',
     'delete_2fa_tdata_detect': 'TData format: Auto-detect 2fa.txt, twofa.txt, password.txt',
@@ -749,10 +749,10 @@ TEXTS = {
     'delete_2fa_auto_read': 'Auto-detect: Read current password from file',
     'delete_2fa_manual_input': 'Manual input: کاربر enters current 2FA password',
     'delete_2fa_timeout': '5-minute input timeout protection',
-    'delete_2fa_auto_update': '🔄 Auto Update رمز عبور Files',
+    'delete_2fa_auto_update': '🔄 Auto به‌روزرسانی رمز عبور فایلs',
     'delete_2fa_session_update': 'Session format: Unified twofa field cleared, removes other password fields',
     'delete_2fa_tdata_update': 'TData format: Auto-delete or clear 2fa.txt and other password فایل',
-    'delete_2fa_sync_update': 'Files sync immediately after successful deletion',
+    'delete_2fa_sync_update': 'فایلs sync immediately after successful deletion',
     'delete_2fa_no_manual_edit': 'بدون manual config file editing needed',
     'delete_2fa_notes': '⚠️ Notes',
     'delete_2fa_note1': 'After deleting 2FA, account will no longer require 2FA password',
@@ -764,7 +764,7 @@ TEXTS = {
     'delete_2fa_upload_prompt': '🚀 Please upload your ZIP file...',
     'delete_2fa_back_menu': 'بازگشت to منوی اصلی',
     
-    # 2. Password Input Method Selection
+    # 2. رمز عبور Input Method انتخابion
     'delete_2fa_found_files': '📁 Found {count} account فایل',
     'delete_2fa_file_type': '📊 نوع فایل: {type}',
     'delete_2fa_select_method': '🔐 Please select password input method:',
@@ -780,35 +780,35 @@ TEXTS = {
     'delete_2fa_btn_manual': 'Manual Input رمز عبور',
     'delete_2fa_btn_cancel': 'لغو',
     
-    # 3. Manual Password Input
+    # 3. Manual رمز عبور Input
     'delete_2fa_enter_password': '🔐 Please enter current 2FA password:',
     'delete_2fa_enter_desc1': '· Enter your current 2FA password',
     'delete_2fa_enter_desc2': '· System will verify password and delete 2FA',
     'delete_2fa_enter_desc3': '· Please send password within 5 minutes...',
     'delete_2fa_cancel_hint': '💡 To cancel, click /start to return to main menu',
     
-    # 4. Deletion Progress
+    # 4. Deletion پیشرفت
     'delete_2fa_in_progress': '🗑️ Deleting 2FA password...',
     'delete_2fa_current_progress': '📊 Current پیشرفت',
     'delete_2fa_processed': '· Processed: {done}/{total}',
     'delete_2fa_speed': '· سرعت: {speed}/sec',
     'delete_2fa_elapsed': '· Duration: {time}s',
-    'delete_2fa_success_count': '✅ Delete success: {count}',
-    'delete_2fa_faiشد_count': '❌ Delete faiشد: {count}',
+    'delete_2fa_success_count': '✅ حذف success: {count}',
+    'delete_2fa_faiشد_count': '❌ حذف faiشد: {count}',
     'delete_2fa_remaining': '⏱️ Est. remaining: {time}s',
     
-    # 5. Deletion Complete
+    # 5. Deletion کامل
     'delete_2fa_complete': '🎉 2FA password deletion complete!',
     'delete_2fa_stats': '📊 Deletion Stats',
-    'delete_2fa_total': '· Total: {count}',
+    'delete_2fa_total': '· مجموع: {count}',
     'delete_2fa_success': '· ✅ موفق: {count}',
     'delete_2fa_faiشد': '· ❌ ناموفق: {count}',
     'delete_2fa_duration': '· ⏱️ Duration: {time}s',
     'delete_2fa_speed_stat': '· 🚀 سرعت: {speed}/sec',
-    'delete_2fa_sending_results': '📦 Sending result فایل...',
+    'delete_2fa_sending_results': '📦 در حال ارسال result فایل...',
     
-    # 6. Task Complete Summary
-    'delete_2fa_task_complete': '✅ Delete 2FA task complete!',
+    # 6. Task کامل خلاصه
+    'delete_2fa_task_complete': '✅ حذف 2FA task complete!',
     'delete_2fa_final_stats': '📊 Final Statistics',
     'delete_2fa_final_success': '· موفق: {count}',
     'delete_2fa_final_faiشد': '· ناموفق: {count}',
@@ -818,49 +818,49 @@ TEXTS = {
     'delete_2fa_tip2': '· رمز عبور config in فایل has been auto-cleared',
     'delete_2fa_tip3': '· Please keep result فایل safe',
     
-    # 7. Result File Naming
-    'zip_delete_2fa_success': 'Delete2FA_موفق_{count}',
-    'zip_delete_2fa_faiشد': 'Delete2FA_ناموفق_{count}',
+    # 7. Result فایل Naming
+    'zip_delete_2fa_success': 'حذف2FA_موفق_{count}',
+    'zip_delete_2fa_faiشد': 'حذف2FA_ناموفق_{count}',
     'file_desc_delete_2fa_success': '📦 موفق ({count} اکانت)',
     'file_desc_delete_2fa_faiشد': '📦 ناموفق ({count} اکانت)',
     'delete_2fa_process_time': '⏰ Process time: {time}',
-    'report_delete_2fa_success': 'Delete2FA_موفق_{count}_Report.txt',
-    'report_delete_2fa_faiشد': 'Delete2FA_ناموفق_{count}_Report.txt',
-    'report_desc_delete_2fa_success': '📋 موفق Detaiشد Report',
-    'report_desc_delete_2fa_faiشد': '📋 ناموفق Detaiشد Report',
+    'report_delete_2fa_success': 'حذف2FA_موفق_{count}_گزارش.txt',
+    'report_delete_2fa_faiشد': 'حذف2FA_ناموفق_{count}_گزارش.txt',
+    'report_desc_delete_2fa_success': '📋 موفق Detaiشد گزارش',
+    'report_desc_delete_2fa_faiشد': '📋 ناموفق Detaiشد گزارش',
     'report_delete_2fa_contains': 'شامل details of {count} اکانت',
     
-    # 8. Report TXT Template - Success
-    'report_delete_2fa_title_success': '2FA رمز عبور Deletion Report - موفق',
-    'report_delete_2fa_total': 'Total: {count}',
+    # 8. گزارش TXT Template - موفق
+    'report_delete_2fa_title_success': '2FA رمز عبور Deletion گزارش - موفق',
+    'report_delete_2fa_total': 'مجموع: {count}',
     'report_delete_2fa_generated': 'Generated: {time}',
     'report_delete_2fa_detail_list': 'Detail List:',
-    'report_delete_2fa_account': 'Account: {account}',
+    'report_delete_2fa_account': 'اکانت: {account}',
     'report_delete_2fa_details': 'Details: {info}',
     'report_delete_2fa_process_time': 'Process time: {time}',
     'report_delete_2fa_using_proxy': 'Using proxy',
-    'report_delete_2fa_local_connection': 'Local connection',
+    'report_delete_2fa_local_connection': 'محلی connection',
     'report_delete_2fa_success_msg': 'رمز عبور deleted successfully, file updated',
     'report_delete_2fa_success_no_json': '2FA password deleted',
     'report_delete_2fa_success_with_json': '2FA password deleted, file updated',
     'report_delete_2fa_success_update_faiشد': '2FA password deleted, but file update faiشد',
     'report_delete_2fa_manual_faiشد': 'Manual deletion faiشد',
-    'report_delete_2fa_error_unauthorized': 'Account unauthorized',
+    'report_delete_2fa_error_unauthorized': 'اکانت unauthorized',
     'report_delete_2fa_error_wrong_password': 'Wrong password',
     'report_delete_2fa_error_no_2fa': '2FA not set',
     'report_delete_2fa_error_flood': 'Too many requests, please try later',
-    'report_delete_2fa_error_frozen': 'Account frozen/banned',
+    'report_delete_2fa_error_frozen': 'اکانت frozen/banned',
     'report_delete_2fa_error_deletion_faiشد': 'Deletion faiشد',
     'report_delete_2fa_error_network': 'Network connection faiشد',
     'report_delete_2fa_error_general': 'خطا',
     'report_delete_2fa_error_session_not_found': 'Converted session file not found',
     'report_delete_2fa_error_exception': 'Exception',
     
-    # 9. Report TXT Template - Faiشد
-    'report_delete_2fa_title_faiشد': '2FA رمز عبور Deletion Report - ناموفق',
+    # 9. گزارش TXT Template - Faiشد
+    'report_delete_2fa_title_faiشد': '2FA رمز عبور Deletion گزارش - ناموفق',
     'report_delete_2fa_error': 'خطا: {error}',
     'report_delete_2fa_failure_analysis': 'Failure Analysis and Solutions:',
-    'report_delete_2fa_reason_unauthorized': 'Account unauthorized',
+    'report_delete_2fa_reason_unauthorized': 'اکانت unauthorized',
     'report_delete_2fa_reason_unauthorized_desc1': 'TData file may not be logged in or expired',
     'report_delete_2fa_reason_unauthorized_desc2': 'Suggest re-login account',
     'report_delete_2fa_reason_wrong_password': 'Wrong old password',
@@ -871,16 +871,16 @@ TEXTS = {
     'report_delete_2fa_reason_network_desc2': 'Try local connection or change proxy',
     
     # 10. Other Messages
-    'delete_2fa_starting': '🗑️ Starting 2FA password deletion...',
+    'delete_2fa_starting': '🗑️ شروع 2FA password deletion...',
     'delete_2fa_found_count': '📊 Found {count} فایل',
-    'delete_2fa_please_wait': '⏳ در حال پردازش, please wait...',
+    'delete_2fa_please_wait': '⏳ در حال پردازش, لطفاً صبر کنید...',
     'delete_2fa_processing_file': '📥 در حال پردازش your file...',
     'delete_2fa_no_valid_files': '❌ بدون valid فایل found',
     'delete_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account فایل',
-    'delete_2fa_faiشد_msg': '❌ Delete 2FA faiشد',
+    'delete_2fa_faiشد_msg': '❌ حذف 2FA faiشد',
     'delete_2fa_error_msg': 'خطا: {error}',
     
-    # ===== Add 2FA Feature =====
+    # ===== افزودن 2FA Feature =====
     # 1. Feature Introduction Page
     'add_2fa_title': '➕ افزودن 2FA رمز عبور',
     'add_2fa_features': '📋 Features:',
@@ -891,72 +891,72 @@ TEXTS = {
     'add_2fa_format1': '· آرشیو ZIP (containing Session or TData)',
     'add_2fa_format2': '· Auto-detect file type and add corresponding 2FA config',
     'add_2fa_rules': '⚙️ در حال پردازش rules:',
-    'add_2fa_rule1': '· Session file → Create JSON file with same name (contains twofa field)',
-    'add_2fa_rule2': '· TData directory → Create 2fa.txt file (same level as tdata)',
+    'add_2fa_rule1': '· Session file → ایجاد JSON file with same name (contains twofa field)',
+    'add_2fa_rule2': '· TData directory → ایجاد 2fa.txt file (same level as tdata)',
     'add_2fa_upload_prompt': '📤 لطفاً فایل های اکانت خود را آپلود کنید',
     'add_2fa_back_menu': 'بازگشت to منوی اصلی',
     
-    # 2. Processing
+    # 2. در حال پردازش
     'add_2fa_processing': 'در حال پردازش فایل....',
     
-    # 3. Scan Complete
-    'add_2fa_scan_complete': '✅ File scan complete!',
+    # 3. Scan کامل
+    'add_2fa_scan_complete': '✅ فایل scan complete!',
     'add_2fa_statistics': '📊 Statistics',
-    'add_2fa_total_accounts': '· Total اکانت: {count}',
+    'add_2fa_total_accounts': '· مجموع اکانت: {count}',
     'add_2fa_file_type': '· نوع فایل: {type}',
     
-    # 4. Enter Password
+    # 4. Enter رمز عبور
     'add_2fa_enter_password': '📝 Please enter the 2FA password to set',
     'add_2fa_enter_desc1': '· This password will apply to all اکانت',
     'add_2fa_enter_desc2': '· Session فایل will create corresponding JSON config فایل',
     'add_2fa_enter_desc3': '· TData directories will create 2fa.txt فایل',
     'add_2fa_timeout': '⏰ Auto-cancel if not entered within 5 minutes',
     
-    # 5. Password Received
+    # 5. رمز عبور Received
     'add_2fa_password_received': '✅ 2FA password received',
     'add_2fa_password_display': 'رمز عبور: {password}',
     'add_2fa_processing_now': 'در حال پردازش...',
     
-    # 6. Add Complete
+    # 6. افزودن کامل
     'add_2fa_complete': '✅ افزودن 2FA complete!',
     'add_2fa_results': '📊 در حال پردازش Results',
     'add_2fa_success': '· موفق: {count}',
     'add_2fa_faiشد': '· ناموفق: {count}',
-    'add_2fa_total': '· Total: {count}',
+    'add_2fa_total': '· مجموع: {count}',
     'add_2fa_duration': '· Duration: {time}s',
     'add_2fa_password_set': '🔐 2FA password set: {password}',
     
-    # 7. Result File Naming
+    # 7. Result فایل Naming
     'zip_add_2fa_result': 'add_2fa_result_{timestamp}',
     'file_desc_add_2fa_success': '📦 افزودن 2FA Result - موفق {count}',
-    'zip_add_2fa_success': 'Add2FA_موفق_{count}',
-    'zip_add_2fa_faiشد': 'Add2FA_ناموفق_{count}',
+    'zip_add_2fa_success': 'افزودن2FA_موفق_{count}',
+    'zip_add_2fa_faiشد': 'افزودن2FA_ناموفق_{count}',
     'file_desc_add_2fa_success_count': '📦 موفق ({count} اکانت)',
     'file_desc_add_2fa_faiشد_count': '📦 ناموفق ({count} اکانت)',
-    'report_add_2fa_success': 'Add2FA_موفق_{count}_Report.txt',
-    'report_add_2fa_faiشد': 'Add2FA_ناموفق_{count}_Report.txt',
-    'report_desc_add_2fa_success': '📋 موفق Detaiشد Report',
-    'report_desc_add_2fa_faiشد': '📋 ناموفق Detaiشد Report',
+    'report_add_2fa_success': 'افزودن2FA_موفق_{count}_گزارش.txt',
+    'report_add_2fa_faiشد': 'افزودن2FA_ناموفق_{count}_گزارش.txt',
+    'report_desc_add_2fa_success': '📋 موفق Detaiشد گزارش',
+    'report_desc_add_2fa_faiشد': '📋 ناموفق Detaiشد گزارش',
     
-    # 8. Report TXT Template
-    'report_add_2fa_title_success': '2FA رمز عبور Add Report - موفق',
-    'report_add_2fa_title_faiشد': '2FA رمز عبور Add Report - ناموفق',
-    'report_add_2fa_total': 'Total: {count}',
+    # 8. گزارش TXT Template
+    'report_add_2fa_title_success': '2FA رمز عبور افزودن گزارش - موفق',
+    'report_add_2fa_title_faiشد': '2FA رمز عبور افزودن گزارش - ناموفق',
+    'report_add_2fa_total': 'مجموع: {count}',
     'report_add_2fa_generated': 'Generated: {time}',
     'report_add_2fa_detail_list': 'Detail List:',
-    'report_add_2fa_account': 'Account: {account}',
+    'report_add_2fa_account': 'اکانت: {account}',
     'report_add_2fa_details': 'Details: {info}',
     'report_add_2fa_process_time': 'Process time: {time}',
     'report_add_2fa_config_created': '2FA config file created',
     
-    # 9. Errors and Other Messages
+    # 9. خطاs and Other Messages
     'add_2fa_no_pending_task': '❌ بدون pending افزودن 2FA task, please start over',
     'add_2fa_operation_timeout': '❌ Operation timeout, please start over',
     'add_2fa_password_empty': '❌ 2FA password cannot be empty, please re-enter',
     'add_2fa_no_valid_files': '❌ بدون valid فایل found',
     'add_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account فایل',
     'add_2fa_processing_file': '📥 در حال پردازش your file...',
-    'add_2fa_processing_config': '🔄 Adding 2FA config...',
+    'add_2fa_processing_config': '🔄 افزودنing 2FA config...',
     'add_2fa_processing_faiشد': '❌ در حال پردازش faiشد',
     'add_2fa_error': 'خطا: {error}',
     'add_2fa_result_success_desc': '✅ موفق',
@@ -964,59 +964,59 @@ TEXTS = {
     'add_2fa_result_error_desc': '❌ خطا',
     'add_2fa_need_member': '❌ عضویت required to use افزودن 2FA feature',
     
-    # ===== Account Split Feature =====
+    # ===== اکانت Split Feature =====
     # 1. Feature Introduction Page
-    'split_title': '📦 Account File Classification',
+    'split_title': '📦 اکانت فایل Classification',
     'split_features': '🎯 Features',
     'split_features_desc': 'Support uploading ZIP فایل with multiple اکانت (TData directories or Session+JSON فایل), auto-detect and classify:',
     'split_methods': '📋 Supported Classification Methods',
-    'split_method_country': '1️⃣ Split by Country Code',
+    'split_method_country': '1️⃣ Split by تعدادry Code',
     'split_method_country_desc1': '· Auto-detect phone number → area code → country',
     'split_method_country_desc2': '· Generate one ZIP per country',
-    'split_method_country_desc3': '· Naming: Country+Code+Count',
+    'split_method_country_desc3': '· Naming: تعدادry+Code+تعداد',
     'split_method_quantity': '2️⃣ Split by Quantity',
     'split_method_quantity_desc1': '· Support single or multiple quantities',
     'split_method_quantity_desc2': '· Mixed countries use "Mixed" label naming',
-    'split_method_quantity_desc3': '· All unidentified use "Unknown" label naming',
+    'split_method_quantity_desc3': '· همه unidentified use "Unknown" label naming',
     'split_steps': '💡 Usage Steps',
     'split_step1': '1. Click button below to start',
-    'split_step2': '2. Upload ZIP file with اکانت',
-    'split_step3': '3. Select split method',
+    'split_step2': '2. آپلود ZIP file with اکانت',
+    'split_step3': '3. انتخاب split method',
     'split_step4': '4. Wait for processing and receive results',
     'split_notes': '⚠️ Notes',
     'split_note1': '· Support TData and Session formats',
-    'split_note2': '· File size limit 100MB',
+    'split_note2': '· فایل size limit 100MB',
     'split_note3': '· Auto-detect phone number and country info',
-    'split_start_upload': '📤 Start Upload',
+    'split_start_upload': '📤 Start آپلود',
     'split_back_menu': '◀️ بازگشت to منوی اصلی',
     
-    # 2. Upload File
+    # 2. آپلود فایل
     'split_upload_prompt': '📤 Please upload account فایل',
     'split_formats': 'فرمت های پشتیبانی شده:',
     'split_format1': '· Session فایل ZIP (.session)',
     'split_format2': '· Session+JSON فایل ZIP (.session + .json)',
     'split_format3': '· TData پوشه ZIP',
-    'split_size_limit': '⚠️ File size limit 100MB',
+    'split_size_limit': '⚠️ فایل size limit 100MB',
     'split_timeout': '⏰ 5 minutes timeout',
     'split_back': 'بازگشت to منوی اصلی',
     
-    # 3. Scan Complete
-    'split_scan_complete': '✅ File scan complete!',
+    # 3. Scan کامل
+    'split_scan_complete': '✅ فایل scan complete!',
     'split_statistics': '📊 Statistics',
-    'split_total_accounts': '· Total اکانت: {count}',
+    'split_total_accounts': '· مجموع اکانت: {count}',
     'split_identified': '· Identified: {count}',
     'split_unidentified': '· Unidentified: {count}',
     'split_file_type': '· نوع فایل: {type}',
     'split_select_method': '🎯 Please select split method:',
     
-    # 4. Select Split Method Buttons
+    # 4. انتخاب Split Method Buttons
     'split_select_prompt': 'Please select split method:',
-    'split_btn_country': '🌍 Split by Country',
+    'split_btn_country': '🌍 Split by تعدادry',
     'split_btn_quantity': '🔢 Split by Quantity',
     'split_btn_cancel': '❌ لغو',
     
-    # 5. Select Quantity Mode
-    'split_quantity_mode': '🔢 Select quantity mode:',
+    # 5. انتخاب Quantity حالت
+    'split_quantity_mode': '🔢 انتخاب quantity mode:',
     'split_single_quantity': '1️⃣ Single Quantity',
     'split_single_quantity_desc': 'Split by fixed quantity, e.g. 10 per package',
     'split_multiple_quantity': '🔢 Multiple Quantities',
@@ -1037,40 +1037,40 @@ TEXTS = {
     'split_enter_multiple_desc': 'System will split in order: 1st package 10, 2nd package 20, 3rd package 30',
     'split_enter_multiple_remainder': 'Remainder will be notified but not packaged',
     
-    # 8. Processing
-    'split_sending_results': '📤 Sending results...',
+    # 8. در حال پردازش
+    'split_sending_results': '📤 در حال ارسال results...',
     'split_processing': 'در حال پردازش...',
     'split_processing_file': '📥 در حال پردازش your file...',
-    'split_processing_country': '🔄 Starting split by country...',
+    'split_processing_country': '🔄 شروع split by country...',
     'split_processing_country_desc': 'Grouping and packaging...',
-    'split_processing_quantity_single': '🔄 Starting split by quantity...',
+    'split_processing_quantity_single': '🔄 شروع split by quantity...',
     'split_processing_quantity_single_desc': '{qty} اکانت per package',
-    'split_processing_quantity_multi': '🔄 Starting split by quantity...',
+    'split_processing_quantity_multi': '🔄 شروع split by quantity...',
     'split_processing_quantity_multi_sequence': 'Quantity sequence: {sequence}',
-    'split_processing_quantity_multi_total': 'Total اکانت: {total}',
+    'split_processing_quantity_multi_total': 'مجموع اکانت: {total}',
     'split_processing_quantity_multi_requested': 'Requested quantity: {requested}',
     'split_remainder_unallocated': '⚠️ Remaining {remainder} اکانت unallocated',
     'split_remainder_exceeded': '⚠️ Requested quantity exceeded, last package may be insufficient',
     
-    # Error messages
+    # خطا messages
     'split_error_no_task': '❌ بدون pending classification task',
     'split_error_qty_exceeds': '❌ Quantity {qty} exceeds total اکانت {total}',
     
-    # 9. Classification Complete
+    # 9. Classification کامل
     'split_complete': '✅ Classification complete!',
-    'split_result_total': '· Total اکانت: {count}',
+    'split_result_total': '· مجموع اکانت: {count}',
     'split_result_sent': '· Sent: {count} فایل',
-    'split_result_method_country': '· Classification: By Country Code',
+    'split_result_method_country': '· Classification: By تعدادry Code',
     'split_result_method_quantity': '· Classification: By Quantity',
     'split_result_sequence': '· Quantity sequence: {sequence}',
     'split_use_again': 'To use again, click /start',
     
-    # 10. Result File Naming
+    # 10. Result فایل Naming
     'split_file_contains': 'شامل {count} اکانت',
     'split_mixed': 'Mixed',
     'split_unknown': 'Unknown',
     
-    # 11. Country Name Translations
+    # 11. تعدادry Name Translations
     'country_czech_republic': 'Czech Republic',
     'country_china': 'China',
     'country_united_states': 'United States',
@@ -1189,7 +1189,7 @@ TEXTS = {
     'country_hong_kong': 'Hong Kong',
     'country_macau': 'Macau',
     
-    # Additional countries
+    # افزودنitional countries
     'country_afghanistan': 'Afghanistan',
     'country_albania': 'Albania',
     'country_andorra': 'Andorra',
@@ -1336,7 +1336,7 @@ TEXTS = {
     'country_us_virgin_islands': 'U.S. Virgin Islands',
     'country_antarctica': 'Antarctica',
     
-    # ===== API Conversion Feature =====
+    # ===== API تبدیل Feature =====
     # Feature introduction page
     'api_title': '🔗 API تبدیل فرمت',
     'api_core_features': '🎯 Core Features',
@@ -1350,14 +1350,14 @@ TEXTS = {
     'api_verify_feature3': '· Support HTTP API call to get verification code',
     'api_verify_feature4': '· 5-minute auto-expiry protection',
     'api_usage': '📤 Usage',
-    'api_usage_step1': '1. Upload ZIP file (containing TData or Session)',
+    'api_usage_step1': '1. آپلود ZIP file (containing TData or Session)',
     'api_usage_step2': '2. System auto-analyzes account info',
     'api_usage_step3': '3. Generate API format file and verification links',
-    'api_usage_step4': '4. Download and use results',
+    'api_usage_step4': '4. دانلود and use results',
     'api_upload_prompt': 'Please upload your file...',
     'api_back_menu': 'بازگشت to منوی اصلی',
     
-    # Processing
+    # در حال پردازش
     'api_processing_file': 'در حال پردازش your file',
     
     # Scan complete
@@ -1372,7 +1372,7 @@ TEXTS = {
     'api_2fa_timeout': '⏰ 5 minutes timeout',
     'api_skip': 'skip',
     
-    # Conversion progress
+    # تبدیل progress
     'api_converting': '🔄 API conversion in progress...',
     'api_progress': '📊 تبدیل پیشرفت',
     'api_progress_percent': '· پیشرفت: {percent}% ({done}/{total})',
@@ -1380,7 +1380,7 @@ TEXTS = {
     'api_progress_faiشد': '· ❌ ناموفق: {count}',
     'api_progress_speed': '· Avg speed: {speed}/sec',
     'api_progress_remaining': '· Est. remaining: {time} min',
-    'api_processing_status': '⚡ در حال پردازش Status',
+    'api_processing_status': '⚡ در حال پردازش وضعیت',
     'api_file_type_session': '· نوع فایل: SESSION',
     'api_file_type_tdata': '· نوع فایل: TDATA',
     'api_2fa_mode_auto': '· 2FA mode: Auto-detect',
@@ -1388,16 +1388,16 @@ TEXTS = {
     'api_elapsed_time': '· Elapsed: {time}s',
     'api_failure_stats': '❌ Failure Statistics',
     
-    # Conversion complete
+    # تبدیل complete
     'api_complete': '🎉 API format conversion complete!',
     'api_statistics': '📊 تبدیل Statistics',
-    'api_stat_total': '· Total: {count}',
+    'api_stat_total': '· مجموع: {count}',
     'api_stat_success': '· ✅ موفق: {count} ({percent}%)',
     'api_stat_faiشد': '· ❌ ناموفق: {count} ({percent}%)',
     'api_stat_duration': '· ⏱️ Duration: {time}s',
     'api_stat_speed': '· 🚀 سرعت: {speed}/sec',
     'api_failure_details': '❌ Failure Details',
-    'api_sending_txt': '📄 Sending TXT file...',
+    'api_sending_txt': '📄 در حال ارسال TXT file...',
     
     # Result files
     'api_result_filename': 'TG_API_{count}_اکانت.txt',
@@ -1407,15 +1407,15 @@ TEXTS = {
     # Failure reason translations
     'api_failure_reason_conversion_faiشد': 'تبدیل faiشد',
     'api_failure_reason_unauthorized': 'Unauthorized',
-    'api_failure_reason_timeout': 'Connection timeout',
+    'api_failure_reason_timeout': 'اتصال timeout',
     'api_failure_reason_conversion_error': 'تبدیل error',
     'api_failure_reason_concurrent_error': 'Concurrent error',
-    'api_failure_reason_file_not_exist': 'File not exist',
-    'api_failure_reason_file_corrupted': 'File corrupted',
+    'api_failure_reason_file_not_exist': 'فایل not exist',
+    'api_failure_reason_file_corrupted': 'فایل corrupted',
     'api_failure_reason_dir_not_exist': 'Directory not exist',
     'api_failure_reason_unknown': 'Unknown error',
     
-    # ===== File Rename Feature =====
+    # ===== فایل Rename Feature =====
     # 1. Feature Introduction Page
     'rename_title': '📝 تغییر نام فایل',
     'rename_features': '💡 Features',
@@ -1427,33 +1427,33 @@ TEXTS = {
     'rename_timeout_upload': '⏰ Auto-cancel if no upload within 5 minutes',
     'rename_btn_cancel': 'لغو',
     
-    # 2. File Received
-    'rename_file_received': '✅ File received',
+    # 2. فایل Received
+    'rename_file_received': '✅ فایل received',
     'rename_original_name': '📁 Original filename: {filename}',
-    'rename_file_size': '📏 File size: {size}',
+    'rename_file_size': '📏 فایل size: {size}',
     'rename_enter_new_name': '✏️ Please enter new filename',
     'rename_name_only': '· Enter filename only (without extension)',
     'rename_ext_keep': '· Extension {ext} will be automatically kept',
     'rename_illegal_clean': '· Illegal characters will be auto-cleaned',
     'rename_timeout_input': '⏰ Auto-cancel if no input within 5 minutes',
     
-    # 3. Rename Success
-    'rename_success': '✅ File renamed successfully',
+    # 3. Rename موفق
+    'rename_success': '✅ فایل renamed successfully',
     'rename_old_name': 'Original filename: {old_name}',
     'rename_new_name': 'New filename: {new_name}',
     'rename_telegram_tip': '💡 If the filename is incorrect when downloading, it may be due to تلگرام client restrictions\nThe actual file contains all characters, including Emoji and special brackets',
-    'rename_file_sent': '✅ File sent!',
+    'rename_file_sent': '✅ فایل sent!',
     
-    # 4. Error Messages
+    # 4. خطا Messages
     'rename_no_task': '❌ بدون pending rename task',
-    'rename_download_faiشد': '❌ File download faiشد: {error}',
+    'rename_download_faiشد': '❌ فایل download faiشد: {error}',
     'rename_invalid_name': '❌ Invalid filename, please re-enter',
-    'rename_send_faiشد': '❌ File send faiشد',
+    'rename_send_faiشد': '❌ فایل send faiشد',
     'rename_faiشد': '❌ Rename faiشد: {error}',
     
-    # ===== Account Merge Feature =====
+    # ===== اکانت Merge Feature =====
     # 1. Feature Introduction Page
-    'merge_title': '🧩 Account File Merge',
+    'merge_title': '🧩 اکانت فایل Merge',
     'merge_features': '💡 Features',
     'merge_feature1': '· Auto-extract all ZIP فایل',
     'merge_feature2': '· Recursively scan and identify TData اکانت',
@@ -1463,40 +1463,40 @@ TEXTS = {
     'merge_zip_only': '⚠️ Only .zip فایل accepted',
     'merge_multi_upload': '· Can upload multiple ZIP فایل',
     'merge_auto_scan': '· System will auto-extract and scan contents',
-    'merge_click_complete': 'Click "✅ Complete Merge" after upload',
+    'merge_click_complete': 'Click "✅ کامل Merge" after upload',
     
     # 2. Buttons
-    'merge_btn_complete': '✅ Complete Merge',
+    'merge_btn_complete': '✅ کامل Merge',
     'merge_btn_cancel': '❌ لغو',
-    'merge_btn_continue': '📁 Continue Upload',
+    'merge_btn_continue': '📁 Continue آپلود',
     
-    # 3. After File Upload
+    # 3. After فایل آپلود
     'merge_received_zip': '✅ Received ZIP file {count}',
-    'merge_filename': 'Filename: {filename}',
+    'merge_filename': 'فایلname: {filename}',
     'merge_select_action': 'Please select next action:',
-    'merge_action_continue': '· Continue upload: Add more ZIP فایل',
-    'merge_action_complete': '· Complete merge: Start processing all فایل',
+    'merge_action_continue': '· Continue upload: افزودن more ZIP فایل',
+    'merge_action_complete': '· کامل merge: Start processing all فایل',
     
-    # 4. Processing
+    # 4. در حال پردازش
     'merge_processing': '🔄 در حال پردازش فایل...',
     
     # 5. Results
-    'merge_complete': '✅ Account file merge complete!',
+    'merge_complete': '✅ اکانت file merge complete!',
     'merge_results': '📊 در حال پردازش Results',
     'merge_result_zip': '· Extracted ZIP فایل: {count}',
     'merge_result_tdata': '· TData اکانت: {count}',
     'merge_result_session': '· Session فایل: {count} (support pure Session or Session+JSON)',
-    'merge_generated': '📦 Generated Files',
-    'merge_total_files': 'Total {count} فایل (normal and duplicate فایل packed separately)',
+    'merge_generated': '📦 Generated فایلs',
+    'merge_total_files': 'مجموع {count} فایل (normal and duplicate فایل packed separately)',
     
-    # 6. Output File Descriptions
-    'merge_session_files': 'Session Files ({count} items)',
-    'merge_tdata_files': 'TData Files ({count} items)',
+    # 6. Output فایل Descriptions
+    'merge_session_files': 'Session فایلs ({count} items)',
+    'merge_tdata_files': 'TData فایلs ({count} items)',
     
-    # 7. Error and Hint Messages
+    # 7. خطا and Hint Messages
     'merge_no_task': '❌ بدون pending merge task',
     'merge_zip_only_error': '❌ Only .zip فایل supported, please re-upload',
-    'merge_download_faiشد': '❌ File download faiشد: {error}',
+    'merge_download_faiشد': '❌ فایل download faiشد: {error}',
     'merge_continue_upload_hint': '✅ Please continue uploading ZIP فایل',
     'merge_received_files': 'Received فایل: {count}',
     'merge_upload_next': '• Please upload next ZIP file',
@@ -1510,7 +1510,7 @@ TEXTS = {
     'cleanup_important': '⚠️ Important Notice',
     'cleanup_intro': 'This feature will perform the following operations on uploaded اکانت:',
     'cleanup_action1': '· 🚪 Leave all groups and channels',
-    'cleanup_action2': '· 🗑️ Delete all chat history (revoke when possible)',
+    'cleanup_action2': '· 🗑️ حذف all chat history (revoke when possible)',
     'cleanup_action3': '· 📇 Clear all contacts',
     'cleanup_action4': '· 📁 Archive remaining conversations',
     'cleanup_irreversible': '🔴 Irreversible Operation',
@@ -1526,30 +1526,30 @@ TEXTS = {
     'cleanup_btn_cancel': '❌ لغو',
     'cleanup_btn_confirm': '✅ تأیید Cleanup',
     
-    # 3. After File Upload
+    # 3. After فایل آپلود
     'cleanup_processing_file': 'در حال پردازش your file',
     'cleanup_found_accounts': '✅ Found {count} account فایل',
     'cleanup_type_session': '📊 Type: SESSION',
     'cleanup_type_tdata': '📊 Type: TDATA',
     
-    # 4. Confirm Cleanup
+    # 4. تأیید Cleanup
     'cleanup_confirm_title': '⚠️ تأیید cleanup operation?',
     'cleanup_confirm_intro': 'This operation will:',
     'cleanup_confirm_action1': '· Leave all groups and channels',
-    'cleanup_confirm_action2': '· Delete all chat history',
+    'cleanup_confirm_action2': '· حذف all chat history',
     'cleanup_confirm_action3': '· Clear all contacts',
     'cleanup_confirm_action4': '· Archive remaining conversations',
     'cleanup_confirm_warn': '🔴 This operation is irreversible!',
     
-    # 5. Processing Progress
-    'cleanup_starting': 'Starting cleanup',
+    # 5. در حال پردازش پیشرفت
+    'cleanup_starting': 'شروع cleanup',
     'cleanup_initializing': 'Initializing...',
-    'cleanup_in_progress': '🧹 Cleaning in progress, please wait.',
+    'cleanup_in_progress': '🧹 Cleaning in progress, لطفاً صبر کنید.',
     'cleanup_current': '📄 Current: {filename}',
-    'cleanup_total_progress': '📊 Total progress: {current}/{total} ({percent}%)',
+    'cleanup_total_progress': '📊 مجموع progress: {current}/{total} ({percent}%)',
     'cleanup_eta': '⏳ Estimated completion: {time} remaining',
     'cleanup_eta_alt': 'Estimated completion time: {time} remaining',
-    'cleanup_status': '🔄 Status:',
+    'cleanup_status': '🔄 وضعیت:',
     'cleanup_status_profile': '🔄 Cleaning account info (avatar, name, bio)...',
     'cleanup_status_get_dialogs': '📋 Getting dialog list...',
     'cleanup_status_found_dialogs': '📊 Found {groups} groups, {channels} channels, {users} users',
@@ -1558,23 +1558,23 @@ TEXTS = {
     'cleanup_status_delete_contacts': '📇 Deleting contacts...',
     'cleanup_status_archive_dialogs': '📁 Archiving remaining conversations...',
     
-    # 6. Cleanup Complete
+    # 6. Cleanup کامل
     'cleanup_complete': '✅ Cleanup complete!',
     'cleanup_statistics': '📊 Cleanup Statistics',
-    'cleanup_stat_total': '· Total اکانت: {count}',
+    'cleanup_stat_total': '· مجموع اکانت: {count}',
     'cleanup_stat_success': '· ✅ موفق: {count} ({percent}%)',
     'cleanup_stat_frozen': '· ❄️ مسدود شده: {count} ({percent}%)',
     'cleanup_stat_faiشد': '· ❌ ناموفق: {count}',
     'cleanup_packing': '📦 Packing account فایل...',
     
-    # 7. Output Files
-    'cleanup_summary_report': '📋 Cleanup Summary Report',
+    # 7. Output فایلs
+    'cleanup_summary_report': '📋 Cleanup خلاصه گزارش',
     'cleanup_success_accounts': '📦 موفقfully cleaned اکانت ({count})',
     'cleanup_faiشد_accounts': '📦 ناموفق to clean اکانت ({count})',
     
-    # 8. Cleanup Report Content
-    'cleanup_report_title': 'Batch Cleanup Detaiشد Report',
-    'cleanup_report_time': 'Cleanup Time',
+    # 8. Cleanup گزارش Content
+    'cleanup_report_title': 'Batch Cleanup Detaiشد گزارش',
+    'cleanup_report_time': 'Cleanup زمان',
     'cleanup_report_concurrency': 'Concurrency',
     'cleanup_report_concurrent_accounts': 'اکانت simultaneously',
     'cleanup_report_total': 'مجموع اکانت ها',
@@ -1584,8 +1584,8 @@ TEXTS = {
     'cleanup_report_details': 'Detaiشد Results',
     'cleanup_report_error': 'خطا:',
     'cleanup_report_stats': 'Stats:',
-    'cleanup_report_deleted_dialogs': 'Deleted {count} conversations',
-    'cleanup_report_deleted_contacts': 'Deleted {count} contacts',
+    'cleanup_report_deleted_dialogs': 'حذفd {count} conversations',
+    'cleanup_report_deleted_contacts': 'حذفd {count} contacts',
     'cleanup_report_unauthorized': 'Session unauthorized',
     'cleanup_report_success_list': 'موفقfully Cleaned',
     'cleanup_report_faiشد_list': 'ناموفق to Clean',
@@ -1596,12 +1596,12 @@ TEXTS = {
     'cleanup_report_profile_cleared': 'Profile cleared',
     'cleanup_report_groups_left': 'Left {count} groups',
     'cleanup_report_channels_left': 'Left {count} channels',
-    'cleanup_report_histories_deleted': 'Deleted {count} conversations',
-    'cleanup_report_contacts_deleted_label': 'Deleted {count} contacts',
+    'cleanup_report_histories_deleted': 'حذفd {count} conversations',
+    'cleanup_report_contacts_deleted_label': 'حذفd {count} contacts',
     'cleanup_report_error_details': 'خطا details:',
-    'cleanup_report_frozen_accounts': 'مسدود شده Accounts',
+    'cleanup_report_frozen_accounts': 'مسدود شده اکانتs',
     
-    # 9. Errors and Other Messages
+    # 9. خطاs and Other Messages
     'cleanup_feature_disabشد': '❌ One-click cleanup feature is disabشد',
     'cleanup_need_member': '❌ عضویت required for one-click cleanup',
     'cleanup_no_valid_files': '❌ بدون valid فایل found',
@@ -1614,13 +1614,13 @@ TEXTS = {
     'cleanup_already_processed': 'Processed Statistics',
     'cleanup_actual_processed': '· Processed: {actual}/{total}',
     'cleanup_error_info': '⚠️ خطا info:',
-    'cleanup_sending_results': '📦 Sending processed results...',
+    'cleanup_sending_results': '📦 در حال ارسال processed results...',
     'cleanup_incomplete': '⚠️ Cleanup incomplete',
     'cleanup_may_interrupted': '⚠️ در حال پردازش may have been interrupted or encountered errors',
     'cleanup_results_sent': '✅ Cleanup results sent',
     'cleanup_send_faiشد': '❌ ناموفق to send cleanup results',
-    'cleanup_frozen_detected': 'Account frozen',
-    'cleanup_connection_faiشد': 'Connection faiشد',
+    'cleanup_frozen_detected': 'اکانت frozen',
+    'cleanup_connection_faiشد': 'اتصال faiشد',
     'cleanup_timeout_error': 'Cleanup timeout',
     
     # ===== Re-authorization Feature =====
@@ -1634,16 +1634,16 @@ TEXTS = {
     'reauth_desc5': '· Support proxy connection (fallback to local on timeout)',
     'reauth_desc6': '· Use random device parameters to prevent risk control',
     'reauth_workflow_title': 'Workflow:',
-    'reauth_workflow1': '1. Upload account فایل (Session/TData/ZIP)',
+    'reauth_workflow1': '1. آپلود account فایل (Session/TData/ZIP)',
     'reauth_workflow2': '2. Enter old password (or auto-detect 2FA from JSON)',
     'reauth_workflow3': '3. Enter new password',
     'reauth_workflow4': '4. System auto-completes re-authorization',
     'reauth_workflow5': '5. Results packaged by category (success/faiشد)',
     'reauth_fail_title': 'Failure Categories:',
-    'reauth_fail_frozen': '· مسدود شده: Account has been frozen',
-    'reauth_fail_banned': '· ممنوع: Account has been banned',
+    'reauth_fail_frozen': '· مسدود شده: اکانت has been frozen',
+    'reauth_fail_banned': '· ممنوع: اکانت has been banned',
     'reauth_fail_wrong_pwd': '· Wrong رمز عبور: Old password incorrect',
-    'reauth_fail_network': '· Network خطا: Connection timeout or network issues',
+    'reauth_fail_network': '· Network خطا: اتصال timeout or network issues',
     'reauth_notes_title': 'Notes:',
     'reauth_note1': '⚠️ After re-authorization, old sessions will be invalidated immediately',
     'reauth_note2': '⚠️ Please ensure you provide the correct old password',
@@ -1658,13 +1658,13 @@ TEXTS = {
     'reauth_btn_cancel': '❌ لغو',
     'reauth_btn_confirm': '✅ تأیید Start',
     
-    # 3. After File Upload
+    # 3. After فایل آپلود
     'reauth_processing_file': 'در حال پردازش file',
     'reauth_found_accounts': '✅ Found {count} account فایل',
     'reauth_file_type_session': 'نوع فایل: SESSION',
     'reauth_file_type_tdata': 'نوع فایل: TDATA',
     
-    # 4. Password Selection
+    # 4. رمز عبور انتخابion
     'reauth_pwd_method_title': 'Please select old password input method:',
     'reauth_pwd_auto': '· Auto-detect: Automatically find password from فایل',
     'reauth_pwd_manual': '· Manual input: Manually enter old password',
@@ -1673,28 +1673,28 @@ TEXTS = {
     'reauth_pwd_auto_tdata': '- TData format: Any .txt file containing 2fa/twofa/password (case insensitive)',
     'reauth_pwd_auto_example': 'Example: 2FA.txt, twoFA.TXT, password.txt, etc.',
     
-    # 5. Password Detection Result
+    # 5. رمز عبور Detection Result
     'reauth_pwd_detect_complete': '✅ رمز عبور auto-detection complete',
     'reauth_pwd_stats': 'Statistics:',
-    'reauth_pwd_total': '· Total فایل: {count}',
+    'reauth_pwd_total': '· مجموع فایل: {count}',
     'reauth_pwd_detected': '· موفقfully detected: {count}',
     'reauth_pwd_not_detected': '· Not detected: {count}',
-    'reauth_pwd_empty_note': '💡 Accounts without detected password will be processed with empty password',
+    'reauth_pwd_empty_note': '💡 اکانتs without detected password will be processed with empty password',
     
-    # 6. Manual Input Old Password
+    # 6. Manual Input Old رمز عبور
     'reauth_manual_old_pwd_title': '📝 Manual Input Old رمز عبور',
     'reauth_manual_old_pwd_prompt': 'Please enter old password (if account has 2FA password)',
     'reauth_manual_old_pwd_tip': '💡 If no password, enter "无" or "skip"',
     'reauth_old_pwd_saved': '✅ Old password saved',
     
-    # 7. New Password Input
+    # 7. New رمز عبور Input
     'reauth_new_pwd_prompt': 'Please enter new password (for re-authorized اکانت)',
     'reauth_new_pwd_tip': '💡 If no new password needed, enter "无" or "skip"',
     
-    # 8. Final Confirmation
+    # 8. Final تأییدation
     'reauth_final_confirm': '📋 Final تأییدation',
-    'reauth_account_info': 'Account Info:',
-    'reauth_account_count': '· Account count: {count}',
+    'reauth_account_info': 'اکانت Info:',
+    'reauth_account_count': '· اکانت count: {count}',
     'reauth_pwd_settings': 'رمز عبور Settings:',
     'reauth_old_pwd': '· Old password: {value}',
     'reauth_new_pwd': '· New password: {value}',
@@ -1702,8 +1702,8 @@ TEXTS = {
     'reauth_pwd_masked': '***',
     'reauth_process_flow': 'Process Flow:',
     'reauth_flow1': '1. Reset all sessions (kick other devices)',
-    'reauth_flow2': '2. Delete old password',
-    'reauth_flow3': '3. Create new session (random device parameters)',
+    'reauth_flow2': '2. حذف old password',
+    'reauth_flow3': '3. ایجاد new session (random device parameters)',
     'reauth_flow4': '4. Set new password',
     'reauth_flow5': '5. Verify old sessions invalidated',
     'reauth_flow6': '6. Package categorized results',
@@ -1713,23 +1713,23 @@ TEXTS = {
     'reauth_important3': '· Detaiشد report will be generated after completion',
     'reauth_confirm_question': 'تأیید to start re-authorization?',
     
-    # 9. Processing Progress
+    # 9. در حال پردازش پیشرفت
     'reauth_in_progress': '🔄 Re-authorizing...',
     'reauth_please_wait': 'لطفاً صبر کنید, detaiشد report will be sent after completion',
-    'reauth_starting': '🚀 Starting re-authorization...',
+    'reauth_starting': '🚀 شروع re-authorization...',
     'reauth_start': '▶️ Start re-authorization',
     'reauth_progress': 'پیشرفت: {current}/{total} ({percent}%)',
-    'reauth_stat_account_count': '📊 Account Count',
+    'reauth_stat_account_count': '📊 اکانت تعداد',
     'reauth_stat_success': '✅ Authorization موفق',
-    'reauth_stat_frozen': '❄️ مسدود شده Accounts',
-    'reauth_stat_banned': '🚫 ممنوع Accounts',
+    'reauth_stat_frozen': '❄️ مسدود شده اکانتs',
+    'reauth_stat_banned': '🚫 ممنوع اکانتs',
     'reauth_stat_2fa_error': '🔑 2FA خطا',
     'reauth_stat_network_error': '🌐 Network خطا',
     
-    # 10. Processing Result
-    'reauth_complete': '✅ Re-authorization Complete',
+    # 10. در حال پردازش Result
+    'reauth_complete': '✅ Re-authorization کامل',
     'reauth_result_stats': 'Statistics:',
-    'reauth_result_total': '· Total: {count}',
+    'reauth_result_total': '· مجموع: {count}',
     'reauth_result_success': '· ✅ موفق: {count}',
     'reauth_result_frozen': '· ❄️ مسدود شده: {count}',
     'reauth_result_banned': '· 🚫 ممنوع: {count}',
@@ -1739,18 +1739,18 @@ TEXTS = {
     'reauth_success_rate': 'موفق Rate: {percent}%',
     'reauth_see_report': '📄 See detaiشد report in file below',
     
-    # 11. Output Files
-    'reauth_file_report': '📄 Re-authorization Detaiشد Report',
+    # 11. Output فایلs
+    'reauth_file_report': '📄 Re-authorization Detaiشد گزارش',
     'reauth_file_success': '📦 موفقfully authorized اکانت ({count})',
     'reauth_file_frozen': '📦 مسدود شده اکانت ({count})',
     'reauth_file_banned': '📦 ممنوع اکانت ({count})',
     'reauth_file_wrong_pwd': '📦 Wrong password اکانت ({count})',
     'reauth_file_network': '📦 Network error اکانت ({count})',
-    'reauth_file_other': '📦 Accounts with other errors ({count})',
+    'reauth_file_other': '📦 اکانتs with other errors ({count})',
     
-    # 12. Report Content
-    'reauth_report_title': 'Re-authorization Report',
-    'reauth_report_time': 'Generated Time:',
+    # 12. گزارش Content
+    'reauth_report_title': 'Re-authorization گزارش',
+    'reauth_report_time': 'Generated زمان:',
     'reauth_report_total': 'مجموع اکانت ها:',
     'reauth_report_success': 'موفق:',
     'reauth_report_frozen': 'مسدود شده:',
@@ -1758,10 +1758,10 @@ TEXTS = {
     'reauth_report_pwd_error': 'رمز عبور خطا:',
     'reauth_report_network': 'Network خطا:',
     'reauth_report_other': 'Other خطا:',
-    'reauth_report_file': 'File:',
+    'reauth_report_file': 'فایل:',
     'reauth_report_error': 'خطا:',
     
-    # Report category titles
+    # گزارش category titles
     'reauth_report_category_success': 'SUCCESS',
     'reauth_report_category_frozen': 'FROZEN',
     'reauth_report_category_banned': 'BANNED',
@@ -1769,24 +1769,24 @@ TEXTS = {
     'reauth_report_category_network_error': 'NETWORK_ERROR',
     'reauth_report_category_other_error': 'OTHER_ERROR',
     
-    # Report detail fields
+    # گزارش detail fields
     'reauth_report_phone': 'Phone:',
     'reauth_report_device_model': 'Device حالتl:',
     'reauth_report_system_version': 'System Version:',
     'reauth_report_app_version': 'App Version:',
-    'reauth_report_connection': 'Connection:',
+    'reauth_report_connection': 'اتصال:',
     'reauth_report_new_password': 'New رمز عبور:',
     
-    # Connection method values
-    'reauth_connection_proxy': 'Using Proxy',
+    # اتصال method values
+    'reauth_connection_proxy': 'Using پروکسی',
     'reauth_connection_local': 'اتصال محلی',
     'reauth_connection_local_fallback': 'اتصال محلی (fallback after proxy faiشد)',
     
-    # Report generation faiشد
-    'reauth_report_gen_faiشد': 'Report generation faiشد:',
-    'reauth_report_total_success': 'Total: {total}, موفق: {success}',
+    # گزارش generation faiشد
+    'reauth_report_gen_faiشد': 'گزارش generation faiشد:',
+    'reauth_report_total_success': 'مجموع: {total}, موفق: {success}',
     
-    # Additional messages
+    # افزودنitional messages
     'reauth_need_member': '⚠️ Re-authorization feature requires membership\n\nPlease activate membership first',
     'reauth_session_expired': '❌ Session expired',
     'reauth_session_expired_restart': '❌ Session expired, please restart',
@@ -1796,9 +1796,9 @@ TEXTS = {
     'reauth_error': 'خطا: {error}',
     'reauth_file_type': 'نوع فایل: {type}',
     
-    # ===== Query Registration Time Feature =====
+    # ===== Query Registration زمان Feature =====
     # 1. Feature Introduction Page
-    'regtime_title': '🕰️ Query Registration Time',
+    'regtime_title': '🕰️ Query Registration زمان',
     'regtime_intro': 'This feature queries the accurate registration time of اکانت and classifies by date:',
     'regtime_feature1': '• 📅 Classify by full date (Year-Month-Day)',
     'regtime_feature2': '• 🎯 Multiple methods to get the most accurate registration time',
@@ -1813,21 +1813,21 @@ TEXTS = {
     'regtime_note4': '4. Recommend batch processing no more than 100 اکانت',
     'regtime_note5': '5. Will automatically use the most accurate method to get registration time',
     'regtime_upload_title': '📤 Please upload account فایل:',
-    'regtime_upload_session': '• Session format: Upload .session فایل (can be zipped)',
-    'regtime_upload_tdata': '• TData format: Upload zip file containing tdata directory',
+    'regtime_upload_session': '• Session format: آپلود .session فایل (can be zipped)',
+    'regtime_upload_tdata': '• TData format: آپلود zip file containing tdata directory',
     
     # 2. Buttons
     'regtime_btn_back': 'بازگشت to منوی اصلی',
     'regtime_btn_start': '✅ Start Query',
     'regtime_btn_cancel': '❌ لغو',
     
-    # 3. After File Upload
+    # 3. After فایل آپلود
     'regtime_processing_file': 'در حال پردازش file',
     'regtime_found_accounts': '✅ Found {count} account فایل',
     'regtime_file_type_session': 'نوع فایل: SESSION',
     'regtime_file_type_tdata': 'نوع فایل: TDATA',
     
-    # 4. Processing Info
+    # 4. در حال پردازش Info
     'regtime_process_title': 'در حال پردازش Info:',
     'regtime_process1': '• Priority: Get accurate registration time from @تلگرام official chat',
     'regtime_process2': '• بازگشتup: Saved Messages or user ID estimation',
@@ -1840,34 +1840,34 @@ TEXTS = {
     'regtime_accuracy3': '3. کاربر ID estimation (backup only)',
     'regtime_ready_question': 'Ready to start query?',
     
-    # 5. Processing Progress
+    # 5. در حال پردازش پیشرفت
     'regtime_querying': 'Querying',
     'regtime_may_take_minutes': 'May take a few minutes',
     'regtime_progress_title': '🔄 Query پیشرفت',
-    'regtime_progress_total': '• Total: {count}',
+    'regtime_progress_total': '• مجموع: {count}',
     'regtime_progress_processed': '• Processed: {count}',
     'regtime_progress_success': '• موفق: {count}',
     'regtime_progress_faiشد': '• ناموفق: {count}',
     'regtime_please_wait': '⏳ لطفاً صبر کنید...',
     
     # 6. Query Results
-    'regtime_complete': '✅ Registration Time Query Complete',
+    'regtime_complete': '✅ Registration زمان Query کامل',
     'regtime_stats_title': 'Statistics:',
-    'regtime_stats_total': '• Total: {count}',
+    'regtime_stats_total': '• مجموع: {count}',
     'regtime_stats_success': '• ✅ موفق: {count}',
     'regtime_stats_faiشد': '• ❌ ناموفق: {count}',
     'regtime_classify_title': 'Classified by registration date:',
     'regtime_classify_item': '• {date}: {count}',
     'regtime_see_report': '📄 See detaiشد report in فایل below',
     
-    # 7. Output Files
-    'regtime_file_report': '📋 Registration Time Query Detaiشد Report',
-    'regtime_file_classified': '📦 Registration time classified اکانت ({count} اکانت, sorted into پوشه by date)',
+    # 7. Output فایلs
+    'regtime_file_report': '📋 Registration زمان Query Detaiشد گزارش',
+    'regtime_file_طبقه‌بندی شده': '📦 Registration time طبقه‌بندی شده اکانت ({count} اکانت, sorted into پوشه by date)',
     'regtime_file_faiشد': '❌ ناموفق query اکانت ({count}, with detaiشد failure reasons)',
     
-    # 8. Report Content
-    'regtime_report_title': 'Registration Time Query Report',
-    'regtime_report_time': 'Generated Time:',
+    # 8. گزارش Content
+    'regtime_report_title': 'Registration زمان Query گزارش',
+    'regtime_report_time': 'Generated زمان:',
     'regtime_report_total': 'مجموع اکانت ها:',
     'regtime_report_success': 'موفق:',
     'regtime_report_faiشد': 'ناموفق:',
@@ -1879,7 +1879,7 @@ TEXTS = {
     'regtime_source_all_chats': '• all_chats: From scanning all chats (✅ Accurate)',
     'regtime_source_estimated': '• estimated: Estimated based on user ID (⚠️ May be inaccurate, error could be months or years)',
     'regtime_date_header': '📅 {date} ({count} اکانت)',
-    'regtime_field_file': 'File:',
+    'regtime_field_file': 'فایل:',
     'regtime_field_phone': 'Phone:',
     'regtime_field_userid': 'کاربر ID:',
     'regtime_field_username': 'کاربرname:',
@@ -1890,19 +1890,19 @@ TEXTS = {
     'regtime_error_label': 'ERROR:',
     'regtime_error_field': 'خطا:',
     
-    # 9. Faiشد Report
-    'regtime_fail_report_title': 'ناموفق Query Accounts Details',
-    'regtime_fail_total': 'Total ناموفق:',
-    'regtime_fail_frozen': '【مسدود شده Accounts】({count})',
-    'regtime_fail_banned': '【ممنوع Accounts】({count})',
+    # 9. Faiشد گزارش
+    'regtime_fail_report_title': 'ناموفق Query اکانتs Details',
+    'regtime_fail_total': 'مجموع ناموفق:',
+    'regtime_fail_frozen': '【مسدود شده اکانتs】({count})',
+    'regtime_fail_banned': '【ممنوع اکانتs】({count})',
     'regtime_fail_other_errors': '【Other خطاs】({count})',
     'regtime_fail_type': 'Type:',
     'regtime_fail_reason': 'Failure Reason:',
-    'regtime_fail_unauthorized': 'Account unauthorized or expired',
-    'regtime_fail_timeout': 'Connection timeout',
-    'regtime_fail_timeout_both': 'Connection timeout (both proxy and local faiشد)',
-    'regtime_fail_frozen_account': 'Account has been frozen',
-    'regtime_fail_banned_account': 'Account has been banned',
+    'regtime_fail_unauthorized': 'اکانت unauthorized or expired',
+    'regtime_fail_timeout': 'اتصال timeout',
+    'regtime_fail_timeout_both': 'اتصال timeout (both proxy and local faiشد)',
+    'regtime_fail_frozen_account': 'اکانت has been frozen',
+    'regtime_fail_banned_account': 'اکانت has been banned',
     'regtime_fail_opentele': 'opentele not instalشد, cannot process TData format',
     'regtime_fail_tdata_load': 'TData unauthorized or loading faiشد',
     'regtime_fail_tdata_timeout': 'TData loading timeout',
@@ -1913,7 +1913,7 @@ TEXTS = {
     # 10. ZIP Folder Names
     'regtime_folder_name': '{date} registered اکانت ({count})',
     
-    # 11. Additional Messages
+    # 11. افزودنitional Messages
     'regtime_need_member': '❌ Registration time query feature requires membership\n\nPlease activate membership first',
     'regtime_session_expired': '❌ Session expired, please re-upload فایل',
     'regtime_no_valid_files': '❌ بدون valid فایل found\n\nPlease ensure ZIP contains Session or TData format فایل',
@@ -1935,7 +1935,7 @@ TEXTS = {
     'profile_random_bio': '• Bio: Choose to leave empty or randomly generate in corresponding language',
     'profile_random_username': '• کاربرname: Choose to delete or randomly generate new username',
     'profile_custom_mode_title': '✏️ Custom Generation حالت:',
-    'profile_custom_upload': '• Upload txt file (one content per line)',
+    'profile_custom_upload': '• آپلود txt file (one content per line)',
     'profile_custom_manual': '• Or manually enter content',
     'profile_custom_support': '• Supports custom name, avatar, bio, username',
     'profile_notes_title': '⚠️ Notes:',
@@ -1945,12 +1945,12 @@ TEXTS = {
     'profile_note4': '4. Supports Session and TData formats',
     'profile_select_mode': 'Please select modification mode:',
     
-    # 2. Mode Selection Buttons
+    # 2. حالت انتخابion Buttons
     'profile_btn_random': '🎲 Random Generation',
     'profile_btn_custom': '✏️ Custom Generation',
     'profile_btn_back': 'بازگشت to منوی اصلی',
     
-    # 3. Random Generation Mode Configuration
+    # 3. Random Generation حالت Configuration
     'profile_random_config_title': '🎲 Random Generation حالت',
     'profile_current_config': 'Current Configuration:',
     'profile_config_name': '• Name:',
@@ -1964,11 +1964,11 @@ TEXTS = {
     # 4. Configuration Option Values
     'profile_opt_auto_generate': '✅ Auto-generate by country',
     'profile_opt_random_generate': '✅ Random generate',
-    'profile_opt_delete_all': '🗑️ Delete all',
-    'profile_opt_delete_all_history': '🗑️ Delete all history',
+    'profile_opt_delete_all': '🗑️ حذف all',
+    'profile_opt_delete_all_history': '🗑️ حذف all history',
     'profile_opt_keep_current': '📷 Keep current',
     'profile_opt_no_modify': '⏩ بدون modification',
-    'profile_opt_delete': '🗑️ Delete',
+    'profile_opt_delete': '🗑️ حذف',
     'profile_opt_random_bio': '🎲 Random generate bio',
     'profile_opt_random_username': '🎲 Random generate username',
     'profile_opt_clear_bio': '📝 Leave empty',
@@ -1978,18 +1978,18 @@ TEXTS = {
     'profile_btn_bio': 'Bio:',
     'profile_btn_username': 'کاربرname:',
     'profile_btn_name': 'Name:',
-    'profile_btn_upload': '📤 Upload account فایل to start',
+    'profile_btn_upload': '📤 آپلود account فایل to start',
     'profile_btn_return': 'Return',
     'profile_btn_cancel': '❌ لغو',
     
-    # 6. Custom Mode Configuration
+    # 6. Custom حالت Configuration
     'profile_custom_config_title': '✏️ Custom Generation حالت',
     'profile_custom_tip_title': '💡 Configuration method:',
     'profile_custom_tip1': '1. Click buttons to configure each item',
     'profile_custom_tip2': '2. Supports uploading txt file or manual input',
     'profile_custom_tip3': '3. Can choose not to modify an item (leave empty)',
     'profile_custom_rule_title': '📊 Smart allocation rules:',
-    'profile_custom_rule1': '• 1 content + N اکانت = All اکانت use the same content',
+    'profile_custom_rule1': '• 1 content + N اکانت = همه اکانت use the same content',
     'profile_custom_rule2': '• M contents + N اکانت (M&lt;N) = Cyclic use',
     'profile_custom_rule3': '• M contents + N اکانت (M≥N) = One-to-one correspondence',
     'profile_custom_select': 'Please select items to configure:',
@@ -2000,28 +2000,28 @@ TEXTS = {
     'profile_custom_status_no_modify': '⏩ بدون modification',
     'profile_custom_field_config': '📝 Configure {field}',
     'profile_custom_field_select': 'Please select operation:',
-    'profile_custom_field_upload_txt': '📄 Upload txt file',
+    'profile_custom_field_upload_txt': '📄 آپلود txt file',
     'profile_custom_field_manual_input': '✍️ Manual input',
     'profile_custom_field_no_modify': '⏩ بدون modification for this item',
     'profile_custom_field_view_configured': '📊 View configured ({count})',
     'profile_custom_field_clear_config': '🗑 Clear configuration',
-    'profile_custom_field_upload_images': '🖼 Upload image file/ZIP',
-    'profile_custom_field_delete_all_avatar': '🗑 Delete all avatars',
+    'profile_custom_field_upload_images': '🖼 آپلود image file/ZIP',
+    'profile_custom_field_delete_all_avatar': '🗑 حذف all avatars',
     'profile_custom_field_clear_bio': '📝 Clear bio',
-    'profile_custom_field_delete_username': '🗑 Delete username',
+    'profile_custom_field_delete_username': '🗑 حذف username',
     'profile_custom_field_back_to_menu': '🔙 بازگشت to configuration menu',
     
-    # 8. Upload Prompts
+    # 8. آپلود Prompts
     'profile_upload_title': '📤 Please upload account فایل',
     'profile_upload_format': 'فرمت های پشتیبانی شده:',
-    'profile_upload_session': '• Session format: Upload .session فایل (can be zipped)',
-    'profile_upload_tdata': '• TData format: Upload zip file containing tdata directory',
+    'profile_upload_session': '• Session format: آپلود .session فایل (can be zipped)',
+    'profile_upload_tdata': '• TData format: آپلود zip file containing tdata directory',
     'profile_upload_timeout': '⏱ Please upload فایل within 5 minutes...',
     'profile_upload_cancel': '💡 To cancel, click /start to return to main menu',
     'profile_processing_file': 'در حال پردازش file',
     
     # Custom upload prompts
-    'profile_custom_upload_photo_title': '📤 Upload {field} file',
+    'profile_custom_upload_photo_title': '📤 آپلود {field} file',
     'profile_custom_upload_photo_format': 'فرمت های پشتیبانی شده:',
     'profile_custom_upload_photo_single': '• Single image: jpg, png, jpeg, webp',
     'profile_custom_upload_photo_multi': '• Multiple images: Pack into zip file',
@@ -2029,8 +2029,8 @@ TEXTS = {
     'profile_custom_upload_photo_notice': '💡 Note:',
     'profile_custom_upload_photo_size': '• Recommended image size: 640x640 or higher',
     'profile_custom_upload_photo_limit': '• Recommended file size: Not more than 5MB',
-    'profile_custom_upload_txt_title': '📤 Upload {field} txt file',
-    'profile_custom_upload_txt_format': 'File format:',
+    'profile_custom_upload_txt_title': '📤 آپلود {field} txt file',
+    'profile_custom_upload_txt_format': 'فایل format:',
     'profile_custom_upload_txt_line': '• One {field} per line',
     'profile_custom_upload_txt_encoding': '• UTF-8 encoding',
     'profile_custom_upload_txt_skip': '• Empty lines supported (will be skipped)',
@@ -2053,19 +2053,19 @@ TEXTS = {
     'profile_custom_view_more': '... {count} more',
     'profile_custom_input_empty': '❌ Input is empty, please re-enter',
     'profile_custom_no_images': '❌ بدون valid image فایل found\n\nفرمت های پشتیبانی شده: jpg, png, jpeg, webp, gif',
-    'profile_custom_encoding_error': '❌ File encoding error\n\nPlease save file with UTF-8 encoding',
-    'profile_custom_file_empty': '❌ File content is empty',
+    'profile_custom_encoding_error': '❌ فایل encoding error\n\nPlease save file with UTF-8 encoding',
+    'profile_custom_file_empty': '❌ فایل content is empty',
     'profile_custom_processing_faiشد': '❌ <b>در حال پردازش faiشد</b>\n\nخطا: {error}',
     'profile_photo_processing': '📥 <b>در حال پردازش image...</b>',
     'profile_photo_uploaded_success': '✅ <b>Image uploaded</b>\n\nAvatar photo saved successfully',
     'profile_photo_upload_faiشد': '❌ <b>Image upload faiشد</b>\n\nخطا: {error}',
     'button_back_previous': '⬅️ بازگشت',
     
-    # 9. Confirmation Page
+    # 9. تأییدation Page
     'profile_confirm_title': '📝 Ready to start editing profile',
-    'profile_file_info': '📁 File information:',
+    'profile_file_info': '📁 فایل information:',
     'profile_file_type': '├ Type:',
-    'profile_file_count': '└ Count: {count} اکانت',
+    'profile_file_count': '└ تعداد: {count} اکانت',
     'profile_modify_config': '⚙️ Modification configuration:',
     'profile_config_name_label': '├ Name:',
     'profile_config_avatar_label': '├ Avatar:',
@@ -2078,21 +2078,21 @@ TEXTS = {
     'profile_confirm_question': 'تأیید to start modification?',
     'profile_btn_confirm': '✅ تأیید and start',
     
-    # 10. Processing Progress
+    # 10. در حال پردازش پیشرفت
     'profile_progress_title': '📝 Profile Modification پیشرفت',
     'profile_stats_title': '📊 Statistics:',
-    'profile_stats_total': '├ 📦 Total:',
+    'profile_stats_total': '├ 📦 مجموع:',
     'profile_stats_success': '├ ✅ موفق:',
     'profile_stats_faiشد': '├ ❌ ناموفق:',
     'profile_stats_processing': '├ ⏳ در حال پردازش:',
     'profile_stats_remaining': '└ 📋 Remaining:',
     'profile_speed': '⚡ در حال پردازش speed: {speed}/sec',
-    'profile_time_elapsed': '⏱️ Time elapsed:',
+    'profile_time_elapsed': '⏱️ زمان elapsed:',
     'profile_time_remaining': '⏳ Estimated remaining:',
     'profile_current_processing': '🔄 Currently processing:',
     'profile_wait_tip': '💡 Tip: لطفاً صبر کنید patiently, do not close the dialog',
     
-    # 11. Processing Status
+    # 11. در حال پردازش وضعیت
     'profile_status_success': '✅ موفق',
     'profile_status_faiشد': '❌ ناموفق:',
     'profile_status_modifying_name': 'Modifying name...',
@@ -2107,7 +2107,7 @@ TEXTS = {
     'profile_action_name_success': '✅ Name: {name}',
     'profile_action_name_faiشد': '❌ Name update faiشد',
     'profile_action_name_faiشد_error': '❌ Name update faiشد: {error}',
-    'profile_action_avatar_deleted': '✅ Deleted all avatars',
+    'profile_action_avatar_deleted': '✅ حذفd all avatars',
     'profile_action_avatar_delete_faiشد': '❌ Avatar deletion faiشد',
     'profile_action_avatar_delete_faiشد_error': '❌ Avatar deletion faiشد: {error}',
     'profile_action_avatar_uploaded': '✅ Avatar uploaded',
@@ -2119,7 +2119,7 @@ TEXTS = {
     'profile_action_username_success': '✅ کاربرname: {username}',
     'profile_action_username_faiشد': '❌ کاربرname update faiشد',
     'profile_action_username_faiشد_error': '❌ کاربرname update faiشد: {error}',
-    'profile_action_username_deleted': '✅ کاربرname: Deleted',
+    'profile_action_username_deleted': '✅ کاربرname: حذفd',
     'profile_action_username_delete_faiشد': '❌ کاربرname deletion faiشد',
     'profile_action_username_delete_faiشد_error': '❌ کاربرname deletion faiشد: {error}',
     'profile_action_username_occupied': '❌ کاربرname already taken: {username}',
@@ -2131,65 +2131,65 @@ TEXTS = {
     # 12. Modification Results
     'profile_complete': '✅ Profile modification complete!',
     'profile_result_stats': '📊 Statistics:',
-    'profile_result_total': '• Total:',
+    'profile_result_total': '• مجموع:',
     'profile_result_success': '• موفق: {count} ✅',
     'profile_result_faiشد': '• ناموفق: {count} ❌',
     'profile_error_stats': '📋 خطا type statistics:',
-    'profile_files_sent': '📁 Files sent:',
+    'profile_files_sent': '📁 فایلs sent:',
     'profile_file_report': '• Detaiشد report:',
     'profile_file_success': '• موفقful اکانت:',
     'profile_file_faiشد': '• ناموفق اکانت:',
     
-    # 13. Output Files
-    'profile_output_report': '📋 Profile Modification Detaiشد Report',
+    # 13. Output فایلs
+    'profile_output_report': '📋 Profile Modification Detaiشد گزارش',
     'profile_output_success': '✅ موفقful اکانت ({count})',
     'profile_output_faiشد': '❌ ناموفق اکانت ({count})',
     
-    # 14. Report Content
-    'profile_report_title': '📋 Profile Modification Detaiشد Report',
+    # 14. گزارش Content
+    'profile_report_title': '📋 Profile Modification Detaiشد گزارش',
     'profile_report_time': 'Generated time:',
-    'profile_report_summary': 'Total: {total} | موفق: {success} | ناموفق: {faiشد}',
+    'profile_report_summary': 'مجموع: {total} | موفق: {success} | ناموفق: {faiشد}',
     'profile_report_success_title': '✅ موفقful اکانت ({count})',
     'profile_report_faiشد_title': '❌ ناموفق اکانت ({count})',
-    'profile_report_file': 'File:',
+    'profile_report_file': 'فایل:',
     'profile_report_name_change': '- Name: Before {before}  After {after} ✓',
-    'profile_report_avatar_deleted': '- Avatar: Deleted ✓',
-    'profile_report_avatar_updated': '- Avatar: Updated ✓',
-    'profile_report_avatar_uploaded': '- Avatar: Uploaded new avatar ✓',
+    'profile_report_avatar_deleted': '- Avatar: حذفd ✓',
+    'profile_report_avatar_updated': '- Avatar: به‌روزرسانیd ✓',
+    'profile_report_avatar_uploaded': '- Avatar: آپلودed new avatar ✓',
     'profile_report_bio_change': '- Bio: Before {before}  After {after} ✓',
-    'profile_report_bio_deleted': '- Bio: Deleted ✓',
+    'profile_report_bio_deleted': '- Bio: حذفd ✓',
     'profile_report_bio_cleared': '- Bio: Cleared ✓',
     'profile_report_username_change': '- کاربرname: Before {before}  After {after} ✓',
-    'profile_report_username_deleted': '- کاربرname: Deleted ✓',
+    'profile_report_username_deleted': '- کاربرname: حذفd ✓',
     'profile_report_error_type': 'خطا type:',
     'profile_report_error_reason': 'خطا reason:',
     'profile_report_error_stats': '📊 خطا Statistics',
     
-    # 15. Error Types
+    # 15. خطا Types
     'profile_error_auth_expired': 'Authorization expired, need to re-login',
-    'profile_error_timeout': 'Connection timeout',
+    'profile_error_timeout': 'اتصال timeout',
     'profile_error_flood': 'Too many operations, please try again later',
     'profile_error_username_taken': 'کاربرname already taken',
     'profile_error_username_invalid': 'Invalid username format',
     'profile_error_network': 'Network connection error',
     'profile_error_unknown': 'Unknown error',
-    'profile_error_banned': 'Account has been banned',
-    'profile_error_deactivated': 'Account has been deactivated',
-    'profile_error_unauthorized': 'Account unauthorized',
+    'profile_error_banned': 'اکانت has been banned',
+    'profile_error_deactivated': 'اکانت has been deactivated',
+    'profile_error_unauthorized': 'اکانت unauthorized',
     'profile_error_rpc_error': 'تلگرام API error',
     'profile_error_password_needed': '2FA password required',
     'profile_error_phone_banned': 'Phone number has been banned',
-    'profile_error_flood_wait': 'Rate limit triggered, please wait {seconds} seconds',
+    'profile_error_flood_wait': 'Rate limit triggered, لطفاً صبر کنید {seconds} seconds',
     
     # 16. Random Generation Config Display Values
     'profile_display_random_by_country': '✅ Random generate (by country)',
-    'profile_display_delete_history': '🗑️ Delete all history',
+    'profile_display_delete_history': '🗑️ حذف all history',
     'profile_display_keep': '📷 Keep',
     'profile_display_random': '🎲 Random generate',
-    'profile_display_delete': '🗑️ Delete',
+    'profile_display_delete': '🗑️ حذف',
     'profile_display_no_modify': '⏩ بدون modification',
     'profile_display_custom': '✏️ Custom',
-    'profile_display_delete_all': '🗑️ Delete all',
+    'profile_display_delete_all': '🗑️ حذف all',
     'profile_display_clear': '📝 Leave empty',
     
     # 17. Other Prompt Messages
@@ -2204,7 +2204,7 @@ TEXTS = {
     'profile_field_bio': 'Bio',
     'profile_field_username': 'کاربرname',
     
-    # ===== Check Contact Limit Feature =====
+    # ===== بررسی Contact Limit Feature =====
     # 1. Feature Introduction Page
     'contact_limit_title': '🔍 بررسی Contact Limit',
     'contact_limit_upload': '📤 Please upload ZIP file containing Session or TData',
@@ -2218,41 +2218,41 @@ TEXTS = {
     'contact_limit_wait': '⏳ لطفاً صبر کنید patiently during detection...',
     'contact_limit_cancel': '💡 To cancel, click /start to return to main menu',
     
-    # 2. Found Accounts
+    # 2. Found اکانتs
     'contact_limit_found': '📊 Found {total} اکانت, {unique} after deduplication, starting detection...',
     'contact_limit_estimate': '⏳ Estimated time: {time}',
     
-    # 3. Processing Progress
+    # 3. در حال پردازش پیشرفت
     'contact_limit_progress': '📊 Detection progress: [{current}/{total}]',
     'contact_limit_current': '❌ Current:',
-    'contact_limit_status': 'Status:',
+    'contact_limit_status': 'وضعیت:',
     'contact_limit_stats': 'Statistics:',
-    'contact_limit_completed': '• Completed:',
+    'contact_limit_completed': '• کاملd:',
     'contact_limit_remaining': '• Remaining:',
     'contact_limit_percent': '• پیشرفت:',
     'contact_limit_elapsed': '⏱️ Elapsed:',
     
-    # 4. Detection Complete
+    # 4. Detection کامل
     'contact_limit_complete': '✅ Detection complete!',
-    'contact_limit_time': '⏱️ Time: {time}',
+    'contact_limit_time': '⏱️ زمان: {time}',
     'contact_limit_report_sent': '📊 Detection report and categorized فایل sent',
     
-    # 5. Output Files
-    'contact_limit_report_file': '📊 Contact Limit Detection Report',
+    # 5. Output فایلs
+    'contact_limit_report_file': '📊 Contact Limit Detection گزارش',
     'contact_limit_normal': '✅ Normal: {count}',
     'contact_limit_limited': '⚠️ Limited: {count}',
     'contact_limit_banned': '🚫 ممنوع: {count}',
     'contact_limit_faiشد': '❌ ناموفق: {count}',
     'contact_limit_check_faiشد_zip': 'Contact check faiشد',
     
-    # 6. Report Content
-    'contact_limit_report_title': '📊 Contact Limit Detection Report',
+    # 6. گزارش Content
+    'contact_limit_report_title': '📊 Contact Limit Detection گزارش',
     'contact_limit_report_time': 'Detection time: {time} (Beijing time)',
-    'contact_limit_report_total': 'Total detected: {count} اکانت',
+    'contact_limit_report_total': 'مجموع detected: {count} اکانت',
     'contact_limit_report_principle': 'Detection principle explanation:',
     'contact_limit_report_normal_desc': '✅ Normal: موفقfully imported test contact and found user',
     'contact_limit_report_limited_desc': '⚠️ Limited: Import successful but user not found / FloodWait triggered / Import faiشد',
-    'contact_limit_report_banned_desc': '❌ ممنوع: Account banned or deactivated',
+    'contact_limit_report_banned_desc': '❌ ممنوع: اکانت banned or deactivated',
     'contact_limit_report_faiشد_desc': '❌ ناموفق: Detection error or unauthorized',
     'contact_limit_report_stats': 'Statistics',
     'contact_limit_report_normal_count': '✅ Normal اکانت: {count}',
@@ -2260,36 +2260,36 @@ TEXTS = {
     'contact_limit_report_banned_count': '❌ ممنوع: {count}',
     'contact_limit_report_faiشد_count': '❌ Detection faiشد: {count}',
     'contact_limit_report_detail': '📋 Detaiشد List',
-    'contact_limit_report_normal_list': '【✅ Normal Accounts】',
+    'contact_limit_report_normal_list': '【✅ Normal اکانتs】',
     'contact_limit_report_limited_list': '【⚠️ Contact Limited】',
     'contact_limit_report_banned_list': '【❌ ممنوع】',
     'contact_limit_report_faiشد_list': '【❌ Detection ناموفق】',
     'contact_limit_report_none': 'None',
     
-    # 7. Status Types
+    # 7. وضعیت Types
     'contact_limit_status_normal': '✅ Normal',
     'contact_limit_status_limited': '⚠️ Limited',
     'contact_limit_status_banned': '🚫 ممنوع',
     'contact_limit_status_faiشد': '❌ ناموفق',
-    'contact_limit_status_connection_error': '⚠️ Connection error: {error}',
+    'contact_limit_status_connection_error': '⚠️ اتصال error: {error}',
     'contact_limit_status_auth_error': 'Authorization expired',
     'contact_limit_status_flood_wait': 'FloodWait triggered',
     'contact_limit_status_import_faiشد': 'Import faiشد',
     'contact_limit_status_user_not_found': 'کاربر not found',
     
-    # 8. Time Units
+    # 8. زمان Units
     'contact_limit_minute': 'minute(s)',
     'contact_limit_second': 'second(s)',
     
-    # 9. ZIP File Naming
+    # 9. ZIP فایل Naming
     'contact_limit_zip_normal': 'Contactبررسی_Normal',
     'contact_limit_zip_limited': 'Contactبررسی_Limited',
     'contact_limit_zip_faiشد': 'Contactبررسی_ناموفق',
     
-    # ===== Activate/Redeem Membership Feature =====
-    # 1. Membership Center Page
+    # ===== Activate/Redeem عضویت Feature =====
+    # 1. عضویت Center Page
     'member_center_title': '💳 عضویت Center',
-    'member_current_status': '📊 Current Status',
+    'member_current_status': '📊 Current وضعیت',
     'member_feature_title': '💡 Features',
     'member_feature1': '• Redeem card code to activate membership',
     'member_feature2': '• عضویت duration auto-accumulates',
@@ -2297,8 +2297,8 @@ TEXTS = {
     'member_operation_title': '🎯 Operation Options',
     'member_operation_desc': 'Please select the operation you want to perform',
     
-    # 2. Membership Status Types
-    'member_status_admin': '👑 Admin (دائمی)',
+    # 2. عضویت وضعیت Types
+    'member_status_admin': '👑 مدیر (دائمی)',
     'member_status_none': '❌ بدون عضویت',
     'member_status_member': '💎 Member',
     'member_status_expire': '• انقضا time: {time}',
@@ -2319,13 +2319,13 @@ TEXTS = {
     'redeem_tip3': '• Duration auto-accumulates after successful redemption',
     'redeem_timeout': '⏰ Auto-cancel if no input within 5 minutes',
     
-    # 5. Redemption Success
+    # 5. Redemption موفق
     'redeem_success': '✅ Redemption موفقful!',
     'redeem_info_title': '📋 Redemption Info',
     'redeem_info_code': '• Code: {code}',
     'redeem_info_level': '• عضویت level: {level}',
     'redeem_info_days': '• Days added: {days} day(s)',
-    'redeem_current_status': '💎 Current عضویت Status',
+    'redeem_current_status': '💎 Current عضویت وضعیت',
     'redeem_current_level': '• عضویت level: {level}',
     'redeem_current_expire': '• انقضا time: {time}',
     'redeem_thanks': 'Thank you for your support!',
@@ -2338,33 +2338,33 @@ TEXTS = {
     'redeem_error_invalid': 'Invalid code status',
     'redeem_error_check': 'Please check if your code is correct',
     
-    # 7. Membership Level Names
+    # 7. عضویت Level Names
     'member_level_member': 'Member',
-    'member_level_admin': 'Admin',
+    'member_level_admin': 'مدیر',
     
-    # ===== Admin Panel Features =====
-    # 1. Admin Panel Main
+    # ===== مدیر Panel Features =====
+    # 1. مدیر Panel Main
     'admin_panel_title': '👑 پنل مدیریت',
-    'admin_panel_access_denied': '❌ Admin only',
+    'admin_panel_access_denied': '❌ مدیر only',
     'admin_system_stats': '📊 System Statistics',
-    'admin_total_users': 'Total کاربرs',
+    'admin_total_users': 'مجموع کاربرs',
     'admin_today_active': 'Active Today',
     'admin_week_active': 'Active This Week',
     'admin_active_members': 'Active Members',
     'admin_trial_members': 'Trial Members',
     'admin_recent_users': 'Recent New کاربرs',
-    'admin_info': '👑 Admin Info',
-    'admin_count': 'Admin Count',
+    'admin_info': '👑 مدیر Info',
+    'admin_count': 'مدیر تعداد',
     'admin_your_permission': 'Your Permission',
-    'admin_super_admin': '👑 Super Admin',
-    'admin_normal_admin': '🔧 Normal Admin',
-    'admin_system_time': 'System Time',
+    'admin_super_admin': '👑 Super مدیر',
+    'admin_normal_admin': '🔧 Normal مدیر',
+    'admin_system_time': 'System زمان',
     'admin_quick_actions': '🔧 Quick Actions',
     'admin_quick_actions_desc': 'Click buttons below to manage',
     'admin_btn_user_management': '👥 کاربر Management',
     'admin_btn_user_stats': '📊 کاربر Statistics',
     'admin_btn_proxy_management': '📡 مدیریت پروکسی',
-    'admin_btn_admin_management': '👑 Admin Management',
+    'admin_btn_admin_management': '👑 مدیر Management',
     'admin_btn_search_user': '🔍 Search کاربر',
     'admin_btn_recent_users': '📋 Recent کاربرs',
     'admin_btn_card_activation': '💳 Card Activation',
@@ -2373,12 +2373,12 @@ TEXTS = {
     'admin_btn_broadcast': '📢 Broadcast',
     'admin_btn_back_panel': '🔙 بازگشت to پنل مدیریت',
     
-    # 2. User Management
+    # 2. کاربر Management
     'user_management_title': '👥 کاربر Management',
     'user_management_recent_active': '📋 Recently Active کاربرs (7 days)',
     'user_management_no_active': 'بدون active users',
     'user_management_legend': '📖 Legend',
-    'user_management_legend_admin': '👑 = Admin',
+    'user_management_legend_admin': '👑 = مدیر',
     'user_management_legend_vip': '💎 = VIP',
     'user_management_legend_normal': '❌ = Normal کاربر',
     'user_management_time_hours_ago': '{hours}h ago',
@@ -2389,10 +2389,10 @@ TEXTS = {
     'user_management_btn_stats': '📊 کاربر Statistics',
     'user_management_btn_refresh': '🔄 Refresh',
     
-    # 3. User Statistics
+    # 3. کاربر Statistics
     'user_stats_title': '📊 کاربر Statistics',
     'user_stats_basic_data': '👥 کاربر Overview',
-    'user_stats_total_users': 'Total کاربرs',
+    'user_stats_total_users': 'مجموع کاربرs',
     'user_stats_today_active': 'Active Today',
     'user_stats_week_active': 'Active This Week',
     'user_stats_recent_new': 'Recent New کاربرs',
@@ -2404,10 +2404,10 @@ TEXTS = {
     'user_stats_activity_analysis': '📈 Activity Analysis',
     'user_stats_week_rate': 'Weekly Active Rate',
     'user_stats_day_rate': 'Daily Active Rate',
-    'user_stats_time': '📅 Statistics Time',
+    'user_stats_time': '📅 Statistics زمان',
     'user_stats_btn_refresh': '🔄 Refresh Data',
     
-    # 4. Search User
+    # 4. Search کاربر
     'search_user_title': '🔍 Search کاربر',
     'search_user_prompt': '📝 Please enter search keywords:',
     'search_user_methods': 'Supported search methods:',
@@ -2425,29 +2425,29 @@ TEXTS = {
     'search_user_found': 'Found {count} matching users:',
     'search_user_btn_continue': '🔍 Continue Search',
     
-    # 5. Recent Users
+    # 5. Recent کاربرs
     'recent_users_title': '📋 Recently Registered کاربرs',
     'recent_users_no_data': 'بدون user data',
     'recent_users_registered': '{time}',
     'recent_users_btn_refresh': '🔄 Refresh List',
     
-    # 6. Admin Management
-    'admin_manage_title': '👑 Admin Management',
-    'admin_manage_list': '📋 Current Admin List',
-    'admin_manage_super': '👑 Super Admin',
-    'admin_manage_normal': '👤 Normal Admin',
+    # 6. مدیر Management
+    'admin_manage_title': '👑 مدیر Management',
+    'admin_manage_list': '📋 Current مدیر List',
+    'admin_manage_super': '👑 Super مدیر',
+    'admin_manage_normal': '👤 Normal مدیر',
     'admin_manage_no_admins': 'بدون admins',
     'admin_manage_nickname': 'نام مستعار',
     'admin_manage_username': 'کاربرname',
-    'admin_manage_added_time': 'Added Time',
-    'admin_manage_admin_prefix': 'Admin',
-    'admin_manage_config_admin': 'Config File Admin',
+    'admin_manage_added_time': 'افزودنed زمان',
+    'admin_manage_admin_prefix': 'مدیر',
+    'admin_manage_config_admin': 'Config فایل مدیر',
     'admin_manage_system_builtin': 'System Built-in',
     'admin_manage_description': '📖 Description',
     'admin_manage_desc_super': 'Super admins are from config file',
     'admin_manage_desc_normal': 'Normal admins can be added via commands',
     
-    # 7. User Details
+    # 7. کاربر Details
     'user_detail_title': '👤 کاربر Details',
     'user_detail_basic_info': '📋 Basic Info',
     'user_detail_nickname': 'نام مستعار',
@@ -2456,19 +2456,19 @@ TEXTS = {
     'user_detail_level': 'Level',
     'user_detail_expiry': 'انقضا',
     'user_detail_usage_stats': '📊 Usage Statistics',
-    'user_detail_register_time': 'Registration Time',
+    'user_detail_register_time': 'Registration زمان',
     'user_detail_last_active': 'Last Active',
-    'user_detail_usage_count': 'Usage Count',
+    'user_detail_usage_count': 'Usage تعداد',
     'user_detail_btn_gift': '🎁 Gift عضویت',
     'user_detail_btn_ban': '🚫 Ban کاربر',
     'user_detail_btn_back_list': 'بازگشت to List',
     'user_detail_not_found': '❌ کاربر {user_id} not found',
     
-    # 8. Gift Membership
+    # 8. Gift عضویت
     'gift_membership_title': '🎁 Gift عضویت',
     'gift_membership_user_info': '📋 کاربر Info',
-    'gift_membership_current_status': '💎 Current عضویت Status',
-    'gift_membership_select_days': '⏰ Select Gift Duration',
+    'gift_membership_current_status': '💎 Current عضویت وضعیت',
+    'gift_membership_select_days': '⏰ انتخاب Gift Duration',
     'gift_membership_select_prompt': 'Please select membership days to gift:',
     'gift_membership_1day': '1 Day',
     'gift_membership_7days': '7 Days',
@@ -2482,44 +2482,44 @@ TEXTS = {
     'gift_membership_days_gifted': 'Days Gifted',
     'gift_membership_btn_continue': '🔄 Continue Gifting',
     
-    # 9. Ban User
+    # 9. Ban کاربر
     'ban_user_confirm_title': '⚠️ تأیید Ban کاربر',
     'ban_user_confirm_prompt': '⚠️ Are you sure you want to ban this user?',
     'ban_user_confirm_desc': 'After banning, this user will not be able to use the bot.',
     'ban_user_btn_confirm': '✅ تأیید Ban',
     'ban_user_success': '✅ Ban موفقful!',
     'ban_user_info': '📋 Ban Info',
-    'ban_user_time': 'Ban Time',
+    'ban_user_time': 'Ban زمان',
     'ban_user_desc': 'This user has been banned and cannot use the bot.',
     
-    # 10. Proxy Management Panel
+    # 10. پروکسی Management Panel
     'proxy_panel_title': '📡 مدیریت پروکسی Panel',
-    'proxy_panel_overview': '📊 Proxy Overview',
-    'proxy_panel_total': 'Total Proxies',
+    'proxy_panel_overview': '📊 پروکسی Overview',
+    'proxy_panel_total': 'مجموع Proxies',
     'proxy_panel_available': 'Available Proxies',
     'proxy_panel_invalid': 'Invalid Proxies',
     'proxy_panel_success_rate': 'موفق Rate',
-    'proxy_panel_select_op': '🔧 Select Operation:',
+    'proxy_panel_select_op': '🔧 انتخاب Operation:',
     'proxy_panel_btn_status': '📊 وضعیت پروکسی',
     'proxy_panel_btn_test': '🔄 Test Proxies',
-    'proxy_panel_btn_stats': '📈 Proxy Statistics',
+    'proxy_panel_btn_stats': '📈 پروکسی Statistics',
     'proxy_panel_btn_clean': '🗑 Clean Invalid',
     'proxy_panel_btn_optimize': '⚡ سرعت Optimization',
-    'proxy_panel_btn_back': 'بازگشت to Proxy Panel',
+    'proxy_panel_btn_back': 'بازگشت to پروکسی Panel',
     
-    # 11. Proxy Status
-    'proxy_status_title': '📊 Proxy Detaiشد Status',
+    # 11. پروکسی وضعیت
+    'proxy_status_title': '📊 پروکسی Detaiشد وضعیت',
     'proxy_status_basic': '📈 Basic Statistics',
     'proxy_status_performance': '⚡ Performance Metrics',
-    'proxy_status_avg_response': 'Average Response',
-    'proxy_status_fastest': 'Fastest Response',
-    'proxy_status_slowest': 'Slowest Response',
+    'proxy_status_avg_response': 'میانگین پاسخ',
+    'proxy_status_fastest': 'Fastest پاسخ',
+    'proxy_status_slowest': 'Slowest پاسخ',
     'proxy_status_region': '🌍 Region Distribution',
-    'proxy_status_update_time': '🕐 Update Time',
-    'proxy_status_btn_refresh': '🔄 Refresh Status',
+    'proxy_status_update_time': '🕐 به‌روزرسانی زمان',
+    'proxy_status_btn_refresh': '🔄 Refresh وضعیت',
     
     # 12. Test Proxies
-    'proxy_test_title': '🔄 Proxy Test',
+    'proxy_test_title': '🔄 پروکسی Test',
     'proxy_test_description': '📋 Test Description',
     'proxy_test_desc_connectivity': 'Will test connectivity of all پروکسی',
     'proxy_test_desc_time': 'Testing may take a few minutes',
@@ -2532,16 +2532,16 @@ TEXTS = {
     'proxy_test_available': 'Available',
     'proxy_test_invalid': 'Invalid',
     'proxy_test_wait': 'لطفاً صبر کنید...',
-    'proxy_test_complete': '✅ Proxy Test Complete!',
+    'proxy_test_complete': '✅ پروکسی Test کامل!',
     'proxy_test_results': '📊 Test Results',
-    'proxy_test_total': 'Total Tested',
+    'proxy_test_total': 'مجموع Tested',
     'proxy_test_duration': '⏱ Duration',
     'proxy_test_seconds': 'seconds',
     'proxy_test_btn_clean': '🗑 Clean Invalid Proxies',
     'proxy_test_btn_retest': '🔄 Retest',
     
-    # 13. Proxy Statistics
-    'proxy_stats_title': '📈 Proxy Statistics Info',
+    # 13. پروکسی Statistics
+    'proxy_stats_title': '📈 پروکسی Statistics Info',
     'proxy_stats_usage': '📊 Usage Statistics',
     'proxy_stats_today_requests': 'Today\'s Requests',
     'proxy_stats_success_requests': 'موفقful Requests',
@@ -2555,31 +2555,31 @@ TEXTS = {
     
     # 14. Clean Invalid Proxies
     'proxy_clean_title': '🗑 Clean Invalid Proxies',
-    'proxy_clean_current_status': '📊 Current Status',
+    'proxy_clean_current_status': '📊 Current وضعیت',
     'proxy_clean_invalid_count': 'Invalid Proxies',
     'proxy_clean_proxies_unit': 'پروکسی',
     'proxy_clean_of_total': 'of total',
     'proxy_clean_confirm': '⚠️ تأیید Clean?',
     'proxy_clean_warning': 'This will permanently delete all invalid پروکسی and cannot be undone.',
     'proxy_clean_btn_confirm': '✅ تأیید Clean',
-    'proxy_clean_starting': '🚀 Starting to clean {count} پروکسی...',
+    'proxy_clean_starting': '🚀 شروع to clean {count} پروکسی...',
     'proxy_clean_fast_mode': 'Fast حالت: On',
     'proxy_clean_concurrency': 'Concurrency',
     'proxy_clean_wait': 'لطفاً صبر کنید, cleaning may take a few minutes...',
-    'proxy_clean_complete': '✅ Clean Complete!',
+    'proxy_clean_complete': '✅ Clean کامل!',
     'proxy_clean_results': '📊 Clean Results',
     'proxy_clean_cleaned': 'Cleaned',
     'proxy_clean_remaining': 'Remaining Proxies',
-    'proxy_clean_faiشد': '❌ Proxy Clean ناموفق',
+    'proxy_clean_faiشد': '❌ پروکسی Clean ناموفق',
     'proxy_clean_no_proxies': 'بدون available پروکسی',
     
-    # 15. Speed Optimization
+    # 15. سرعت Optimization
     'proxy_optimize_title': '⚡ سرعت Optimization Config',
     'proxy_optimize_current': '⚙️ Current Settings',
     'proxy_optimize_fast_mode': 'Fast حالت',
     'proxy_optimize_on': '🟢 On',
     'proxy_optimize_off': '🔴 Off',
-    'proxy_optimize_timeout': 'بررسی Timeout',
+    'proxy_optimize_timeout': 'بررسی زمانout',
     'proxy_optimize_retry': 'Smart Retry',
     'proxy_optimize_times': 'times',
     'proxy_optimize_auto_clean': 'Auto Clean',
@@ -2598,18 +2598,18 @@ TEXTS = {
     # 16. Card Activation
     'card_activation_title': '🎫 Card Activation',
     'card_activation_description': '📋 Function Description',
-    'card_activation_desc_select': 'Select days to generate card',
+    'card_activation_desc_select': 'انتخاب days to generate card',
     'card_activation_desc_count': 'Generate 1 card at a time',
     'card_activation_desc_format': 'Card is 8-digit uppercase alphanumeric',
     'card_activation_desc_usage': 'Each card can only be used once',
-    'card_activation_select_validity': '🎯 Select Validity Period',
+    'card_activation_select_validity': '🎯 انتخاب Validity Period',
     'card_activation_select_prompt': 'Please select the card validity period:',
     'card_activation_success': '✅ Card Generated موفقfully!',
     'card_activation_info': '🎫 Card Info',
     'card_activation_code': 'Card Code',
     'card_activation_vip': 'VIP',
     'card_activation_validity': 'Validity',
-    'card_activation_status': 'Status',
+    'card_activation_status': 'وضعیت',
     'card_activation_unused': 'Unused',
     'card_activation_tips': '💡 Tips',
     'card_activation_tip_save': 'Please keep the card code safe',
@@ -2626,14 +2626,14 @@ TEXTS = {
     'manual_activation_note1': 'Days selection will appear after input',
     'manual_activation_note2': 'عضویت duration auto-accumulates',
     'manual_activation_confirm_user': '👤 تأیید کاربر Info',
-    'manual_activation_select_days': '⏰ Select Activation Duration',
+    'manual_activation_select_days': '⏰ انتخاب Activation Duration',
     'manual_activation_select_prompt': 'Please select membership days for this user:',
     'manual_activation_success': '✅ Activation موفقful!',
     'manual_activation_info': '📋 Activation Info',
-    'manual_activation_days_added': 'Days Added',
+    'manual_activation_days_added': 'Days افزودنed',
     'manual_activation_btn_continue': '🔄 Continue Activation',
     
-    # 18. Revoke Membership
+    # 18. Revoke عضویت
     'revoke_membership_title': 'Revoke عضویت',
     'revoke_membership_prompt': '📝 Please enter username (@name) or user ID to revoke:',
     'revoke_membership_note': 'Revoking will remove all membership privileges',
@@ -2657,16 +2657,16 @@ TEXTS = {
     'broadcast_menu_feature_buttons': 'Can add custom buttons (URL or callback)',
     'broadcast_menu_feature_throttle': 'Smart throttling to avoid rate limits',
     'broadcast_menu_feature_progress': 'Real-time progress display',
-    'broadcast_menu_feature_history': 'Complete history records',
-    'broadcast_menu_select_op': '🔧 Select Operation',
+    'broadcast_menu_feature_history': 'کامل history records',
+    'broadcast_menu_select_op': '🔧 انتخاب Operation',
     'broadcast_menu_click_start': 'Click buttons below to start:',
-    'broadcast_menu_btn_create': '📝 Create Broadcast',
+    'broadcast_menu_btn_create': '📝 ایجاد Broadcast',
     'broadcast_menu_btn_history': '📋 History',
     'broadcast_menu_btn_back': 'بازگشت',
     
-    # 20. Create Broadcast
-    'broadcast_create_title': '📝 Create Broadcast',
-    'broadcast_create_current_status': '📊 Current Status',
+    # 20. ایجاد Broadcast
+    'broadcast_create_title': '📝 ایجاد Broadcast',
+    'broadcast_create_current_status': '📊 Current وضعیت',
     'broadcast_create_media': 'Media',
     'broadcast_create_text': 'Text',
     'broadcast_create_buttons': 'Buttons',
@@ -2720,31 +2720,31 @@ TEXTS = {
     'broadcast_preview_title': '🔍 Full Preview',
     'broadcast_preview_label': '📢 Preview',
     
-    # 25. Select Target Users
-    'broadcast_target_title': '📝 Create Broadcast - Step 4/4',
+    # 25. انتخاب Target کاربرs
+    'broadcast_target_title': '📝 ایجاد Broadcast - Step 4/4',
     'broadcast_target_subtitle': 'Title',
     'broadcast_target_content_set': 'Content Set',
-    'broadcast_target_select': '🎯 Please Select Target کاربرs',
+    'broadcast_target_select': '🎯 Please انتخاب Target کاربرs',
     'broadcast_target_prompt': 'Please select user group to send notification:',
-    'broadcast_target_all': '👥 All کاربرs',
+    'broadcast_target_all': '👥 همه کاربرs',
     'broadcast_target_vip': '💎 VIP Only',
     'broadcast_target_active': '🔥 Active کاربرs (7d)',
     'broadcast_target_new': '🆕 New کاربرs (7d)',
     
-    # 26. Broadcast Preview Confirmation
+    # 26. Broadcast Preview تأییدation
     'broadcast_confirm_title': 'Broadcast Preview',
     'broadcast_confirm_title_label': '📋 Title',
     'broadcast_confirm_target': '🎯 Target',
     'broadcast_confirm_users': 'users',
     'broadcast_confirm_content': '📄 Content',
     'broadcast_confirm_send': '⚠️ تأیید Send?',
-    'broadcast_confirm_estimate': 'Estimated Time',
+    'broadcast_confirm_estimate': 'Estimated زمان',
     'broadcast_confirm_mode': 'Send حالت: Smart Throttle Batch Send',
-    'broadcast_confirm_btn_start': '✅ Start Sending',
+    'broadcast_confirm_btn_start': '✅ Start در حال ارسال',
     'broadcast_confirm_btn_edit': '✏️ بازگشت to Edit',
     
-    # 27. Send Progress
-    'broadcast_send_starting': '🚀 Starting broadcast...',
+    # 27. Send پیشرفت
+    'broadcast_send_starting': '🚀 شروع broadcast...',
     'broadcast_send_initializing': 'Initializing...',
     'broadcast_send_broadcasting': '📡 Broadcasting...',
     'broadcast_send_target': 'Target',
@@ -2752,30 +2752,30 @@ TEXTS = {
     'broadcast_send_success': 'موفق',
     'broadcast_send_faiشد': 'ناموفق',
     
-    # 28. Send Complete
-    'broadcast_complete_title': '✅ Broadcast Complete!',
+    # 28. Send کامل
+    'broadcast_complete_title': '✅ Broadcast کامل!',
     'broadcast_complete_stats': '📊 Send Statistics',
     'broadcast_complete_target_users': 'Target کاربرs',
-    'broadcast_complete_total_time': 'Total Time',
-    'broadcast_complete_avg_speed': 'Average سرعت',
+    'broadcast_complete_total_time': 'مجموع زمان',
+    'broadcast_complete_avg_speed': 'میانگین سرعت',
     'broadcast_complete_users_sec': 'users/sec',
     'broadcast_complete_id': '📋 Broadcast ID',
     
     # 29. Broadcast History
     'broadcast_history_title': '📋 Broadcast History',
-    'broadcast_history_all': 'All',
+    'broadcast_history_all': 'همه',
     'broadcast_history_btn_back': 'بازگشت to History',
     
     # 30. Broadcast Details
     'broadcast_detail_title': '📋 Broadcast Details',
     'broadcast_detail_id': '🆔 ID',
     'broadcast_detail_title_label': '📝 Title',
-    'broadcast_detail_created': '📅 Created Time',
-    'broadcast_detail_status': '📊 Status',
-    'broadcast_detail_completed': '✅ Completed',
+    'broadcast_detail_created': '📅 ایجادd زمان',
+    'broadcast_detail_status': '📊 وضعیت',
+    'broadcast_detail_completed': '✅ کاملd',
     'broadcast_detail_target_group': '🎯 Target Group',
-    'broadcast_detail_all_users': 'All کاربرs',
-    'broadcast_detail_target_count': '🎯 Target Count',
+    'broadcast_detail_all_users': 'همه کاربرs',
+    'broadcast_detail_target_count': '🎯 Target تعداد',
     'broadcast_detail_results': '📈 Send Results',
     'broadcast_detail_duration': 'Duration',
     'broadcast_detail_content': '📄 Content',

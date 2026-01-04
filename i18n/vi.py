@@ -5,7 +5,7 @@ TEXTS = {
     'main_menu_welcome': '👋 Chào mừng đến với Bot Quản Lý Tài Khoản Telegram!',
     'main_menu_select': 'Vui lòng chọn một chức năng:',
     
-    # User info
+    # Người dùng info
     'user_info': 'Thông Tin Người Dùng',
     'user_nickname': 'Biệt Danh',
     'user_id': 'ID',
@@ -47,7 +47,7 @@ TEXTS = {
     'btn_admin_panel': '👑 Bảng Quản Trị',
     'btn_proxy_panel': '📡 Quản Lý Proxy',
     
-    # Language switch
+    # Ngôn ngữ switch
     'btn_language_menu': '🌐 Chuyển Ngôn Ngữ',
     'language_menu_title': '🌐 Chọn Ngôn Ngữ',
     'language_chinese': '🇨🇳 中文',
@@ -59,7 +59,7 @@ TEXTS = {
     'language_vietnamese': '🇻🇳 Tiếng Việt',
     'language_switched': '✅ Đã chuyển sang tiếng Việt',
     
-    # Back button
+    # Quay lại button
     'btn_back_to_menu': 'Quay Lại Menu',
     'btn_back': '◀️ Quay Lại',
     'btn_cancel': '❌ Hủy',
@@ -76,8 +76,8 @@ TEXTS = {
     'proxy_disabled': '🌐 Chế Độ Proxy: Đã Tắt',
     'proxy_count': '🌐 Chế Độ Proxy: Đã Bật ({count} proxy)',
     
-    # ===== Account Check =====
-    # Upload prompt interface
+    # ===== Tài khoản Kiểm tra =====
+    # Tải lên prompt interface
     'account_check_upload_title': '📨 Vui lòng tải lên các tệp tài khoản của bạn',
     'account_check_supported_formats': '📋 Định dạng được hỗ trợ',
     'account_check_format_zip': '· Lưu trữ ZIP (được khuyến nghị)',
@@ -96,7 +96,7 @@ TEXTS = {
     'account_check_threads': '⚡ Luồng đồng thời: {count}',
     'account_check_please_wait': 'Vui lòng đợi, hiển thị tiến trình thời gian thực...',
     
-    # Check progress
+    # Kiểm tra progress
     'account_check_in_progress': '⚡ Đang kiểm tra...',
     'account_check_progress_title': '📊 Kiểm tra Tiến Trình',
     'account_check_progress_percent': '· Tiến Trình: {percent}% ({done}/{total})',
@@ -104,18 +104,18 @@ TEXTS = {
     'account_check_mode': '· Chế Độ: {mode}',
     'account_check_speed': '· Tốc Độ: {speed} tài khoản/sec',
     'account_check_remaining': '· Est. remaining: {time} min',
-    'account_check_proxy_stats': '🔄 Proxy Usage Stats',
+    'account_check_proxy_stats': '🔄 Thống kê sử dụng Proxy',
     'account_check_proxies_used': '· Proxies used: {count}',
     'account_check_fallback_local': '· Fallback local: {count}',
     'account_check_faiđã_proxies': '· Thất Bại proxy: {count}',
-    'account_check_optimization': '⚡ Optimization Status',
+    'account_check_optimization': '⚡ Optimization Trạng thái',
     'account_check_fast_mode': '· Fast mode: {status}',
     'account_check_fast_mode_on': '🟢 On',
     'account_check_fast_mode_off': '🔴 Off',
     'account_check_concurrency': '· Concurrency: {count}',
     'account_check_timeout': '· Kiểm tra timeout: {seconds}s',
     
-    # Account status categories
+    # Tài khoản status categories
     'status_no_restriction': 'Không Hạn Chế',
     'status_spambot': 'Thư Rác',
     'status_frozen': 'Đông Lạnh',
@@ -127,22 +127,22 @@ TEXTS = {
     'zip_spambot': 'Thư Rác_{count}',
     'zip_frozen': 'Đông Lạnh_{count}',
     'zip_banned': 'Bị Cấm_{count}',
-    'zip_connection_error': 'ConnectionLỗi_{count}',
+    'zip_connection_error': 'Kết nốiLỗi_{count}',
     
-    # File descriptions
+    # Tệp descriptions
     'file_desc_no_restriction': '📦 Không Hạn Chế - {count} tài khoản',
     'file_desc_spambot': '📦 Thư Rác - {count} tài khoản',
     'file_desc_frozen': '📦 Đông Lạnh - {count} tài khoản',
     'file_desc_banned': '📦 Bị Cấm - {count} tài khoản',
     'file_desc_connection_error': '📦 Lỗi - {count} tài khoản',
     
-    # Check completion and summary
+    # Kiểm tra completion and summary
     'check_time': '⏰ Kiểm tra time: {time}',
     'check_mode_label': '🌐 Kiểm tra mode: {mode}',
     'check_mode_proxy': 'Chế độ proxy',
     'check_mode_local': 'Chế độ cục bộ',
-    'all_files_sent': '📤 All tệp sent successfully!',
-    'send_summary': '📊 Send Summary',
+    'all_files_sent': '📤 Tất cả tệp đã gửi thành công!',
+    'send_summary': '📊 Send Tóm tắt',
     'files_sent_count': '· Thành Côngfully sent: {count} tệp',
     'check_mode_summary': '· Kiểm tra mode: {mode}',
     'check_duration': '· Kiểm tra duration: {seconds}s',
@@ -150,23 +150,23 @@ TEXTS = {
     
     # Proxy stats and other statistics
     'total_accounts': 'Tổng Số Tài Khoản',
-    'proxy_usage_stats': '📡 Proxy Usage Stats',
+    'proxy_usage_stats': '📡 Thống kê sử dụng Proxy',
     'proxies_used_stat': 'Proxies Used',
-    'fallback_local_stat': 'Fallback Local',
+    'fallback_local_stat': 'Fallback Cục bộ',
     'faiđã_proxies_stat': 'Thất Bại Proxies',
-    'local_only_stat': 'Local Only',
-    'proxy_connection': '📡 Proxy Connection',
+    'local_only_stat': 'Cục bộ Only',
+    'proxy_connection': '📡 Proxy Kết nối',
     'local_connection': '🏠 Kết Nối Cục Bộ',
-    'performance_stats': '⚡ Performance Stats',
-    'average_speed': 'Average Tốc Độ',
-    'sending_files': '🚀 Sending classified tệp, please wait...',
+    'performance_stats': '⚡ Thống kê hiệu suất',
+    'average_speed': 'Trung bình Tốc Độ',
+    'sending_files': '🚀 Đang gửi đã phân loại tệp, vui lòng đợi...',
     'processing_file': '📥 Đang Xử Lý your file...',
     'accounts_unit': '',
     'seconds_unit': 's',
     'minutes_unit': 'min',
     'accounts_per_second': 'tài khoản/s',
     
-    # ===== Format Conversion =====
+    # ===== Định dạng Chuyển đổi =====
     # Function introduction page
     'format_conversion_title': '🔄 Chuyển Đổi Định Dạng',
     'format_conversion_supported': '📁 Supported Chuyển đổis',
@@ -208,9 +208,9 @@ TEXTS = {
     'session_to_tdata_info2': '· Batch convert to Tdata format',
     'session_to_tdata_info3': '· Generate corresponding Tdata thư mục',
     
-    # Conversion progress
+    # Chuyển đổi progress
     'processing_your_file': '📥 Đang Xử Lý your file...',
-    'start_conversion': '🔄 Starting conversion...',
+    'start_conversion': '🔄 Đang bắt đầu conversion...',
     'found_files': '📁 Found {count} tệp',
     'initializing': '⏳ Initializing...',
     'conversion_in_progress': '🔄 Định Dạng conversion in progress...',
@@ -223,10 +223,10 @@ TEXTS = {
     'conversion_remaining': '⏱️ Est. remaining: {time}s',
     'processing_files': 'Đang Xử Lý your tệp',
     
-    # Conversion complete (intermediate state)
+    # Chuyển đổi complete (intermediate state)
     'conversion_complete': '🎉 Chuyển đổi complete!',
     'conversion_stats': '📊 Chuyển đổi Stats',
-    'conversion_total': '· Total: {count}',
+    'conversion_total': '· Tổng: {count}',
     'conversion_success': '· ✅ Thành Công: {count}',
     'conversion_faiđã': '· ❌ Thất Bại: {count}',
     'conversion_duration': '· Duration: {time}s',
@@ -241,48 +241,48 @@ TEXTS = {
     'file_desc_conversion_faiđã': '📦 Chuyển đổi faiđã ({count} tài khoản)',
     'report_filename_success': 'session_to_tdata_success-report.txt',
     'report_filename_faiđã': 'conversion_faiđã-report.txt',
-    'report_desc_success': '📋 Chuyển đổi Thành Công Detaiđã Report',
-    'report_desc_faiđã': '📋 Chuyển đổi Thất Bại Detaiđã Report',
+    'report_desc_success': '📋 Chuyển đổi Thành Công Detaiđã Báo cáo',
+    'report_desc_faiđã': '📋 Chuyển đổi Thất Bại Detaiđã Báo cáo',
     'report_contains_accounts': 'Chứa details of {count} tài khoản',
     
     # Final completion summary
     'conversion_task_complete': '✅ Chuyển đổi task complete!',
-    'conversion_total_count': '· Total: {count}',
+    'conversion_total_count': '· Tổng: {count}',
     'conversion_success_percent': '· ✅ Thành Công: {count} ({percent}%)',
     'conversion_faiđã_percent': '· ❌ Thất Bại: {count} ({percent}%)',
-    'conversion_total_time': '· ⏱️ Total time: {seconds}s ({minutes}min)',
+    'conversion_total_time': '· ⏱️ Tổng time: {seconds}s ({minutes}min)',
     'conversion_avg_speed': '· 🚀 Avg speed: {speed}/sec',
-    'all_results_sent': '📥 All result tệp sent!',
+    'all_results_sent': '📥 Tất cả result tệp sent!',
     
-    # Report TXT template
-    'report_title_success': 'Chuyển Đổi Định Dạng Report - Thành Công',
-    'report_title_faiđã': 'Chuyển Đổi Định Dạng Report - Thất Bại',
+    # Báo cáo TXT template
+    'report_title_success': 'Chuyển Đổi Định Dạng Báo cáo - Thành Công',
+    'report_title_faiđã': 'Chuyển Đổi Định Dạng Báo cáo - Thất Bại',
     'report_generated_time': 'Generated: {time}',
     'report_conversion_type': 'Chuyển đổi type: {type}',
-    'report_total_count': 'Total: {count}',
+    'report_total_count': 'Tổng: {count}',
     'report_detail_list': 'Detail List:',
-    'report_file': 'File: {filename}',
+    'report_file': 'Tệp: {filename}',
     'report_info': 'Info: Phone: {phone} | Người Dùngname: {username}',
-    'report_time': 'Time: {time}',
+    'report_time': 'Thời gian: {time}',
     'report_error': 'Lỗi: {error}',
     'report_no_username': '@NoNgười Dùngname',
     
-    # Error messages
+    # Lỗi messages
     'error_file_type': 'Loại tệp error',
     'error_need_tdata': 'Need Tdata file, but found {type} format',
     'error_need_session': 'Need Session file, but found {type} format',
-    'error_unauthorized': 'Account unauthorized',
+    'error_unauthorized': 'Tài khoản unauthorized',
     'error_auth_key_invalid': 'Auth key invalid',
     'error_file_locked': 'TData file is locked',
     'error_session_locked': 'Session file is locked',
-    'error_connection_timeout': 'Connection timeout',
+    'error_connection_timeout': 'Kết nối timeout',
     'error_network_faiđã': 'Network connection faiđã',
     'error_conversion_faiđã': 'Chuyển đổi faiđã',
     'error_no_valid_files': 'Không có valid tệp found',
     'error_ensure_correct_format': 'Please ensure ZIP contains the correct format',
     'error_click_function_button': 'Please click the corresponding function button first',
     
-    # ===== Change 2FA Feature =====
+    # ===== Thay đổi 2FA Feature =====
     # Function introduction page
     'change_2fa_title': '🔐 Batch Sửa Đổi 2FA Mật khẩu',
     'change_2fa_core_features': '✨ Core Features',
@@ -295,10 +295,10 @@ TEXTS = {
     'change_2fa_two_formats': 'Two formats supported: New password only (được khuyến nghị) or Old + New password',
     'change_2fa_auto_detect_old': 'System auto-detects old password first, no manual input needed',
     'change_2fa_timeout': '5-minute input timeout protection',
-    'change_2fa_auto_update': '🔄 Auto Update Mật khẩu Files',
+    'change_2fa_auto_update': '🔄 Auto Cập nhật Mật khẩu Tệps',
     'change_2fa_session_update': 'Session format: Unified twofa field, removes other password fields',
     'change_2fa_tdata_update': 'TData format: Auto-update 2fa.txt and other password tệp',
-    'change_2fa_sync_update': 'Files sync immediately after successful change',
+    'change_2fa_sync_update': 'Tệps sync immediately after successful change',
     'change_2fa_no_manual_edit': 'Không có manual config file editing needed',
     'change_2fa_notes': '⚠️ Notes',
     'change_2fa_note1': 'System will first try to auto-detect existing password',
@@ -310,7 +310,7 @@ TEXTS = {
     'change_2fa_upload_prompt': '🚀 Please upload your ZIP file...',
     'change_2fa_processing': 'Đang Xử Lý your tệp',
     
-    # Password input prompts
+    # Mật khẩu input prompts
     'change_2fa_found_files': '📁 Found {count} account tệp',
     'change_2fa_file_type': '📊 Loại tệp: {type}',
     'change_2fa_enter_password': '🔐 Please enter password info:',
@@ -327,58 +327,58 @@ TEXTS = {
     'change_2fa_wait_password': '⏰ Please send password within 5 minutes...',
     
     # Modification progress
-    'change_2fa_starting': '🔄 Starting password change...',
+    'change_2fa_starting': '🔄 Đang bắt đầu password change...',
     'change_2fa_found_count': '📊 Found {count} tệp',
     'change_2fa_new_password': '🔐 New password: {password}',
-    'change_2fa_please_wait': '⏳ Đang Xử Lý, please wait...',
+    'change_2fa_please_wait': '⏳ Đang Xử Lý, vui lòng đợi...',
     'change_2fa_in_progress': '🔐 2FA password change in progress...',
     'change_2fa_current_progress': '📊 Current Tiến Trình',
     'change_2fa_processed': 'Processed: {processed}/{total}',
     'change_2fa_speed': 'Tốc Độ: {speed}/sec',
     'change_2fa_elapsed': 'Elapsed: {elapsed}s',
-    'change_2fa_success_count': '✅ Change success: {count}',
-    'change_2fa_faiđã_count': '❌ Change faiđã: {count}',
+    'change_2fa_success_count': '✅ Thay đổi success: {count}',
+    'change_2fa_faiđã_count': '❌ Thay đổi faiđã: {count}',
     'change_2fa_remaining': '⏱️ Est. remaining: {time}s',
     
     # Modification complete
     'change_2fa_complete': '🎉 2FA password change complete!',
-    'change_2fa_stats': '📊 Change Stats',
-    'change_2fa_total': '· Total: {count}',
+    'change_2fa_stats': '📊 Thay đổi Stats',
+    'change_2fa_total': '· Tổng: {count}',
     'change_2fa_success': '· ✅ Thành Công: {count}',
     'change_2fa_faiđã': '· ❌ Thất Bại: {count}',
     'change_2fa_duration': '· ⏱️ Duration: {time}s',
     'change_2fa_speed_stat': '· 🚀 Tốc Độ: {speed}/sec',
-    'change_2fa_sending_results': '📦 Sending result tệp...',
+    'change_2fa_sending_results': '📦 Đang gửi result tệp...',
     
-    # Sending complete
-    'change_2fa_all_sent': '🎉 All tệp sent successfully!',
-    'change_2fa_send_summary': '📋 Send Summary',
-    'change_2fa_files_sent': '· Files sent: {count}',
-    'change_2fa_total_accounts': '· Total tài khoản: {count}',
+    # Đang gửi complete
+    'change_2fa_all_sent': '🎉 Tất cả tệp đã gửi thành công!',
+    'change_2fa_send_summary': '📋 Send Tóm tắt',
+    'change_2fa_files_sent': '· Tệps sent: {count}',
+    'change_2fa_total_accounts': '· Tổng tài khoản: {count}',
     'change_2fa_success_count': '· ✅ Thành Công: {count}',
     'change_2fa_faiđã_count': '· ❌ Thất Bại: {count}',
     'change_2fa_time_spent': '· ⏱️ Duration: {time}s',
     'change_2fa_use_again': 'To use again, click /start',
     
     # Result file naming
-    'zip_change_2fa_success': 'Change2FA_Thành Công_{count}',
-    'zip_change_2fa_faiđã': 'Change2FA_Thất Bại_{count}',
+    'zip_change_2fa_success': 'Thay đổi2FA_Thành Công_{count}',
+    'zip_change_2fa_faiđã': 'Thay đổi2FA_Thất Bại_{count}',
     'file_desc_change_2fa_success': '📦 Thành Công ({count} tài khoản)',
     'file_desc_change_2fa_faiđã': '📦 Thất Bại ({count} tài khoản)',
     'change_2fa_process_time': '⏰ Process time: {time}',
-    'report_change_2fa_success': 'Change2FA_Thành Công_{count}_Report.txt',
-    'report_change_2fa_faiđã': 'Change2FA_Thất Bại_{count}_Report.txt',
-    'report_desc_change_2fa_success': '📋 Thành Công Detaiđã Report',
-    'report_desc_change_2fa_faiđã': '📋 Thất Bại Detaiđã Report',
+    'report_change_2fa_success': 'Thay đổi2FA_Thành Công_{count}_Báo cáo.txt',
+    'report_change_2fa_faiđã': 'Thay đổi2FA_Thất Bại_{count}_Báo cáo.txt',
+    'report_desc_change_2fa_success': '📋 Thành Công Detaiđã Báo cáo',
+    'report_desc_change_2fa_faiđã': '📋 Thất Bại Detaiđã Báo cáo',
     'report_contains_details': 'Chứa details of {count} tài khoản',
     
-    # Report TXT template
-    'report_2fa_title_success': '2FA Mật khẩu Change Report - Thành Công',
-    'report_2fa_title_faiđã': '2FA Mật khẩu Change Report - Thất Bại',
-    'report_2fa_total': 'Total: {count}',
+    # Báo cáo TXT template
+    'report_2fa_title_success': '2FA Mật khẩu Thay đổi Báo cáo - Thành Công',
+    'report_2fa_title_faiđã': '2FA Mật khẩu Thay đổi Báo cáo - Thất Bại',
+    'report_2fa_total': 'Tổng: {count}',
     'report_2fa_generated': 'Generated: {time}',
     'report_2fa_detail_list': 'Detail List:',
-    'report_2fa_account': 'Account: {account}',
+    'report_2fa_account': 'Tài khoản: {account}',
     'report_2fa_details': 'Details: {info}',
     'report_2fa_process_time': 'Process time: {time}',
     'report_2fa_old_password_not_found': 'Old password not found',
@@ -388,7 +388,7 @@ TEXTS = {
     
     # Failure analysis and solutions
     'report_2fa_failure_analysis': 'Failure Analysis and Solutions:',
-    'report_2fa_reason_unauthorized': 'Account unauthorized',
+    'report_2fa_reason_unauthorized': 'Tài khoản unauthorized',
     'report_2fa_reason_unauthorized_desc1': 'TData file may not be logged in or expired',
     'report_2fa_reason_unauthorized_desc2': 'Suggest re-login account',
     'report_2fa_reason_wrong_password': 'Wrong old password',
@@ -398,12 +398,12 @@ TEXTS = {
     'report_2fa_reason_network_desc1': 'Kiểm tra if proxy settings are correct',
     'report_2fa_reason_network_desc2': 'Try local connection or change proxy',
     
-    # Additional status messages (for assembling detail information)
+    # Thêmitional status messages (for assembling detail information)
     'status_tdata_updated': 'TData file updated',
     'status_no_json_found': 'but JSON file not found',
     'status_file_update_faiđã': 'but file update faiđã',
     
-    # ===== Batch Create Feature =====
+    # ===== Batch Tạo Feature =====
     # 1. Feature Introduction Page
     'batch_create_title': '📦 Tạo Hàng Loạt Groups/Channels',
     'batch_create_features': 'Features:',
@@ -415,7 +415,7 @@ TEXTS = {
     'batch_create_feature6': '· Support custom or random username generation',
     'batch_create_feature7': '· Process up to 10 tài khoản simultaneously',
     'batch_create_steps': 'Usage Steps:',
-    'batch_create_step1': '1. Upload Session or TData tệp (ZIP supported)',
+    'batch_create_step1': '1. Tải lên Session or TData tệp (ZIP supported)',
     'batch_create_step2': '2. System auto-verifies tài khoản and shows available count',
     'batch_create_step3': '3. Configure creation parameters (type, naming rules, etc.)',
     'batch_create_step4': '4. Xác Nhận and start batch creation',
@@ -423,40 +423,40 @@ TEXTS = {
     'batch_create_notes': 'Notes:',
     'batch_create_note1': '⚠️ Use responsibly to avoid triggering Telegram limits',
     'batch_create_note2': '⚠️ Suggest creating in batches, don\'t create too many at once',
-    'batch_create_note3': '⚠️ Created groups/channels belong to corresponding tài khoản',
+    'batch_create_note3': '⚠️ Tạod groups/channels belong to corresponding tài khoản',
     'batch_create_upload_prompt': '📤 Please upload account tệp',
     'batch_create_supported_formats': 'Định dạng được hỗ trợ: .session / TData folder / .zip archive',
     
-    # 2. Account Verification
+    # 2. Tài khoản Verification
     'batch_create_found_files': '✅ Found {count} account tệp',
     'batch_create_verifying': '⏳ Verifying tài khoản...',
     'batch_create_verifying_progress': 'Tiến Trình: {done}/{total}',
-    'batch_create_verify_complete': '✅ Account verification complete',
+    'batch_create_verify_complete': '✅ Tài khoản verification complete',
     'batch_create_statistics': 'Statistics:',
-    'batch_create_total_accounts': '· Total tài khoản: {count}',
+    'batch_create_total_accounts': '· Tổng tài khoản: {count}',
     'batch_create_valid_accounts': '· Valid tài khoản: {count}',
     'batch_create_invalid_accounts': '· Invalid tài khoản: {count}',
     'batch_create_can_create_today': '· Can create today: {count}',
     'batch_create_next_step': 'Next step:',
     'batch_create_select_type': 'Please select the type to create',
-    'batch_create_btn_group': 'Create Group',
-    'batch_create_btn_channel': 'Create Channel',
+    'batch_create_btn_group': 'Tạo Group',
+    'batch_create_btn_channel': 'Tạo Channel',
     'batch_create_btn_cancel': 'Hủy',
     'batch_create_btn_back': 'Quay Lại',
     
-    # 3. Step 1: Set Creation Count
+    # 3. Step 1: Set Creation Số lượng
     'batch_create_group_title': '📦 Tạo Hàng Loạt Groups',
     'batch_create_channel_title': '📦 Tạo Hàng Loạt Channels',
-    'batch_create_account_info': 'Account Info:',
-    'batch_create_step1_title': 'Step 1/4: Set Creation Count',
+    'batch_create_account_info': 'Tài khoản Info:',
+    'batch_create_step1_title': 'Step 1/4: Set Creation Số lượng',
     'batch_create_step1_prompt': 'Please enter the number to create per account (1-10):',
     'batch_create_step1_example': '💡 Example: Enter 5 to create 5 groups per valid account',
     'batch_create_step1_example_channel': '💡 Example: Enter 5 to create 5 channels per valid account',
     
-    # 4. Step 2: Set Admins
-    'batch_create_count_set_group': '✅ Count set: {count} per group/account',
-    'batch_create_count_set_channel': '✅ Count set: {count} per channel/account',
-    'batch_create_step2_title': 'Step 2/4: Set Admins (Optional, multiple supported)',
+    # 4. Step 2: Set Quản trị viêns
+    'batch_create_count_set_group': '✅ Số lượng set: {count} per group/account',
+    'batch_create_count_set_channel': '✅ Số lượng set: {count} per channel/account',
+    'batch_create_step2_title': 'Step 2/4: Set Quản trị viêns (Optional, multiple supported)',
     'batch_create_step2_prompt': 'Please send usernames to add as admins:',
     'batch_create_step2_format': 'Định Dạng:',
     'batch_create_step2_format1': '· Single admin: Enter username directly',
@@ -468,7 +468,7 @@ TEXTS = {
     'batch_create_btn_skip': 'Skip',
     
     # 5. Step 3: Set Name and Description
-    'batch_create_admins_set': '✅ Admins set: {admins}',
+    'batch_create_admins_set': '✅ Quản trị viêns set: {admins}',
     'batch_create_admins_count': '({count} total)',
     'batch_create_admins_none': 'None',
     'batch_create_step3_title_group': 'Step 3/4: Set Group Name and Description',
@@ -489,31 +489,31 @@ TEXTS = {
     'batch_create_step4_title_group': 'Step 4/4: Set Group Links',
     'batch_create_step4_title_channel': 'Step 4/4: Set Channel Links',
     'batch_create_step4_prompt': 'Please select link setting method:',
-    'batch_create_step4_option1': '· Custom upload: Upload TXT file with custom usernames',
+    'batch_create_step4_option1': '· Custom upload: Tải lên TXT file with custom usernames',
     'batch_create_step4_option2': '· Auto generate: System randomly generates unique usernames',
     'batch_create_step4_tip1': '💡 Custom username format: One per line, with or without @',
     'batch_create_step4_tip2': '💡 If username exists or unavailable, will auto-skip',
     'batch_create_btn_custom': 'Custom',
     'batch_create_btn_auto': 'Auto Generate',
     
-    # 7. Custom Username Upload
-    'batch_create_custom_title': 'Upload Custom Người Dùngnames',
+    # 7. Custom Người dùngname Tải lên
+    'batch_create_custom_title': 'Tải lên Custom Người Dùngnames',
     'batch_create_custom_prompt': 'Please upload TXT file with usernames, or enter directly:',
     'batch_create_custom_format': 'Định Dạng: One username per line',
     'batch_create_custom_example': 'Example:',
     'batch_create_custom_tip1': '💡 With or without @ symbol',
     'batch_create_custom_tip2': '💡 If username exists, will auto-skip',
     
-    # 8. Final Confirmation
+    # 8. Final Xác nhậnation
     'batch_create_confirm_title': '📋 Final Xác Nhậnation',
     'batch_create_confirm_type_group': 'Creation type: Group',
     'batch_create_confirm_type_channel': 'Creation type: Channel',
-    'batch_create_confirm_account_stats': 'Account Statistics:',
+    'batch_create_confirm_account_stats': 'Tài khoản Statistics:',
     'batch_create_confirm_valid_count': '· Valid tài khoản: {count}',
-    'batch_create_confirm_per_account': '· Create per account: {count}',
+    'batch_create_confirm_per_account': '· Tạo per account: {count}',
     'batch_create_confirm_total_estimate': '· Estimated total: {count}',
     'batch_create_confirm_config': 'Configuration:',
-    'batch_create_confirm_admins': '· Admins: {count} ({admins})',
+    'batch_create_confirm_admins': '· Quản trị viêns: {count} ({admins})',
     'batch_create_confirm_names': '· Name count: {count}',
     'batch_create_confirm_link_auto': '· Link mode: Auto generate',
     'batch_create_confirm_link_custom': '· Link mode: Custom',
@@ -526,36 +526,36 @@ TEXTS = {
     'batch_create_confirm_tip3': '· If username exists, will auto-skip',
     'batch_create_confirm_tip4': '· Detaiđã report will be generated after completion',
     'batch_create_confirm_question': 'Xác Nhận to start creation?',
-    'batch_create_btn_confirm': 'Xác Nhận Create',
+    'batch_create_btn_confirm': 'Xác Nhận Tạo',
     
-    # 9. Creation Progress
+    # 9. Creation Tiến trình
     'batch_create_creating': '⏳ Creating...',
     'batch_create_wait_report': 'Vui lòng đợi, detaiđã report will be sent after completion',
-    'batch_create_starting': '🚀 Starting batch creation',
+    'batch_create_starting': '🚀 Đang bắt đầu batch creation',
     'batch_create_progress': 'Tiến Trình: {done}/{total} ({percent}%)',
-    'batch_create_status_preparing': 'Status: Preparing...',
+    'batch_create_status_preparing': 'Trạng thái: Preparing...',
     'batch_create_btn_view_log': 'View Log',
     
-    # 10. Creation Complete
+    # 10. Creation Hoàn thành
     'batch_create_complete': '✅ Batch creation complete',
-    'batch_create_stats_total': '· Total: {count}',
+    'batch_create_stats_total': '· Tổng: {count}',
     'batch_create_stats_success': '· Thành Công: {count}',
     'batch_create_stats_faiđã': '· Thất Bại: {count}',
     'batch_create_stats_skipped': '· Skipped: {count}',
     'batch_create_success_rate': 'Thành Công rate: {percent}%',
     'batch_create_report_below': '📄 See detaiđã report in file below',
-    'batch_create_detaiđã_report': '📊 Batch Creation Detaiđã Report',
-    'batch_create_success_list': '✅ Thành Côngfully Created List',
+    'batch_create_detaiđã_report': '📊 Batch Creation Detaiđã Báo cáo',
+    'batch_create_success_list': '✅ Thành Côngfully Tạod List',
     
-    # 11. Report TXT Template - Detaiđã Report
-    'report_batch_create_title': 'Tạo Hàng Loạt Groups/Channels - Result Report',
+    # 11. Báo cáo TXT Template - Detaiđã Báo cáo
+    'report_batch_create_title': 'Tạo Hàng Loạt Groups/Channels - Result Báo cáo',
     'report_batch_create_generated': 'Generated: {time}',
     'report_batch_create_stats': 'Statistics:',
-    'report_batch_create_total': '  Total: {count}',
+    'report_batch_create_total': '  Tổng: {count}',
     'report_batch_create_success': '  Thành Công: {count}',
     'report_batch_create_faiđã': '  Thất Bại: {count}',
     'report_batch_create_skipped': '  Skipped: {count}',
-    'report_batch_create_success_list': 'Thành Côngfully Created List:',
+    'report_batch_create_success_list': 'Thành Côngfully Tạod List:',
     'report_batch_create_type': 'Type: {type}',
     'report_batch_create_type_group': 'group',
     'report_batch_create_type_channel': 'channel',
@@ -567,12 +567,12 @@ TEXTS = {
     'report_batch_create_creator_account': 'Creator account: {account}',
     'report_batch_create_creator_username': 'Creator username: {username}',
     'report_batch_create_creator_id': 'Creator ID: {id}',
-    'report_batch_create_admins': 'Admins: {admins}',
+    'report_batch_create_admins': 'Quản trị viêns: {admins}',
     'report_batch_create_admins_none': '@None',
-    'report_batch_create_admin_faiđã': 'Admin add faiđã:',
+    'report_batch_create_admin_faiđã': 'Quản trị viên add faiđã:',
     'report_batch_create_admin_faiđã_reason': '  - {admin}: Người Dùngname @{admin} does not exist or invalid',
     
-    # 12. Report TXT Template - Success List
+    # 12. Báo cáo TXT Template - Thành công List
     'report_success_list_title': 'Tạo Hàng Loạt - Thành Công List',
     'report_success_list_generated': 'Generated: {time}',
     'report_success_list_count': 'Thành Công count: {count}',
@@ -584,9 +584,9 @@ TEXTS = {
     'report_success_list_channel_link': 'Channel link: {link}',
     'report_success_list_creator': 'Creator account: {account}',
     'report_success_list_creator_username': 'Creator username: {username}',
-    'report_success_list_admin_username': 'Admin username: {admin}',
+    'report_success_list_admin_username': 'Quản trị viên username: {admin}',
     
-    # 13. Report TXT Template - Failure List
+    # 13. Báo cáo TXT Template - Failure List
     'report_failure_list_title': '❌ Failure Details List',
     'report_failure_list_header': 'Tạo Hàng Loạt - Failure List (Detaiđã Reasons)',
     'report_failure_list_generated': 'Generated: {time}',
@@ -598,21 +598,21 @@ TEXTS = {
     'report_failure_list_creator': 'Creator account: {account}',
     'report_failure_list_reason': 'Failure reason: {reason}',
     
-    # Batch Create - Account Frozen
-    'batch_create_account_frozen_skipped': 'Account frozen, creation skipped',
+    # Batch Tạo - Tài khoản Frozen
+    'batch_create_account_frozen_skipped': 'Tài khoản frozen, creation skipped',
     
-    # Batch Create - Error Messages
+    # Batch Tạo - Lỗi Messages
     'batch_create_feature_disabđã': '❌ Batch create feature is disabđã',
     'batch_create_session_expired': '❌ Session expired',
     'batch_create_session_expired_restart': '❌ Session expired, please restart',
-    'batch_create_count_range_error': '❌ Count must be between 1-10, please re-enter',
+    'batch_create_count_range_error': '❌ Số lượng must be between 1-10, please re-enter',
     'batch_create_faiđã': '❌ Creation faiđã',
     'batch_create_error': 'Lỗi: {error}',
     'error_upload_zip_only': '❌ Please upload ZIP format archive',
     
-    # Batch Create - Progress Messages
-    'batch_create_progress_completed': 'Completed {count}',
-    'batch_create_status_completed': 'Status: Completed {count}',
+    # Batch Tạo - Tiến trình Messages
+    'batch_create_progress_completed': 'Hoàn thànhd {count}',
+    'batch_create_status_completed': 'Trạng thái: Hoàn thànhd {count}',
     
     # ===== Forget 2FA Feature =====
     # 1. Feature Introduction Page
@@ -633,12 +633,12 @@ TEXTS = {
     'forget_2fa_upload_auto': '· Auto-detect file format',
     'forget_2fa_result_categories': '📊 Result Categories:',
     'forget_2fa_category_reset': '· ✅ Reset Requested - Thành Côngfully requested password reset (wait 7 days)',
-    'forget_2fa_category_no_reset': '· ⚠️ Không có Reset Needed - Account has no 2FA password',
+    'forget_2fa_category_no_reset': '· ⚠️ Không có Reset Needed - Tài khoản has no 2FA password',
     'forget_2fa_category_cooling': '· ⏳ In Cooling Period - Already in cooling period',
-    'forget_2fa_category_faiđã': '· ❌ Thất Bại - Connection faiđã/other errors',
+    'forget_2fa_category_faiđã': '· ❌ Thất Bại - Kết nối faiđã/other errors',
     'forget_2fa_back_menu': 'Quay Lại Menu Chính',
     
-    # 2. Processing Progress
+    # 2. Đang xử lý Tiến trình
     'forget_2fa_processing': '🔓 Đang Xử Lý Quên 2FA...',
     'forget_2fa_progress': 'Tiến Trình: {done}/{total} ({percent}%)',
     'forget_2fa_elapsed': '⏱ Elapsed: {time}s',
@@ -649,28 +649,28 @@ TEXTS = {
     'forget_2fa_stat_faiđã': '❌ Thất Bại: {count}',
     'forget_2fa_stat_pending': '📊 Pending: {count}',
     'forget_2fa_current': 'Current: {filename}...',
-    'forget_2fa_status_reset': 'Status: ✅ Reset Requested',
-    'forget_2fa_status_no_reset': 'Status: ⚠️ Không có Reset Needed',
-    'forget_2fa_status_cooling': 'Status: ⏳ In Cooling Period',
-    'forget_2fa_status_faiđã': 'Status: ❌ Thất Bại',
+    'forget_2fa_status_reset': 'Trạng thái: ✅ Reset Requested',
+    'forget_2fa_status_no_reset': 'Trạng thái: ⚠️ Không có Reset Needed',
+    'forget_2fa_status_cooling': 'Trạng thái: ⏳ In Cooling Period',
+    'forget_2fa_status_faiđã': 'Trạng thái: ❌ Thất Bại',
     'forget_2fa_proxy_using': 'Proxy: ✅ Using Proxy',
     'forget_2fa_proxy_local': 'Proxy: ❌ Kết Nối Cục Bộ',
     
-    # 3. Processing Complete
-    'forget_2fa_complete': '✅ Quên 2FA Đang Xử Lý Complete!',
+    # 3. Đang xử lý Hoàn thành
+    'forget_2fa_complete': '✅ Quên 2FA Đang Xử Lý Hoàn thành!',
     'forget_2fa_results': '📊 Đang Xử Lý Results',
-    'forget_2fa_total_accounts': '· Total tài khoản: {count}',
+    'forget_2fa_total_accounts': '· Tổng tài khoản: {count}',
     'forget_2fa_result_reset': '· ✅ Reset Requested: {count}',
     'forget_2fa_result_no_reset': '· ⚠️ Không có Reset Needed: {count}',
     'forget_2fa_result_cooling': '· ⏳ In Cooling Period: {count}',
     'forget_2fa_result_faiđã': '· ❌ Thất Bại: {count}',
-    'forget_2fa_total_time': '⏱ Total time: {time}s',
+    'forget_2fa_total_time': '⏱ Tổng time: {time}s',
     'forget_2fa_batch_id': '🆔 Batch ID: {batch_id}',
     'forget_2fa_notes': '📝 Notes:',
-    'forget_2fa_notes_wait': '· Accounts with reset requested need to wait 7-day cooling period',
+    'forget_2fa_notes_wait': '· Tài khoảns with reset requested need to wait 7-day cooling period',
     'forget_2fa_notes_remove': '· 2FA password will be removed after cooling period ends',
     
-    # 4. Result File Naming
+    # 4. Result Tệp Naming
     'zip_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}',
     'zip_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}',
     'zip_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}',
@@ -679,45 +679,45 @@ TEXTS = {
     'file_desc_forget_2fa_no_reset': '📦 Quên 2FA - Không có Reset Needed ({count})',
     'file_desc_forget_2fa_cooling': '📦 Quên 2FA - In Cooling Period ({count})',
     'file_desc_forget_2fa_faiđã': '📦 Quên 2FA - Thất Bại ({count})',
-    'report_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}_Report.txt',
-    'report_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}_Report.txt',
-    'report_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}_Report.txt',
-    'report_forget_2fa_faiđã': 'Forgot2FA_Thất Bại_{count}_Report.txt',
-    'report_desc_forget_2fa_reset': '📋 Detaiđã Report - Reset Requested',
-    'report_desc_forget_2fa_no_reset': '📋 Detaiđã Report - Không có Reset Needed',
-    'report_desc_forget_2fa_cooling': '📋 Detaiđã Report - In Cooling Period',
-    'report_desc_forget_2fa_faiđã': '📋 Detaiđã Report - Thất Bại',
+    'report_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}_Báo cáo.txt',
+    'report_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}_Báo cáo.txt',
+    'report_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}_Báo cáo.txt',
+    'report_forget_2fa_faiđã': 'Forgot2FA_Thất Bại_{count}_Báo cáo.txt',
+    'report_desc_forget_2fa_reset': '📋 Detaiđã Báo cáo - Reset Requested',
+    'report_desc_forget_2fa_no_reset': '📋 Detaiđã Báo cáo - Không có Reset Needed',
+    'report_desc_forget_2fa_cooling': '📋 Detaiđã Báo cáo - In Cooling Period',
+    'report_desc_forget_2fa_faiđã': '📋 Detaiđã Báo cáo - Thất Bại',
     
-    # 5. Report TXT Template - Reset Requested
-    'report_forget_2fa_title_reset': 'Quên 2FA Report - Reset Requested',
-    'report_forget_2fa_total': 'Total: {count}',
+    # 5. Báo cáo TXT Template - Reset Requested
+    'report_forget_2fa_title_reset': 'Quên 2FA Báo cáo - Reset Requested',
+    'report_forget_2fa_total': 'Tổng: {count}',
     'report_forget_2fa_generated': 'Generated: {time}',
     'report_forget_2fa_detail_list': 'Detail List:',
     'report_forget_2fa_item_reset': '✅ {filename}',
     'report_forget_2fa_phone': 'Phone: {phone}',
-    'report_forget_2fa_status_reset_waiting': 'Status: Mật khẩu reset requested, waiting for cooling period, until: {date}',
+    'report_forget_2fa_status_reset_waiting': 'Trạng thái: Mật khẩu reset requested, waiting for cooling period, until: {date}',
     'report_forget_2fa_proxy_using': 'Proxy: ✅ Using Proxy',
     'report_forget_2fa_proxy_local': 'Proxy: ❌ Kết Nối Cục Bộ',
     'report_forget_2fa_cooling_until': 'Cooling period until: {date}',
     'report_forget_2fa_duration': 'Duration: {time}s',
     
-    # 6. Report TXT Template - Không có Reset Needed
-    'report_forget_2fa_title_no_reset': 'Quên 2FA Report - Không có Reset Needed',
+    # 6. Báo cáo TXT Template - Không có Reset Needed
+    'report_forget_2fa_title_no_reset': 'Quên 2FA Báo cáo - Không có Reset Needed',
     'report_forget_2fa_item_no_reset': '⚠️ {filename}',
-    'report_forget_2fa_status_detect_faiđã': 'Status: Thất Bại to detect 2FA status: {error}',
-    'report_forget_2fa_status_no_2fa': 'Status: Account has no 2FA password set',
+    'report_forget_2fa_status_detect_faiđã': 'Trạng thái: Thất Bại to detect 2FA status: {error}',
+    'report_forget_2fa_status_no_2fa': 'Trạng thái: Tài khoản has no 2FA password set',
     
-    # 7. Report TXT Template - In Cooling Period
-    'report_forget_2fa_title_cooling': 'Quên 2FA Report - In Cooling Period',
+    # 7. Báo cáo TXT Template - In Cooling Period
+    'report_forget_2fa_title_cooling': 'Quên 2FA Báo cáo - In Cooling Period',
     'report_forget_2fa_item_cooling': '⏳ {filename}',
-    'report_forget_2fa_status_in_cooling': 'Status: Already in cooling period, until: {date}',
+    'report_forget_2fa_status_in_cooling': 'Trạng thái: Already in cooling period, until: {date}',
     
-    # 8. Report TXT Template - Faiđã
-    'report_forget_2fa_title_faiđã': 'Quên 2FA Report - Thất Bại',
+    # 8. Báo cáo TXT Template - Faiđã
+    'report_forget_2fa_title_faiđã': 'Quên 2FA Báo cáo - Thất Bại',
     'report_forget_2fa_item_faiđã': '❌ {filename}',
-    'report_forget_2fa_status_connection_faiđã': 'Status: Connection faiđã (all proxy and local faiđã)',
+    'report_forget_2fa_status_connection_faiđã': 'Trạng thái: Kết nối faiđã (all proxy and local faiđã)',
     
-    # 9. Initialization and Processing Messages
+    # 9. Initialization and Đang xử lý Messages
     'forget_2fa_found_accounts': '📊 Found {count} tài khoản',
     'forget_2fa_format': '📁 Định Dạng: {format}',
     'forget_2fa_proxy_count': '📡 Proxy: {count} available',
@@ -725,10 +725,10 @@ TEXTS = {
     'forget_2fa_processing_file': '📥 Đang Xử Lý your file...',
     'forget_2fa_no_valid_files': '❌ Không có valid tệp found',
     'forget_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format tệp',
-    'forget_2fa_sending_results': '📦 Sending result tệp...',
+    'forget_2fa_sending_results': '📦 Đang gửi result tệp...',
     'forget_2fa_send_faiđã': '❌ Thất Bại to send result tệp',
     
-    # 10. Status Mapping Text
+    # 10. Trạng thái Mapping Text
     'forget_2fa_status_requested': 'Reset Requested',
     'forget_2fa_status_no_2fa': 'Không có Reset Needed',
     'forget_2fa_status_cooling': 'In Cooling Period',
@@ -736,9 +736,9 @@ TEXTS = {
     'forget_2fa_status_local': 'Kết Nối Cục Bộ',
     'forget_2fa_status_unknown': 'Unknown',
     
-    # ===== Delete 2FA Feature =====
+    # ===== Xóa 2FA Feature =====
     # 1. Feature Introduction Page
-    'delete_2fa_title': '❌ Batch Delete 2FA Mật khẩu',
+    'delete_2fa_title': '❌ Batch Xóa 2FA Mật khẩu',
     'delete_2fa_core_features': '✨ Core Features',
     'delete_2fa_auto_detect': '🔍 Auto Mật khẩu Detection',
     'delete_2fa_tdata_detect': 'TData format: Auto-detect 2fa.txt, twofa.txt, password.txt',
@@ -749,10 +749,10 @@ TEXTS = {
     'delete_2fa_auto_read': 'Auto-detect: Read current password from file',
     'delete_2fa_manual_input': 'Manual input: Người Dùng enters current 2FA password',
     'delete_2fa_timeout': '5-minute input timeout protection',
-    'delete_2fa_auto_update': '🔄 Auto Update Mật khẩu Files',
+    'delete_2fa_auto_update': '🔄 Auto Cập nhật Mật khẩu Tệps',
     'delete_2fa_session_update': 'Session format: Unified twofa field cleared, removes other password fields',
     'delete_2fa_tdata_update': 'TData format: Auto-delete or clear 2fa.txt and other password tệp',
-    'delete_2fa_sync_update': 'Files sync immediately after successful deletion',
+    'delete_2fa_sync_update': 'Tệps sync immediately after successful deletion',
     'delete_2fa_no_manual_edit': 'Không có manual config file editing needed',
     'delete_2fa_notes': '⚠️ Notes',
     'delete_2fa_note1': 'After deleting 2FA, account will no longer require 2FA password',
@@ -764,7 +764,7 @@ TEXTS = {
     'delete_2fa_upload_prompt': '🚀 Please upload your ZIP file...',
     'delete_2fa_back_menu': 'Quay Lại Menu Chính',
     
-    # 2. Password Input Method Selection
+    # 2. Mật khẩu Input Method Chọnion
     'delete_2fa_found_files': '📁 Found {count} account tệp',
     'delete_2fa_file_type': '📊 Loại tệp: {type}',
     'delete_2fa_select_method': '🔐 Please select password input method:',
@@ -780,35 +780,35 @@ TEXTS = {
     'delete_2fa_btn_manual': 'Manual Input Mật khẩu',
     'delete_2fa_btn_cancel': 'Hủy',
     
-    # 3. Manual Password Input
+    # 3. Manual Mật khẩu Input
     'delete_2fa_enter_password': '🔐 Please enter current 2FA password:',
     'delete_2fa_enter_desc1': '· Enter your current 2FA password',
     'delete_2fa_enter_desc2': '· System will verify password and delete 2FA',
     'delete_2fa_enter_desc3': '· Please send password within 5 minutes...',
     'delete_2fa_cancel_hint': '💡 To cancel, click /start to return to main menu',
     
-    # 4. Deletion Progress
+    # 4. Deletion Tiến trình
     'delete_2fa_in_progress': '🗑️ Deleting 2FA password...',
     'delete_2fa_current_progress': '📊 Current Tiến Trình',
     'delete_2fa_processed': '· Processed: {done}/{total}',
     'delete_2fa_speed': '· Tốc Độ: {speed}/sec',
     'delete_2fa_elapsed': '· Duration: {time}s',
-    'delete_2fa_success_count': '✅ Delete success: {count}',
-    'delete_2fa_faiđã_count': '❌ Delete faiđã: {count}',
+    'delete_2fa_success_count': '✅ Xóa success: {count}',
+    'delete_2fa_faiđã_count': '❌ Xóa faiđã: {count}',
     'delete_2fa_remaining': '⏱️ Est. remaining: {time}s',
     
-    # 5. Deletion Complete
+    # 5. Deletion Hoàn thành
     'delete_2fa_complete': '🎉 2FA password deletion complete!',
     'delete_2fa_stats': '📊 Deletion Stats',
-    'delete_2fa_total': '· Total: {count}',
+    'delete_2fa_total': '· Tổng: {count}',
     'delete_2fa_success': '· ✅ Thành Công: {count}',
     'delete_2fa_faiđã': '· ❌ Thất Bại: {count}',
     'delete_2fa_duration': '· ⏱️ Duration: {time}s',
     'delete_2fa_speed_stat': '· 🚀 Tốc Độ: {speed}/sec',
-    'delete_2fa_sending_results': '📦 Sending result tệp...',
+    'delete_2fa_sending_results': '📦 Đang gửi result tệp...',
     
-    # 6. Task Complete Summary
-    'delete_2fa_task_complete': '✅ Delete 2FA task complete!',
+    # 6. Task Hoàn thành Tóm tắt
+    'delete_2fa_task_complete': '✅ Xóa 2FA task complete!',
     'delete_2fa_final_stats': '📊 Final Statistics',
     'delete_2fa_final_success': '· Thành Công: {count}',
     'delete_2fa_final_faiđã': '· Thất Bại: {count}',
@@ -818,49 +818,49 @@ TEXTS = {
     'delete_2fa_tip2': '· Mật khẩu config in tệp has been auto-cleared',
     'delete_2fa_tip3': '· Please keep result tệp safe',
     
-    # 7. Result File Naming
-    'zip_delete_2fa_success': 'Delete2FA_Thành Công_{count}',
-    'zip_delete_2fa_faiđã': 'Delete2FA_Thất Bại_{count}',
+    # 7. Result Tệp Naming
+    'zip_delete_2fa_success': 'Xóa2FA_Thành Công_{count}',
+    'zip_delete_2fa_faiđã': 'Xóa2FA_Thất Bại_{count}',
     'file_desc_delete_2fa_success': '📦 Thành Công ({count} tài khoản)',
     'file_desc_delete_2fa_faiđã': '📦 Thất Bại ({count} tài khoản)',
     'delete_2fa_process_time': '⏰ Process time: {time}',
-    'report_delete_2fa_success': 'Delete2FA_Thành Công_{count}_Report.txt',
-    'report_delete_2fa_faiđã': 'Delete2FA_Thất Bại_{count}_Report.txt',
-    'report_desc_delete_2fa_success': '📋 Thành Công Detaiđã Report',
-    'report_desc_delete_2fa_faiđã': '📋 Thất Bại Detaiđã Report',
+    'report_delete_2fa_success': 'Xóa2FA_Thành Công_{count}_Báo cáo.txt',
+    'report_delete_2fa_faiđã': 'Xóa2FA_Thất Bại_{count}_Báo cáo.txt',
+    'report_desc_delete_2fa_success': '📋 Thành Công Detaiđã Báo cáo',
+    'report_desc_delete_2fa_faiđã': '📋 Thất Bại Detaiđã Báo cáo',
     'report_delete_2fa_contains': 'Chứa details of {count} tài khoản',
     
-    # 8. Report TXT Template - Success
-    'report_delete_2fa_title_success': '2FA Mật khẩu Deletion Report - Thành Công',
-    'report_delete_2fa_total': 'Total: {count}',
+    # 8. Báo cáo TXT Template - Thành công
+    'report_delete_2fa_title_success': '2FA Mật khẩu Deletion Báo cáo - Thành Công',
+    'report_delete_2fa_total': 'Tổng: {count}',
     'report_delete_2fa_generated': 'Generated: {time}',
     'report_delete_2fa_detail_list': 'Detail List:',
-    'report_delete_2fa_account': 'Account: {account}',
+    'report_delete_2fa_account': 'Tài khoản: {account}',
     'report_delete_2fa_details': 'Details: {info}',
     'report_delete_2fa_process_time': 'Process time: {time}',
     'report_delete_2fa_using_proxy': 'Using proxy',
-    'report_delete_2fa_local_connection': 'Local connection',
+    'report_delete_2fa_local_connection': 'Cục bộ connection',
     'report_delete_2fa_success_msg': 'Mật khẩu deleted successfully, file updated',
     'report_delete_2fa_success_no_json': '2FA password deleted',
     'report_delete_2fa_success_with_json': '2FA password deleted, file updated',
     'report_delete_2fa_success_update_faiđã': '2FA password deleted, but file update faiđã',
     'report_delete_2fa_manual_faiđã': 'Manual deletion faiđã',
-    'report_delete_2fa_error_unauthorized': 'Account unauthorized',
+    'report_delete_2fa_error_unauthorized': 'Tài khoản unauthorized',
     'report_delete_2fa_error_wrong_password': 'Wrong password',
     'report_delete_2fa_error_no_2fa': '2FA not set',
     'report_delete_2fa_error_flood': 'Too many requests, please try later',
-    'report_delete_2fa_error_frozen': 'Account frozen/banned',
+    'report_delete_2fa_error_frozen': 'Tài khoản frozen/banned',
     'report_delete_2fa_error_deletion_faiđã': 'Deletion faiđã',
     'report_delete_2fa_error_network': 'Network connection faiđã',
     'report_delete_2fa_error_general': 'Lỗi',
     'report_delete_2fa_error_session_not_found': 'Converted session file not found',
     'report_delete_2fa_error_exception': 'Exception',
     
-    # 9. Report TXT Template - Faiđã
-    'report_delete_2fa_title_faiđã': '2FA Mật khẩu Deletion Report - Thất Bại',
+    # 9. Báo cáo TXT Template - Faiđã
+    'report_delete_2fa_title_faiđã': '2FA Mật khẩu Deletion Báo cáo - Thất Bại',
     'report_delete_2fa_error': 'Lỗi: {error}',
     'report_delete_2fa_failure_analysis': 'Failure Analysis and Solutions:',
-    'report_delete_2fa_reason_unauthorized': 'Account unauthorized',
+    'report_delete_2fa_reason_unauthorized': 'Tài khoản unauthorized',
     'report_delete_2fa_reason_unauthorized_desc1': 'TData file may not be logged in or expired',
     'report_delete_2fa_reason_unauthorized_desc2': 'Suggest re-login account',
     'report_delete_2fa_reason_wrong_password': 'Wrong old password',
@@ -871,16 +871,16 @@ TEXTS = {
     'report_delete_2fa_reason_network_desc2': 'Try local connection or change proxy',
     
     # 10. Other Messages
-    'delete_2fa_starting': '🗑️ Starting 2FA password deletion...',
+    'delete_2fa_starting': '🗑️ Đang bắt đầu 2FA password deletion...',
     'delete_2fa_found_count': '📊 Found {count} tệp',
-    'delete_2fa_please_wait': '⏳ Đang Xử Lý, please wait...',
+    'delete_2fa_please_wait': '⏳ Đang Xử Lý, vui lòng đợi...',
     'delete_2fa_processing_file': '📥 Đang Xử Lý your file...',
     'delete_2fa_no_valid_files': '❌ Không có valid tệp found',
     'delete_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account tệp',
-    'delete_2fa_faiđã_msg': '❌ Delete 2FA faiđã',
+    'delete_2fa_faiđã_msg': '❌ Xóa 2FA faiđã',
     'delete_2fa_error_msg': 'Lỗi: {error}',
     
-    # ===== Add 2FA Feature =====
+    # ===== Thêm 2FA Feature =====
     # 1. Feature Introduction Page
     'add_2fa_title': '➕ Thêm 2FA Mật khẩu',
     'add_2fa_features': '📋 Features:',
@@ -891,72 +891,72 @@ TEXTS = {
     'add_2fa_format1': '· Lưu trữ ZIP (containing Session or TData)',
     'add_2fa_format2': '· Auto-detect file type and add corresponding 2FA config',
     'add_2fa_rules': '⚙️ Đang Xử Lý rules:',
-    'add_2fa_rule1': '· Session file → Create JSON file with same name (contains twofa field)',
-    'add_2fa_rule2': '· TData directory → Create 2fa.txt file (same level as tdata)',
+    'add_2fa_rule1': '· Session file → Tạo JSON file with same name (contains twofa field)',
+    'add_2fa_rule2': '· TData directory → Tạo 2fa.txt file (same level as tdata)',
     'add_2fa_upload_prompt': '📤 Vui lòng tải lên các tệp tài khoản của bạn',
     'add_2fa_back_menu': 'Quay Lại Menu Chính',
     
-    # 2. Processing
+    # 2. Đang xử lý
     'add_2fa_processing': 'Đang Xử Lý tệp....',
     
-    # 3. Scan Complete
-    'add_2fa_scan_complete': '✅ File scan complete!',
+    # 3. Scan Hoàn thành
+    'add_2fa_scan_complete': '✅ Tệp scan complete!',
     'add_2fa_statistics': '📊 Statistics',
-    'add_2fa_total_accounts': '· Total tài khoản: {count}',
+    'add_2fa_total_accounts': '· Tổng tài khoản: {count}',
     'add_2fa_file_type': '· Loại tệp: {type}',
     
-    # 4. Enter Password
+    # 4. Enter Mật khẩu
     'add_2fa_enter_password': '📝 Please enter the 2FA password to set',
     'add_2fa_enter_desc1': '· This password will apply to all tài khoản',
     'add_2fa_enter_desc2': '· Session tệp will create corresponding JSON config tệp',
     'add_2fa_enter_desc3': '· TData directories will create 2fa.txt tệp',
     'add_2fa_timeout': '⏰ Auto-cancel if not entered within 5 minutes',
     
-    # 5. Password Received
+    # 5. Mật khẩu Received
     'add_2fa_password_received': '✅ 2FA password received',
     'add_2fa_password_display': 'Mật khẩu: {password}',
     'add_2fa_processing_now': 'Đang Xử Lý...',
     
-    # 6. Add Complete
+    # 6. Thêm Hoàn thành
     'add_2fa_complete': '✅ Thêm 2FA complete!',
     'add_2fa_results': '📊 Đang Xử Lý Results',
     'add_2fa_success': '· Thành Công: {count}',
     'add_2fa_faiđã': '· Thất Bại: {count}',
-    'add_2fa_total': '· Total: {count}',
+    'add_2fa_total': '· Tổng: {count}',
     'add_2fa_duration': '· Duration: {time}s',
     'add_2fa_password_set': '🔐 2FA password set: {password}',
     
-    # 7. Result File Naming
+    # 7. Result Tệp Naming
     'zip_add_2fa_result': 'add_2fa_result_{timestamp}',
     'file_desc_add_2fa_success': '📦 Thêm 2FA Result - Thành Công {count}',
-    'zip_add_2fa_success': 'Add2FA_Thành Công_{count}',
-    'zip_add_2fa_faiđã': 'Add2FA_Thất Bại_{count}',
+    'zip_add_2fa_success': 'Thêm2FA_Thành Công_{count}',
+    'zip_add_2fa_faiđã': 'Thêm2FA_Thất Bại_{count}',
     'file_desc_add_2fa_success_count': '📦 Thành Công ({count} tài khoản)',
     'file_desc_add_2fa_faiđã_count': '📦 Thất Bại ({count} tài khoản)',
-    'report_add_2fa_success': 'Add2FA_Thành Công_{count}_Report.txt',
-    'report_add_2fa_faiđã': 'Add2FA_Thất Bại_{count}_Report.txt',
-    'report_desc_add_2fa_success': '📋 Thành Công Detaiđã Report',
-    'report_desc_add_2fa_faiđã': '📋 Thất Bại Detaiđã Report',
+    'report_add_2fa_success': 'Thêm2FA_Thành Công_{count}_Báo cáo.txt',
+    'report_add_2fa_faiđã': 'Thêm2FA_Thất Bại_{count}_Báo cáo.txt',
+    'report_desc_add_2fa_success': '📋 Thành Công Detaiđã Báo cáo',
+    'report_desc_add_2fa_faiđã': '📋 Thất Bại Detaiđã Báo cáo',
     
-    # 8. Report TXT Template
-    'report_add_2fa_title_success': '2FA Mật khẩu Add Report - Thành Công',
-    'report_add_2fa_title_faiđã': '2FA Mật khẩu Add Report - Thất Bại',
-    'report_add_2fa_total': 'Total: {count}',
+    # 8. Báo cáo TXT Template
+    'report_add_2fa_title_success': '2FA Mật khẩu Thêm Báo cáo - Thành Công',
+    'report_add_2fa_title_faiđã': '2FA Mật khẩu Thêm Báo cáo - Thất Bại',
+    'report_add_2fa_total': 'Tổng: {count}',
     'report_add_2fa_generated': 'Generated: {time}',
     'report_add_2fa_detail_list': 'Detail List:',
-    'report_add_2fa_account': 'Account: {account}',
+    'report_add_2fa_account': 'Tài khoản: {account}',
     'report_add_2fa_details': 'Details: {info}',
     'report_add_2fa_process_time': 'Process time: {time}',
     'report_add_2fa_config_created': '2FA config file created',
     
-    # 9. Errors and Other Messages
+    # 9. Lỗis and Other Messages
     'add_2fa_no_pending_task': '❌ Không có pending Thêm 2FA task, please start over',
     'add_2fa_operation_timeout': '❌ Operation timeout, please start over',
     'add_2fa_password_empty': '❌ 2FA password cannot be empty, please re-enter',
     'add_2fa_no_valid_files': '❌ Không có valid tệp found',
     'add_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account tệp',
     'add_2fa_processing_file': '📥 Đang Xử Lý your file...',
-    'add_2fa_processing_config': '🔄 Adding 2FA config...',
+    'add_2fa_processing_config': '🔄 Thêming 2FA config...',
     'add_2fa_processing_faiđã': '❌ Đang Xử Lý faiđã',
     'add_2fa_error': 'Lỗi: {error}',
     'add_2fa_result_success_desc': '✅ Thành Công',
@@ -964,59 +964,59 @@ TEXTS = {
     'add_2fa_result_error_desc': '❌ Lỗi',
     'add_2fa_need_member': '❌ Thành Viên required to use Thêm 2FA feature',
     
-    # ===== Account Split Feature =====
+    # ===== Tài khoản Split Feature =====
     # 1. Feature Introduction Page
-    'split_title': '📦 Account File Classification',
+    'split_title': '📦 Tài khoản Tệp Classification',
     'split_features': '🎯 Features',
     'split_features_desc': 'Support uploading ZIP tệp with multiple tài khoản (TData directories or Session+JSON tệp), auto-detect and classify:',
     'split_methods': '📋 Supported Classification Methods',
-    'split_method_country': '1️⃣ Split by Country Code',
+    'split_method_country': '1️⃣ Split by Số lượngry Code',
     'split_method_country_desc1': '· Auto-detect phone number → area code → country',
     'split_method_country_desc2': '· Generate one ZIP per country',
-    'split_method_country_desc3': '· Naming: Country+Code+Count',
+    'split_method_country_desc3': '· Naming: Số lượngry+Code+Số lượng',
     'split_method_quantity': '2️⃣ Split by Quantity',
     'split_method_quantity_desc1': '· Support single or multiple quantities',
     'split_method_quantity_desc2': '· Mixed countries use "Mixed" label naming',
-    'split_method_quantity_desc3': '· All unidentified use "Unknown" label naming',
+    'split_method_quantity_desc3': '· Tất cả unidentified use "Unknown" label naming',
     'split_steps': '💡 Usage Steps',
     'split_step1': '1. Click button below to start',
-    'split_step2': '2. Upload ZIP file with tài khoản',
-    'split_step3': '3. Select split method',
+    'split_step2': '2. Tải lên ZIP file with tài khoản',
+    'split_step3': '3. Chọn split method',
     'split_step4': '4. Wait for processing and receive results',
     'split_notes': '⚠️ Notes',
     'split_note1': '· Support TData and Session formats',
-    'split_note2': '· File size limit 100MB',
+    'split_note2': '· Tệp size limit 100MB',
     'split_note3': '· Auto-detect phone number and country info',
-    'split_start_upload': '📤 Start Upload',
+    'split_start_upload': '📤 Start Tải lên',
     'split_back_menu': '◀️ Quay Lại Menu Chính',
     
-    # 2. Upload File
+    # 2. Tải lên Tệp
     'split_upload_prompt': '📤 Please upload account tệp',
     'split_formats': 'Định dạng được hỗ trợ:',
     'split_format1': '· Session tệp ZIP (.session)',
     'split_format2': '· Session+JSON tệp ZIP (.session + .json)',
     'split_format3': '· TData thư mục ZIP',
-    'split_size_limit': '⚠️ File size limit 100MB',
+    'split_size_limit': '⚠️ Tệp size limit 100MB',
     'split_timeout': '⏰ 5 minutes timeout',
     'split_back': 'Quay Lại Menu Chính',
     
-    # 3. Scan Complete
-    'split_scan_complete': '✅ File scan complete!',
+    # 3. Scan Hoàn thành
+    'split_scan_complete': '✅ Tệp scan complete!',
     'split_statistics': '📊 Statistics',
-    'split_total_accounts': '· Total tài khoản: {count}',
+    'split_total_accounts': '· Tổng tài khoản: {count}',
     'split_identified': '· Identified: {count}',
     'split_unidentified': '· Unidentified: {count}',
     'split_file_type': '· Loại tệp: {type}',
     'split_select_method': '🎯 Please select split method:',
     
-    # 4. Select Split Method Buttons
+    # 4. Chọn Split Method Buttons
     'split_select_prompt': 'Please select split method:',
-    'split_btn_country': '🌍 Split by Country',
+    'split_btn_country': '🌍 Split by Số lượngry',
     'split_btn_quantity': '🔢 Split by Quantity',
     'split_btn_cancel': '❌ Hủy',
     
-    # 5. Select Quantity Mode
-    'split_quantity_mode': '🔢 Select quantity mode:',
+    # 5. Chọn Quantity Chế độ
+    'split_quantity_mode': '🔢 Chọn quantity mode:',
     'split_single_quantity': '1️⃣ Single Quantity',
     'split_single_quantity_desc': 'Split by fixed quantity, e.g. 10 per package',
     'split_multiple_quantity': '🔢 Multiple Quantities',
@@ -1037,40 +1037,40 @@ TEXTS = {
     'split_enter_multiple_desc': 'System will split in order: 1st package 10, 2nd package 20, 3rd package 30',
     'split_enter_multiple_remainder': 'Remainder will be notified but not packaged',
     
-    # 8. Processing
-    'split_sending_results': '📤 Sending results...',
+    # 8. Đang xử lý
+    'split_sending_results': '📤 Đang gửi results...',
     'split_processing': 'Đang Xử Lý...',
     'split_processing_file': '📥 Đang Xử Lý your file...',
-    'split_processing_country': '🔄 Starting split by country...',
+    'split_processing_country': '🔄 Đang bắt đầu split by country...',
     'split_processing_country_desc': 'Grouping and packaging...',
-    'split_processing_quantity_single': '🔄 Starting split by quantity...',
+    'split_processing_quantity_single': '🔄 Đang bắt đầu split by quantity...',
     'split_processing_quantity_single_desc': '{qty} tài khoản per package',
-    'split_processing_quantity_multi': '🔄 Starting split by quantity...',
+    'split_processing_quantity_multi': '🔄 Đang bắt đầu split by quantity...',
     'split_processing_quantity_multi_sequence': 'Quantity sequence: {sequence}',
-    'split_processing_quantity_multi_total': 'Total tài khoản: {total}',
+    'split_processing_quantity_multi_total': 'Tổng tài khoản: {total}',
     'split_processing_quantity_multi_requested': 'Requested quantity: {requested}',
     'split_remainder_unallocated': '⚠️ Remaining {remainder} tài khoản unallocated',
     'split_remainder_exceeded': '⚠️ Requested quantity exceeded, last package may be insufficient',
     
-    # Error messages
+    # Lỗi messages
     'split_error_no_task': '❌ Không có pending classification task',
     'split_error_qty_exceeds': '❌ Quantity {qty} exceeds total tài khoản {total}',
     
-    # 9. Classification Complete
+    # 9. Classification Hoàn thành
     'split_complete': '✅ Classification complete!',
-    'split_result_total': '· Total tài khoản: {count}',
+    'split_result_total': '· Tổng tài khoản: {count}',
     'split_result_sent': '· Sent: {count} tệp',
-    'split_result_method_country': '· Classification: By Country Code',
+    'split_result_method_country': '· Classification: By Số lượngry Code',
     'split_result_method_quantity': '· Classification: By Quantity',
     'split_result_sequence': '· Quantity sequence: {sequence}',
     'split_use_again': 'To use again, click /start',
     
-    # 10. Result File Naming
+    # 10. Result Tệp Naming
     'split_file_contains': 'Chứa {count} tài khoản',
     'split_mixed': 'Mixed',
     'split_unknown': 'Unknown',
     
-    # 11. Country Name Translations
+    # 11. Số lượngry Name Translations
     'country_czech_republic': 'Czech Republic',
     'country_china': 'China',
     'country_united_states': 'United States',
@@ -1189,7 +1189,7 @@ TEXTS = {
     'country_hong_kong': 'Hong Kong',
     'country_macau': 'Macau',
     
-    # Additional countries
+    # Thêmitional countries
     'country_afghanistan': 'Afghanistan',
     'country_albania': 'Albania',
     'country_andorra': 'Andorra',
@@ -1336,7 +1336,7 @@ TEXTS = {
     'country_us_virgin_islands': 'U.S. Virgin Islands',
     'country_antarctica': 'Antarctica',
     
-    # ===== API Conversion Feature =====
+    # ===== API Chuyển đổi Feature =====
     # Feature introduction page
     'api_title': '🔗 API Chuyển Đổi Định Dạng',
     'api_core_features': '🎯 Core Features',
@@ -1350,14 +1350,14 @@ TEXTS = {
     'api_verify_feature3': '· Support HTTP API call to get verification code',
     'api_verify_feature4': '· 5-minute auto-expiry protection',
     'api_usage': '📤 Usage',
-    'api_usage_step1': '1. Upload ZIP file (containing TData or Session)',
+    'api_usage_step1': '1. Tải lên ZIP file (containing TData or Session)',
     'api_usage_step2': '2. System auto-analyzes account info',
     'api_usage_step3': '3. Generate API format file and verification links',
-    'api_usage_step4': '4. Download and use results',
+    'api_usage_step4': '4. Tải xuống and use results',
     'api_upload_prompt': 'Please upload your file...',
     'api_back_menu': 'Quay Lại Menu Chính',
     
-    # Processing
+    # Đang xử lý
     'api_processing_file': 'Đang Xử Lý your file',
     
     # Scan complete
@@ -1372,7 +1372,7 @@ TEXTS = {
     'api_2fa_timeout': '⏰ 5 minutes timeout',
     'api_skip': 'skip',
     
-    # Conversion progress
+    # Chuyển đổi progress
     'api_converting': '🔄 API conversion in progress...',
     'api_progress': '📊 Chuyển đổi Tiến Trình',
     'api_progress_percent': '· Tiến Trình: {percent}% ({done}/{total})',
@@ -1380,7 +1380,7 @@ TEXTS = {
     'api_progress_faiđã': '· ❌ Thất Bại: {count}',
     'api_progress_speed': '· Avg speed: {speed}/sec',
     'api_progress_remaining': '· Est. remaining: {time} min',
-    'api_processing_status': '⚡ Đang Xử Lý Status',
+    'api_processing_status': '⚡ Đang Xử Lý Trạng thái',
     'api_file_type_session': '· Loại tệp: SESSION',
     'api_file_type_tdata': '· Loại tệp: TDATA',
     'api_2fa_mode_auto': '· 2FA mode: Auto-detect',
@@ -1388,16 +1388,16 @@ TEXTS = {
     'api_elapsed_time': '· Elapsed: {time}s',
     'api_failure_stats': '❌ Failure Statistics',
     
-    # Conversion complete
+    # Chuyển đổi complete
     'api_complete': '🎉 API format conversion complete!',
     'api_statistics': '📊 Chuyển đổi Statistics',
-    'api_stat_total': '· Total: {count}',
+    'api_stat_total': '· Tổng: {count}',
     'api_stat_success': '· ✅ Thành Công: {count} ({percent}%)',
     'api_stat_faiđã': '· ❌ Thất Bại: {count} ({percent}%)',
     'api_stat_duration': '· ⏱️ Duration: {time}s',
     'api_stat_speed': '· 🚀 Tốc Độ: {speed}/sec',
     'api_failure_details': '❌ Failure Details',
-    'api_sending_txt': '📄 Sending TXT file...',
+    'api_sending_txt': '📄 Đang gửi TXT file...',
     
     # Result files
     'api_result_filename': 'TG_API_{count}_tài khoản.txt',
@@ -1407,15 +1407,15 @@ TEXTS = {
     # Failure reason translations
     'api_failure_reason_conversion_faiđã': 'Chuyển đổi faiđã',
     'api_failure_reason_unauthorized': 'Unauthorized',
-    'api_failure_reason_timeout': 'Connection timeout',
+    'api_failure_reason_timeout': 'Kết nối timeout',
     'api_failure_reason_conversion_error': 'Chuyển đổi error',
     'api_failure_reason_concurrent_error': 'Concurrent error',
-    'api_failure_reason_file_not_exist': 'File not exist',
-    'api_failure_reason_file_corrupted': 'File corrupted',
+    'api_failure_reason_file_not_exist': 'Tệp not exist',
+    'api_failure_reason_file_corrupted': 'Tệp corrupted',
     'api_failure_reason_dir_not_exist': 'Directory not exist',
     'api_failure_reason_unknown': 'Unknown error',
     
-    # ===== File Rename Feature =====
+    # ===== Tệp Rename Feature =====
     # 1. Feature Introduction Page
     'rename_title': '📝 Đổi Tên Tệp',
     'rename_features': '💡 Features',
@@ -1427,33 +1427,33 @@ TEXTS = {
     'rename_timeout_upload': '⏰ Auto-cancel if no upload within 5 minutes',
     'rename_btn_cancel': 'Hủy',
     
-    # 2. File Received
-    'rename_file_received': '✅ File received',
+    # 2. Tệp Received
+    'rename_file_received': '✅ Tệp received',
     'rename_original_name': '📁 Original filename: {filename}',
-    'rename_file_size': '📏 File size: {size}',
+    'rename_file_size': '📏 Tệp size: {size}',
     'rename_enter_new_name': '✏️ Please enter new filename',
     'rename_name_only': '· Enter filename only (without extension)',
     'rename_ext_keep': '· Extension {ext} will be automatically kept',
     'rename_illegal_clean': '· Illegal characters will be auto-cleaned',
     'rename_timeout_input': '⏰ Auto-cancel if no input within 5 minutes',
     
-    # 3. Rename Success
-    'rename_success': '✅ File renamed successfully',
+    # 3. Rename Thành công
+    'rename_success': '✅ Tệp renamed successfully',
     'rename_old_name': 'Original filename: {old_name}',
     'rename_new_name': 'New filename: {new_name}',
     'rename_telegram_tip': '💡 If the filename is incorrect when downloading, it may be due to Telegram client restrictions\nThe actual file contains all characters, including Emoji and special brackets',
-    'rename_file_sent': '✅ File sent!',
+    'rename_file_sent': '✅ Tệp sent!',
     
-    # 4. Error Messages
+    # 4. Lỗi Messages
     'rename_no_task': '❌ Không có pending rename task',
-    'rename_download_faiđã': '❌ File download faiđã: {error}',
+    'rename_download_faiđã': '❌ Tệp download faiđã: {error}',
     'rename_invalid_name': '❌ Invalid filename, please re-enter',
-    'rename_send_faiđã': '❌ File send faiđã',
+    'rename_send_faiđã': '❌ Tệp send faiđã',
     'rename_faiđã': '❌ Rename faiđã: {error}',
     
-    # ===== Account Merge Feature =====
+    # ===== Tài khoản Merge Feature =====
     # 1. Feature Introduction Page
-    'merge_title': '🧩 Account File Merge',
+    'merge_title': '🧩 Tài khoản Tệp Merge',
     'merge_features': '💡 Features',
     'merge_feature1': '· Auto-extract all ZIP tệp',
     'merge_feature2': '· Recursively scan and identify TData tài khoản',
@@ -1463,40 +1463,40 @@ TEXTS = {
     'merge_zip_only': '⚠️ Only .zip tệp accepted',
     'merge_multi_upload': '· Can upload multiple ZIP tệp',
     'merge_auto_scan': '· System will auto-extract and scan contents',
-    'merge_click_complete': 'Click "✅ Complete Merge" after upload',
+    'merge_click_complete': 'Click "✅ Hoàn thành Merge" after upload',
     
     # 2. Buttons
-    'merge_btn_complete': '✅ Complete Merge',
+    'merge_btn_complete': '✅ Hoàn thành Merge',
     'merge_btn_cancel': '❌ Hủy',
-    'merge_btn_continue': '📁 Continue Upload',
+    'merge_btn_continue': '📁 Continue Tải lên',
     
-    # 3. After File Upload
+    # 3. After Tệp Tải lên
     'merge_received_zip': '✅ Received ZIP file {count}',
-    'merge_filename': 'Filename: {filename}',
+    'merge_filename': 'Tệpname: {filename}',
     'merge_select_action': 'Please select next action:',
-    'merge_action_continue': '· Continue upload: Add more ZIP tệp',
-    'merge_action_complete': '· Complete merge: Start processing all tệp',
+    'merge_action_continue': '· Continue upload: Thêm more ZIP tệp',
+    'merge_action_complete': '· Hoàn thành merge: Start processing all tệp',
     
-    # 4. Processing
+    # 4. Đang xử lý
     'merge_processing': '🔄 Đang Xử Lý tệp...',
     
     # 5. Results
-    'merge_complete': '✅ Account file merge complete!',
+    'merge_complete': '✅ Tài khoản file merge complete!',
     'merge_results': '📊 Đang Xử Lý Results',
     'merge_result_zip': '· Extracted ZIP tệp: {count}',
     'merge_result_tdata': '· TData tài khoản: {count}',
     'merge_result_session': '· Session tệp: {count} (support pure Session or Session+JSON)',
-    'merge_generated': '📦 Generated Files',
-    'merge_total_files': 'Total {count} tệp (normal and duplicate tệp packed separately)',
+    'merge_generated': '📦 Generated Tệps',
+    'merge_total_files': 'Tổng {count} tệp (normal and duplicate tệp packed separately)',
     
-    # 6. Output File Descriptions
-    'merge_session_files': 'Session Files ({count} items)',
-    'merge_tdata_files': 'TData Files ({count} items)',
+    # 6. Output Tệp Descriptions
+    'merge_session_files': 'Session Tệps ({count} items)',
+    'merge_tdata_files': 'TData Tệps ({count} items)',
     
-    # 7. Error and Hint Messages
+    # 7. Lỗi and Hint Messages
     'merge_no_task': '❌ Không có pending merge task',
     'merge_zip_only_error': '❌ Only .zip tệp supported, please re-upload',
-    'merge_download_faiđã': '❌ File download faiđã: {error}',
+    'merge_download_faiđã': '❌ Tệp download faiđã: {error}',
     'merge_continue_upload_hint': '✅ Please continue uploading ZIP tệp',
     'merge_received_files': 'Received tệp: {count}',
     'merge_upload_next': '• Please upload next ZIP file',
@@ -1510,7 +1510,7 @@ TEXTS = {
     'cleanup_important': '⚠️ Important Notice',
     'cleanup_intro': 'This feature will perform the following operations on uploaded tài khoản:',
     'cleanup_action1': '· 🚪 Leave all groups and channels',
-    'cleanup_action2': '· 🗑️ Delete all chat history (revoke when possible)',
+    'cleanup_action2': '· 🗑️ Xóa all chat history (revoke when possible)',
     'cleanup_action3': '· 📇 Clear all contacts',
     'cleanup_action4': '· 📁 Archive remaining conversations',
     'cleanup_irreversible': '🔴 Irreversible Operation',
@@ -1526,30 +1526,30 @@ TEXTS = {
     'cleanup_btn_cancel': '❌ Hủy',
     'cleanup_btn_confirm': '✅ Xác Nhận Cleanup',
     
-    # 3. After File Upload
+    # 3. After Tệp Tải lên
     'cleanup_processing_file': 'Đang Xử Lý your file',
     'cleanup_found_accounts': '✅ Found {count} account tệp',
     'cleanup_type_session': '📊 Type: SESSION',
     'cleanup_type_tdata': '📊 Type: TDATA',
     
-    # 4. Confirm Cleanup
+    # 4. Xác nhận Cleanup
     'cleanup_confirm_title': '⚠️ Xác Nhận cleanup operation?',
     'cleanup_confirm_intro': 'This operation will:',
     'cleanup_confirm_action1': '· Leave all groups and channels',
-    'cleanup_confirm_action2': '· Delete all chat history',
+    'cleanup_confirm_action2': '· Xóa all chat history',
     'cleanup_confirm_action3': '· Clear all contacts',
     'cleanup_confirm_action4': '· Archive remaining conversations',
     'cleanup_confirm_warn': '🔴 This operation is irreversible!',
     
-    # 5. Processing Progress
-    'cleanup_starting': 'Starting cleanup',
+    # 5. Đang xử lý Tiến trình
+    'cleanup_starting': 'Đang bắt đầu cleanup',
     'cleanup_initializing': 'Initializing...',
-    'cleanup_in_progress': '🧹 Cleaning in progress, please wait.',
+    'cleanup_in_progress': '🧹 Cleaning in progress, vui lòng đợi.',
     'cleanup_current': '📄 Current: {filename}',
-    'cleanup_total_progress': '📊 Total progress: {current}/{total} ({percent}%)',
+    'cleanup_total_progress': '📊 Tổng progress: {current}/{total} ({percent}%)',
     'cleanup_eta': '⏳ Estimated completion: {time} remaining',
     'cleanup_eta_alt': 'Estimated completion time: {time} remaining',
-    'cleanup_status': '🔄 Status:',
+    'cleanup_status': '🔄 Trạng thái:',
     'cleanup_status_profile': '🔄 Cleaning account info (avatar, name, bio)...',
     'cleanup_status_get_dialogs': '📋 Getting dialog list...',
     'cleanup_status_found_dialogs': '📊 Found {groups} groups, {channels} channels, {users} users',
@@ -1558,23 +1558,23 @@ TEXTS = {
     'cleanup_status_delete_contacts': '📇 Deleting contacts...',
     'cleanup_status_archive_dialogs': '📁 Archiving remaining conversations...',
     
-    # 6. Cleanup Complete
+    # 6. Cleanup Hoàn thành
     'cleanup_complete': '✅ Cleanup complete!',
     'cleanup_statistics': '📊 Cleanup Statistics',
-    'cleanup_stat_total': '· Total tài khoản: {count}',
+    'cleanup_stat_total': '· Tổng tài khoản: {count}',
     'cleanup_stat_success': '· ✅ Thành Công: {count} ({percent}%)',
     'cleanup_stat_frozen': '· ❄️ Đông Lạnh: {count} ({percent}%)',
     'cleanup_stat_faiđã': '· ❌ Thất Bại: {count}',
     'cleanup_packing': '📦 Packing account tệp...',
     
-    # 7. Output Files
-    'cleanup_summary_report': '📋 Cleanup Summary Report',
+    # 7. Output Tệps
+    'cleanup_summary_report': '📋 Cleanup Tóm tắt Báo cáo',
     'cleanup_success_accounts': '📦 Thành Côngfully cleaned tài khoản ({count})',
     'cleanup_faiđã_accounts': '📦 Thất Bại to clean tài khoản ({count})',
     
-    # 8. Cleanup Report Content
-    'cleanup_report_title': 'Batch Cleanup Detaiđã Report',
-    'cleanup_report_time': 'Cleanup Time',
+    # 8. Cleanup Báo cáo Content
+    'cleanup_report_title': 'Batch Cleanup Detaiđã Báo cáo',
+    'cleanup_report_time': 'Cleanup Thời gian',
     'cleanup_report_concurrency': 'Concurrency',
     'cleanup_report_concurrent_accounts': 'tài khoản simultaneously',
     'cleanup_report_total': 'Tổng Số Tài Khoản',
@@ -1584,8 +1584,8 @@ TEXTS = {
     'cleanup_report_details': 'Detaiđã Results',
     'cleanup_report_error': 'Lỗi:',
     'cleanup_report_stats': 'Stats:',
-    'cleanup_report_deleted_dialogs': 'Deleted {count} conversations',
-    'cleanup_report_deleted_contacts': 'Deleted {count} contacts',
+    'cleanup_report_deleted_dialogs': 'Xóad {count} conversations',
+    'cleanup_report_deleted_contacts': 'Xóad {count} contacts',
     'cleanup_report_unauthorized': 'Session unauthorized',
     'cleanup_report_success_list': 'Thành Côngfully Cleaned',
     'cleanup_report_faiđã_list': 'Thất Bại to Clean',
@@ -1596,12 +1596,12 @@ TEXTS = {
     'cleanup_report_profile_cleared': 'Profile cleared',
     'cleanup_report_groups_left': 'Left {count} groups',
     'cleanup_report_channels_left': 'Left {count} channels',
-    'cleanup_report_histories_deleted': 'Deleted {count} conversations',
-    'cleanup_report_contacts_deleted_label': 'Deleted {count} contacts',
+    'cleanup_report_histories_deleted': 'Xóad {count} conversations',
+    'cleanup_report_contacts_deleted_label': 'Xóad {count} contacts',
     'cleanup_report_error_details': 'Lỗi details:',
-    'cleanup_report_frozen_accounts': 'Đông Lạnh Accounts',
+    'cleanup_report_frozen_accounts': 'Đông Lạnh Tài khoảns',
     
-    # 9. Errors and Other Messages
+    # 9. Lỗis and Other Messages
     'cleanup_feature_disabđã': '❌ One-click cleanup feature is disabđã',
     'cleanup_need_member': '❌ Thành Viên required for one-click cleanup',
     'cleanup_no_valid_files': '❌ Không có valid tệp found',
@@ -1614,13 +1614,13 @@ TEXTS = {
     'cleanup_already_processed': 'Processed Statistics',
     'cleanup_actual_processed': '· Processed: {actual}/{total}',
     'cleanup_error_info': '⚠️ Lỗi info:',
-    'cleanup_sending_results': '📦 Sending processed results...',
+    'cleanup_sending_results': '📦 Đang gửi processed results...',
     'cleanup_incomplete': '⚠️ Cleanup incomplete',
     'cleanup_may_interrupted': '⚠️ Đang Xử Lý may have been interrupted or encountered errors',
     'cleanup_results_sent': '✅ Cleanup results sent',
     'cleanup_send_faiđã': '❌ Thất Bại to send cleanup results',
-    'cleanup_frozen_detected': 'Account frozen',
-    'cleanup_connection_faiđã': 'Connection faiđã',
+    'cleanup_frozen_detected': 'Tài khoản frozen',
+    'cleanup_connection_faiđã': 'Kết nối faiđã',
     'cleanup_timeout_error': 'Cleanup timeout',
     
     # ===== Re-authorization Feature =====
@@ -1634,16 +1634,16 @@ TEXTS = {
     'reauth_desc5': '· Support proxy connection (fallback to local on timeout)',
     'reauth_desc6': '· Use random device parameters to prevent risk control',
     'reauth_workflow_title': 'Workflow:',
-    'reauth_workflow1': '1. Upload account tệp (Session/TData/ZIP)',
+    'reauth_workflow1': '1. Tải lên account tệp (Session/TData/ZIP)',
     'reauth_workflow2': '2. Enter old password (or auto-detect 2FA from JSON)',
     'reauth_workflow3': '3. Enter new password',
     'reauth_workflow4': '4. System auto-completes re-authorization',
     'reauth_workflow5': '5. Results packaged by category (success/faiđã)',
     'reauth_fail_title': 'Failure Categories:',
-    'reauth_fail_frozen': '· Đông Lạnh: Account has been frozen',
-    'reauth_fail_banned': '· Bị Cấm: Account has been banned',
+    'reauth_fail_frozen': '· Đông Lạnh: Tài khoản has been frozen',
+    'reauth_fail_banned': '· Bị Cấm: Tài khoản has been banned',
     'reauth_fail_wrong_pwd': '· Wrong Mật khẩu: Old password incorrect',
-    'reauth_fail_network': '· Network Lỗi: Connection timeout or network issues',
+    'reauth_fail_network': '· Network Lỗi: Kết nối timeout or network issues',
     'reauth_notes_title': 'Notes:',
     'reauth_note1': '⚠️ After re-authorization, old sessions will be invalidated immediately',
     'reauth_note2': '⚠️ Please ensure you provide the correct old password',
@@ -1658,13 +1658,13 @@ TEXTS = {
     'reauth_btn_cancel': '❌ Hủy',
     'reauth_btn_confirm': '✅ Xác Nhận Start',
     
-    # 3. After File Upload
+    # 3. After Tệp Tải lên
     'reauth_processing_file': 'Đang Xử Lý file',
     'reauth_found_accounts': '✅ Found {count} account tệp',
     'reauth_file_type_session': 'Loại tệp: SESSION',
     'reauth_file_type_tdata': 'Loại tệp: TDATA',
     
-    # 4. Password Selection
+    # 4. Mật khẩu Chọnion
     'reauth_pwd_method_title': 'Please select old password input method:',
     'reauth_pwd_auto': '· Auto-detect: Automatically find password from tệp',
     'reauth_pwd_manual': '· Manual input: Manually enter old password',
@@ -1673,28 +1673,28 @@ TEXTS = {
     'reauth_pwd_auto_tdata': '- TData format: Any .txt file containing 2fa/twofa/password (case insensitive)',
     'reauth_pwd_auto_example': 'Example: 2FA.txt, twoFA.TXT, password.txt, etc.',
     
-    # 5. Password Detection Result
+    # 5. Mật khẩu Detection Result
     'reauth_pwd_detect_complete': '✅ Mật khẩu auto-detection complete',
     'reauth_pwd_stats': 'Statistics:',
-    'reauth_pwd_total': '· Total tệp: {count}',
+    'reauth_pwd_total': '· Tổng tệp: {count}',
     'reauth_pwd_detected': '· Thành Côngfully detected: {count}',
     'reauth_pwd_not_detected': '· Not detected: {count}',
-    'reauth_pwd_empty_note': '💡 Accounts without detected password will be processed with empty password',
+    'reauth_pwd_empty_note': '💡 Tài khoảns without detected password will be processed with empty password',
     
-    # 6. Manual Input Old Password
+    # 6. Manual Input Old Mật khẩu
     'reauth_manual_old_pwd_title': '📝 Manual Input Old Mật khẩu',
     'reauth_manual_old_pwd_prompt': 'Please enter old password (if account has 2FA password)',
     'reauth_manual_old_pwd_tip': '💡 If no password, enter "无" or "skip"',
     'reauth_old_pwd_saved': '✅ Old password saved',
     
-    # 7. New Password Input
+    # 7. New Mật khẩu Input
     'reauth_new_pwd_prompt': 'Please enter new password (for re-authorized tài khoản)',
     'reauth_new_pwd_tip': '💡 If no new password needed, enter "无" or "skip"',
     
-    # 8. Final Confirmation
+    # 8. Final Xác nhậnation
     'reauth_final_confirm': '📋 Final Xác Nhậnation',
-    'reauth_account_info': 'Account Info:',
-    'reauth_account_count': '· Account count: {count}',
+    'reauth_account_info': 'Tài khoản Info:',
+    'reauth_account_count': '· Tài khoản count: {count}',
     'reauth_pwd_settings': 'Mật khẩu Settings:',
     'reauth_old_pwd': '· Old password: {value}',
     'reauth_new_pwd': '· New password: {value}',
@@ -1702,8 +1702,8 @@ TEXTS = {
     'reauth_pwd_masked': '***',
     'reauth_process_flow': 'Process Flow:',
     'reauth_flow1': '1. Reset all sessions (kick other devices)',
-    'reauth_flow2': '2. Delete old password',
-    'reauth_flow3': '3. Create new session (random device parameters)',
+    'reauth_flow2': '2. Xóa old password',
+    'reauth_flow3': '3. Tạo new session (random device parameters)',
     'reauth_flow4': '4. Set new password',
     'reauth_flow5': '5. Verify old sessions invalidated',
     'reauth_flow6': '6. Package categorized results',
@@ -1713,23 +1713,23 @@ TEXTS = {
     'reauth_important3': '· Detaiđã report will be generated after completion',
     'reauth_confirm_question': 'Xác Nhận to start re-authorization?',
     
-    # 9. Processing Progress
+    # 9. Đang xử lý Tiến trình
     'reauth_in_progress': '🔄 Re-authorizing...',
     'reauth_please_wait': 'Vui lòng đợi, detaiđã report will be sent after completion',
-    'reauth_starting': '🚀 Starting re-authorization...',
+    'reauth_starting': '🚀 Đang bắt đầu re-authorization...',
     'reauth_start': '▶️ Start re-authorization',
     'reauth_progress': 'Tiến Trình: {current}/{total} ({percent}%)',
-    'reauth_stat_account_count': '📊 Account Count',
+    'reauth_stat_account_count': '📊 Tài khoản Số lượng',
     'reauth_stat_success': '✅ Authorization Thành Công',
-    'reauth_stat_frozen': '❄️ Đông Lạnh Accounts',
-    'reauth_stat_banned': '🚫 Bị Cấm Accounts',
+    'reauth_stat_frozen': '❄️ Đông Lạnh Tài khoảns',
+    'reauth_stat_banned': '🚫 Bị Cấm Tài khoảns',
     'reauth_stat_2fa_error': '🔑 2FA Lỗi',
     'reauth_stat_network_error': '🌐 Network Lỗi',
     
-    # 10. Processing Result
-    'reauth_complete': '✅ Re-authorization Complete',
+    # 10. Đang xử lý Result
+    'reauth_complete': '✅ Re-authorization Hoàn thành',
     'reauth_result_stats': 'Statistics:',
-    'reauth_result_total': '· Total: {count}',
+    'reauth_result_total': '· Tổng: {count}',
     'reauth_result_success': '· ✅ Thành Công: {count}',
     'reauth_result_frozen': '· ❄️ Đông Lạnh: {count}',
     'reauth_result_banned': '· 🚫 Bị Cấm: {count}',
@@ -1739,18 +1739,18 @@ TEXTS = {
     'reauth_success_rate': 'Thành Công Rate: {percent}%',
     'reauth_see_report': '📄 See detaiđã report in file below',
     
-    # 11. Output Files
-    'reauth_file_report': '📄 Re-authorization Detaiđã Report',
+    # 11. Output Tệps
+    'reauth_file_report': '📄 Re-authorization Detaiđã Báo cáo',
     'reauth_file_success': '📦 Thành Côngfully authorized tài khoản ({count})',
     'reauth_file_frozen': '📦 Đông Lạnh tài khoản ({count})',
     'reauth_file_banned': '📦 Bị Cấm tài khoản ({count})',
     'reauth_file_wrong_pwd': '📦 Wrong password tài khoản ({count})',
     'reauth_file_network': '📦 Network error tài khoản ({count})',
-    'reauth_file_other': '📦 Accounts with other errors ({count})',
+    'reauth_file_other': '📦 Tài khoảns with other errors ({count})',
     
-    # 12. Report Content
-    'reauth_report_title': 'Re-authorization Report',
-    'reauth_report_time': 'Generated Time:',
+    # 12. Báo cáo Content
+    'reauth_report_title': 'Re-authorization Báo cáo',
+    'reauth_report_time': 'Generated Thời gian:',
     'reauth_report_total': 'Tổng Số Tài Khoản:',
     'reauth_report_success': 'Thành Công:',
     'reauth_report_frozen': 'Đông Lạnh:',
@@ -1758,10 +1758,10 @@ TEXTS = {
     'reauth_report_pwd_error': 'Mật khẩu Lỗi:',
     'reauth_report_network': 'Network Lỗi:',
     'reauth_report_other': 'Other Lỗi:',
-    'reauth_report_file': 'File:',
+    'reauth_report_file': 'Tệp:',
     'reauth_report_error': 'Lỗi:',
     
-    # Report category titles
+    # Báo cáo category titles
     'reauth_report_category_success': 'SUCCESS',
     'reauth_report_category_frozen': 'FROZEN',
     'reauth_report_category_banned': 'BANNED',
@@ -1769,24 +1769,24 @@ TEXTS = {
     'reauth_report_category_network_error': 'NETWORK_ERROR',
     'reauth_report_category_other_error': 'OTHER_ERROR',
     
-    # Report detail fields
+    # Báo cáo detail fields
     'reauth_report_phone': 'Phone:',
     'reauth_report_device_model': 'Device Chế Độl:',
     'reauth_report_system_version': 'System Version:',
     'reauth_report_app_version': 'App Version:',
-    'reauth_report_connection': 'Connection:',
+    'reauth_report_connection': 'Kết nối:',
     'reauth_report_new_password': 'New Mật khẩu:',
     
-    # Connection method values
+    # Kết nối method values
     'reauth_connection_proxy': 'Using Proxy',
     'reauth_connection_local': 'Kết Nối Cục Bộ',
     'reauth_connection_local_fallback': 'Kết Nối Cục Bộ (fallback after proxy faiđã)',
     
-    # Report generation faiđã
-    'reauth_report_gen_faiđã': 'Report generation faiđã:',
-    'reauth_report_total_success': 'Total: {total}, Thành Công: {success}',
+    # Báo cáo generation faiđã
+    'reauth_report_gen_faiđã': 'Báo cáo generation faiđã:',
+    'reauth_report_total_success': 'Tổng: {total}, Thành Công: {success}',
     
-    # Additional messages
+    # Thêmitional messages
     'reauth_need_member': '⚠️ Re-authorization feature requires membership\n\nPlease activate membership first',
     'reauth_session_expired': '❌ Session expired',
     'reauth_session_expired_restart': '❌ Session expired, please restart',
@@ -1796,9 +1796,9 @@ TEXTS = {
     'reauth_error': 'Lỗi: {error}',
     'reauth_file_type': 'Loại tệp: {type}',
     
-    # ===== Query Registration Time Feature =====
+    # ===== Query Registration Thời gian Feature =====
     # 1. Feature Introduction Page
-    'regtime_title': '🕰️ Query Registration Time',
+    'regtime_title': '🕰️ Query Registration Thời gian',
     'regtime_intro': 'This feature queries the accurate registration time of tài khoản and classifies by date:',
     'regtime_feature1': '• 📅 Classify by full date (Year-Month-Day)',
     'regtime_feature2': '• 🎯 Multiple methods to get the most accurate registration time',
@@ -1813,21 +1813,21 @@ TEXTS = {
     'regtime_note4': '4. Recommend batch processing no more than 100 tài khoản',
     'regtime_note5': '5. Will automatically use the most accurate method to get registration time',
     'regtime_upload_title': '📤 Please upload account tệp:',
-    'regtime_upload_session': '• Session format: Upload .session tệp (can be zipped)',
-    'regtime_upload_tdata': '• TData format: Upload zip file containing tdata directory',
+    'regtime_upload_session': '• Session format: Tải lên .session tệp (can be zipped)',
+    'regtime_upload_tdata': '• TData format: Tải lên zip file containing tdata directory',
     
     # 2. Buttons
     'regtime_btn_back': 'Quay Lại Menu Chính',
     'regtime_btn_start': '✅ Start Query',
     'regtime_btn_cancel': '❌ Hủy',
     
-    # 3. After File Upload
+    # 3. After Tệp Tải lên
     'regtime_processing_file': 'Đang Xử Lý file',
     'regtime_found_accounts': '✅ Found {count} account tệp',
     'regtime_file_type_session': 'Loại tệp: SESSION',
     'regtime_file_type_tdata': 'Loại tệp: TDATA',
     
-    # 4. Processing Info
+    # 4. Đang xử lý Info
     'regtime_process_title': 'Đang Xử Lý Info:',
     'regtime_process1': '• Priority: Get accurate registration time from @Telegram official chat',
     'regtime_process2': '• Quay Lạiup: Saved Messages or user ID estimation',
@@ -1840,34 +1840,34 @@ TEXTS = {
     'regtime_accuracy3': '3. Người Dùng ID estimation (backup only)',
     'regtime_ready_question': 'Ready to start query?',
     
-    # 5. Processing Progress
+    # 5. Đang xử lý Tiến trình
     'regtime_querying': 'Querying',
     'regtime_may_take_minutes': 'May take a few minutes',
     'regtime_progress_title': '🔄 Query Tiến Trình',
-    'regtime_progress_total': '• Total: {count}',
+    'regtime_progress_total': '• Tổng: {count}',
     'regtime_progress_processed': '• Processed: {count}',
     'regtime_progress_success': '• Thành Công: {count}',
     'regtime_progress_faiđã': '• Thất Bại: {count}',
     'regtime_please_wait': '⏳ Vui lòng đợi...',
     
     # 6. Query Results
-    'regtime_complete': '✅ Registration Time Query Complete',
+    'regtime_complete': '✅ Registration Thời gian Query Hoàn thành',
     'regtime_stats_title': 'Statistics:',
-    'regtime_stats_total': '• Total: {count}',
+    'regtime_stats_total': '• Tổng: {count}',
     'regtime_stats_success': '• ✅ Thành Công: {count}',
     'regtime_stats_faiđã': '• ❌ Thất Bại: {count}',
     'regtime_classify_title': 'Classified by registration date:',
     'regtime_classify_item': '• {date}: {count}',
     'regtime_see_report': '📄 See detaiđã report in tệp below',
     
-    # 7. Output Files
-    'regtime_file_report': '📋 Registration Time Query Detaiđã Report',
-    'regtime_file_classified': '📦 Registration time classified tài khoản ({count} tài khoản, sorted into thư mục by date)',
+    # 7. Output Tệps
+    'regtime_file_report': '📋 Registration Thời gian Query Detaiđã Báo cáo',
+    'regtime_file_đã phân loại': '📦 Registration time đã phân loại tài khoản ({count} tài khoản, sorted into thư mục by date)',
     'regtime_file_faiđã': '❌ Thất Bại query tài khoản ({count}, with detaiđã failure reasons)',
     
-    # 8. Report Content
-    'regtime_report_title': 'Registration Time Query Report',
-    'regtime_report_time': 'Generated Time:',
+    # 8. Báo cáo Content
+    'regtime_report_title': 'Registration Thời gian Query Báo cáo',
+    'regtime_report_time': 'Generated Thời gian:',
     'regtime_report_total': 'Tổng Số Tài Khoản:',
     'regtime_report_success': 'Thành Công:',
     'regtime_report_faiđã': 'Thất Bại:',
@@ -1879,7 +1879,7 @@ TEXTS = {
     'regtime_source_all_chats': '• all_chats: From scanning all chats (✅ Accurate)',
     'regtime_source_estimated': '• estimated: Estimated based on user ID (⚠️ May be inaccurate, error could be months or years)',
     'regtime_date_header': '📅 {date} ({count} tài khoản)',
-    'regtime_field_file': 'File:',
+    'regtime_field_file': 'Tệp:',
     'regtime_field_phone': 'Phone:',
     'regtime_field_userid': 'Người Dùng ID:',
     'regtime_field_username': 'Người Dùngname:',
@@ -1890,19 +1890,19 @@ TEXTS = {
     'regtime_error_label': 'ERROR:',
     'regtime_error_field': 'Lỗi:',
     
-    # 9. Faiđã Report
-    'regtime_fail_report_title': 'Thất Bại Query Accounts Details',
-    'regtime_fail_total': 'Total Thất Bại:',
-    'regtime_fail_frozen': '【Đông Lạnh Accounts】({count})',
-    'regtime_fail_banned': '【Bị Cấm Accounts】({count})',
+    # 9. Faiđã Báo cáo
+    'regtime_fail_report_title': 'Thất Bại Query Tài khoảns Details',
+    'regtime_fail_total': 'Tổng Thất Bại:',
+    'regtime_fail_frozen': '【Đông Lạnh Tài khoảns】({count})',
+    'regtime_fail_banned': '【Bị Cấm Tài khoảns】({count})',
     'regtime_fail_other_errors': '【Other Lỗis】({count})',
     'regtime_fail_type': 'Type:',
     'regtime_fail_reason': 'Failure Reason:',
-    'regtime_fail_unauthorized': 'Account unauthorized or expired',
-    'regtime_fail_timeout': 'Connection timeout',
-    'regtime_fail_timeout_both': 'Connection timeout (both proxy and local faiđã)',
-    'regtime_fail_frozen_account': 'Account has been frozen',
-    'regtime_fail_banned_account': 'Account has been banned',
+    'regtime_fail_unauthorized': 'Tài khoản unauthorized or expired',
+    'regtime_fail_timeout': 'Kết nối timeout',
+    'regtime_fail_timeout_both': 'Kết nối timeout (both proxy and local faiđã)',
+    'regtime_fail_frozen_account': 'Tài khoản has been frozen',
+    'regtime_fail_banned_account': 'Tài khoản has been banned',
     'regtime_fail_opentele': 'opentele not instalđã, cannot process TData format',
     'regtime_fail_tdata_load': 'TData unauthorized or loading faiđã',
     'regtime_fail_tdata_timeout': 'TData loading timeout',
@@ -1913,7 +1913,7 @@ TEXTS = {
     # 10. ZIP Folder Names
     'regtime_folder_name': '{date} registered tài khoản ({count})',
     
-    # 11. Additional Messages
+    # 11. Thêmitional Messages
     'regtime_need_member': '❌ Registration time query feature requires membership\n\nPlease activate membership first',
     'regtime_session_expired': '❌ Session expired, please re-upload tệp',
     'regtime_no_valid_files': '❌ Không có valid tệp found\n\nPlease ensure ZIP contains Session or TData format tệp',
@@ -1935,7 +1935,7 @@ TEXTS = {
     'profile_random_bio': '• Bio: Choose to leave empty or randomly generate in corresponding language',
     'profile_random_username': '• Người Dùngname: Choose to delete or randomly generate new username',
     'profile_custom_mode_title': '✏️ Custom Generation Chế Độ:',
-    'profile_custom_upload': '• Upload txt file (one content per line)',
+    'profile_custom_upload': '• Tải lên txt file (one content per line)',
     'profile_custom_manual': '• Or manually enter content',
     'profile_custom_support': '• Supports custom name, avatar, bio, username',
     'profile_notes_title': '⚠️ Notes:',
@@ -1945,12 +1945,12 @@ TEXTS = {
     'profile_note4': '4. Supports Session and TData formats',
     'profile_select_mode': 'Please select modification mode:',
     
-    # 2. Mode Selection Buttons
+    # 2. Chế độ Chọnion Buttons
     'profile_btn_random': '🎲 Random Generation',
     'profile_btn_custom': '✏️ Custom Generation',
     'profile_btn_back': 'Quay Lại Menu Chính',
     
-    # 3. Random Generation Mode Configuration
+    # 3. Random Generation Chế độ Configuration
     'profile_random_config_title': '🎲 Random Generation Chế Độ',
     'profile_current_config': 'Current Configuration:',
     'profile_config_name': '• Name:',
@@ -1964,11 +1964,11 @@ TEXTS = {
     # 4. Configuration Option Values
     'profile_opt_auto_generate': '✅ Auto-generate by country',
     'profile_opt_random_generate': '✅ Random generate',
-    'profile_opt_delete_all': '🗑️ Delete all',
-    'profile_opt_delete_all_history': '🗑️ Delete all history',
+    'profile_opt_delete_all': '🗑️ Xóa all',
+    'profile_opt_delete_all_history': '🗑️ Xóa all history',
     'profile_opt_keep_current': '📷 Keep current',
     'profile_opt_no_modify': '⏩ Không có modification',
-    'profile_opt_delete': '🗑️ Delete',
+    'profile_opt_delete': '🗑️ Xóa',
     'profile_opt_random_bio': '🎲 Random generate bio',
     'profile_opt_random_username': '🎲 Random generate username',
     'profile_opt_clear_bio': '📝 Leave empty',
@@ -1978,18 +1978,18 @@ TEXTS = {
     'profile_btn_bio': 'Bio:',
     'profile_btn_username': 'Người Dùngname:',
     'profile_btn_name': 'Name:',
-    'profile_btn_upload': '📤 Upload account tệp to start',
+    'profile_btn_upload': '📤 Tải lên account tệp to start',
     'profile_btn_return': 'Return',
     'profile_btn_cancel': '❌ Hủy',
     
-    # 6. Custom Mode Configuration
+    # 6. Custom Chế độ Configuration
     'profile_custom_config_title': '✏️ Custom Generation Chế Độ',
     'profile_custom_tip_title': '💡 Configuration method:',
     'profile_custom_tip1': '1. Click buttons to configure each item',
     'profile_custom_tip2': '2. Supports uploading txt file or manual input',
     'profile_custom_tip3': '3. Can choose not to modify an item (leave empty)',
     'profile_custom_rule_title': '📊 Smart allocation rules:',
-    'profile_custom_rule1': '• 1 content + N tài khoản = All tài khoản use the same content',
+    'profile_custom_rule1': '• 1 content + N tài khoản = Tất cả tài khoản use the same content',
     'profile_custom_rule2': '• M contents + N tài khoản (M&lt;N) = Cyclic use',
     'profile_custom_rule3': '• M contents + N tài khoản (M≥N) = One-to-one correspondence',
     'profile_custom_select': 'Please select items to configure:',
@@ -2000,28 +2000,28 @@ TEXTS = {
     'profile_custom_status_no_modify': '⏩ Không có modification',
     'profile_custom_field_config': '📝 Configure {field}',
     'profile_custom_field_select': 'Please select operation:',
-    'profile_custom_field_upload_txt': '📄 Upload txt file',
+    'profile_custom_field_upload_txt': '📄 Tải lên txt file',
     'profile_custom_field_manual_input': '✍️ Manual input',
     'profile_custom_field_no_modify': '⏩ Không có modification for this item',
     'profile_custom_field_view_configured': '📊 View configured ({count})',
     'profile_custom_field_clear_config': '🗑 Clear configuration',
-    'profile_custom_field_upload_images': '🖼 Upload image file/ZIP',
-    'profile_custom_field_delete_all_avatar': '🗑 Delete all avatars',
+    'profile_custom_field_upload_images': '🖼 Tải lên image file/ZIP',
+    'profile_custom_field_delete_all_avatar': '🗑 Xóa all avatars',
     'profile_custom_field_clear_bio': '📝 Clear bio',
-    'profile_custom_field_delete_username': '🗑 Delete username',
+    'profile_custom_field_delete_username': '🗑 Xóa username',
     'profile_custom_field_back_to_menu': '🔙 Quay Lại to configuration menu',
     
-    # 8. Upload Prompts
+    # 8. Tải lên Prompts
     'profile_upload_title': '📤 Please upload account tệp',
     'profile_upload_format': 'Định dạng được hỗ trợ:',
-    'profile_upload_session': '• Session format: Upload .session tệp (can be zipped)',
-    'profile_upload_tdata': '• TData format: Upload zip file containing tdata directory',
+    'profile_upload_session': '• Session format: Tải lên .session tệp (can be zipped)',
+    'profile_upload_tdata': '• TData format: Tải lên zip file containing tdata directory',
     'profile_upload_timeout': '⏱ Please upload tệp within 5 minutes...',
     'profile_upload_cancel': '💡 To cancel, click /start to return to main menu',
     'profile_processing_file': 'Đang Xử Lý file',
     
     # Custom upload prompts
-    'profile_custom_upload_photo_title': '📤 Upload {field} file',
+    'profile_custom_upload_photo_title': '📤 Tải lên {field} file',
     'profile_custom_upload_photo_format': 'Định dạng được hỗ trợ:',
     'profile_custom_upload_photo_single': '• Single image: jpg, png, jpeg, webp',
     'profile_custom_upload_photo_multi': '• Multiple images: Pack into zip file',
@@ -2029,8 +2029,8 @@ TEXTS = {
     'profile_custom_upload_photo_notice': '💡 Note:',
     'profile_custom_upload_photo_size': '• Recommended image size: 640x640 or higher',
     'profile_custom_upload_photo_limit': '• Recommended file size: Not more than 5MB',
-    'profile_custom_upload_txt_title': '📤 Upload {field} txt file',
-    'profile_custom_upload_txt_format': 'File format:',
+    'profile_custom_upload_txt_title': '📤 Tải lên {field} txt file',
+    'profile_custom_upload_txt_format': 'Tệp format:',
     'profile_custom_upload_txt_line': '• One {field} per line',
     'profile_custom_upload_txt_encoding': '• UTF-8 encoding',
     'profile_custom_upload_txt_skip': '• Empty lines supported (will be skipped)',
@@ -2053,19 +2053,19 @@ TEXTS = {
     'profile_custom_view_more': '... {count} more',
     'profile_custom_input_empty': '❌ Input is empty, please re-enter',
     'profile_custom_no_images': '❌ Không có valid image tệp found\n\nĐịnh dạng được hỗ trợ: jpg, png, jpeg, webp, gif',
-    'profile_custom_encoding_error': '❌ File encoding error\n\nPlease save file with UTF-8 encoding',
-    'profile_custom_file_empty': '❌ File content is empty',
+    'profile_custom_encoding_error': '❌ Tệp encoding error\n\nPlease save file with UTF-8 encoding',
+    'profile_custom_file_empty': '❌ Tệp content is empty',
     'profile_custom_processing_faiđã': '❌ <b>Đang Xử Lý faiđã</b>\n\nLỗi: {error}',
     'profile_photo_processing': '📥 <b>Đang Xử Lý image...</b>',
     'profile_photo_uploaded_success': '✅ <b>Image uploaded</b>\n\nAvatar photo saved successfully',
     'profile_photo_upload_faiđã': '❌ <b>Image upload faiđã</b>\n\nLỗi: {error}',
     'button_back_previous': '⬅️ Quay Lại',
     
-    # 9. Confirmation Page
+    # 9. Xác nhậnation Page
     'profile_confirm_title': '📝 Ready to start editing profile',
-    'profile_file_info': '📁 File information:',
+    'profile_file_info': '📁 Tệp information:',
     'profile_file_type': '├ Type:',
-    'profile_file_count': '└ Count: {count} tài khoản',
+    'profile_file_count': '└ Số lượng: {count} tài khoản',
     'profile_modify_config': '⚙️ Modification configuration:',
     'profile_config_name_label': '├ Name:',
     'profile_config_avatar_label': '├ Avatar:',
@@ -2078,21 +2078,21 @@ TEXTS = {
     'profile_confirm_question': 'Xác Nhận to start modification?',
     'profile_btn_confirm': '✅ Xác Nhận and start',
     
-    # 10. Processing Progress
+    # 10. Đang xử lý Tiến trình
     'profile_progress_title': '📝 Profile Modification Tiến Trình',
     'profile_stats_title': '📊 Statistics:',
-    'profile_stats_total': '├ 📦 Total:',
+    'profile_stats_total': '├ 📦 Tổng:',
     'profile_stats_success': '├ ✅ Thành Công:',
     'profile_stats_faiđã': '├ ❌ Thất Bại:',
     'profile_stats_processing': '├ ⏳ Đang Xử Lý:',
     'profile_stats_remaining': '└ 📋 Remaining:',
     'profile_speed': '⚡ Đang Xử Lý speed: {speed}/sec',
-    'profile_time_elapsed': '⏱️ Time elapsed:',
+    'profile_time_elapsed': '⏱️ Thời gian elapsed:',
     'profile_time_remaining': '⏳ Estimated remaining:',
     'profile_current_processing': '🔄 Currently processing:',
     'profile_wait_tip': '💡 Tip: Vui lòng đợi patiently, do not close the dialog',
     
-    # 11. Processing Status
+    # 11. Đang xử lý Trạng thái
     'profile_status_success': '✅ Thành Công',
     'profile_status_faiđã': '❌ Thất Bại:',
     'profile_status_modifying_name': 'Modifying name...',
@@ -2107,7 +2107,7 @@ TEXTS = {
     'profile_action_name_success': '✅ Name: {name}',
     'profile_action_name_faiđã': '❌ Name update faiđã',
     'profile_action_name_faiđã_error': '❌ Name update faiđã: {error}',
-    'profile_action_avatar_deleted': '✅ Deleted all avatars',
+    'profile_action_avatar_deleted': '✅ Xóad all avatars',
     'profile_action_avatar_delete_faiđã': '❌ Avatar deletion faiđã',
     'profile_action_avatar_delete_faiđã_error': '❌ Avatar deletion faiđã: {error}',
     'profile_action_avatar_uploaded': '✅ Avatar uploaded',
@@ -2119,7 +2119,7 @@ TEXTS = {
     'profile_action_username_success': '✅ Người Dùngname: {username}',
     'profile_action_username_faiđã': '❌ Người Dùngname update faiđã',
     'profile_action_username_faiđã_error': '❌ Người Dùngname update faiđã: {error}',
-    'profile_action_username_deleted': '✅ Người Dùngname: Deleted',
+    'profile_action_username_deleted': '✅ Người Dùngname: Xóad',
     'profile_action_username_delete_faiđã': '❌ Người Dùngname deletion faiđã',
     'profile_action_username_delete_faiđã_error': '❌ Người Dùngname deletion faiđã: {error}',
     'profile_action_username_occupied': '❌ Người Dùngname already taken: {username}',
@@ -2131,65 +2131,65 @@ TEXTS = {
     # 12. Modification Results
     'profile_complete': '✅ Profile modification complete!',
     'profile_result_stats': '📊 Statistics:',
-    'profile_result_total': '• Total:',
+    'profile_result_total': '• Tổng:',
     'profile_result_success': '• Thành Công: {count} ✅',
     'profile_result_faiđã': '• Thất Bại: {count} ❌',
     'profile_error_stats': '📋 Lỗi type statistics:',
-    'profile_files_sent': '📁 Files sent:',
+    'profile_files_sent': '📁 Tệps sent:',
     'profile_file_report': '• Detaiđã report:',
     'profile_file_success': '• Thành Côngful tài khoản:',
     'profile_file_faiđã': '• Thất Bại tài khoản:',
     
-    # 13. Output Files
-    'profile_output_report': '📋 Profile Modification Detaiđã Report',
+    # 13. Output Tệps
+    'profile_output_report': '📋 Profile Modification Detaiđã Báo cáo',
     'profile_output_success': '✅ Thành Côngful tài khoản ({count})',
     'profile_output_faiđã': '❌ Thất Bại tài khoản ({count})',
     
-    # 14. Report Content
-    'profile_report_title': '📋 Profile Modification Detaiđã Report',
+    # 14. Báo cáo Content
+    'profile_report_title': '📋 Profile Modification Detaiđã Báo cáo',
     'profile_report_time': 'Generated time:',
-    'profile_report_summary': 'Total: {total} | Thành Công: {success} | Thất Bại: {faiđã}',
+    'profile_report_summary': 'Tổng: {total} | Thành Công: {success} | Thất Bại: {faiđã}',
     'profile_report_success_title': '✅ Thành Côngful tài khoản ({count})',
     'profile_report_faiđã_title': '❌ Thất Bại tài khoản ({count})',
-    'profile_report_file': 'File:',
+    'profile_report_file': 'Tệp:',
     'profile_report_name_change': '- Name: Before {before}  After {after} ✓',
-    'profile_report_avatar_deleted': '- Avatar: Deleted ✓',
-    'profile_report_avatar_updated': '- Avatar: Updated ✓',
-    'profile_report_avatar_uploaded': '- Avatar: Uploaded new avatar ✓',
+    'profile_report_avatar_deleted': '- Avatar: Xóad ✓',
+    'profile_report_avatar_updated': '- Avatar: Cập nhậtd ✓',
+    'profile_report_avatar_uploaded': '- Avatar: Tải lêned new avatar ✓',
     'profile_report_bio_change': '- Bio: Before {before}  After {after} ✓',
-    'profile_report_bio_deleted': '- Bio: Deleted ✓',
+    'profile_report_bio_deleted': '- Bio: Xóad ✓',
     'profile_report_bio_cleared': '- Bio: Cleared ✓',
     'profile_report_username_change': '- Người Dùngname: Before {before}  After {after} ✓',
-    'profile_report_username_deleted': '- Người Dùngname: Deleted ✓',
+    'profile_report_username_deleted': '- Người Dùngname: Xóad ✓',
     'profile_report_error_type': 'Lỗi type:',
     'profile_report_error_reason': 'Lỗi reason:',
     'profile_report_error_stats': '📊 Lỗi Statistics',
     
-    # 15. Error Types
+    # 15. Lỗi Types
     'profile_error_auth_expired': 'Authorization expired, need to re-login',
-    'profile_error_timeout': 'Connection timeout',
+    'profile_error_timeout': 'Kết nối timeout',
     'profile_error_flood': 'Too many operations, please try again later',
     'profile_error_username_taken': 'Người Dùngname already taken',
     'profile_error_username_invalid': 'Invalid username format',
     'profile_error_network': 'Network connection error',
     'profile_error_unknown': 'Unknown error',
-    'profile_error_banned': 'Account has been banned',
-    'profile_error_deactivated': 'Account has been deactivated',
-    'profile_error_unauthorized': 'Account unauthorized',
+    'profile_error_banned': 'Tài khoản has been banned',
+    'profile_error_deactivated': 'Tài khoản has been deactivated',
+    'profile_error_unauthorized': 'Tài khoản unauthorized',
     'profile_error_rpc_error': 'Telegram API error',
     'profile_error_password_needed': '2FA password required',
     'profile_error_phone_banned': 'Phone number has been banned',
-    'profile_error_flood_wait': 'Rate limit triggered, please wait {seconds} seconds',
+    'profile_error_flood_wait': 'Rate limit triggered, vui lòng đợi {seconds} seconds',
     
     # 16. Random Generation Config Display Values
     'profile_display_random_by_country': '✅ Random generate (by country)',
-    'profile_display_delete_history': '🗑️ Delete all history',
+    'profile_display_delete_history': '🗑️ Xóa all history',
     'profile_display_keep': '📷 Keep',
     'profile_display_random': '🎲 Random generate',
-    'profile_display_delete': '🗑️ Delete',
+    'profile_display_delete': '🗑️ Xóa',
     'profile_display_no_modify': '⏩ Không có modification',
     'profile_display_custom': '✏️ Custom',
-    'profile_display_delete_all': '🗑️ Delete all',
+    'profile_display_delete_all': '🗑️ Xóa all',
     'profile_display_clear': '📝 Leave empty',
     
     # 17. Other Prompt Messages
@@ -2204,7 +2204,7 @@ TEXTS = {
     'profile_field_bio': 'Bio',
     'profile_field_username': 'Người Dùngname',
     
-    # ===== Check Contact Limit Feature =====
+    # ===== Kiểm tra Contact Limit Feature =====
     # 1. Feature Introduction Page
     'contact_limit_title': '🔍 Kiểm tra Contact Limit',
     'contact_limit_upload': '📤 Please upload ZIP file containing Session or TData',
@@ -2218,41 +2218,41 @@ TEXTS = {
     'contact_limit_wait': '⏳ Vui lòng đợi patiently during detection...',
     'contact_limit_cancel': '💡 To cancel, click /start to return to main menu',
     
-    # 2. Found Accounts
+    # 2. Found Tài khoảns
     'contact_limit_found': '📊 Found {total} tài khoản, {unique} after deduplication, starting detection...',
     'contact_limit_estimate': '⏳ Estimated time: {time}',
     
-    # 3. Processing Progress
+    # 3. Đang xử lý Tiến trình
     'contact_limit_progress': '📊 Detection progress: [{current}/{total}]',
     'contact_limit_current': '❌ Current:',
-    'contact_limit_status': 'Status:',
+    'contact_limit_status': 'Trạng thái:',
     'contact_limit_stats': 'Statistics:',
-    'contact_limit_completed': '• Completed:',
+    'contact_limit_completed': '• Hoàn thànhd:',
     'contact_limit_remaining': '• Remaining:',
     'contact_limit_percent': '• Tiến Trình:',
     'contact_limit_elapsed': '⏱️ Elapsed:',
     
-    # 4. Detection Complete
+    # 4. Detection Hoàn thành
     'contact_limit_complete': '✅ Detection complete!',
-    'contact_limit_time': '⏱️ Time: {time}',
+    'contact_limit_time': '⏱️ Thời gian: {time}',
     'contact_limit_report_sent': '📊 Detection report and categorized tệp sent',
     
-    # 5. Output Files
-    'contact_limit_report_file': '📊 Contact Limit Detection Report',
+    # 5. Output Tệps
+    'contact_limit_report_file': '📊 Contact Limit Detection Báo cáo',
     'contact_limit_normal': '✅ Normal: {count}',
     'contact_limit_limited': '⚠️ Limited: {count}',
     'contact_limit_banned': '🚫 Bị Cấm: {count}',
     'contact_limit_faiđã': '❌ Thất Bại: {count}',
     'contact_limit_check_faiđã_zip': 'Contact check faiđã',
     
-    # 6. Report Content
-    'contact_limit_report_title': '📊 Contact Limit Detection Report',
+    # 6. Báo cáo Content
+    'contact_limit_report_title': '📊 Contact Limit Detection Báo cáo',
     'contact_limit_report_time': 'Detection time: {time} (Beijing time)',
-    'contact_limit_report_total': 'Total detected: {count} tài khoản',
+    'contact_limit_report_total': 'Tổng detected: {count} tài khoản',
     'contact_limit_report_principle': 'Detection principle explanation:',
     'contact_limit_report_normal_desc': '✅ Normal: Thành Côngfully imported test contact and found user',
     'contact_limit_report_limited_desc': '⚠️ Limited: Import successful but user not found / FloodWait triggered / Import faiđã',
-    'contact_limit_report_banned_desc': '❌ Bị Cấm: Account banned or deactivated',
+    'contact_limit_report_banned_desc': '❌ Bị Cấm: Tài khoản banned or deactivated',
     'contact_limit_report_faiđã_desc': '❌ Thất Bại: Detection error or unauthorized',
     'contact_limit_report_stats': 'Statistics',
     'contact_limit_report_normal_count': '✅ Normal tài khoản: {count}',
@@ -2260,36 +2260,36 @@ TEXTS = {
     'contact_limit_report_banned_count': '❌ Bị Cấm: {count}',
     'contact_limit_report_faiđã_count': '❌ Detection faiđã: {count}',
     'contact_limit_report_detail': '📋 Detaiđã List',
-    'contact_limit_report_normal_list': '【✅ Normal Accounts】',
+    'contact_limit_report_normal_list': '【✅ Normal Tài khoảns】',
     'contact_limit_report_limited_list': '【⚠️ Contact Limited】',
     'contact_limit_report_banned_list': '【❌ Bị Cấm】',
     'contact_limit_report_faiđã_list': '【❌ Detection Thất Bại】',
     'contact_limit_report_none': 'None',
     
-    # 7. Status Types
+    # 7. Trạng thái Types
     'contact_limit_status_normal': '✅ Normal',
     'contact_limit_status_limited': '⚠️ Limited',
     'contact_limit_status_banned': '🚫 Bị Cấm',
     'contact_limit_status_faiđã': '❌ Thất Bại',
-    'contact_limit_status_connection_error': '⚠️ Connection error: {error}',
+    'contact_limit_status_connection_error': '⚠️ Kết nối error: {error}',
     'contact_limit_status_auth_error': 'Authorization expired',
     'contact_limit_status_flood_wait': 'FloodWait triggered',
     'contact_limit_status_import_faiđã': 'Import faiđã',
     'contact_limit_status_user_not_found': 'Người Dùng not found',
     
-    # 8. Time Units
+    # 8. Thời gian Units
     'contact_limit_minute': 'minute(s)',
     'contact_limit_second': 'second(s)',
     
-    # 9. ZIP File Naming
+    # 9. ZIP Tệp Naming
     'contact_limit_zip_normal': 'ContactKiểm tra_Normal',
     'contact_limit_zip_limited': 'ContactKiểm tra_Limited',
     'contact_limit_zip_faiđã': 'ContactKiểm tra_Thất Bại',
     
-    # ===== Activate/Redeem Membership Feature =====
-    # 1. Membership Center Page
+    # ===== Activate/Redeem Thành viên Feature =====
+    # 1. Thành viên Center Page
     'member_center_title': '💳 Thành Viên Center',
-    'member_current_status': '📊 Current Status',
+    'member_current_status': '📊 Current Trạng thái',
     'member_feature_title': '💡 Features',
     'member_feature1': '• Redeem card code to activate membership',
     'member_feature2': '• Thành Viên duration auto-accumulates',
@@ -2297,8 +2297,8 @@ TEXTS = {
     'member_operation_title': '🎯 Operation Options',
     'member_operation_desc': 'Please select the operation you want to perform',
     
-    # 2. Membership Status Types
-    'member_status_admin': '👑 Admin (Vĩnh Viễn)',
+    # 2. Thành viên Trạng thái Types
+    'member_status_admin': '👑 Quản trị viên (Vĩnh Viễn)',
     'member_status_none': '❌ Không có Thành Viên',
     'member_status_member': '💎 Member',
     'member_status_expire': '• Hết Hạn time: {time}',
@@ -2319,13 +2319,13 @@ TEXTS = {
     'redeem_tip3': '• Duration auto-accumulates after successful redemption',
     'redeem_timeout': '⏰ Auto-cancel if no input within 5 minutes',
     
-    # 5. Redemption Success
+    # 5. Redemption Thành công
     'redeem_success': '✅ Redemption Thành Côngful!',
     'redeem_info_title': '📋 Redemption Info',
     'redeem_info_code': '• Code: {code}',
     'redeem_info_level': '• Thành Viên level: {level}',
     'redeem_info_days': '• Days added: {days} day(s)',
-    'redeem_current_status': '💎 Current Thành Viên Status',
+    'redeem_current_status': '💎 Current Thành Viên Trạng thái',
     'redeem_current_level': '• Thành Viên level: {level}',
     'redeem_current_expire': '• Hết Hạn time: {time}',
     'redeem_thanks': 'Thank you for your support!',
@@ -2338,33 +2338,33 @@ TEXTS = {
     'redeem_error_invalid': 'Invalid code status',
     'redeem_error_check': 'Please check if your code is correct',
     
-    # 7. Membership Level Names
+    # 7. Thành viên Level Names
     'member_level_member': 'Member',
-    'member_level_admin': 'Admin',
+    'member_level_admin': 'Quản trị viên',
     
-    # ===== Admin Panel Features =====
-    # 1. Admin Panel Main
+    # ===== Quản trị viên Panel Features =====
+    # 1. Quản trị viên Panel Main
     'admin_panel_title': '👑 Bảng Quản Trị',
-    'admin_panel_access_denied': '❌ Admin only',
+    'admin_panel_access_denied': '❌ Quản trị viên only',
     'admin_system_stats': '📊 System Statistics',
-    'admin_total_users': 'Total Người Dùngs',
+    'admin_total_users': 'Tổng Người Dùngs',
     'admin_today_active': 'Active Today',
     'admin_week_active': 'Active This Week',
     'admin_active_members': 'Active Members',
     'admin_trial_members': 'Trial Members',
     'admin_recent_users': 'Recent New Người Dùngs',
-    'admin_info': '👑 Admin Info',
-    'admin_count': 'Admin Count',
+    'admin_info': '👑 Quản trị viên Info',
+    'admin_count': 'Quản trị viên Số lượng',
     'admin_your_permission': 'Your Permission',
-    'admin_super_admin': '👑 Super Admin',
-    'admin_normal_admin': '🔧 Normal Admin',
-    'admin_system_time': 'System Time',
+    'admin_super_admin': '👑 Super Quản trị viên',
+    'admin_normal_admin': '🔧 Normal Quản trị viên',
+    'admin_system_time': 'System Thời gian',
     'admin_quick_actions': '🔧 Quick Actions',
     'admin_quick_actions_desc': 'Click buttons below to manage',
     'admin_btn_user_management': '👥 Người Dùng Management',
     'admin_btn_user_stats': '📊 Người Dùng Statistics',
     'admin_btn_proxy_management': '📡 Quản Lý Proxy',
-    'admin_btn_admin_management': '👑 Admin Management',
+    'admin_btn_admin_management': '👑 Quản trị viên Management',
     'admin_btn_search_user': '🔍 Search Người Dùng',
     'admin_btn_recent_users': '📋 Recent Người Dùngs',
     'admin_btn_card_activation': '💳 Card Activation',
@@ -2373,12 +2373,12 @@ TEXTS = {
     'admin_btn_broadcast': '📢 Broadcast',
     'admin_btn_back_panel': '🔙 Quay Lại to Bảng Quản Trị',
     
-    # 2. User Management
+    # 2. Người dùng Management
     'user_management_title': '👥 Người Dùng Management',
     'user_management_recent_active': '📋 Recently Active Người Dùngs (7 days)',
     'user_management_no_active': 'Không có active users',
     'user_management_legend': '📖 Legend',
-    'user_management_legend_admin': '👑 = Admin',
+    'user_management_legend_admin': '👑 = Quản trị viên',
     'user_management_legend_vip': '💎 = VIP',
     'user_management_legend_normal': '❌ = Normal Người Dùng',
     'user_management_time_hours_ago': '{hours}h ago',
@@ -2389,10 +2389,10 @@ TEXTS = {
     'user_management_btn_stats': '📊 Người Dùng Statistics',
     'user_management_btn_refresh': '🔄 Refresh',
     
-    # 3. User Statistics
+    # 3. Người dùng Statistics
     'user_stats_title': '📊 Người Dùng Statistics',
     'user_stats_basic_data': '👥 Người Dùng Overview',
-    'user_stats_total_users': 'Total Người Dùngs',
+    'user_stats_total_users': 'Tổng Người Dùngs',
     'user_stats_today_active': 'Active Today',
     'user_stats_week_active': 'Active This Week',
     'user_stats_recent_new': 'Recent New Người Dùngs',
@@ -2404,10 +2404,10 @@ TEXTS = {
     'user_stats_activity_analysis': '📈 Activity Analysis',
     'user_stats_week_rate': 'Weekly Active Rate',
     'user_stats_day_rate': 'Daily Active Rate',
-    'user_stats_time': '📅 Statistics Time',
+    'user_stats_time': '📅 Statistics Thời gian',
     'user_stats_btn_refresh': '🔄 Refresh Data',
     
-    # 4. Search User
+    # 4. Search Người dùng
     'search_user_title': '🔍 Search Người Dùng',
     'search_user_prompt': '📝 Please enter search keywords:',
     'search_user_methods': 'Supported search methods:',
@@ -2425,29 +2425,29 @@ TEXTS = {
     'search_user_found': 'Found {count} matching users:',
     'search_user_btn_continue': '🔍 Continue Search',
     
-    # 5. Recent Users
+    # 5. Recent Người dùngs
     'recent_users_title': '📋 Recently Registered Người Dùngs',
     'recent_users_no_data': 'Không có user data',
     'recent_users_registered': '{time}',
     'recent_users_btn_refresh': '🔄 Refresh List',
     
-    # 6. Admin Management
-    'admin_manage_title': '👑 Admin Management',
-    'admin_manage_list': '📋 Current Admin List',
-    'admin_manage_super': '👑 Super Admin',
-    'admin_manage_normal': '👤 Normal Admin',
+    # 6. Quản trị viên Management
+    'admin_manage_title': '👑 Quản trị viên Management',
+    'admin_manage_list': '📋 Current Quản trị viên List',
+    'admin_manage_super': '👑 Super Quản trị viên',
+    'admin_manage_normal': '👤 Normal Quản trị viên',
     'admin_manage_no_admins': 'Không có admins',
     'admin_manage_nickname': 'Biệt Danh',
     'admin_manage_username': 'Người Dùngname',
-    'admin_manage_added_time': 'Added Time',
-    'admin_manage_admin_prefix': 'Admin',
-    'admin_manage_config_admin': 'Config File Admin',
+    'admin_manage_added_time': 'Thêmed Thời gian',
+    'admin_manage_admin_prefix': 'Quản trị viên',
+    'admin_manage_config_admin': 'Config Tệp Quản trị viên',
     'admin_manage_system_builtin': 'System Built-in',
     'admin_manage_description': '📖 Description',
     'admin_manage_desc_super': 'Super admins are from config file',
     'admin_manage_desc_normal': 'Normal admins can be added via commands',
     
-    # 7. User Details
+    # 7. Người dùng Details
     'user_detail_title': '👤 Người Dùng Details',
     'user_detail_basic_info': '📋 Basic Info',
     'user_detail_nickname': 'Biệt Danh',
@@ -2456,19 +2456,19 @@ TEXTS = {
     'user_detail_level': 'Level',
     'user_detail_expiry': 'Hết Hạn',
     'user_detail_usage_stats': '📊 Usage Statistics',
-    'user_detail_register_time': 'Registration Time',
+    'user_detail_register_time': 'Registration Thời gian',
     'user_detail_last_active': 'Last Active',
-    'user_detail_usage_count': 'Usage Count',
+    'user_detail_usage_count': 'Usage Số lượng',
     'user_detail_btn_gift': '🎁 Gift Thành Viên',
     'user_detail_btn_ban': '🚫 Ban Người Dùng',
     'user_detail_btn_back_list': 'Quay Lại to List',
     'user_detail_not_found': '❌ Người Dùng {user_id} not found',
     
-    # 8. Gift Membership
+    # 8. Gift Thành viên
     'gift_membership_title': '🎁 Gift Thành Viên',
     'gift_membership_user_info': '📋 Người Dùng Info',
-    'gift_membership_current_status': '💎 Current Thành Viên Status',
-    'gift_membership_select_days': '⏰ Select Gift Duration',
+    'gift_membership_current_status': '💎 Current Thành Viên Trạng thái',
+    'gift_membership_select_days': '⏰ Chọn Gift Duration',
     'gift_membership_select_prompt': 'Please select membership days to gift:',
     'gift_membership_1day': '1 Day',
     'gift_membership_7days': '7 Days',
@@ -2482,24 +2482,24 @@ TEXTS = {
     'gift_membership_days_gifted': 'Days Gifted',
     'gift_membership_btn_continue': '🔄 Continue Gifting',
     
-    # 9. Ban User
+    # 9. Ban Người dùng
     'ban_user_confirm_title': '⚠️ Xác Nhận Ban Người Dùng',
     'ban_user_confirm_prompt': '⚠️ Are you sure you want to ban this user?',
     'ban_user_confirm_desc': 'After banning, this user will not be able to use the bot.',
     'ban_user_btn_confirm': '✅ Xác Nhận Ban',
     'ban_user_success': '✅ Ban Thành Côngful!',
     'ban_user_info': '📋 Ban Info',
-    'ban_user_time': 'Ban Time',
+    'ban_user_time': 'Ban Thời gian',
     'ban_user_desc': 'This user has been banned and cannot use the bot.',
     
     # 10. Proxy Management Panel
     'proxy_panel_title': '📡 Quản Lý Proxy Panel',
     'proxy_panel_overview': '📊 Proxy Overview',
-    'proxy_panel_total': 'Total Proxies',
+    'proxy_panel_total': 'Tổng Proxies',
     'proxy_panel_available': 'Available Proxies',
     'proxy_panel_invalid': 'Invalid Proxies',
     'proxy_panel_success_rate': 'Thành Công Rate',
-    'proxy_panel_select_op': '🔧 Select Operation:',
+    'proxy_panel_select_op': '🔧 Chọn Operation:',
     'proxy_panel_btn_status': '📊 Trạng Thái Proxy',
     'proxy_panel_btn_test': '🔄 Test Proxies',
     'proxy_panel_btn_stats': '📈 Proxy Statistics',
@@ -2507,16 +2507,16 @@ TEXTS = {
     'proxy_panel_btn_optimize': '⚡ Tốc Độ Optimization',
     'proxy_panel_btn_back': 'Quay Lại to Proxy Panel',
     
-    # 11. Proxy Status
-    'proxy_status_title': '📊 Proxy Detaiđã Status',
+    # 11. Proxy Trạng thái
+    'proxy_status_title': '📊 Proxy Detaiđã Trạng thái',
     'proxy_status_basic': '📈 Basic Statistics',
     'proxy_status_performance': '⚡ Performance Metrics',
-    'proxy_status_avg_response': 'Average Response',
-    'proxy_status_fastest': 'Fastest Response',
-    'proxy_status_slowest': 'Slowest Response',
+    'proxy_status_avg_response': 'Trung bình Phản hồi',
+    'proxy_status_fastest': 'Fastest Phản hồi',
+    'proxy_status_slowest': 'Slowest Phản hồi',
     'proxy_status_region': '🌍 Region Distribution',
-    'proxy_status_update_time': '🕐 Update Time',
-    'proxy_status_btn_refresh': '🔄 Refresh Status',
+    'proxy_status_update_time': '🕐 Cập nhật Thời gian',
+    'proxy_status_btn_refresh': '🔄 Refresh Trạng thái',
     
     # 12. Test Proxies
     'proxy_test_title': '🔄 Proxy Test',
@@ -2532,9 +2532,9 @@ TEXTS = {
     'proxy_test_available': 'Available',
     'proxy_test_invalid': 'Invalid',
     'proxy_test_wait': 'Vui lòng đợi...',
-    'proxy_test_complete': '✅ Proxy Test Complete!',
+    'proxy_test_complete': '✅ Proxy Test Hoàn thành!',
     'proxy_test_results': '📊 Test Results',
-    'proxy_test_total': 'Total Tested',
+    'proxy_test_total': 'Tổng Tested',
     'proxy_test_duration': '⏱ Duration',
     'proxy_test_seconds': 'seconds',
     'proxy_test_btn_clean': '🗑 Clean Invalid Proxies',
@@ -2555,31 +2555,31 @@ TEXTS = {
     
     # 14. Clean Invalid Proxies
     'proxy_clean_title': '🗑 Clean Invalid Proxies',
-    'proxy_clean_current_status': '📊 Current Status',
+    'proxy_clean_current_status': '📊 Current Trạng thái',
     'proxy_clean_invalid_count': 'Invalid Proxies',
     'proxy_clean_proxies_unit': 'proxy',
     'proxy_clean_of_total': 'of total',
     'proxy_clean_confirm': '⚠️ Xác Nhận Clean?',
     'proxy_clean_warning': 'This will permanently delete all invalid proxy and cannot be undone.',
     'proxy_clean_btn_confirm': '✅ Xác Nhận Clean',
-    'proxy_clean_starting': '🚀 Starting to clean {count} proxy...',
+    'proxy_clean_starting': '🚀 Đang bắt đầu to clean {count} proxy...',
     'proxy_clean_fast_mode': 'Fast Chế Độ: On',
     'proxy_clean_concurrency': 'Concurrency',
     'proxy_clean_wait': 'Vui lòng đợi, cleaning may take a few minutes...',
-    'proxy_clean_complete': '✅ Clean Complete!',
+    'proxy_clean_complete': '✅ Clean Hoàn thành!',
     'proxy_clean_results': '📊 Clean Results',
     'proxy_clean_cleaned': 'Cleaned',
     'proxy_clean_remaining': 'Remaining Proxies',
     'proxy_clean_faiđã': '❌ Proxy Clean Thất Bại',
     'proxy_clean_no_proxies': 'Không có available proxy',
     
-    # 15. Speed Optimization
+    # 15. Tốc độ Optimization
     'proxy_optimize_title': '⚡ Tốc Độ Optimization Config',
     'proxy_optimize_current': '⚙️ Current Settings',
     'proxy_optimize_fast_mode': 'Fast Chế Độ',
     'proxy_optimize_on': '🟢 On',
     'proxy_optimize_off': '🔴 Off',
-    'proxy_optimize_timeout': 'Kiểm tra Timeout',
+    'proxy_optimize_timeout': 'Kiểm tra Thời gianout',
     'proxy_optimize_retry': 'Smart Retry',
     'proxy_optimize_times': 'times',
     'proxy_optimize_auto_clean': 'Auto Clean',
@@ -2598,18 +2598,18 @@ TEXTS = {
     # 16. Card Activation
     'card_activation_title': '🎫 Card Activation',
     'card_activation_description': '📋 Function Description',
-    'card_activation_desc_select': 'Select days to generate card',
+    'card_activation_desc_select': 'Chọn days to generate card',
     'card_activation_desc_count': 'Generate 1 card at a time',
     'card_activation_desc_format': 'Card is 8-digit uppercase alphanumeric',
     'card_activation_desc_usage': 'Each card can only be used once',
-    'card_activation_select_validity': '🎯 Select Validity Period',
+    'card_activation_select_validity': '🎯 Chọn Validity Period',
     'card_activation_select_prompt': 'Please select the card validity period:',
     'card_activation_success': '✅ Card Generated Thành Côngfully!',
     'card_activation_info': '🎫 Card Info',
     'card_activation_code': 'Card Code',
     'card_activation_vip': 'VIP',
     'card_activation_validity': 'Validity',
-    'card_activation_status': 'Status',
+    'card_activation_status': 'Trạng thái',
     'card_activation_unused': 'Unused',
     'card_activation_tips': '💡 Tips',
     'card_activation_tip_save': 'Please keep the card code safe',
@@ -2626,14 +2626,14 @@ TEXTS = {
     'manual_activation_note1': 'Days selection will appear after input',
     'manual_activation_note2': 'Thành Viên duration auto-accumulates',
     'manual_activation_confirm_user': '👤 Xác Nhận Người Dùng Info',
-    'manual_activation_select_days': '⏰ Select Activation Duration',
+    'manual_activation_select_days': '⏰ Chọn Activation Duration',
     'manual_activation_select_prompt': 'Please select membership days for this user:',
     'manual_activation_success': '✅ Activation Thành Côngful!',
     'manual_activation_info': '📋 Activation Info',
-    'manual_activation_days_added': 'Days Added',
+    'manual_activation_days_added': 'Days Thêmed',
     'manual_activation_btn_continue': '🔄 Continue Activation',
     
-    # 18. Revoke Membership
+    # 18. Revoke Thành viên
     'revoke_membership_title': 'Revoke Thành Viên',
     'revoke_membership_prompt': '📝 Please enter username (@name) or user ID to revoke:',
     'revoke_membership_note': 'Revoking will remove all membership privileges',
@@ -2657,16 +2657,16 @@ TEXTS = {
     'broadcast_menu_feature_buttons': 'Can add custom buttons (URL or callback)',
     'broadcast_menu_feature_throttle': 'Smart throttling to avoid rate limits',
     'broadcast_menu_feature_progress': 'Real-time progress display',
-    'broadcast_menu_feature_history': 'Complete history records',
-    'broadcast_menu_select_op': '🔧 Select Operation',
+    'broadcast_menu_feature_history': 'Hoàn thành history records',
+    'broadcast_menu_select_op': '🔧 Chọn Operation',
     'broadcast_menu_click_start': 'Click buttons below to start:',
-    'broadcast_menu_btn_create': '📝 Create Broadcast',
+    'broadcast_menu_btn_create': '📝 Tạo Broadcast',
     'broadcast_menu_btn_history': '📋 History',
     'broadcast_menu_btn_back': 'Quay Lại',
     
-    # 20. Create Broadcast
-    'broadcast_create_title': '📝 Create Broadcast',
-    'broadcast_create_current_status': '📊 Current Status',
+    # 20. Tạo Broadcast
+    'broadcast_create_title': '📝 Tạo Broadcast',
+    'broadcast_create_current_status': '📊 Current Trạng thái',
     'broadcast_create_media': 'Media',
     'broadcast_create_text': 'Text',
     'broadcast_create_buttons': 'Buttons',
@@ -2720,31 +2720,31 @@ TEXTS = {
     'broadcast_preview_title': '🔍 Full Preview',
     'broadcast_preview_label': '📢 Preview',
     
-    # 25. Select Target Users
-    'broadcast_target_title': '📝 Create Broadcast - Step 4/4',
+    # 25. Chọn Target Người dùngs
+    'broadcast_target_title': '📝 Tạo Broadcast - Step 4/4',
     'broadcast_target_subtitle': 'Title',
     'broadcast_target_content_set': 'Content Set',
-    'broadcast_target_select': '🎯 Please Select Target Người Dùngs',
+    'broadcast_target_select': '🎯 Please Chọn Target Người Dùngs',
     'broadcast_target_prompt': 'Please select user group to send notification:',
-    'broadcast_target_all': '👥 All Người Dùngs',
+    'broadcast_target_all': '👥 Tất cả Người Dùngs',
     'broadcast_target_vip': '💎 VIP Only',
     'broadcast_target_active': '🔥 Active Người Dùngs (7d)',
     'broadcast_target_new': '🆕 New Người Dùngs (7d)',
     
-    # 26. Broadcast Preview Confirmation
+    # 26. Broadcast Preview Xác nhậnation
     'broadcast_confirm_title': 'Broadcast Preview',
     'broadcast_confirm_title_label': '📋 Title',
     'broadcast_confirm_target': '🎯 Target',
     'broadcast_confirm_users': 'users',
     'broadcast_confirm_content': '📄 Content',
     'broadcast_confirm_send': '⚠️ Xác Nhận Send?',
-    'broadcast_confirm_estimate': 'Estimated Time',
+    'broadcast_confirm_estimate': 'Estimated Thời gian',
     'broadcast_confirm_mode': 'Send Chế Độ: Smart Throttle Batch Send',
-    'broadcast_confirm_btn_start': '✅ Start Sending',
+    'broadcast_confirm_btn_start': '✅ Start Đang gửi',
     'broadcast_confirm_btn_edit': '✏️ Quay Lại to Edit',
     
-    # 27. Send Progress
-    'broadcast_send_starting': '🚀 Starting broadcast...',
+    # 27. Send Tiến trình
+    'broadcast_send_starting': '🚀 Đang bắt đầu broadcast...',
     'broadcast_send_initializing': 'Initializing...',
     'broadcast_send_broadcasting': '📡 Broadcasting...',
     'broadcast_send_target': 'Target',
@@ -2752,30 +2752,30 @@ TEXTS = {
     'broadcast_send_success': 'Thành Công',
     'broadcast_send_faiđã': 'Thất Bại',
     
-    # 28. Send Complete
-    'broadcast_complete_title': '✅ Broadcast Complete!',
+    # 28. Send Hoàn thành
+    'broadcast_complete_title': '✅ Broadcast Hoàn thành!',
     'broadcast_complete_stats': '📊 Send Statistics',
     'broadcast_complete_target_users': 'Target Người Dùngs',
-    'broadcast_complete_total_time': 'Total Time',
-    'broadcast_complete_avg_speed': 'Average Tốc Độ',
+    'broadcast_complete_total_time': 'Tổng Thời gian',
+    'broadcast_complete_avg_speed': 'Trung bình Tốc Độ',
     'broadcast_complete_users_sec': 'users/sec',
     'broadcast_complete_id': '📋 Broadcast ID',
     
     # 29. Broadcast History
     'broadcast_history_title': '📋 Broadcast History',
-    'broadcast_history_all': 'All',
+    'broadcast_history_all': 'Tất cả',
     'broadcast_history_btn_back': 'Quay Lại to History',
     
     # 30. Broadcast Details
     'broadcast_detail_title': '📋 Broadcast Details',
     'broadcast_detail_id': '🆔 ID',
     'broadcast_detail_title_label': '📝 Title',
-    'broadcast_detail_created': '📅 Created Time',
-    'broadcast_detail_status': '📊 Status',
-    'broadcast_detail_completed': '✅ Completed',
+    'broadcast_detail_created': '📅 Tạod Thời gian',
+    'broadcast_detail_status': '📊 Trạng thái',
+    'broadcast_detail_completed': '✅ Hoàn thànhd',
     'broadcast_detail_target_group': '🎯 Target Group',
-    'broadcast_detail_all_users': 'All Người Dùngs',
-    'broadcast_detail_target_count': '🎯 Target Count',
+    'broadcast_detail_all_users': 'Tất cả Người Dùngs',
+    'broadcast_detail_target_count': '🎯 Target Số lượng',
     'broadcast_detail_results': '📈 Send Results',
     'broadcast_detail_duration': 'Duration',
     'broadcast_detail_content': '📄 Content',

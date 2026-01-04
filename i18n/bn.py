@@ -1,11 +1,11 @@
 TEXTS = {
-    # ===== Main Menu =====
+    # ===== Main মেনু =====
     'bot_title': '🔍 টেলিগ্রাম অ্যাকাউন্ট বট V8.0',
     'main_menu_title': '🏠 মূল মেনু',
     'main_menu_welcome': '👋 টেলিগ্রাম অ্যাকাউন্ট ম্যানেজার বটে স্বাগতম!',
     'main_menu_select': 'অনুগ্রহ করে একটি ফাংশন নির্বাচন করুন:',
     
-    # User info
+    # ব্যবহারকারী info
     'user_info': 'ব্যবহারকারীর তথ্য',
     'user_nickname': 'ডাকনাম',
     'user_id': 'ID',
@@ -17,7 +17,7 @@ TEXTS = {
     'membership_admin': 'প্রশাসক',
     'default_user': 'ব্যবহারকারী',
     
-    # Proxy status
+    # প্রক্সি status
     'proxy_status': 'প্রক্সি স্ট্যাটাস',
     'proxy_mode': 'প্রক্সি মোড',
     'proxy_mode_enabহয়েছে': '🟢সক্রিয়',
@@ -47,7 +47,7 @@ TEXTS = {
     'btn_admin_panel': '👑 অ্যাডমিন প্যানেল',
     'btn_proxy_panel': '📡 প্রক্সি ম্যানেজমেন্ট',
     
-    # Language switch
+    # ভাষা switch
     'btn_language_menu': '🌐 ভাষা পরিবর্তন করুন',
     'language_menu_title': '🌐 ভাষা নির্বাচন করুন',
     'language_chinese': '🇨🇳 中文',
@@ -59,7 +59,7 @@ TEXTS = {
     'language_vietnamese': '🇻🇳 Tiếng Việt',
     'language_switched': '✅ ভাষা বাংলায় পরিবর্তন করা হয়েছে',
     
-    # Back button
+    # পিছনে button
     'btn_back_to_menu': 'মেনুতে ফিরুন',
     'btn_back': '◀️ পিছনে',
     'btn_cancel': '❌ বাতিল',
@@ -71,13 +71,13 @@ TEXTS = {
     'status_failed': '❌ ব্যর্থ',
     'status_cancelled': '❌ বাতিল',
     
-    # Proxy status
+    # প্রক্সি status
     'proxy_enabled': '🌐 প্রক্সি মোড: সক্রিয়',
     'proxy_disabled': '🌐 প্রক্সি মোড: নিষ্ক্রিয়',
     'proxy_count': '🌐 প্রক্সি মোড: সক্রিয় ({count} প্রক্সি)',
     
-    # ===== Account Check =====
-    # Upload prompt interface
+    # ===== অ্যাকাউন্ট চেক =====
+    # আপলোড prompt interface
     'account_check_upload_title': '📨 অনুগ্রহ করে আপনার অ্যাকাউন্ট ফাইল আপলোড করুন',
     'account_check_supported_formats': '📋 সমর্থিত ফরম্যাট',
     'account_check_format_zip': '· ZIP আর্কাইভ (প্রস্তাবিত)',
@@ -96,7 +96,7 @@ TEXTS = {
     'account_check_threads': '⚡ সমসাময়িক থ্রেড: {count}',
     'account_check_please_wait': 'অনুগ্রহ করে অপেক্ষা করুন, রিয়েল-টাইম অগ্রগতি দেখানো হচ্ছে...',
     
-    # Check progress
+    # চেক progress
     'account_check_in_progress': '⚡ চেক চলছে...',
     'account_check_progress_title': '📊 চেক অগ্রগতি',
     'account_check_progress_percent': '· অগ্রগতি: {percent}% ({done}/{total})',
@@ -104,18 +104,18 @@ TEXTS = {
     'account_check_mode': '· মোড: {mode}',
     'account_check_speed': '· গতি: {speed} অ্যাকাউন্ট/sec',
     'account_check_remaining': '· Est. remaining: {time} min',
-    'account_check_proxy_stats': '🔄 Proxy Usage Stats',
+    'account_check_proxy_stats': '🔄 প্রক্সি ব্যবহার পরিসংখ্যান',
     'account_check_proxies_used': '· Proxies used: {count}',
     'account_check_fallback_local': '· Fallback local: {count}',
     'account_check_faiহয়েছে_proxies': '· ব্যর্থ প্রক্সি: {count}',
-    'account_check_optimization': '⚡ Optimization Status',
+    'account_check_optimization': '⚡ Optimization অবস্থা',
     'account_check_fast_mode': '· Fast mode: {status}',
     'account_check_fast_mode_on': '🟢 On',
     'account_check_fast_mode_off': '🔴 Off',
     'account_check_concurrency': '· Concurrency: {count}',
     'account_check_timeout': '· চেক timeout: {seconds}s',
     
-    # Account status categories
+    # অ্যাকাউন্ট status categories
     'status_no_restriction': 'কোনো সীমাবদ্ধতা নেই',
     'status_spambot': 'স্প্যাম',
     'status_frozen': 'হিমায়িত',
@@ -127,46 +127,46 @@ TEXTS = {
     'zip_spambot': 'স্প্যাম_{count}',
     'zip_frozen': 'হিমায়িত_{count}',
     'zip_banned': 'নিষিদ্ধ_{count}',
-    'zip_connection_error': 'Connectionত্রুটি_{count}',
+    'zip_connection_error': 'সংযোগত্রুটি_{count}',
     
-    # File descriptions
+    # ফাইল descriptions
     'file_desc_no_restriction': '📦 কোনো সীমাবদ্ধতা নেই - {count} অ্যাকাউন্ট',
     'file_desc_spambot': '📦 স্প্যাম - {count} অ্যাকাউন্ট',
     'file_desc_frozen': '📦 হিমায়িত - {count} অ্যাকাউন্ট',
     'file_desc_banned': '📦 নিষিদ্ধ - {count} অ্যাকাউন্ট',
     'file_desc_connection_error': '📦 ত্রুটি - {count} অ্যাকাউন্ট',
     
-    # Check completion and summary
+    # চেক completion and summary
     'check_time': '⏰ চেক time: {time}',
     'check_mode_label': '🌐 চেক mode: {mode}',
     'check_mode_proxy': 'প্রক্সি মোড',
     'check_mode_local': 'স্থানীয় মোড',
-    'all_files_sent': '📤 All ফাইল sent successfully!',
-    'send_summary': '📊 Send Summary',
+    'all_files_sent': '📤 সব ফাইল সফলভাবে পাঠানো হয়েছে!',
+    'send_summary': '📊 Send সারাংশ',
     'files_sent_count': '· সফলfully sent: {count} ফাইল',
     'check_mode_summary': '· চেক mode: {mode}',
     'check_duration': '· চেক duration: {seconds}s',
     'thanks_message': 'Thanks for using the enhanced bot! To check again, click /start',
     
-    # Proxy stats and other statistics
+    # প্রক্সি stats and other statistics
     'total_accounts': 'মোট অ্যাকাউন্ট',
-    'proxy_usage_stats': '📡 Proxy Usage Stats',
+    'proxy_usage_stats': '📡 প্রক্সি ব্যবহার পরিসংখ্যান',
     'proxies_used_stat': 'Proxies Used',
-    'fallback_local_stat': 'Fallback Local',
+    'fallback_local_stat': 'Fallback স্থানীয়',
     'faiহয়েছে_proxies_stat': 'ব্যর্থ Proxies',
-    'local_only_stat': 'Local Only',
-    'proxy_connection': '📡 Proxy Connection',
+    'local_only_stat': 'স্থানীয় Only',
+    'proxy_connection': '📡 প্রক্সি সংযোগ',
     'local_connection': '🏠 স্থানীয় সংযোগ',
-    'performance_stats': '⚡ Performance Stats',
-    'average_speed': 'Average গতি',
-    'sending_files': '🚀 Sending classified ফাইল, please wait...',
+    'performance_stats': '⚡ কর্মক্ষমতা পরিসংখ্যান',
+    'average_speed': 'গড় গতি',
+    'sending_files': '🚀 পাঠানো হচ্ছে শ্রেণীবদ্ধ ফাইল, অনুগ্রহ করে অপেক্ষা করুন...',
     'processing_file': '📥 প্রক্রিয়াকরণ your file...',
     'accounts_unit': '',
     'seconds_unit': 's',
     'minutes_unit': 'min',
     'accounts_per_second': 'অ্যাকাউন্ট/s',
     
-    # ===== Format Conversion =====
+    # ===== ফরম্যাট রূপান্তর =====
     # Function introduction page
     'format_conversion_title': '🔄 ফরম্যাট রূপান্তর',
     'format_conversion_supported': '📁 Supported রূপান্তরs',
@@ -208,9 +208,9 @@ TEXTS = {
     'session_to_tdata_info2': '· Batch convert to Tdata format',
     'session_to_tdata_info3': '· Generate corresponding Tdata ফোল্ডার',
     
-    # Conversion progress
+    # রূপান্তর progress
     'processing_your_file': '📥 প্রক্রিয়াকরণ your file...',
-    'start_conversion': '🔄 Starting conversion...',
+    'start_conversion': '🔄 শুরু হচ্ছে conversion...',
     'found_files': '📁 Found {count} ফাইল',
     'initializing': '⏳ Initializing...',
     'conversion_in_progress': '🔄 ফরম্যাট conversion in progress...',
@@ -223,10 +223,10 @@ TEXTS = {
     'conversion_remaining': '⏱️ Est. remaining: {time}s',
     'processing_files': 'প্রক্রিয়াকরণ your ফাইল',
     
-    # Conversion complete (intermediate state)
+    # রূপান্তর complete (intermediate state)
     'conversion_complete': '🎉 রূপান্তর complete!',
     'conversion_stats': '📊 রূপান্তর Stats',
-    'conversion_total': '· Total: {count}',
+    'conversion_total': '· মোট: {count}',
     'conversion_success': '· ✅ সফল: {count}',
     'conversion_faiহয়েছে': '· ❌ ব্যর্থ: {count}',
     'conversion_duration': '· Duration: {time}s',
@@ -241,48 +241,48 @@ TEXTS = {
     'file_desc_conversion_faiহয়েছে': '📦 রূপান্তর faiহয়েছে ({count} অ্যাকাউন্ট)',
     'report_filename_success': 'session_to_tdata_success-report.txt',
     'report_filename_faiহয়েছে': 'conversion_faiহয়েছে-report.txt',
-    'report_desc_success': '📋 রূপান্তর সফল Detaiহয়েছে Report',
-    'report_desc_faiহয়েছে': '📋 রূপান্তর ব্যর্থ Detaiহয়েছে Report',
+    'report_desc_success': '📋 রূপান্তর সফল Detaiহয়েছে রিপোর্ট',
+    'report_desc_faiহয়েছে': '📋 রূপান্তর ব্যর্থ Detaiহয়েছে রিপোর্ট',
     'report_contains_accounts': 'রয়েছে details of {count} অ্যাকাউন্ট',
     
     # Final completion summary
     'conversion_task_complete': '✅ রূপান্তর task complete!',
-    'conversion_total_count': '· Total: {count}',
+    'conversion_total_count': '· মোট: {count}',
     'conversion_success_percent': '· ✅ সফল: {count} ({percent}%)',
     'conversion_faiহয়েছে_percent': '· ❌ ব্যর্থ: {count} ({percent}%)',
-    'conversion_total_time': '· ⏱️ Total time: {seconds}s ({minutes}min)',
+    'conversion_total_time': '· ⏱️ মোট time: {seconds}s ({minutes}min)',
     'conversion_avg_speed': '· 🚀 Avg speed: {speed}/sec',
-    'all_results_sent': '📥 All result ফাইল sent!',
+    'all_results_sent': '📥 সব result ফাইল sent!',
     
-    # Report TXT template
-    'report_title_success': 'ফরম্যাট রূপান্তর Report - সফল',
-    'report_title_faiহয়েছে': 'ফরম্যাট রূপান্তর Report - ব্যর্থ',
+    # রিপোর্ট TXT template
+    'report_title_success': 'ফরম্যাট রূপান্তর রিপোর্ট - সফল',
+    'report_title_faiহয়েছে': 'ফরম্যাট রূপান্তর রিপোর্ট - ব্যর্থ',
     'report_generated_time': 'Generated: {time}',
     'report_conversion_type': 'রূপান্তর type: {type}',
-    'report_total_count': 'Total: {count}',
+    'report_total_count': 'মোট: {count}',
     'report_detail_list': 'Detail List:',
-    'report_file': 'File: {filename}',
+    'report_file': 'ফাইল: {filename}',
     'report_info': 'Info: Phone: {phone} | ব্যবহারকারীname: {username}',
-    'report_time': 'Time: {time}',
+    'report_time': 'সময়: {time}',
     'report_error': 'ত্রুটি: {error}',
     'report_no_username': '@Noব্যবহারকারীname',
     
-    # Error messages
+    # ত্রুটি messages
     'error_file_type': 'ফাইলের ধরন error',
     'error_need_tdata': 'Need Tdata file, but found {type} format',
     'error_need_session': 'Need Session file, but found {type} format',
-    'error_unauthorized': 'Account unauthorized',
+    'error_unauthorized': 'অ্যাকাউন্ট unauthorized',
     'error_auth_key_invalid': 'Auth key invalid',
     'error_file_locked': 'TData file is locked',
     'error_session_locked': 'Session file is locked',
-    'error_connection_timeout': 'Connection timeout',
+    'error_connection_timeout': 'সংযোগ timeout',
     'error_network_faiহয়েছে': 'Network connection faiহয়েছে',
     'error_conversion_faiহয়েছে': 'রূপান্তর faiহয়েছে',
     'error_no_valid_files': 'কোনো valid ফাইল found',
     'error_ensure_correct_format': 'Please ensure ZIP contains the correct format',
     'error_click_function_button': 'Please click the corresponding function button first',
     
-    # ===== Change 2FA Feature =====
+    # ===== পরিবর্তন 2FA Feature =====
     # Function introduction page
     'change_2fa_title': '🔐 Batch 2FA পরিবর্তন করুন পাসওয়ার্ড',
     'change_2fa_core_features': '✨ Core Features',
@@ -295,10 +295,10 @@ TEXTS = {
     'change_2fa_two_formats': 'Two formats supported: New password only (প্রস্তাবিত) or Old + New password',
     'change_2fa_auto_detect_old': 'System auto-detects old password first, no manual input needed',
     'change_2fa_timeout': '5-minute input timeout protection',
-    'change_2fa_auto_update': '🔄 Auto Update পাসওয়ার্ড Files',
+    'change_2fa_auto_update': '🔄 Auto আপডেট পাসওয়ার্ড ফাইলs',
     'change_2fa_session_update': 'Session format: Unified twofa field, removes other password fields',
     'change_2fa_tdata_update': 'TData format: Auto-update 2fa.txt and other password ফাইল',
-    'change_2fa_sync_update': 'Files sync immediately after successful change',
+    'change_2fa_sync_update': 'ফাইলs sync immediately after successful change',
     'change_2fa_no_manual_edit': 'কোনো manual config file editing needed',
     'change_2fa_notes': '⚠️ Notes',
     'change_2fa_note1': 'System will first try to auto-detect existing password',
@@ -310,7 +310,7 @@ TEXTS = {
     'change_2fa_upload_prompt': '🚀 Please upload your ZIP file...',
     'change_2fa_processing': 'প্রক্রিয়াকরণ your ফাইল',
     
-    # Password input prompts
+    # পাসওয়ার্ড input prompts
     'change_2fa_found_files': '📁 Found {count} account ফাইল',
     'change_2fa_file_type': '📊 ফাইলের ধরন: {type}',
     'change_2fa_enter_password': '🔐 Please enter password info:',
@@ -327,58 +327,58 @@ TEXTS = {
     'change_2fa_wait_password': '⏰ Please send password within 5 minutes...',
     
     # Modification progress
-    'change_2fa_starting': '🔄 Starting password change...',
+    'change_2fa_starting': '🔄 শুরু হচ্ছে password change...',
     'change_2fa_found_count': '📊 Found {count} ফাইল',
     'change_2fa_new_password': '🔐 New password: {password}',
-    'change_2fa_please_wait': '⏳ প্রক্রিয়াকরণ, please wait...',
+    'change_2fa_please_wait': '⏳ প্রক্রিয়াকরণ, অনুগ্রহ করে অপেক্ষা করুন...',
     'change_2fa_in_progress': '🔐 2FA password change in progress...',
     'change_2fa_current_progress': '📊 Current অগ্রগতি',
     'change_2fa_processed': 'Processed: {processed}/{total}',
     'change_2fa_speed': 'গতি: {speed}/sec',
     'change_2fa_elapsed': 'Elapsed: {elapsed}s',
-    'change_2fa_success_count': '✅ Change success: {count}',
-    'change_2fa_faiহয়েছে_count': '❌ Change faiহয়েছে: {count}',
+    'change_2fa_success_count': '✅ পরিবর্তন success: {count}',
+    'change_2fa_faiহয়েছে_count': '❌ পরিবর্তন faiহয়েছে: {count}',
     'change_2fa_remaining': '⏱️ Est. remaining: {time}s',
     
     # Modification complete
     'change_2fa_complete': '🎉 2FA password change complete!',
-    'change_2fa_stats': '📊 Change Stats',
-    'change_2fa_total': '· Total: {count}',
+    'change_2fa_stats': '📊 পরিবর্তন Stats',
+    'change_2fa_total': '· মোট: {count}',
     'change_2fa_success': '· ✅ সফল: {count}',
     'change_2fa_faiহয়েছে': '· ❌ ব্যর্থ: {count}',
     'change_2fa_duration': '· ⏱️ Duration: {time}s',
     'change_2fa_speed_stat': '· 🚀 গতি: {speed}/sec',
-    'change_2fa_sending_results': '📦 Sending result ফাইল...',
+    'change_2fa_sending_results': '📦 পাঠানো হচ্ছে result ফাইল...',
     
-    # Sending complete
-    'change_2fa_all_sent': '🎉 All ফাইল sent successfully!',
-    'change_2fa_send_summary': '📋 Send Summary',
-    'change_2fa_files_sent': '· Files sent: {count}',
-    'change_2fa_total_accounts': '· Total অ্যাকাউন্ট: {count}',
+    # পাঠানো হচ্ছে complete
+    'change_2fa_all_sent': '🎉 সব ফাইল সফলভাবে পাঠানো হয়েছে!',
+    'change_2fa_send_summary': '📋 Send সারাংশ',
+    'change_2fa_files_sent': '· ফাইলs sent: {count}',
+    'change_2fa_total_accounts': '· মোট অ্যাকাউন্ট: {count}',
     'change_2fa_success_count': '· ✅ সফল: {count}',
     'change_2fa_faiহয়েছে_count': '· ❌ ব্যর্থ: {count}',
     'change_2fa_time_spent': '· ⏱️ Duration: {time}s',
     'change_2fa_use_again': 'To use again, click /start',
     
     # Result file naming
-    'zip_change_2fa_success': 'Change2FA_সফল_{count}',
-    'zip_change_2fa_faiহয়েছে': 'Change2FA_ব্যর্থ_{count}',
+    'zip_change_2fa_success': 'পরিবর্তন2FA_সফল_{count}',
+    'zip_change_2fa_faiহয়েছে': 'পরিবর্তন2FA_ব্যর্থ_{count}',
     'file_desc_change_2fa_success': '📦 সফল ({count} অ্যাকাউন্ট)',
     'file_desc_change_2fa_faiহয়েছে': '📦 ব্যর্থ ({count} অ্যাকাউন্ট)',
     'change_2fa_process_time': '⏰ Process time: {time}',
-    'report_change_2fa_success': 'Change2FA_সফল_{count}_Report.txt',
-    'report_change_2fa_faiহয়েছে': 'Change2FA_ব্যর্থ_{count}_Report.txt',
-    'report_desc_change_2fa_success': '📋 সফল Detaiহয়েছে Report',
-    'report_desc_change_2fa_faiহয়েছে': '📋 ব্যর্থ Detaiহয়েছে Report',
+    'report_change_2fa_success': 'পরিবর্তন2FA_সফল_{count}_রিপোর্ট.txt',
+    'report_change_2fa_faiহয়েছে': 'পরিবর্তন2FA_ব্যর্থ_{count}_রিপোর্ট.txt',
+    'report_desc_change_2fa_success': '📋 সফল Detaiহয়েছে রিপোর্ট',
+    'report_desc_change_2fa_faiহয়েছে': '📋 ব্যর্থ Detaiহয়েছে রিপোর্ট',
     'report_contains_details': 'রয়েছে details of {count} অ্যাকাউন্ট',
     
-    # Report TXT template
-    'report_2fa_title_success': '2FA পাসওয়ার্ড Change Report - সফল',
-    'report_2fa_title_faiহয়েছে': '2FA পাসওয়ার্ড Change Report - ব্যর্থ',
-    'report_2fa_total': 'Total: {count}',
+    # রিপোর্ট TXT template
+    'report_2fa_title_success': '2FA পাসওয়ার্ড পরিবর্তন রিপোর্ট - সফল',
+    'report_2fa_title_faiহয়েছে': '2FA পাসওয়ার্ড পরিবর্তন রিপোর্ট - ব্যর্থ',
+    'report_2fa_total': 'মোট: {count}',
     'report_2fa_generated': 'Generated: {time}',
     'report_2fa_detail_list': 'Detail List:',
-    'report_2fa_account': 'Account: {account}',
+    'report_2fa_account': 'অ্যাকাউন্ট: {account}',
     'report_2fa_details': 'Details: {info}',
     'report_2fa_process_time': 'Process time: {time}',
     'report_2fa_old_password_not_found': 'Old password not found',
@@ -388,7 +388,7 @@ TEXTS = {
     
     # Failure analysis and solutions
     'report_2fa_failure_analysis': 'Failure Analysis and Solutions:',
-    'report_2fa_reason_unauthorized': 'Account unauthorized',
+    'report_2fa_reason_unauthorized': 'অ্যাকাউন্ট unauthorized',
     'report_2fa_reason_unauthorized_desc1': 'TData file may not be logged in or expired',
     'report_2fa_reason_unauthorized_desc2': 'Suggest re-login account',
     'report_2fa_reason_wrong_password': 'Wrong old password',
@@ -398,12 +398,12 @@ TEXTS = {
     'report_2fa_reason_network_desc1': 'চেক if proxy settings are correct',
     'report_2fa_reason_network_desc2': 'Try local connection or change proxy',
     
-    # Additional status messages (for assembling detail information)
+    # যোগ করুনitional status messages (for assembling detail information)
     'status_tdata_updated': 'TData file updated',
     'status_no_json_found': 'but JSON file not found',
     'status_file_update_faiহয়েছে': 'but file update faiহয়েছে',
     
-    # ===== Batch Create Feature =====
+    # ===== Batch তৈরি Feature =====
     # 1. Feature Introduction Page
     'batch_create_title': '📦 ব্যাচ তৈরি Groups/Channels',
     'batch_create_features': 'Features:',
@@ -415,7 +415,7 @@ TEXTS = {
     'batch_create_feature6': '· Support custom or random username generation',
     'batch_create_feature7': '· Process up to 10 অ্যাকাউন্ট simultaneously',
     'batch_create_steps': 'Usage Steps:',
-    'batch_create_step1': '1. Upload Session or TData ফাইল (ZIP supported)',
+    'batch_create_step1': '1. আপলোড Session or TData ফাইল (ZIP supported)',
     'batch_create_step2': '2. System auto-verifies অ্যাকাউন্ট and shows available count',
     'batch_create_step3': '3. Configure creation parameters (type, naming rules, etc.)',
     'batch_create_step4': '4. নিশ্চিত করুন and start batch creation',
@@ -423,40 +423,40 @@ TEXTS = {
     'batch_create_notes': 'Notes:',
     'batch_create_note1': '⚠️ Use responsibly to avoid triggering টেলিগ্রাম limits',
     'batch_create_note2': '⚠️ Suggest creating in batches, don\'t create too many at once',
-    'batch_create_note3': '⚠️ Created groups/channels belong to corresponding অ্যাকাউন্ট',
+    'batch_create_note3': '⚠️ তৈরিd groups/channels belong to corresponding অ্যাকাউন্ট',
     'batch_create_upload_prompt': '📤 Please upload account ফাইল',
     'batch_create_supported_formats': 'সমর্থিত ফরম্যাট: .session / TData folder / .zip archive',
     
-    # 2. Account Verification
+    # 2. অ্যাকাউন্ট Verification
     'batch_create_found_files': '✅ Found {count} account ফাইল',
     'batch_create_verifying': '⏳ Verifying অ্যাকাউন্ট...',
     'batch_create_verifying_progress': 'অগ্রগতি: {done}/{total}',
-    'batch_create_verify_complete': '✅ Account verification complete',
+    'batch_create_verify_complete': '✅ অ্যাকাউন্ট verification complete',
     'batch_create_statistics': 'Statistics:',
-    'batch_create_total_accounts': '· Total অ্যাকাউন্ট: {count}',
+    'batch_create_total_accounts': '· মোট অ্যাকাউন্ট: {count}',
     'batch_create_valid_accounts': '· Valid অ্যাকাউন্ট: {count}',
     'batch_create_invalid_accounts': '· Invalid অ্যাকাউন্ট: {count}',
     'batch_create_can_create_today': '· Can create today: {count}',
     'batch_create_next_step': 'Next step:',
     'batch_create_select_type': 'Please select the type to create',
-    'batch_create_btn_group': 'Create Group',
-    'batch_create_btn_channel': 'Create Channel',
+    'batch_create_btn_group': 'তৈরি Group',
+    'batch_create_btn_channel': 'তৈরি Channel',
     'batch_create_btn_cancel': 'বাতিল',
     'batch_create_btn_back': 'পিছনে',
     
-    # 3. Step 1: Set Creation Count
+    # 3. Step 1: Set Creation সংখ্যা
     'batch_create_group_title': '📦 ব্যাচ তৈরি Groups',
     'batch_create_channel_title': '📦 ব্যাচ তৈরি Channels',
-    'batch_create_account_info': 'Account Info:',
-    'batch_create_step1_title': 'Step 1/4: Set Creation Count',
+    'batch_create_account_info': 'অ্যাকাউন্ট Info:',
+    'batch_create_step1_title': 'Step 1/4: Set Creation সংখ্যা',
     'batch_create_step1_prompt': 'Please enter the number to create per account (1-10):',
     'batch_create_step1_example': '💡 Example: Enter 5 to create 5 groups per valid account',
     'batch_create_step1_example_channel': '💡 Example: Enter 5 to create 5 channels per valid account',
     
-    # 4. Step 2: Set Admins
-    'batch_create_count_set_group': '✅ Count set: {count} per group/account',
-    'batch_create_count_set_channel': '✅ Count set: {count} per channel/account',
-    'batch_create_step2_title': 'Step 2/4: Set Admins (Optional, multiple supported)',
+    # 4. Step 2: Set প্রশাসকs
+    'batch_create_count_set_group': '✅ সংখ্যা set: {count} per group/account',
+    'batch_create_count_set_channel': '✅ সংখ্যা set: {count} per channel/account',
+    'batch_create_step2_title': 'Step 2/4: Set প্রশাসকs (Optional, multiple supported)',
     'batch_create_step2_prompt': 'Please send usernames to add as admins:',
     'batch_create_step2_format': 'ফরম্যাট:',
     'batch_create_step2_format1': '· Single admin: Enter username directly',
@@ -468,7 +468,7 @@ TEXTS = {
     'batch_create_btn_skip': 'Skip',
     
     # 5. Step 3: Set Name and Description
-    'batch_create_admins_set': '✅ Admins set: {admins}',
+    'batch_create_admins_set': '✅ প্রশাসকs set: {admins}',
     'batch_create_admins_count': '({count} total)',
     'batch_create_admins_none': 'None',
     'batch_create_step3_title_group': 'Step 3/4: Set Group Name and Description',
@@ -489,31 +489,31 @@ TEXTS = {
     'batch_create_step4_title_group': 'Step 4/4: Set Group Links',
     'batch_create_step4_title_channel': 'Step 4/4: Set Channel Links',
     'batch_create_step4_prompt': 'Please select link setting method:',
-    'batch_create_step4_option1': '· Custom upload: Upload TXT file with custom usernames',
+    'batch_create_step4_option1': '· Custom upload: আপলোড TXT file with custom usernames',
     'batch_create_step4_option2': '· Auto generate: System randomly generates unique usernames',
     'batch_create_step4_tip1': '💡 Custom username format: One per line, with or without @',
     'batch_create_step4_tip2': '💡 If username exists or unavailable, will auto-skip',
     'batch_create_btn_custom': 'Custom',
     'batch_create_btn_auto': 'Auto Generate',
     
-    # 7. Custom Username Upload
-    'batch_create_custom_title': 'Upload Custom ব্যবহারকারীnames',
+    # 7. Custom ব্যবহারকারীname আপলোড
+    'batch_create_custom_title': 'আপলোড Custom ব্যবহারকারীnames',
     'batch_create_custom_prompt': 'Please upload TXT file with usernames, or enter directly:',
     'batch_create_custom_format': 'ফরম্যাট: One username per line',
     'batch_create_custom_example': 'Example:',
     'batch_create_custom_tip1': '💡 With or without @ symbol',
     'batch_create_custom_tip2': '💡 If username exists, will auto-skip',
     
-    # 8. Final Confirmation
+    # 8. Final নিশ্চিতation
     'batch_create_confirm_title': '📋 Final নিশ্চিত করুনation',
     'batch_create_confirm_type_group': 'Creation type: Group',
     'batch_create_confirm_type_channel': 'Creation type: Channel',
-    'batch_create_confirm_account_stats': 'Account Statistics:',
+    'batch_create_confirm_account_stats': 'অ্যাকাউন্ট Statistics:',
     'batch_create_confirm_valid_count': '· Valid অ্যাকাউন্ট: {count}',
-    'batch_create_confirm_per_account': '· Create per account: {count}',
+    'batch_create_confirm_per_account': '· তৈরি per account: {count}',
     'batch_create_confirm_total_estimate': '· Estimated total: {count}',
     'batch_create_confirm_config': 'Configuration:',
-    'batch_create_confirm_admins': '· Admins: {count} ({admins})',
+    'batch_create_confirm_admins': '· প্রশাসকs: {count} ({admins})',
     'batch_create_confirm_names': '· Name count: {count}',
     'batch_create_confirm_link_auto': '· Link mode: Auto generate',
     'batch_create_confirm_link_custom': '· Link mode: Custom',
@@ -526,36 +526,36 @@ TEXTS = {
     'batch_create_confirm_tip3': '· If username exists, will auto-skip',
     'batch_create_confirm_tip4': '· Detaiহয়েছে report will be generated after completion',
     'batch_create_confirm_question': 'নিশ্চিত করুন to start creation?',
-    'batch_create_btn_confirm': 'নিশ্চিত করুন Create',
+    'batch_create_btn_confirm': 'নিশ্চিত করুন তৈরি',
     
-    # 9. Creation Progress
+    # 9. Creation অগ্রগতি
     'batch_create_creating': '⏳ Creating...',
     'batch_create_wait_report': 'অনুগ্রহ করে অপেক্ষা করুন, detaiহয়েছে report will be sent after completion',
-    'batch_create_starting': '🚀 Starting batch creation',
+    'batch_create_starting': '🚀 শুরু হচ্ছে batch creation',
     'batch_create_progress': 'অগ্রগতি: {done}/{total} ({percent}%)',
-    'batch_create_status_preparing': 'Status: Preparing...',
+    'batch_create_status_preparing': 'অবস্থা: Preparing...',
     'batch_create_btn_view_log': 'View Log',
     
-    # 10. Creation Complete
+    # 10. Creation সম্পূর্ণ
     'batch_create_complete': '✅ Batch creation complete',
-    'batch_create_stats_total': '· Total: {count}',
+    'batch_create_stats_total': '· মোট: {count}',
     'batch_create_stats_success': '· সফল: {count}',
     'batch_create_stats_faiহয়েছে': '· ব্যর্থ: {count}',
     'batch_create_stats_skipped': '· Skipped: {count}',
     'batch_create_success_rate': 'সফল rate: {percent}%',
     'batch_create_report_below': '📄 See detaiহয়েছে report in file below',
-    'batch_create_detaiহয়েছে_report': '📊 Batch Creation Detaiহয়েছে Report',
-    'batch_create_success_list': '✅ সফলfully Created List',
+    'batch_create_detaiহয়েছে_report': '📊 Batch Creation Detaiহয়েছে রিপোর্ট',
+    'batch_create_success_list': '✅ সফলfully তৈরিd List',
     
-    # 11. Report TXT Template - Detaiহয়েছে Report
-    'report_batch_create_title': 'ব্যাচ তৈরি Groups/Channels - Result Report',
+    # 11. রিপোর্ট TXT Template - Detaiহয়েছে রিপোর্ট
+    'report_batch_create_title': 'ব্যাচ তৈরি Groups/Channels - Result রিপোর্ট',
     'report_batch_create_generated': 'Generated: {time}',
     'report_batch_create_stats': 'Statistics:',
-    'report_batch_create_total': '  Total: {count}',
+    'report_batch_create_total': '  মোট: {count}',
     'report_batch_create_success': '  সফল: {count}',
     'report_batch_create_faiহয়েছে': '  ব্যর্থ: {count}',
     'report_batch_create_skipped': '  Skipped: {count}',
-    'report_batch_create_success_list': 'সফলfully Created List:',
+    'report_batch_create_success_list': 'সফলfully তৈরিd List:',
     'report_batch_create_type': 'Type: {type}',
     'report_batch_create_type_group': 'group',
     'report_batch_create_type_channel': 'channel',
@@ -567,12 +567,12 @@ TEXTS = {
     'report_batch_create_creator_account': 'Creator account: {account}',
     'report_batch_create_creator_username': 'Creator username: {username}',
     'report_batch_create_creator_id': 'Creator ID: {id}',
-    'report_batch_create_admins': 'Admins: {admins}',
+    'report_batch_create_admins': 'প্রশাসকs: {admins}',
     'report_batch_create_admins_none': '@None',
-    'report_batch_create_admin_faiহয়েছে': 'Admin add faiহয়েছে:',
+    'report_batch_create_admin_faiহয়েছে': 'প্রশাসক add faiহয়েছে:',
     'report_batch_create_admin_faiহয়েছে_reason': '  - {admin}: ব্যবহারকারীname @{admin} does not exist or invalid',
     
-    # 12. Report TXT Template - Success List
+    # 12. রিপোর্ট TXT Template - সফল List
     'report_success_list_title': 'ব্যাচ তৈরি - সফল List',
     'report_success_list_generated': 'Generated: {time}',
     'report_success_list_count': 'সফল count: {count}',
@@ -584,9 +584,9 @@ TEXTS = {
     'report_success_list_channel_link': 'Channel link: {link}',
     'report_success_list_creator': 'Creator account: {account}',
     'report_success_list_creator_username': 'Creator username: {username}',
-    'report_success_list_admin_username': 'Admin username: {admin}',
+    'report_success_list_admin_username': 'প্রশাসক username: {admin}',
     
-    # 13. Report TXT Template - Failure List
+    # 13. রিপোর্ট TXT Template - Failure List
     'report_failure_list_title': '❌ Failure Details List',
     'report_failure_list_header': 'ব্যাচ তৈরি - Failure List (Detaiহয়েছে Reasons)',
     'report_failure_list_generated': 'Generated: {time}',
@@ -598,21 +598,21 @@ TEXTS = {
     'report_failure_list_creator': 'Creator account: {account}',
     'report_failure_list_reason': 'Failure reason: {reason}',
     
-    # Batch Create - Account Frozen
-    'batch_create_account_frozen_skipped': 'Account frozen, creation skipped',
+    # Batch তৈরি - অ্যাকাউন্ট Frozen
+    'batch_create_account_frozen_skipped': 'অ্যাকাউন্ট frozen, creation skipped',
     
-    # Batch Create - Error Messages
+    # Batch তৈরি - ত্রুটি Messages
     'batch_create_feature_disabহয়েছে': '❌ Batch create feature is disabহয়েছে',
     'batch_create_session_expired': '❌ Session expired',
     'batch_create_session_expired_restart': '❌ Session expired, please restart',
-    'batch_create_count_range_error': '❌ Count must be between 1-10, please re-enter',
+    'batch_create_count_range_error': '❌ সংখ্যা must be between 1-10, please re-enter',
     'batch_create_faiহয়েছে': '❌ Creation faiহয়েছে',
     'batch_create_error': 'ত্রুটি: {error}',
     'error_upload_zip_only': '❌ Please upload ZIP format archive',
     
-    # Batch Create - Progress Messages
-    'batch_create_progress_completed': 'Completed {count}',
-    'batch_create_status_completed': 'Status: Completed {count}',
+    # Batch তৈরি - অগ্রগতি Messages
+    'batch_create_progress_completed': 'সম্পূর্ণd {count}',
+    'batch_create_status_completed': 'অবস্থা: সম্পূর্ণd {count}',
     
     # ===== Forget 2FA Feature =====
     # 1. Feature Introduction Page
@@ -620,7 +620,7 @@ TEXTS = {
     'forget_2fa_important': '⚠️ Important Notes:',
     'forget_2fa_note1': '· Will initiate টেলিগ্রাম official password reset process',
     'forget_2fa_note2': '· পাসওয়ার্ড will be removed after 7-day cooling period',
-    'forget_2fa_note3': '· Proxy connection preferred (to avoid restrictions)',
+    'forget_2fa_note3': '· প্রক্সি connection preferred (to avoid restrictions)',
     'forget_2fa_note4': '· Auto fallback to local connection if proxy fails',
     'forget_2fa_note5': '· Auto random delay between অ্যাকাউন্ট (5-15s)',
     'forget_2fa_proxy_warning': '⚠️ Warning: Insufficient প্রক্সি! Only {count} available, recommend at least 10',
@@ -633,12 +633,12 @@ TEXTS = {
     'forget_2fa_upload_auto': '· Auto-detect file format',
     'forget_2fa_result_categories': '📊 Result Categories:',
     'forget_2fa_category_reset': '· ✅ Reset Requested - সফলfully requested password reset (wait 7 days)',
-    'forget_2fa_category_no_reset': '· ⚠️ কোনো Reset Needed - Account has no 2FA password',
+    'forget_2fa_category_no_reset': '· ⚠️ কোনো Reset Needed - অ্যাকাউন্ট has no 2FA password',
     'forget_2fa_category_cooling': '· ⏳ In Cooling Period - Already in cooling period',
-    'forget_2fa_category_faiহয়েছে': '· ❌ ব্যর্থ - Connection faiহয়েছে/other errors',
+    'forget_2fa_category_faiহয়েছে': '· ❌ ব্যর্থ - সংযোগ faiহয়েছে/other errors',
     'forget_2fa_back_menu': 'পিছনে to মূল মেনু',
     
-    # 2. Processing Progress
+    # 2. প্রক্রিয়াকরণ অগ্রগতি
     'forget_2fa_processing': '🔓 প্রক্রিয়াকরণ 2FA ভুলে গেছেন...',
     'forget_2fa_progress': 'অগ্রগতি: {done}/{total} ({percent}%)',
     'forget_2fa_elapsed': '⏱ Elapsed: {time}s',
@@ -649,28 +649,28 @@ TEXTS = {
     'forget_2fa_stat_faiহয়েছে': '❌ ব্যর্থ: {count}',
     'forget_2fa_stat_pending': '📊 Pending: {count}',
     'forget_2fa_current': 'Current: {filename}...',
-    'forget_2fa_status_reset': 'Status: ✅ Reset Requested',
-    'forget_2fa_status_no_reset': 'Status: ⚠️ কোনো Reset Needed',
-    'forget_2fa_status_cooling': 'Status: ⏳ In Cooling Period',
-    'forget_2fa_status_faiহয়েছে': 'Status: ❌ ব্যর্থ',
-    'forget_2fa_proxy_using': 'Proxy: ✅ Using Proxy',
-    'forget_2fa_proxy_local': 'Proxy: ❌ স্থানীয় সংযোগ',
+    'forget_2fa_status_reset': 'অবস্থা: ✅ Reset Requested',
+    'forget_2fa_status_no_reset': 'অবস্থা: ⚠️ কোনো Reset Needed',
+    'forget_2fa_status_cooling': 'অবস্থা: ⏳ In Cooling Period',
+    'forget_2fa_status_faiহয়েছে': 'অবস্থা: ❌ ব্যর্থ',
+    'forget_2fa_proxy_using': 'প্রক্সি: ✅ Using প্রক্সি',
+    'forget_2fa_proxy_local': 'প্রক্সি: ❌ স্থানীয় সংযোগ',
     
-    # 3. Processing Complete
-    'forget_2fa_complete': '✅ 2FA ভুলে গেছেন প্রক্রিয়াকরণ Complete!',
+    # 3. প্রক্রিয়াকরণ সম্পূর্ণ
+    'forget_2fa_complete': '✅ 2FA ভুলে গেছেন প্রক্রিয়াকরণ সম্পূর্ণ!',
     'forget_2fa_results': '📊 প্রক্রিয়াকরণ Results',
-    'forget_2fa_total_accounts': '· Total অ্যাকাউন্ট: {count}',
+    'forget_2fa_total_accounts': '· মোট অ্যাকাউন্ট: {count}',
     'forget_2fa_result_reset': '· ✅ Reset Requested: {count}',
     'forget_2fa_result_no_reset': '· ⚠️ কোনো Reset Needed: {count}',
     'forget_2fa_result_cooling': '· ⏳ In Cooling Period: {count}',
     'forget_2fa_result_faiহয়েছে': '· ❌ ব্যর্থ: {count}',
-    'forget_2fa_total_time': '⏱ Total time: {time}s',
+    'forget_2fa_total_time': '⏱ মোট time: {time}s',
     'forget_2fa_batch_id': '🆔 Batch ID: {batch_id}',
     'forget_2fa_notes': '📝 Notes:',
-    'forget_2fa_notes_wait': '· Accounts with reset requested need to wait 7-day cooling period',
+    'forget_2fa_notes_wait': '· অ্যাকাউন্টs with reset requested need to wait 7-day cooling period',
     'forget_2fa_notes_remove': '· 2FA password will be removed after cooling period ends',
     
-    # 4. Result File Naming
+    # 4. Result ফাইল Naming
     'zip_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}',
     'zip_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}',
     'zip_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}',
@@ -679,56 +679,56 @@ TEXTS = {
     'file_desc_forget_2fa_no_reset': '📦 2FA ভুলে গেছেন - কোনো Reset Needed ({count})',
     'file_desc_forget_2fa_cooling': '📦 2FA ভুলে গেছেন - In Cooling Period ({count})',
     'file_desc_forget_2fa_faiহয়েছে': '📦 2FA ভুলে গেছেন - ব্যর্থ ({count})',
-    'report_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}_Report.txt',
-    'report_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}_Report.txt',
-    'report_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}_Report.txt',
-    'report_forget_2fa_faiহয়েছে': 'Forgot2FA_ব্যর্থ_{count}_Report.txt',
-    'report_desc_forget_2fa_reset': '📋 Detaiহয়েছে Report - Reset Requested',
-    'report_desc_forget_2fa_no_reset': '📋 Detaiহয়েছে Report - কোনো Reset Needed',
-    'report_desc_forget_2fa_cooling': '📋 Detaiহয়েছে Report - In Cooling Period',
-    'report_desc_forget_2fa_faiহয়েছে': '📋 Detaiহয়েছে Report - ব্যর্থ',
+    'report_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}_রিপোর্ট.txt',
+    'report_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}_রিপোর্ট.txt',
+    'report_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}_রিপোর্ট.txt',
+    'report_forget_2fa_faiহয়েছে': 'Forgot2FA_ব্যর্থ_{count}_রিপোর্ট.txt',
+    'report_desc_forget_2fa_reset': '📋 Detaiহয়েছে রিপোর্ট - Reset Requested',
+    'report_desc_forget_2fa_no_reset': '📋 Detaiহয়েছে রিপোর্ট - কোনো Reset Needed',
+    'report_desc_forget_2fa_cooling': '📋 Detaiহয়েছে রিপোর্ট - In Cooling Period',
+    'report_desc_forget_2fa_faiহয়েছে': '📋 Detaiহয়েছে রিপোর্ট - ব্যর্থ',
     
-    # 5. Report TXT Template - Reset Requested
-    'report_forget_2fa_title_reset': '2FA ভুলে গেছেন Report - Reset Requested',
-    'report_forget_2fa_total': 'Total: {count}',
+    # 5. রিপোর্ট TXT Template - Reset Requested
+    'report_forget_2fa_title_reset': '2FA ভুলে গেছেন রিপোর্ট - Reset Requested',
+    'report_forget_2fa_total': 'মোট: {count}',
     'report_forget_2fa_generated': 'Generated: {time}',
     'report_forget_2fa_detail_list': 'Detail List:',
     'report_forget_2fa_item_reset': '✅ {filename}',
     'report_forget_2fa_phone': 'Phone: {phone}',
-    'report_forget_2fa_status_reset_waiting': 'Status: পাসওয়ার্ড reset requested, waiting for cooling period, until: {date}',
-    'report_forget_2fa_proxy_using': 'Proxy: ✅ Using Proxy',
-    'report_forget_2fa_proxy_local': 'Proxy: ❌ স্থানীয় সংযোগ',
+    'report_forget_2fa_status_reset_waiting': 'অবস্থা: পাসওয়ার্ড reset requested, waiting for cooling period, until: {date}',
+    'report_forget_2fa_proxy_using': 'প্রক্সি: ✅ Using প্রক্সি',
+    'report_forget_2fa_proxy_local': 'প্রক্সি: ❌ স্থানীয় সংযোগ',
     'report_forget_2fa_cooling_until': 'Cooling period until: {date}',
     'report_forget_2fa_duration': 'Duration: {time}s',
     
-    # 6. Report TXT Template - কোনো Reset Needed
-    'report_forget_2fa_title_no_reset': '2FA ভুলে গেছেন Report - কোনো Reset Needed',
+    # 6. রিপোর্ট TXT Template - কোনো Reset Needed
+    'report_forget_2fa_title_no_reset': '2FA ভুলে গেছেন রিপোর্ট - কোনো Reset Needed',
     'report_forget_2fa_item_no_reset': '⚠️ {filename}',
-    'report_forget_2fa_status_detect_faiহয়েছে': 'Status: ব্যর্থ to detect 2FA status: {error}',
-    'report_forget_2fa_status_no_2fa': 'Status: Account has no 2FA password set',
+    'report_forget_2fa_status_detect_faiহয়েছে': 'অবস্থা: ব্যর্থ to detect 2FA status: {error}',
+    'report_forget_2fa_status_no_2fa': 'অবস্থা: অ্যাকাউন্ট has no 2FA password set',
     
-    # 7. Report TXT Template - In Cooling Period
-    'report_forget_2fa_title_cooling': '2FA ভুলে গেছেন Report - In Cooling Period',
+    # 7. রিপোর্ট TXT Template - In Cooling Period
+    'report_forget_2fa_title_cooling': '2FA ভুলে গেছেন রিপোর্ট - In Cooling Period',
     'report_forget_2fa_item_cooling': '⏳ {filename}',
-    'report_forget_2fa_status_in_cooling': 'Status: Already in cooling period, until: {date}',
+    'report_forget_2fa_status_in_cooling': 'অবস্থা: Already in cooling period, until: {date}',
     
-    # 8. Report TXT Template - Faiহয়েছে
-    'report_forget_2fa_title_faiহয়েছে': '2FA ভুলে গেছেন Report - ব্যর্থ',
+    # 8. রিপোর্ট TXT Template - Faiহয়েছে
+    'report_forget_2fa_title_faiহয়েছে': '2FA ভুলে গেছেন রিপোর্ট - ব্যর্থ',
     'report_forget_2fa_item_faiহয়েছে': '❌ {filename}',
-    'report_forget_2fa_status_connection_faiহয়েছে': 'Status: Connection faiহয়েছে (all প্রক্সি and local faiহয়েছে)',
+    'report_forget_2fa_status_connection_faiহয়েছে': 'অবস্থা: সংযোগ faiহয়েছে (all প্রক্সি and local faiহয়েছে)',
     
-    # 9. Initialization and Processing Messages
+    # 9. Initialization and প্রক্রিয়াকরণ Messages
     'forget_2fa_found_accounts': '📊 Found {count} অ্যাকাউন্ট',
     'forget_2fa_format': '📁 ফরম্যাট: {format}',
-    'forget_2fa_proxy_count': '📡 Proxy: {count} available',
+    'forget_2fa_proxy_count': '📡 প্রক্সি: {count} available',
     'forget_2fa_initializing': '⏳ Initializing...',
     'forget_2fa_processing_file': '📥 প্রক্রিয়াকরণ your file...',
     'forget_2fa_no_valid_files': '❌ কোনো valid ফাইল found',
     'forget_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format ফাইল',
-    'forget_2fa_sending_results': '📦 Sending result ফাইল...',
+    'forget_2fa_sending_results': '📦 পাঠানো হচ্ছে result ফাইল...',
     'forget_2fa_send_faiহয়েছে': '❌ ব্যর্থ to send result ফাইল',
     
-    # 10. Status Mapping Text
+    # 10. অবস্থা Mapping Text
     'forget_2fa_status_requested': 'Reset Requested',
     'forget_2fa_status_no_2fa': 'কোনো Reset Needed',
     'forget_2fa_status_cooling': 'In Cooling Period',
@@ -736,9 +736,9 @@ TEXTS = {
     'forget_2fa_status_local': 'স্থানীয় সংযোগ',
     'forget_2fa_status_unknown': 'Unknown',
     
-    # ===== Delete 2FA Feature =====
+    # ===== মুছুন 2FA Feature =====
     # 1. Feature Introduction Page
-    'delete_2fa_title': '❌ Batch Delete 2FA পাসওয়ার্ড',
+    'delete_2fa_title': '❌ Batch মুছুন 2FA পাসওয়ার্ড',
     'delete_2fa_core_features': '✨ Core Features',
     'delete_2fa_auto_detect': '🔍 Auto পাসওয়ার্ড Detection',
     'delete_2fa_tdata_detect': 'TData format: Auto-detect 2fa.txt, twofa.txt, password.txt',
@@ -749,10 +749,10 @@ TEXTS = {
     'delete_2fa_auto_read': 'Auto-detect: Read current password from file',
     'delete_2fa_manual_input': 'Manual input: ব্যবহারকারী enters current 2FA password',
     'delete_2fa_timeout': '5-minute input timeout protection',
-    'delete_2fa_auto_update': '🔄 Auto Update পাসওয়ার্ড Files',
+    'delete_2fa_auto_update': '🔄 Auto আপডেট পাসওয়ার্ড ফাইলs',
     'delete_2fa_session_update': 'Session format: Unified twofa field cleared, removes other password fields',
     'delete_2fa_tdata_update': 'TData format: Auto-delete or clear 2fa.txt and other password ফাইল',
-    'delete_2fa_sync_update': 'Files sync immediately after successful deletion',
+    'delete_2fa_sync_update': 'ফাইলs sync immediately after successful deletion',
     'delete_2fa_no_manual_edit': 'কোনো manual config file editing needed',
     'delete_2fa_notes': '⚠️ Notes',
     'delete_2fa_note1': 'After deleting 2FA, account will no longer require 2FA password',
@@ -764,7 +764,7 @@ TEXTS = {
     'delete_2fa_upload_prompt': '🚀 Please upload your ZIP file...',
     'delete_2fa_back_menu': 'পিছনে to মূল মেনু',
     
-    # 2. Password Input Method Selection
+    # 2. পাসওয়ার্ড Input Method নির্বাচনion
     'delete_2fa_found_files': '📁 Found {count} account ফাইল',
     'delete_2fa_file_type': '📊 ফাইলের ধরন: {type}',
     'delete_2fa_select_method': '🔐 Please select password input method:',
@@ -780,35 +780,35 @@ TEXTS = {
     'delete_2fa_btn_manual': 'Manual Input পাসওয়ার্ড',
     'delete_2fa_btn_cancel': 'বাতিল',
     
-    # 3. Manual Password Input
+    # 3. Manual পাসওয়ার্ড Input
     'delete_2fa_enter_password': '🔐 Please enter current 2FA password:',
     'delete_2fa_enter_desc1': '· Enter your current 2FA password',
     'delete_2fa_enter_desc2': '· System will verify password and delete 2FA',
     'delete_2fa_enter_desc3': '· Please send password within 5 minutes...',
     'delete_2fa_cancel_hint': '💡 To cancel, click /start to return to main menu',
     
-    # 4. Deletion Progress
+    # 4. Deletion অগ্রগতি
     'delete_2fa_in_progress': '🗑️ Deleting 2FA password...',
     'delete_2fa_current_progress': '📊 Current অগ্রগতি',
     'delete_2fa_processed': '· Processed: {done}/{total}',
     'delete_2fa_speed': '· গতি: {speed}/sec',
     'delete_2fa_elapsed': '· Duration: {time}s',
-    'delete_2fa_success_count': '✅ Delete success: {count}',
-    'delete_2fa_faiহয়েছে_count': '❌ Delete faiহয়েছে: {count}',
+    'delete_2fa_success_count': '✅ মুছুন success: {count}',
+    'delete_2fa_faiহয়েছে_count': '❌ মুছুন faiহয়েছে: {count}',
     'delete_2fa_remaining': '⏱️ Est. remaining: {time}s',
     
-    # 5. Deletion Complete
+    # 5. Deletion সম্পূর্ণ
     'delete_2fa_complete': '🎉 2FA password deletion complete!',
     'delete_2fa_stats': '📊 Deletion Stats',
-    'delete_2fa_total': '· Total: {count}',
+    'delete_2fa_total': '· মোট: {count}',
     'delete_2fa_success': '· ✅ সফল: {count}',
     'delete_2fa_faiহয়েছে': '· ❌ ব্যর্থ: {count}',
     'delete_2fa_duration': '· ⏱️ Duration: {time}s',
     'delete_2fa_speed_stat': '· 🚀 গতি: {speed}/sec',
-    'delete_2fa_sending_results': '📦 Sending result ফাইল...',
+    'delete_2fa_sending_results': '📦 পাঠানো হচ্ছে result ফাইল...',
     
-    # 6. Task Complete Summary
-    'delete_2fa_task_complete': '✅ Delete 2FA task complete!',
+    # 6. Task সম্পূর্ণ সারাংশ
+    'delete_2fa_task_complete': '✅ মুছুন 2FA task complete!',
     'delete_2fa_final_stats': '📊 Final Statistics',
     'delete_2fa_final_success': '· সফল: {count}',
     'delete_2fa_final_faiহয়েছে': '· ব্যর্থ: {count}',
@@ -818,49 +818,49 @@ TEXTS = {
     'delete_2fa_tip2': '· পাসওয়ার্ড config in ফাইল has been auto-cleared',
     'delete_2fa_tip3': '· Please keep result ফাইল safe',
     
-    # 7. Result File Naming
-    'zip_delete_2fa_success': 'Delete2FA_সফল_{count}',
-    'zip_delete_2fa_faiহয়েছে': 'Delete2FA_ব্যর্থ_{count}',
+    # 7. Result ফাইল Naming
+    'zip_delete_2fa_success': 'মুছুন2FA_সফল_{count}',
+    'zip_delete_2fa_faiহয়েছে': 'মুছুন2FA_ব্যর্থ_{count}',
     'file_desc_delete_2fa_success': '📦 সফল ({count} অ্যাকাউন্ট)',
     'file_desc_delete_2fa_faiহয়েছে': '📦 ব্যর্থ ({count} অ্যাকাউন্ট)',
     'delete_2fa_process_time': '⏰ Process time: {time}',
-    'report_delete_2fa_success': 'Delete2FA_সফল_{count}_Report.txt',
-    'report_delete_2fa_faiহয়েছে': 'Delete2FA_ব্যর্থ_{count}_Report.txt',
-    'report_desc_delete_2fa_success': '📋 সফল Detaiহয়েছে Report',
-    'report_desc_delete_2fa_faiহয়েছে': '📋 ব্যর্থ Detaiহয়েছে Report',
+    'report_delete_2fa_success': 'মুছুন2FA_সফল_{count}_রিপোর্ট.txt',
+    'report_delete_2fa_faiহয়েছে': 'মুছুন2FA_ব্যর্থ_{count}_রিপোর্ট.txt',
+    'report_desc_delete_2fa_success': '📋 সফল Detaiহয়েছে রিপোর্ট',
+    'report_desc_delete_2fa_faiহয়েছে': '📋 ব্যর্থ Detaiহয়েছে রিপোর্ট',
     'report_delete_2fa_contains': 'রয়েছে details of {count} অ্যাকাউন্ট',
     
-    # 8. Report TXT Template - Success
-    'report_delete_2fa_title_success': '2FA পাসওয়ার্ড Deletion Report - সফল',
-    'report_delete_2fa_total': 'Total: {count}',
+    # 8. রিপোর্ট TXT Template - সফল
+    'report_delete_2fa_title_success': '2FA পাসওয়ার্ড Deletion রিপোর্ট - সফল',
+    'report_delete_2fa_total': 'মোট: {count}',
     'report_delete_2fa_generated': 'Generated: {time}',
     'report_delete_2fa_detail_list': 'Detail List:',
-    'report_delete_2fa_account': 'Account: {account}',
+    'report_delete_2fa_account': 'অ্যাকাউন্ট: {account}',
     'report_delete_2fa_details': 'Details: {info}',
     'report_delete_2fa_process_time': 'Process time: {time}',
     'report_delete_2fa_using_proxy': 'Using proxy',
-    'report_delete_2fa_local_connection': 'Local connection',
+    'report_delete_2fa_local_connection': 'স্থানীয় connection',
     'report_delete_2fa_success_msg': 'পাসওয়ার্ড deleted successfully, file updated',
     'report_delete_2fa_success_no_json': '2FA password deleted',
     'report_delete_2fa_success_with_json': '2FA password deleted, file updated',
     'report_delete_2fa_success_update_faiহয়েছে': '2FA password deleted, but file update faiহয়েছে',
     'report_delete_2fa_manual_faiহয়েছে': 'Manual deletion faiহয়েছে',
-    'report_delete_2fa_error_unauthorized': 'Account unauthorized',
+    'report_delete_2fa_error_unauthorized': 'অ্যাকাউন্ট unauthorized',
     'report_delete_2fa_error_wrong_password': 'Wrong password',
     'report_delete_2fa_error_no_2fa': '2FA not set',
     'report_delete_2fa_error_flood': 'Too many requests, please try later',
-    'report_delete_2fa_error_frozen': 'Account frozen/banned',
+    'report_delete_2fa_error_frozen': 'অ্যাকাউন্ট frozen/banned',
     'report_delete_2fa_error_deletion_faiহয়েছে': 'Deletion faiহয়েছে',
     'report_delete_2fa_error_network': 'Network connection faiহয়েছে',
     'report_delete_2fa_error_general': 'ত্রুটি',
     'report_delete_2fa_error_session_not_found': 'Converted session file not found',
     'report_delete_2fa_error_exception': 'Exception',
     
-    # 9. Report TXT Template - Faiহয়েছে
-    'report_delete_2fa_title_faiহয়েছে': '2FA পাসওয়ার্ড Deletion Report - ব্যর্থ',
+    # 9. রিপোর্ট TXT Template - Faiহয়েছে
+    'report_delete_2fa_title_faiহয়েছে': '2FA পাসওয়ার্ড Deletion রিপোর্ট - ব্যর্থ',
     'report_delete_2fa_error': 'ত্রুটি: {error}',
     'report_delete_2fa_failure_analysis': 'Failure Analysis and Solutions:',
-    'report_delete_2fa_reason_unauthorized': 'Account unauthorized',
+    'report_delete_2fa_reason_unauthorized': 'অ্যাকাউন্ট unauthorized',
     'report_delete_2fa_reason_unauthorized_desc1': 'TData file may not be logged in or expired',
     'report_delete_2fa_reason_unauthorized_desc2': 'Suggest re-login account',
     'report_delete_2fa_reason_wrong_password': 'Wrong old password',
@@ -871,16 +871,16 @@ TEXTS = {
     'report_delete_2fa_reason_network_desc2': 'Try local connection or change proxy',
     
     # 10. Other Messages
-    'delete_2fa_starting': '🗑️ Starting 2FA password deletion...',
+    'delete_2fa_starting': '🗑️ শুরু হচ্ছে 2FA password deletion...',
     'delete_2fa_found_count': '📊 Found {count} ফাইল',
-    'delete_2fa_please_wait': '⏳ প্রক্রিয়াকরণ, please wait...',
+    'delete_2fa_please_wait': '⏳ প্রক্রিয়াকরণ, অনুগ্রহ করে অপেক্ষা করুন...',
     'delete_2fa_processing_file': '📥 প্রক্রিয়াকরণ your file...',
     'delete_2fa_no_valid_files': '❌ কোনো valid ফাইল found',
     'delete_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account ফাইল',
-    'delete_2fa_faiহয়েছে_msg': '❌ Delete 2FA faiহয়েছে',
+    'delete_2fa_faiহয়েছে_msg': '❌ মুছুন 2FA faiহয়েছে',
     'delete_2fa_error_msg': 'ত্রুটি: {error}',
     
-    # ===== Add 2FA Feature =====
+    # ===== যোগ করুন 2FA Feature =====
     # 1. Feature Introduction Page
     'add_2fa_title': '➕ 2FA যোগ করুন পাসওয়ার্ড',
     'add_2fa_features': '📋 Features:',
@@ -891,72 +891,72 @@ TEXTS = {
     'add_2fa_format1': '· ZIP আর্কাইভ (containing Session or TData)',
     'add_2fa_format2': '· Auto-detect file type and add corresponding 2FA config',
     'add_2fa_rules': '⚙️ প্রক্রিয়াকরণ rules:',
-    'add_2fa_rule1': '· Session file → Create JSON file with same name (contains twofa field)',
-    'add_2fa_rule2': '· TData directory → Create 2fa.txt file (same level as tdata)',
+    'add_2fa_rule1': '· Session file → তৈরি JSON file with same name (contains twofa field)',
+    'add_2fa_rule2': '· TData directory → তৈরি 2fa.txt file (same level as tdata)',
     'add_2fa_upload_prompt': '📤 অনুগ্রহ করে আপনার অ্যাকাউন্ট ফাইল আপলোড করুন',
     'add_2fa_back_menu': 'পিছনে to মূল মেনু',
     
-    # 2. Processing
+    # 2. প্রক্রিয়াকরণ
     'add_2fa_processing': 'প্রক্রিয়াকরণ ফাইল....',
     
-    # 3. Scan Complete
-    'add_2fa_scan_complete': '✅ File scan complete!',
+    # 3. Scan সম্পূর্ণ
+    'add_2fa_scan_complete': '✅ ফাইল scan complete!',
     'add_2fa_statistics': '📊 Statistics',
-    'add_2fa_total_accounts': '· Total অ্যাকাউন্ট: {count}',
+    'add_2fa_total_accounts': '· মোট অ্যাকাউন্ট: {count}',
     'add_2fa_file_type': '· ফাইলের ধরন: {type}',
     
-    # 4. Enter Password
+    # 4. Enter পাসওয়ার্ড
     'add_2fa_enter_password': '📝 Please enter the 2FA password to set',
     'add_2fa_enter_desc1': '· This password will apply to all অ্যাকাউন্ট',
     'add_2fa_enter_desc2': '· Session ফাইল will create corresponding JSON config ফাইল',
     'add_2fa_enter_desc3': '· TData directories will create 2fa.txt ফাইল',
     'add_2fa_timeout': '⏰ Auto-cancel if not entered within 5 minutes',
     
-    # 5. Password Received
+    # 5. পাসওয়ার্ড Received
     'add_2fa_password_received': '✅ 2FA password received',
     'add_2fa_password_display': 'পাসওয়ার্ড: {password}',
     'add_2fa_processing_now': 'প্রক্রিয়াকরণ...',
     
-    # 6. Add Complete
+    # 6. যোগ করুন সম্পূর্ণ
     'add_2fa_complete': '✅ 2FA যোগ করুন complete!',
     'add_2fa_results': '📊 প্রক্রিয়াকরণ Results',
     'add_2fa_success': '· সফল: {count}',
     'add_2fa_faiহয়েছে': '· ব্যর্থ: {count}',
-    'add_2fa_total': '· Total: {count}',
+    'add_2fa_total': '· মোট: {count}',
     'add_2fa_duration': '· Duration: {time}s',
     'add_2fa_password_set': '🔐 2FA password set: {password}',
     
-    # 7. Result File Naming
+    # 7. Result ফাইল Naming
     'zip_add_2fa_result': 'add_2fa_result_{timestamp}',
     'file_desc_add_2fa_success': '📦 2FA যোগ করুন Result - সফল {count}',
-    'zip_add_2fa_success': 'Add2FA_সফল_{count}',
-    'zip_add_2fa_faiহয়েছে': 'Add2FA_ব্যর্থ_{count}',
+    'zip_add_2fa_success': 'যোগ করুন2FA_সফল_{count}',
+    'zip_add_2fa_faiহয়েছে': 'যোগ করুন2FA_ব্যর্থ_{count}',
     'file_desc_add_2fa_success_count': '📦 সফল ({count} অ্যাকাউন্ট)',
     'file_desc_add_2fa_faiহয়েছে_count': '📦 ব্যর্থ ({count} অ্যাকাউন্ট)',
-    'report_add_2fa_success': 'Add2FA_সফল_{count}_Report.txt',
-    'report_add_2fa_faiহয়েছে': 'Add2FA_ব্যর্থ_{count}_Report.txt',
-    'report_desc_add_2fa_success': '📋 সফল Detaiহয়েছে Report',
-    'report_desc_add_2fa_faiহয়েছে': '📋 ব্যর্থ Detaiহয়েছে Report',
+    'report_add_2fa_success': 'যোগ করুন2FA_সফল_{count}_রিপোর্ট.txt',
+    'report_add_2fa_faiহয়েছে': 'যোগ করুন2FA_ব্যর্থ_{count}_রিপোর্ট.txt',
+    'report_desc_add_2fa_success': '📋 সফল Detaiহয়েছে রিপোর্ট',
+    'report_desc_add_2fa_faiহয়েছে': '📋 ব্যর্থ Detaiহয়েছে রিপোর্ট',
     
-    # 8. Report TXT Template
-    'report_add_2fa_title_success': '2FA পাসওয়ার্ড Add Report - সফল',
-    'report_add_2fa_title_faiহয়েছে': '2FA পাসওয়ার্ড Add Report - ব্যর্থ',
-    'report_add_2fa_total': 'Total: {count}',
+    # 8. রিপোর্ট TXT Template
+    'report_add_2fa_title_success': '2FA পাসওয়ার্ড যোগ করুন রিপোর্ট - সফল',
+    'report_add_2fa_title_faiহয়েছে': '2FA পাসওয়ার্ড যোগ করুন রিপোর্ট - ব্যর্থ',
+    'report_add_2fa_total': 'মোট: {count}',
     'report_add_2fa_generated': 'Generated: {time}',
     'report_add_2fa_detail_list': 'Detail List:',
-    'report_add_2fa_account': 'Account: {account}',
+    'report_add_2fa_account': 'অ্যাকাউন্ট: {account}',
     'report_add_2fa_details': 'Details: {info}',
     'report_add_2fa_process_time': 'Process time: {time}',
     'report_add_2fa_config_created': '2FA config file created',
     
-    # 9. Errors and Other Messages
+    # 9. ত্রুটিs and Other Messages
     'add_2fa_no_pending_task': '❌ কোনো pending 2FA যোগ করুন task, please start over',
     'add_2fa_operation_timeout': '❌ Operation timeout, please start over',
     'add_2fa_password_empty': '❌ 2FA password cannot be empty, please re-enter',
     'add_2fa_no_valid_files': '❌ কোনো valid ফাইল found',
     'add_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account ফাইল',
     'add_2fa_processing_file': '📥 প্রক্রিয়াকরণ your file...',
-    'add_2fa_processing_config': '🔄 Adding 2FA config...',
+    'add_2fa_processing_config': '🔄 যোগ করুনing 2FA config...',
     'add_2fa_processing_faiহয়েছে': '❌ প্রক্রিয়াকরণ faiহয়েছে',
     'add_2fa_error': 'ত্রুটি: {error}',
     'add_2fa_result_success_desc': '✅ সফল',
@@ -964,59 +964,59 @@ TEXTS = {
     'add_2fa_result_error_desc': '❌ ত্রুটি',
     'add_2fa_need_member': '❌ সদস্যপদ required to use 2FA যোগ করুন feature',
     
-    # ===== Account Split Feature =====
+    # ===== অ্যাকাউন্ট Split Feature =====
     # 1. Feature Introduction Page
-    'split_title': '📦 Account File Classification',
+    'split_title': '📦 অ্যাকাউন্ট ফাইল Classification',
     'split_features': '🎯 Features',
     'split_features_desc': 'Support uploading ZIP ফাইল with multiple অ্যাকাউন্ট (TData directories or Session+JSON ফাইল), auto-detect and classify:',
     'split_methods': '📋 Supported Classification Methods',
-    'split_method_country': '1️⃣ Split by Country Code',
+    'split_method_country': '1️⃣ Split by সংখ্যাry Code',
     'split_method_country_desc1': '· Auto-detect phone number → area code → country',
     'split_method_country_desc2': '· Generate one ZIP per country',
-    'split_method_country_desc3': '· Naming: Country+Code+Count',
+    'split_method_country_desc3': '· Naming: সংখ্যাry+Code+সংখ্যা',
     'split_method_quantity': '2️⃣ Split by Quantity',
     'split_method_quantity_desc1': '· Support single or multiple quantities',
     'split_method_quantity_desc2': '· Mixed countries use "Mixed" label naming',
-    'split_method_quantity_desc3': '· All unidentified use "Unknown" label naming',
+    'split_method_quantity_desc3': '· সব unidentified use "Unknown" label naming',
     'split_steps': '💡 Usage Steps',
     'split_step1': '1. Click button below to start',
-    'split_step2': '2. Upload ZIP file with অ্যাকাউন্ট',
-    'split_step3': '3. Select split method',
+    'split_step2': '2. আপলোড ZIP file with অ্যাকাউন্ট',
+    'split_step3': '3. নির্বাচন split method',
     'split_step4': '4. Wait for processing and receive results',
     'split_notes': '⚠️ Notes',
     'split_note1': '· Support TData and Session formats',
-    'split_note2': '· File size limit 100MB',
+    'split_note2': '· ফাইল size limit 100MB',
     'split_note3': '· Auto-detect phone number and country info',
-    'split_start_upload': '📤 Start Upload',
+    'split_start_upload': '📤 Start আপলোড',
     'split_back_menu': '◀️ পিছনে to মূল মেনু',
     
-    # 2. Upload File
+    # 2. আপলোড ফাইল
     'split_upload_prompt': '📤 Please upload account ফাইল',
     'split_formats': 'সমর্থিত ফরম্যাট:',
     'split_format1': '· Session ফাইল ZIP (.session)',
     'split_format2': '· Session+JSON ফাইল ZIP (.session + .json)',
     'split_format3': '· TData ফোল্ডার ZIP',
-    'split_size_limit': '⚠️ File size limit 100MB',
+    'split_size_limit': '⚠️ ফাইল size limit 100MB',
     'split_timeout': '⏰ 5 minutes timeout',
     'split_back': 'পিছনে to মূল মেনু',
     
-    # 3. Scan Complete
-    'split_scan_complete': '✅ File scan complete!',
+    # 3. Scan সম্পূর্ণ
+    'split_scan_complete': '✅ ফাইল scan complete!',
     'split_statistics': '📊 Statistics',
-    'split_total_accounts': '· Total অ্যাকাউন্ট: {count}',
+    'split_total_accounts': '· মোট অ্যাকাউন্ট: {count}',
     'split_identified': '· Identified: {count}',
     'split_unidentified': '· Unidentified: {count}',
     'split_file_type': '· ফাইলের ধরন: {type}',
     'split_select_method': '🎯 Please select split method:',
     
-    # 4. Select Split Method Buttons
+    # 4. নির্বাচন Split Method Buttons
     'split_select_prompt': 'Please select split method:',
-    'split_btn_country': '🌍 Split by Country',
+    'split_btn_country': '🌍 Split by সংখ্যাry',
     'split_btn_quantity': '🔢 Split by Quantity',
     'split_btn_cancel': '❌ বাতিল',
     
-    # 5. Select Quantity Mode
-    'split_quantity_mode': '🔢 Select quantity mode:',
+    # 5. নির্বাচন Quantity মোড
+    'split_quantity_mode': '🔢 নির্বাচন quantity mode:',
     'split_single_quantity': '1️⃣ Single Quantity',
     'split_single_quantity_desc': 'Split by fixed quantity, e.g. 10 per package',
     'split_multiple_quantity': '🔢 Multiple Quantities',
@@ -1037,40 +1037,40 @@ TEXTS = {
     'split_enter_multiple_desc': 'System will split in order: 1st package 10, 2nd package 20, 3rd package 30',
     'split_enter_multiple_remainder': 'Remainder will be notified but not packaged',
     
-    # 8. Processing
-    'split_sending_results': '📤 Sending results...',
+    # 8. প্রক্রিয়াকরণ
+    'split_sending_results': '📤 পাঠানো হচ্ছে results...',
     'split_processing': 'প্রক্রিয়াকরণ...',
     'split_processing_file': '📥 প্রক্রিয়াকরণ your file...',
-    'split_processing_country': '🔄 Starting split by country...',
+    'split_processing_country': '🔄 শুরু হচ্ছে split by country...',
     'split_processing_country_desc': 'Grouping and packaging...',
-    'split_processing_quantity_single': '🔄 Starting split by quantity...',
+    'split_processing_quantity_single': '🔄 শুরু হচ্ছে split by quantity...',
     'split_processing_quantity_single_desc': '{qty} অ্যাকাউন্ট per package',
-    'split_processing_quantity_multi': '🔄 Starting split by quantity...',
+    'split_processing_quantity_multi': '🔄 শুরু হচ্ছে split by quantity...',
     'split_processing_quantity_multi_sequence': 'Quantity sequence: {sequence}',
-    'split_processing_quantity_multi_total': 'Total অ্যাকাউন্ট: {total}',
+    'split_processing_quantity_multi_total': 'মোট অ্যাকাউন্ট: {total}',
     'split_processing_quantity_multi_requested': 'Requested quantity: {requested}',
     'split_remainder_unallocated': '⚠️ Remaining {remainder} অ্যাকাউন্ট unallocated',
     'split_remainder_exceeded': '⚠️ Requested quantity exceeded, last package may be insufficient',
     
-    # Error messages
+    # ত্রুটি messages
     'split_error_no_task': '❌ কোনো pending classification task',
     'split_error_qty_exceeds': '❌ Quantity {qty} exceeds total অ্যাকাউন্ট {total}',
     
-    # 9. Classification Complete
+    # 9. Classification সম্পূর্ণ
     'split_complete': '✅ Classification complete!',
-    'split_result_total': '· Total অ্যাকাউন্ট: {count}',
+    'split_result_total': '· মোট অ্যাকাউন্ট: {count}',
     'split_result_sent': '· Sent: {count} ফাইল',
-    'split_result_method_country': '· Classification: By Country Code',
+    'split_result_method_country': '· Classification: By সংখ্যাry Code',
     'split_result_method_quantity': '· Classification: By Quantity',
     'split_result_sequence': '· Quantity sequence: {sequence}',
     'split_use_again': 'To use again, click /start',
     
-    # 10. Result File Naming
+    # 10. Result ফাইল Naming
     'split_file_contains': 'রয়েছে {count} অ্যাকাউন্ট',
     'split_mixed': 'Mixed',
     'split_unknown': 'Unknown',
     
-    # 11. Country Name Translations
+    # 11. সংখ্যাry Name Translations
     'country_czech_republic': 'Czech Republic',
     'country_china': 'China',
     'country_united_states': 'United States',
@@ -1189,7 +1189,7 @@ TEXTS = {
     'country_hong_kong': 'Hong Kong',
     'country_macau': 'Macau',
     
-    # Additional countries
+    # যোগ করুনitional countries
     'country_afghanistan': 'Afghanistan',
     'country_albania': 'Albania',
     'country_andorra': 'Andorra',
@@ -1336,7 +1336,7 @@ TEXTS = {
     'country_us_virgin_islands': 'U.S. Virgin Islands',
     'country_antarctica': 'Antarctica',
     
-    # ===== API Conversion Feature =====
+    # ===== API রূপান্তর Feature =====
     # Feature introduction page
     'api_title': '🔗 API ফরম্যাট রূপান্তর',
     'api_core_features': '🎯 Core Features',
@@ -1350,14 +1350,14 @@ TEXTS = {
     'api_verify_feature3': '· Support HTTP API call to get verification code',
     'api_verify_feature4': '· 5-minute auto-expiry protection',
     'api_usage': '📤 Usage',
-    'api_usage_step1': '1. Upload ZIP file (containing TData or Session)',
+    'api_usage_step1': '1. আপলোড ZIP file (containing TData or Session)',
     'api_usage_step2': '2. System auto-analyzes account info',
     'api_usage_step3': '3. Generate API format file and verification links',
-    'api_usage_step4': '4. Download and use results',
+    'api_usage_step4': '4. ডাউনলোড and use results',
     'api_upload_prompt': 'Please upload your file...',
     'api_back_menu': 'পিছনে to মূল মেনু',
     
-    # Processing
+    # প্রক্রিয়াকরণ
     'api_processing_file': 'প্রক্রিয়াকরণ your file',
     
     # Scan complete
@@ -1372,7 +1372,7 @@ TEXTS = {
     'api_2fa_timeout': '⏰ 5 minutes timeout',
     'api_skip': 'skip',
     
-    # Conversion progress
+    # রূপান্তর progress
     'api_converting': '🔄 API conversion in progress...',
     'api_progress': '📊 রূপান্তর অগ্রগতি',
     'api_progress_percent': '· অগ্রগতি: {percent}% ({done}/{total})',
@@ -1380,7 +1380,7 @@ TEXTS = {
     'api_progress_faiহয়েছে': '· ❌ ব্যর্থ: {count}',
     'api_progress_speed': '· Avg speed: {speed}/sec',
     'api_progress_remaining': '· Est. remaining: {time} min',
-    'api_processing_status': '⚡ প্রক্রিয়াকরণ Status',
+    'api_processing_status': '⚡ প্রক্রিয়াকরণ অবস্থা',
     'api_file_type_session': '· ফাইলের ধরন: SESSION',
     'api_file_type_tdata': '· ফাইলের ধরন: TDATA',
     'api_2fa_mode_auto': '· 2FA mode: Auto-detect',
@@ -1388,16 +1388,16 @@ TEXTS = {
     'api_elapsed_time': '· Elapsed: {time}s',
     'api_failure_stats': '❌ Failure Statistics',
     
-    # Conversion complete
+    # রূপান্তর complete
     'api_complete': '🎉 API format conversion complete!',
     'api_statistics': '📊 রূপান্তর Statistics',
-    'api_stat_total': '· Total: {count}',
+    'api_stat_total': '· মোট: {count}',
     'api_stat_success': '· ✅ সফল: {count} ({percent}%)',
     'api_stat_faiহয়েছে': '· ❌ ব্যর্থ: {count} ({percent}%)',
     'api_stat_duration': '· ⏱️ Duration: {time}s',
     'api_stat_speed': '· 🚀 গতি: {speed}/sec',
     'api_failure_details': '❌ Failure Details',
-    'api_sending_txt': '📄 Sending TXT file...',
+    'api_sending_txt': '📄 পাঠানো হচ্ছে TXT file...',
     
     # Result files
     'api_result_filename': 'TG_API_{count}_অ্যাকাউন্ট.txt',
@@ -1407,15 +1407,15 @@ TEXTS = {
     # Failure reason translations
     'api_failure_reason_conversion_faiহয়েছে': 'রূপান্তর faiহয়েছে',
     'api_failure_reason_unauthorized': 'Unauthorized',
-    'api_failure_reason_timeout': 'Connection timeout',
+    'api_failure_reason_timeout': 'সংযোগ timeout',
     'api_failure_reason_conversion_error': 'রূপান্তর error',
     'api_failure_reason_concurrent_error': 'Concurrent error',
-    'api_failure_reason_file_not_exist': 'File not exist',
-    'api_failure_reason_file_corrupted': 'File corrupted',
+    'api_failure_reason_file_not_exist': 'ফাইল not exist',
+    'api_failure_reason_file_corrupted': 'ফাইল corrupted',
     'api_failure_reason_dir_not_exist': 'Directory not exist',
     'api_failure_reason_unknown': 'Unknown error',
     
-    # ===== File Rename Feature =====
+    # ===== ফাইল Rename Feature =====
     # 1. Feature Introduction Page
     'rename_title': '📝 ফাইল পুনঃনামকরণ',
     'rename_features': '💡 Features',
@@ -1427,33 +1427,33 @@ TEXTS = {
     'rename_timeout_upload': '⏰ Auto-cancel if no upload within 5 minutes',
     'rename_btn_cancel': 'বাতিল',
     
-    # 2. File Received
-    'rename_file_received': '✅ File received',
+    # 2. ফাইল Received
+    'rename_file_received': '✅ ফাইল received',
     'rename_original_name': '📁 Original filename: {filename}',
-    'rename_file_size': '📏 File size: {size}',
+    'rename_file_size': '📏 ফাইল size: {size}',
     'rename_enter_new_name': '✏️ Please enter new filename',
     'rename_name_only': '· Enter filename only (without extension)',
     'rename_ext_keep': '· Extension {ext} will be automatically kept',
     'rename_illegal_clean': '· Illegal characters will be auto-cleaned',
     'rename_timeout_input': '⏰ Auto-cancel if no input within 5 minutes',
     
-    # 3. Rename Success
-    'rename_success': '✅ File renamed successfully',
+    # 3. Rename সফল
+    'rename_success': '✅ ফাইল renamed successfully',
     'rename_old_name': 'Original filename: {old_name}',
     'rename_new_name': 'New filename: {new_name}',
     'rename_telegram_tip': '💡 If the filename is incorrect when downloading, it may be due to টেলিগ্রাম client restrictions\nThe actual file contains all characters, including Emoji and special brackets',
-    'rename_file_sent': '✅ File sent!',
+    'rename_file_sent': '✅ ফাইল sent!',
     
-    # 4. Error Messages
+    # 4. ত্রুটি Messages
     'rename_no_task': '❌ কোনো pending rename task',
-    'rename_download_faiহয়েছে': '❌ File download faiহয়েছে: {error}',
+    'rename_download_faiহয়েছে': '❌ ফাইল download faiহয়েছে: {error}',
     'rename_invalid_name': '❌ Invalid filename, please re-enter',
-    'rename_send_faiহয়েছে': '❌ File send faiহয়েছে',
+    'rename_send_faiহয়েছে': '❌ ফাইল send faiহয়েছে',
     'rename_faiহয়েছে': '❌ Rename faiহয়েছে: {error}',
     
-    # ===== Account Merge Feature =====
+    # ===== অ্যাকাউন্ট Merge Feature =====
     # 1. Feature Introduction Page
-    'merge_title': '🧩 Account File Merge',
+    'merge_title': '🧩 অ্যাকাউন্ট ফাইল Merge',
     'merge_features': '💡 Features',
     'merge_feature1': '· Auto-extract all ZIP ফাইল',
     'merge_feature2': '· Recursively scan and identify TData অ্যাকাউন্ট',
@@ -1463,40 +1463,40 @@ TEXTS = {
     'merge_zip_only': '⚠️ Only .zip ফাইল accepted',
     'merge_multi_upload': '· Can upload multiple ZIP ফাইল',
     'merge_auto_scan': '· System will auto-extract and scan contents',
-    'merge_click_complete': 'Click "✅ Complete Merge" after upload',
+    'merge_click_complete': 'Click "✅ সম্পূর্ণ Merge" after upload',
     
     # 2. Buttons
-    'merge_btn_complete': '✅ Complete Merge',
+    'merge_btn_complete': '✅ সম্পূর্ণ Merge',
     'merge_btn_cancel': '❌ বাতিল',
-    'merge_btn_continue': '📁 Continue Upload',
+    'merge_btn_continue': '📁 Continue আপলোড',
     
-    # 3. After File Upload
+    # 3. After ফাইল আপলোড
     'merge_received_zip': '✅ Received ZIP file {count}',
-    'merge_filename': 'Filename: {filename}',
+    'merge_filename': 'ফাইলname: {filename}',
     'merge_select_action': 'Please select next action:',
-    'merge_action_continue': '· Continue upload: Add more ZIP ফাইল',
-    'merge_action_complete': '· Complete merge: Start processing all ফাইল',
+    'merge_action_continue': '· Continue upload: যোগ করুন more ZIP ফাইল',
+    'merge_action_complete': '· সম্পূর্ণ merge: Start processing all ফাইল',
     
-    # 4. Processing
+    # 4. প্রক্রিয়াকরণ
     'merge_processing': '🔄 প্রক্রিয়াকরণ ফাইল...',
     
     # 5. Results
-    'merge_complete': '✅ Account file merge complete!',
+    'merge_complete': '✅ অ্যাকাউন্ট file merge complete!',
     'merge_results': '📊 প্রক্রিয়াকরণ Results',
     'merge_result_zip': '· Extracted ZIP ফাইল: {count}',
     'merge_result_tdata': '· TData অ্যাকাউন্ট: {count}',
     'merge_result_session': '· Session ফাইল: {count} (support pure Session or Session+JSON)',
-    'merge_generated': '📦 Generated Files',
-    'merge_total_files': 'Total {count} ফাইল (normal and duplicate ফাইল packed separately)',
+    'merge_generated': '📦 Generated ফাইলs',
+    'merge_total_files': 'মোট {count} ফাইল (normal and duplicate ফাইল packed separately)',
     
-    # 6. Output File Descriptions
-    'merge_session_files': 'Session Files ({count} items)',
-    'merge_tdata_files': 'TData Files ({count} items)',
+    # 6. Output ফাইল Descriptions
+    'merge_session_files': 'Session ফাইলs ({count} items)',
+    'merge_tdata_files': 'TData ফাইলs ({count} items)',
     
-    # 7. Error and Hint Messages
+    # 7. ত্রুটি and Hint Messages
     'merge_no_task': '❌ কোনো pending merge task',
     'merge_zip_only_error': '❌ Only .zip ফাইল supported, please re-upload',
-    'merge_download_faiহয়েছে': '❌ File download faiহয়েছে: {error}',
+    'merge_download_faiহয়েছে': '❌ ফাইল download faiহয়েছে: {error}',
     'merge_continue_upload_hint': '✅ Please continue uploading ZIP ফাইল',
     'merge_received_files': 'Received ফাইল: {count}',
     'merge_upload_next': '• Please upload next ZIP file',
@@ -1510,7 +1510,7 @@ TEXTS = {
     'cleanup_important': '⚠️ Important Notice',
     'cleanup_intro': 'This feature will perform the following operations on uploaded অ্যাকাউন্ট:',
     'cleanup_action1': '· 🚪 Leave all groups and channels',
-    'cleanup_action2': '· 🗑️ Delete all chat history (revoke when possible)',
+    'cleanup_action2': '· 🗑️ মুছুন all chat history (revoke when possible)',
     'cleanup_action3': '· 📇 Clear all contacts',
     'cleanup_action4': '· 📁 Archive remaining conversations',
     'cleanup_irreversible': '🔴 Irreversible Operation',
@@ -1526,30 +1526,30 @@ TEXTS = {
     'cleanup_btn_cancel': '❌ বাতিল',
     'cleanup_btn_confirm': '✅ নিশ্চিত করুন Cleanup',
     
-    # 3. After File Upload
+    # 3. After ফাইল আপলোড
     'cleanup_processing_file': 'প্রক্রিয়াকরণ your file',
     'cleanup_found_accounts': '✅ Found {count} account ফাইল',
     'cleanup_type_session': '📊 Type: SESSION',
     'cleanup_type_tdata': '📊 Type: TDATA',
     
-    # 4. Confirm Cleanup
+    # 4. নিশ্চিত Cleanup
     'cleanup_confirm_title': '⚠️ নিশ্চিত করুন cleanup operation?',
     'cleanup_confirm_intro': 'This operation will:',
     'cleanup_confirm_action1': '· Leave all groups and channels',
-    'cleanup_confirm_action2': '· Delete all chat history',
+    'cleanup_confirm_action2': '· মুছুন all chat history',
     'cleanup_confirm_action3': '· Clear all contacts',
     'cleanup_confirm_action4': '· Archive remaining conversations',
     'cleanup_confirm_warn': '🔴 This operation is irreversible!',
     
-    # 5. Processing Progress
-    'cleanup_starting': 'Starting cleanup',
+    # 5. প্রক্রিয়াকরণ অগ্রগতি
+    'cleanup_starting': 'শুরু হচ্ছে cleanup',
     'cleanup_initializing': 'Initializing...',
-    'cleanup_in_progress': '🧹 Cleaning in progress, please wait.',
+    'cleanup_in_progress': '🧹 Cleaning in progress, অনুগ্রহ করে অপেক্ষা করুন.',
     'cleanup_current': '📄 Current: {filename}',
-    'cleanup_total_progress': '📊 Total progress: {current}/{total} ({percent}%)',
+    'cleanup_total_progress': '📊 মোট progress: {current}/{total} ({percent}%)',
     'cleanup_eta': '⏳ Estimated completion: {time} remaining',
     'cleanup_eta_alt': 'Estimated completion time: {time} remaining',
-    'cleanup_status': '🔄 Status:',
+    'cleanup_status': '🔄 অবস্থা:',
     'cleanup_status_profile': '🔄 Cleaning account info (avatar, name, bio)...',
     'cleanup_status_get_dialogs': '📋 Getting dialog list...',
     'cleanup_status_found_dialogs': '📊 Found {groups} groups, {channels} channels, {users} users',
@@ -1558,23 +1558,23 @@ TEXTS = {
     'cleanup_status_delete_contacts': '📇 Deleting contacts...',
     'cleanup_status_archive_dialogs': '📁 Archiving remaining conversations...',
     
-    # 6. Cleanup Complete
+    # 6. Cleanup সম্পূর্ণ
     'cleanup_complete': '✅ Cleanup complete!',
     'cleanup_statistics': '📊 Cleanup Statistics',
-    'cleanup_stat_total': '· Total অ্যাকাউন্ট: {count}',
+    'cleanup_stat_total': '· মোট অ্যাকাউন্ট: {count}',
     'cleanup_stat_success': '· ✅ সফল: {count} ({percent}%)',
     'cleanup_stat_frozen': '· ❄️ হিমায়িত: {count} ({percent}%)',
     'cleanup_stat_faiহয়েছে': '· ❌ ব্যর্থ: {count}',
     'cleanup_packing': '📦 Packing account ফাইল...',
     
-    # 7. Output Files
-    'cleanup_summary_report': '📋 Cleanup Summary Report',
+    # 7. Output ফাইলs
+    'cleanup_summary_report': '📋 Cleanup সারাংশ রিপোর্ট',
     'cleanup_success_accounts': '📦 সফলfully cleaned অ্যাকাউন্ট ({count})',
     'cleanup_faiহয়েছে_accounts': '📦 ব্যর্থ to clean অ্যাকাউন্ট ({count})',
     
-    # 8. Cleanup Report Content
-    'cleanup_report_title': 'Batch Cleanup Detaiহয়েছে Report',
-    'cleanup_report_time': 'Cleanup Time',
+    # 8. Cleanup রিপোর্ট Content
+    'cleanup_report_title': 'Batch Cleanup Detaiহয়েছে রিপোর্ট',
+    'cleanup_report_time': 'Cleanup সময়',
     'cleanup_report_concurrency': 'Concurrency',
     'cleanup_report_concurrent_accounts': 'অ্যাকাউন্ট simultaneously',
     'cleanup_report_total': 'মোট অ্যাকাউন্ট',
@@ -1584,8 +1584,8 @@ TEXTS = {
     'cleanup_report_details': 'Detaiহয়েছে Results',
     'cleanup_report_error': 'ত্রুটি:',
     'cleanup_report_stats': 'Stats:',
-    'cleanup_report_deleted_dialogs': 'Deleted {count} conversations',
-    'cleanup_report_deleted_contacts': 'Deleted {count} contacts',
+    'cleanup_report_deleted_dialogs': 'মুছুনd {count} conversations',
+    'cleanup_report_deleted_contacts': 'মুছুনd {count} contacts',
     'cleanup_report_unauthorized': 'Session unauthorized',
     'cleanup_report_success_list': 'সফলfully Cleaned',
     'cleanup_report_faiহয়েছে_list': 'ব্যর্থ to Clean',
@@ -1596,12 +1596,12 @@ TEXTS = {
     'cleanup_report_profile_cleared': 'Profile cleared',
     'cleanup_report_groups_left': 'Left {count} groups',
     'cleanup_report_channels_left': 'Left {count} channels',
-    'cleanup_report_histories_deleted': 'Deleted {count} conversations',
-    'cleanup_report_contacts_deleted_label': 'Deleted {count} contacts',
+    'cleanup_report_histories_deleted': 'মুছুনd {count} conversations',
+    'cleanup_report_contacts_deleted_label': 'মুছুনd {count} contacts',
     'cleanup_report_error_details': 'ত্রুটি details:',
-    'cleanup_report_frozen_accounts': 'হিমায়িত Accounts',
+    'cleanup_report_frozen_accounts': 'হিমায়িত অ্যাকাউন্টs',
     
-    # 9. Errors and Other Messages
+    # 9. ত্রুটিs and Other Messages
     'cleanup_feature_disabহয়েছে': '❌ One-click cleanup feature is disabহয়েছে',
     'cleanup_need_member': '❌ সদস্যপদ required for one-click cleanup',
     'cleanup_no_valid_files': '❌ কোনো valid ফাইল found',
@@ -1614,13 +1614,13 @@ TEXTS = {
     'cleanup_already_processed': 'Processed Statistics',
     'cleanup_actual_processed': '· Processed: {actual}/{total}',
     'cleanup_error_info': '⚠️ ত্রুটি info:',
-    'cleanup_sending_results': '📦 Sending processed results...',
+    'cleanup_sending_results': '📦 পাঠানো হচ্ছে processed results...',
     'cleanup_incomplete': '⚠️ Cleanup incomplete',
     'cleanup_may_interrupted': '⚠️ প্রক্রিয়াকরণ may have been interrupted or encountered errors',
     'cleanup_results_sent': '✅ Cleanup results sent',
     'cleanup_send_faiহয়েছে': '❌ ব্যর্থ to send cleanup results',
-    'cleanup_frozen_detected': 'Account frozen',
-    'cleanup_connection_faiহয়েছে': 'Connection faiহয়েছে',
+    'cleanup_frozen_detected': 'অ্যাকাউন্ট frozen',
+    'cleanup_connection_faiহয়েছে': 'সংযোগ faiহয়েছে',
     'cleanup_timeout_error': 'Cleanup timeout',
     
     # ===== Re-authorization Feature =====
@@ -1634,16 +1634,16 @@ TEXTS = {
     'reauth_desc5': '· Support proxy connection (fallback to local on timeout)',
     'reauth_desc6': '· Use random device parameters to prevent risk control',
     'reauth_workflow_title': 'Workflow:',
-    'reauth_workflow1': '1. Upload account ফাইল (Session/TData/ZIP)',
+    'reauth_workflow1': '1. আপলোড account ফাইল (Session/TData/ZIP)',
     'reauth_workflow2': '2. Enter old password (or auto-detect 2FA from JSON)',
     'reauth_workflow3': '3. Enter new password',
     'reauth_workflow4': '4. System auto-completes re-authorization',
     'reauth_workflow5': '5. Results packaged by category (success/faiহয়েছে)',
     'reauth_fail_title': 'Failure Categories:',
-    'reauth_fail_frozen': '· হিমায়িত: Account has been frozen',
-    'reauth_fail_banned': '· নিষিদ্ধ: Account has been banned',
+    'reauth_fail_frozen': '· হিমায়িত: অ্যাকাউন্ট has been frozen',
+    'reauth_fail_banned': '· নিষিদ্ধ: অ্যাকাউন্ট has been banned',
     'reauth_fail_wrong_pwd': '· Wrong পাসওয়ার্ড: Old password incorrect',
-    'reauth_fail_network': '· Network ত্রুটি: Connection timeout or network issues',
+    'reauth_fail_network': '· Network ত্রুটি: সংযোগ timeout or network issues',
     'reauth_notes_title': 'Notes:',
     'reauth_note1': '⚠️ After re-authorization, old sessions will be invalidated immediately',
     'reauth_note2': '⚠️ Please ensure you provide the correct old password',
@@ -1658,13 +1658,13 @@ TEXTS = {
     'reauth_btn_cancel': '❌ বাতিল',
     'reauth_btn_confirm': '✅ নিশ্চিত করুন Start',
     
-    # 3. After File Upload
+    # 3. After ফাইল আপলোড
     'reauth_processing_file': 'প্রক্রিয়াকরণ file',
     'reauth_found_accounts': '✅ Found {count} account ফাইল',
     'reauth_file_type_session': 'ফাইলের ধরন: SESSION',
     'reauth_file_type_tdata': 'ফাইলের ধরন: TDATA',
     
-    # 4. Password Selection
+    # 4. পাসওয়ার্ড নির্বাচনion
     'reauth_pwd_method_title': 'Please select old password input method:',
     'reauth_pwd_auto': '· Auto-detect: Automatically find password from ফাইল',
     'reauth_pwd_manual': '· Manual input: Manually enter old password',
@@ -1673,28 +1673,28 @@ TEXTS = {
     'reauth_pwd_auto_tdata': '- TData format: Any .txt file containing 2fa/twofa/password (case insensitive)',
     'reauth_pwd_auto_example': 'Example: 2FA.txt, twoFA.TXT, password.txt, etc.',
     
-    # 5. Password Detection Result
+    # 5. পাসওয়ার্ড Detection Result
     'reauth_pwd_detect_complete': '✅ পাসওয়ার্ড auto-detection complete',
     'reauth_pwd_stats': 'Statistics:',
-    'reauth_pwd_total': '· Total ফাইল: {count}',
+    'reauth_pwd_total': '· মোট ফাইল: {count}',
     'reauth_pwd_detected': '· সফলfully detected: {count}',
     'reauth_pwd_not_detected': '· Not detected: {count}',
-    'reauth_pwd_empty_note': '💡 Accounts without detected password will be processed with empty password',
+    'reauth_pwd_empty_note': '💡 অ্যাকাউন্টs without detected password will be processed with empty password',
     
-    # 6. Manual Input Old Password
+    # 6. Manual Input Old পাসওয়ার্ড
     'reauth_manual_old_pwd_title': '📝 Manual Input Old পাসওয়ার্ড',
     'reauth_manual_old_pwd_prompt': 'Please enter old password (if account has 2FA password)',
     'reauth_manual_old_pwd_tip': '💡 If no password, enter "无" or "skip"',
     'reauth_old_pwd_saved': '✅ Old password saved',
     
-    # 7. New Password Input
+    # 7. New পাসওয়ার্ড Input
     'reauth_new_pwd_prompt': 'Please enter new password (for re-authorized অ্যাকাউন্ট)',
     'reauth_new_pwd_tip': '💡 If no new password needed, enter "无" or "skip"',
     
-    # 8. Final Confirmation
+    # 8. Final নিশ্চিতation
     'reauth_final_confirm': '📋 Final নিশ্চিত করুনation',
-    'reauth_account_info': 'Account Info:',
-    'reauth_account_count': '· Account count: {count}',
+    'reauth_account_info': 'অ্যাকাউন্ট Info:',
+    'reauth_account_count': '· অ্যাকাউন্ট count: {count}',
     'reauth_pwd_settings': 'পাসওয়ার্ড Settings:',
     'reauth_old_pwd': '· Old password: {value}',
     'reauth_new_pwd': '· New password: {value}',
@@ -1702,8 +1702,8 @@ TEXTS = {
     'reauth_pwd_masked': '***',
     'reauth_process_flow': 'Process Flow:',
     'reauth_flow1': '1. Reset all sessions (kick other devices)',
-    'reauth_flow2': '2. Delete old password',
-    'reauth_flow3': '3. Create new session (random device parameters)',
+    'reauth_flow2': '2. মুছুন old password',
+    'reauth_flow3': '3. তৈরি new session (random device parameters)',
     'reauth_flow4': '4. Set new password',
     'reauth_flow5': '5. Verify old sessions invalidated',
     'reauth_flow6': '6. Package categorized results',
@@ -1713,23 +1713,23 @@ TEXTS = {
     'reauth_important3': '· Detaiহয়েছে report will be generated after completion',
     'reauth_confirm_question': 'নিশ্চিত করুন to start re-authorization?',
     
-    # 9. Processing Progress
+    # 9. প্রক্রিয়াকরণ অগ্রগতি
     'reauth_in_progress': '🔄 Re-authorizing...',
     'reauth_please_wait': 'অনুগ্রহ করে অপেক্ষা করুন, detaiহয়েছে report will be sent after completion',
-    'reauth_starting': '🚀 Starting re-authorization...',
+    'reauth_starting': '🚀 শুরু হচ্ছে re-authorization...',
     'reauth_start': '▶️ Start re-authorization',
     'reauth_progress': 'অগ্রগতি: {current}/{total} ({percent}%)',
-    'reauth_stat_account_count': '📊 Account Count',
+    'reauth_stat_account_count': '📊 অ্যাকাউন্ট সংখ্যা',
     'reauth_stat_success': '✅ Authorization সফল',
-    'reauth_stat_frozen': '❄️ হিমায়িত Accounts',
-    'reauth_stat_banned': '🚫 নিষিদ্ধ Accounts',
+    'reauth_stat_frozen': '❄️ হিমায়িত অ্যাকাউন্টs',
+    'reauth_stat_banned': '🚫 নিষিদ্ধ অ্যাকাউন্টs',
     'reauth_stat_2fa_error': '🔑 2FA ত্রুটি',
     'reauth_stat_network_error': '🌐 Network ত্রুটি',
     
-    # 10. Processing Result
-    'reauth_complete': '✅ Re-authorization Complete',
+    # 10. প্রক্রিয়াকরণ Result
+    'reauth_complete': '✅ Re-authorization সম্পূর্ণ',
     'reauth_result_stats': 'Statistics:',
-    'reauth_result_total': '· Total: {count}',
+    'reauth_result_total': '· মোট: {count}',
     'reauth_result_success': '· ✅ সফল: {count}',
     'reauth_result_frozen': '· ❄️ হিমায়িত: {count}',
     'reauth_result_banned': '· 🚫 নিষিদ্ধ: {count}',
@@ -1739,18 +1739,18 @@ TEXTS = {
     'reauth_success_rate': 'সফল Rate: {percent}%',
     'reauth_see_report': '📄 See detaiহয়েছে report in file below',
     
-    # 11. Output Files
-    'reauth_file_report': '📄 Re-authorization Detaiহয়েছে Report',
+    # 11. Output ফাইলs
+    'reauth_file_report': '📄 Re-authorization Detaiহয়েছে রিপোর্ট',
     'reauth_file_success': '📦 সফলfully authorized অ্যাকাউন্ট ({count})',
     'reauth_file_frozen': '📦 হিমায়িত অ্যাকাউন্ট ({count})',
     'reauth_file_banned': '📦 নিষিদ্ধ অ্যাকাউন্ট ({count})',
     'reauth_file_wrong_pwd': '📦 Wrong password অ্যাকাউন্ট ({count})',
     'reauth_file_network': '📦 Network error অ্যাকাউন্ট ({count})',
-    'reauth_file_other': '📦 Accounts with other errors ({count})',
+    'reauth_file_other': '📦 অ্যাকাউন্টs with other errors ({count})',
     
-    # 12. Report Content
-    'reauth_report_title': 'Re-authorization Report',
-    'reauth_report_time': 'Generated Time:',
+    # 12. রিপোর্ট Content
+    'reauth_report_title': 'Re-authorization রিপোর্ট',
+    'reauth_report_time': 'Generated সময়:',
     'reauth_report_total': 'মোট অ্যাকাউন্ট:',
     'reauth_report_success': 'সফল:',
     'reauth_report_frozen': 'হিমায়িত:',
@@ -1758,10 +1758,10 @@ TEXTS = {
     'reauth_report_pwd_error': 'পাসওয়ার্ড ত্রুটি:',
     'reauth_report_network': 'Network ত্রুটি:',
     'reauth_report_other': 'Other ত্রুটি:',
-    'reauth_report_file': 'File:',
+    'reauth_report_file': 'ফাইল:',
     'reauth_report_error': 'ত্রুটি:',
     
-    # Report category titles
+    # রিপোর্ট category titles
     'reauth_report_category_success': 'SUCCESS',
     'reauth_report_category_frozen': 'FROZEN',
     'reauth_report_category_banned': 'BANNED',
@@ -1769,24 +1769,24 @@ TEXTS = {
     'reauth_report_category_network_error': 'NETWORK_ERROR',
     'reauth_report_category_other_error': 'OTHER_ERROR',
     
-    # Report detail fields
+    # রিপোর্ট detail fields
     'reauth_report_phone': 'Phone:',
     'reauth_report_device_model': 'Device মোডl:',
     'reauth_report_system_version': 'System Version:',
     'reauth_report_app_version': 'App Version:',
-    'reauth_report_connection': 'Connection:',
+    'reauth_report_connection': 'সংযোগ:',
     'reauth_report_new_password': 'New পাসওয়ার্ড:',
     
-    # Connection method values
-    'reauth_connection_proxy': 'Using Proxy',
+    # সংযোগ method values
+    'reauth_connection_proxy': 'Using প্রক্সি',
     'reauth_connection_local': 'স্থানীয় সংযোগ',
     'reauth_connection_local_fallback': 'স্থানীয় সংযোগ (fallback after proxy faiহয়েছে)',
     
-    # Report generation faiহয়েছে
-    'reauth_report_gen_faiহয়েছে': 'Report generation faiহয়েছে:',
-    'reauth_report_total_success': 'Total: {total}, সফল: {success}',
+    # রিপোর্ট generation faiহয়েছে
+    'reauth_report_gen_faiহয়েছে': 'রিপোর্ট generation faiহয়েছে:',
+    'reauth_report_total_success': 'মোট: {total}, সফল: {success}',
     
-    # Additional messages
+    # যোগ করুনitional messages
     'reauth_need_member': '⚠️ Re-authorization feature requires membership\n\nPlease activate membership first',
     'reauth_session_expired': '❌ Session expired',
     'reauth_session_expired_restart': '❌ Session expired, please restart',
@@ -1796,9 +1796,9 @@ TEXTS = {
     'reauth_error': 'ত্রুটি: {error}',
     'reauth_file_type': 'ফাইলের ধরন: {type}',
     
-    # ===== Query Registration Time Feature =====
+    # ===== Query Registration সময় Feature =====
     # 1. Feature Introduction Page
-    'regtime_title': '🕰️ Query Registration Time',
+    'regtime_title': '🕰️ Query Registration সময়',
     'regtime_intro': 'This feature queries the accurate registration time of অ্যাকাউন্ট and classifies by date:',
     'regtime_feature1': '• 📅 Classify by full date (Year-Month-Day)',
     'regtime_feature2': '• 🎯 Multiple methods to get the most accurate registration time',
@@ -1813,21 +1813,21 @@ TEXTS = {
     'regtime_note4': '4. Recommend batch processing no more than 100 অ্যাকাউন্ট',
     'regtime_note5': '5. Will automatically use the most accurate method to get registration time',
     'regtime_upload_title': '📤 Please upload account ফাইল:',
-    'regtime_upload_session': '• Session format: Upload .session ফাইল (can be zipped)',
-    'regtime_upload_tdata': '• TData format: Upload zip file containing tdata directory',
+    'regtime_upload_session': '• Session format: আপলোড .session ফাইল (can be zipped)',
+    'regtime_upload_tdata': '• TData format: আপলোড zip file containing tdata directory',
     
     # 2. Buttons
     'regtime_btn_back': 'পিছনে to মূল মেনু',
     'regtime_btn_start': '✅ Start Query',
     'regtime_btn_cancel': '❌ বাতিল',
     
-    # 3. After File Upload
+    # 3. After ফাইল আপলোড
     'regtime_processing_file': 'প্রক্রিয়াকরণ file',
     'regtime_found_accounts': '✅ Found {count} account ফাইল',
     'regtime_file_type_session': 'ফাইলের ধরন: SESSION',
     'regtime_file_type_tdata': 'ফাইলের ধরন: TDATA',
     
-    # 4. Processing Info
+    # 4. প্রক্রিয়াকরণ Info
     'regtime_process_title': 'প্রক্রিয়াকরণ Info:',
     'regtime_process1': '• Priority: Get accurate registration time from @টেলিগ্রাম official chat',
     'regtime_process2': '• পিছনেup: Saved Messages or user ID estimation',
@@ -1840,34 +1840,34 @@ TEXTS = {
     'regtime_accuracy3': '3. ব্যবহারকারী ID estimation (backup only)',
     'regtime_ready_question': 'Ready to start query?',
     
-    # 5. Processing Progress
+    # 5. প্রক্রিয়াকরণ অগ্রগতি
     'regtime_querying': 'Querying',
     'regtime_may_take_minutes': 'May take a few minutes',
     'regtime_progress_title': '🔄 Query অগ্রগতি',
-    'regtime_progress_total': '• Total: {count}',
+    'regtime_progress_total': '• মোট: {count}',
     'regtime_progress_processed': '• Processed: {count}',
     'regtime_progress_success': '• সফল: {count}',
     'regtime_progress_faiহয়েছে': '• ব্যর্থ: {count}',
     'regtime_please_wait': '⏳ অনুগ্রহ করে অপেক্ষা করুন...',
     
     # 6. Query Results
-    'regtime_complete': '✅ Registration Time Query Complete',
+    'regtime_complete': '✅ Registration সময় Query সম্পূর্ণ',
     'regtime_stats_title': 'Statistics:',
-    'regtime_stats_total': '• Total: {count}',
+    'regtime_stats_total': '• মোট: {count}',
     'regtime_stats_success': '• ✅ সফল: {count}',
     'regtime_stats_faiহয়েছে': '• ❌ ব্যর্থ: {count}',
     'regtime_classify_title': 'Classified by registration date:',
     'regtime_classify_item': '• {date}: {count}',
     'regtime_see_report': '📄 See detaiহয়েছে report in ফাইল below',
     
-    # 7. Output Files
-    'regtime_file_report': '📋 Registration Time Query Detaiহয়েছে Report',
-    'regtime_file_classified': '📦 Registration time classified অ্যাকাউন্ট ({count} অ্যাকাউন্ট, sorted into ফোল্ডার by date)',
+    # 7. Output ফাইলs
+    'regtime_file_report': '📋 Registration সময় Query Detaiহয়েছে রিপোর্ট',
+    'regtime_file_শ্রেণীবদ্ধ': '📦 Registration time শ্রেণীবদ্ধ অ্যাকাউন্ট ({count} অ্যাকাউন্ট, sorted into ফোল্ডার by date)',
     'regtime_file_faiহয়েছে': '❌ ব্যর্থ query অ্যাকাউন্ট ({count}, with detaiহয়েছে failure reasons)',
     
-    # 8. Report Content
-    'regtime_report_title': 'Registration Time Query Report',
-    'regtime_report_time': 'Generated Time:',
+    # 8. রিপোর্ট Content
+    'regtime_report_title': 'Registration সময় Query রিপোর্ট',
+    'regtime_report_time': 'Generated সময়:',
     'regtime_report_total': 'মোট অ্যাকাউন্ট:',
     'regtime_report_success': 'সফল:',
     'regtime_report_faiহয়েছে': 'ব্যর্থ:',
@@ -1879,7 +1879,7 @@ TEXTS = {
     'regtime_source_all_chats': '• all_chats: From scanning all chats (✅ Accurate)',
     'regtime_source_estimated': '• estimated: Estimated based on user ID (⚠️ May be inaccurate, error could be months or years)',
     'regtime_date_header': '📅 {date} ({count} অ্যাকাউন্ট)',
-    'regtime_field_file': 'File:',
+    'regtime_field_file': 'ফাইল:',
     'regtime_field_phone': 'Phone:',
     'regtime_field_userid': 'ব্যবহারকারী ID:',
     'regtime_field_username': 'ব্যবহারকারীname:',
@@ -1890,19 +1890,19 @@ TEXTS = {
     'regtime_error_label': 'ERROR:',
     'regtime_error_field': 'ত্রুটি:',
     
-    # 9. Faiহয়েছে Report
-    'regtime_fail_report_title': 'ব্যর্থ Query Accounts Details',
-    'regtime_fail_total': 'Total ব্যর্থ:',
-    'regtime_fail_frozen': '【হিমায়িত Accounts】({count})',
-    'regtime_fail_banned': '【নিষিদ্ধ Accounts】({count})',
+    # 9. Faiহয়েছে রিপোর্ট
+    'regtime_fail_report_title': 'ব্যর্থ Query অ্যাকাউন্টs Details',
+    'regtime_fail_total': 'মোট ব্যর্থ:',
+    'regtime_fail_frozen': '【হিমায়িত অ্যাকাউন্টs】({count})',
+    'regtime_fail_banned': '【নিষিদ্ধ অ্যাকাউন্টs】({count})',
     'regtime_fail_other_errors': '【Other ত্রুটিs】({count})',
     'regtime_fail_type': 'Type:',
     'regtime_fail_reason': 'Failure Reason:',
-    'regtime_fail_unauthorized': 'Account unauthorized or expired',
-    'regtime_fail_timeout': 'Connection timeout',
-    'regtime_fail_timeout_both': 'Connection timeout (both proxy and local faiহয়েছে)',
-    'regtime_fail_frozen_account': 'Account has been frozen',
-    'regtime_fail_banned_account': 'Account has been banned',
+    'regtime_fail_unauthorized': 'অ্যাকাউন্ট unauthorized or expired',
+    'regtime_fail_timeout': 'সংযোগ timeout',
+    'regtime_fail_timeout_both': 'সংযোগ timeout (both proxy and local faiহয়েছে)',
+    'regtime_fail_frozen_account': 'অ্যাকাউন্ট has been frozen',
+    'regtime_fail_banned_account': 'অ্যাকাউন্ট has been banned',
     'regtime_fail_opentele': 'opentele not instalহয়েছে, cannot process TData format',
     'regtime_fail_tdata_load': 'TData unauthorized or loading faiহয়েছে',
     'regtime_fail_tdata_timeout': 'TData loading timeout',
@@ -1913,7 +1913,7 @@ TEXTS = {
     # 10. ZIP Folder Names
     'regtime_folder_name': '{date} registered অ্যাকাউন্ট ({count})',
     
-    # 11. Additional Messages
+    # 11. যোগ করুনitional Messages
     'regtime_need_member': '❌ Registration time query feature requires membership\n\nPlease activate membership first',
     'regtime_session_expired': '❌ Session expired, please re-upload ফাইল',
     'regtime_no_valid_files': '❌ কোনো valid ফাইল found\n\nPlease ensure ZIP contains Session or TData format ফাইল',
@@ -1935,7 +1935,7 @@ TEXTS = {
     'profile_random_bio': '• Bio: Choose to leave empty or randomly generate in corresponding language',
     'profile_random_username': '• ব্যবহারকারীname: Choose to delete or randomly generate new username',
     'profile_custom_mode_title': '✏️ Custom Generation মোড:',
-    'profile_custom_upload': '• Upload txt file (one content per line)',
+    'profile_custom_upload': '• আপলোড txt file (one content per line)',
     'profile_custom_manual': '• Or manually enter content',
     'profile_custom_support': '• Supports custom name, avatar, bio, username',
     'profile_notes_title': '⚠️ Notes:',
@@ -1945,12 +1945,12 @@ TEXTS = {
     'profile_note4': '4. Supports Session and TData formats',
     'profile_select_mode': 'Please select modification mode:',
     
-    # 2. Mode Selection Buttons
+    # 2. মোড নির্বাচনion Buttons
     'profile_btn_random': '🎲 Random Generation',
     'profile_btn_custom': '✏️ Custom Generation',
     'profile_btn_back': 'পিছনে to মূল মেনু',
     
-    # 3. Random Generation Mode Configuration
+    # 3. Random Generation মোড Configuration
     'profile_random_config_title': '🎲 Random Generation মোড',
     'profile_current_config': 'Current Configuration:',
     'profile_config_name': '• Name:',
@@ -1964,11 +1964,11 @@ TEXTS = {
     # 4. Configuration Option Values
     'profile_opt_auto_generate': '✅ Auto-generate by country',
     'profile_opt_random_generate': '✅ Random generate',
-    'profile_opt_delete_all': '🗑️ Delete all',
-    'profile_opt_delete_all_history': '🗑️ Delete all history',
+    'profile_opt_delete_all': '🗑️ মুছুন all',
+    'profile_opt_delete_all_history': '🗑️ মুছুন all history',
     'profile_opt_keep_current': '📷 Keep current',
     'profile_opt_no_modify': '⏩ কোনো modification',
-    'profile_opt_delete': '🗑️ Delete',
+    'profile_opt_delete': '🗑️ মুছুন',
     'profile_opt_random_bio': '🎲 Random generate bio',
     'profile_opt_random_username': '🎲 Random generate username',
     'profile_opt_clear_bio': '📝 Leave empty',
@@ -1978,18 +1978,18 @@ TEXTS = {
     'profile_btn_bio': 'Bio:',
     'profile_btn_username': 'ব্যবহারকারীname:',
     'profile_btn_name': 'Name:',
-    'profile_btn_upload': '📤 Upload account ফাইল to start',
+    'profile_btn_upload': '📤 আপলোড account ফাইল to start',
     'profile_btn_return': 'Return',
     'profile_btn_cancel': '❌ বাতিল',
     
-    # 6. Custom Mode Configuration
+    # 6. Custom মোড Configuration
     'profile_custom_config_title': '✏️ Custom Generation মোড',
     'profile_custom_tip_title': '💡 Configuration method:',
     'profile_custom_tip1': '1. Click buttons to configure each item',
     'profile_custom_tip2': '2. Supports uploading txt file or manual input',
     'profile_custom_tip3': '3. Can choose not to modify an item (leave empty)',
     'profile_custom_rule_title': '📊 Smart allocation rules:',
-    'profile_custom_rule1': '• 1 content + N অ্যাকাউন্ট = All অ্যাকাউন্ট use the same content',
+    'profile_custom_rule1': '• 1 content + N অ্যাকাউন্ট = সব অ্যাকাউন্ট use the same content',
     'profile_custom_rule2': '• M contents + N অ্যাকাউন্ট (M&lt;N) = Cyclic use',
     'profile_custom_rule3': '• M contents + N অ্যাকাউন্ট (M≥N) = One-to-one correspondence',
     'profile_custom_select': 'Please select items to configure:',
@@ -2000,28 +2000,28 @@ TEXTS = {
     'profile_custom_status_no_modify': '⏩ কোনো modification',
     'profile_custom_field_config': '📝 Configure {field}',
     'profile_custom_field_select': 'Please select operation:',
-    'profile_custom_field_upload_txt': '📄 Upload txt file',
+    'profile_custom_field_upload_txt': '📄 আপলোড txt file',
     'profile_custom_field_manual_input': '✍️ Manual input',
     'profile_custom_field_no_modify': '⏩ কোনো modification for this item',
     'profile_custom_field_view_configured': '📊 View configured ({count})',
     'profile_custom_field_clear_config': '🗑 Clear configuration',
-    'profile_custom_field_upload_images': '🖼 Upload image file/ZIP',
-    'profile_custom_field_delete_all_avatar': '🗑 Delete all avatars',
+    'profile_custom_field_upload_images': '🖼 আপলোড image file/ZIP',
+    'profile_custom_field_delete_all_avatar': '🗑 মুছুন all avatars',
     'profile_custom_field_clear_bio': '📝 Clear bio',
-    'profile_custom_field_delete_username': '🗑 Delete username',
+    'profile_custom_field_delete_username': '🗑 মুছুন username',
     'profile_custom_field_back_to_menu': '🔙 পিছনে to configuration menu',
     
-    # 8. Upload Prompts
+    # 8. আপলোড Prompts
     'profile_upload_title': '📤 Please upload account ফাইল',
     'profile_upload_format': 'সমর্থিত ফরম্যাট:',
-    'profile_upload_session': '• Session format: Upload .session ফাইল (can be zipped)',
-    'profile_upload_tdata': '• TData format: Upload zip file containing tdata directory',
+    'profile_upload_session': '• Session format: আপলোড .session ফাইল (can be zipped)',
+    'profile_upload_tdata': '• TData format: আপলোড zip file containing tdata directory',
     'profile_upload_timeout': '⏱ Please upload ফাইল within 5 minutes...',
     'profile_upload_cancel': '💡 To cancel, click /start to return to main menu',
     'profile_processing_file': 'প্রক্রিয়াকরণ file',
     
     # Custom upload prompts
-    'profile_custom_upload_photo_title': '📤 Upload {field} file',
+    'profile_custom_upload_photo_title': '📤 আপলোড {field} file',
     'profile_custom_upload_photo_format': 'সমর্থিত ফরম্যাট:',
     'profile_custom_upload_photo_single': '• Single image: jpg, png, jpeg, webp',
     'profile_custom_upload_photo_multi': '• Multiple images: Pack into zip file',
@@ -2029,8 +2029,8 @@ TEXTS = {
     'profile_custom_upload_photo_notice': '💡 Note:',
     'profile_custom_upload_photo_size': '• Recommended image size: 640x640 or higher',
     'profile_custom_upload_photo_limit': '• Recommended file size: Not more than 5MB',
-    'profile_custom_upload_txt_title': '📤 Upload {field} txt file',
-    'profile_custom_upload_txt_format': 'File format:',
+    'profile_custom_upload_txt_title': '📤 আপলোড {field} txt file',
+    'profile_custom_upload_txt_format': 'ফাইল format:',
     'profile_custom_upload_txt_line': '• One {field} per line',
     'profile_custom_upload_txt_encoding': '• UTF-8 encoding',
     'profile_custom_upload_txt_skip': '• Empty lines supported (will be skipped)',
@@ -2053,19 +2053,19 @@ TEXTS = {
     'profile_custom_view_more': '... {count} more',
     'profile_custom_input_empty': '❌ Input is empty, please re-enter',
     'profile_custom_no_images': '❌ কোনো valid image ফাইল found\n\nসমর্থিত ফরম্যাট: jpg, png, jpeg, webp, gif',
-    'profile_custom_encoding_error': '❌ File encoding error\n\nPlease save file with UTF-8 encoding',
-    'profile_custom_file_empty': '❌ File content is empty',
+    'profile_custom_encoding_error': '❌ ফাইল encoding error\n\nPlease save file with UTF-8 encoding',
+    'profile_custom_file_empty': '❌ ফাইল content is empty',
     'profile_custom_processing_faiহয়েছে': '❌ <b>প্রক্রিয়াকরণ faiহয়েছে</b>\n\nত্রুটি: {error}',
     'profile_photo_processing': '📥 <b>প্রক্রিয়াকরণ image...</b>',
     'profile_photo_uploaded_success': '✅ <b>Image uploaded</b>\n\nAvatar photo saved successfully',
     'profile_photo_upload_faiহয়েছে': '❌ <b>Image upload faiহয়েছে</b>\n\nত্রুটি: {error}',
     'button_back_previous': '⬅️ পিছনে',
     
-    # 9. Confirmation Page
+    # 9. নিশ্চিতation Page
     'profile_confirm_title': '📝 Ready to start editing profile',
-    'profile_file_info': '📁 File information:',
+    'profile_file_info': '📁 ফাইল information:',
     'profile_file_type': '├ Type:',
-    'profile_file_count': '└ Count: {count} অ্যাকাউন্ট',
+    'profile_file_count': '└ সংখ্যা: {count} অ্যাকাউন্ট',
     'profile_modify_config': '⚙️ Modification configuration:',
     'profile_config_name_label': '├ Name:',
     'profile_config_avatar_label': '├ Avatar:',
@@ -2078,21 +2078,21 @@ TEXTS = {
     'profile_confirm_question': 'নিশ্চিত করুন to start modification?',
     'profile_btn_confirm': '✅ নিশ্চিত করুন and start',
     
-    # 10. Processing Progress
+    # 10. প্রক্রিয়াকরণ অগ্রগতি
     'profile_progress_title': '📝 Profile Modification অগ্রগতি',
     'profile_stats_title': '📊 Statistics:',
-    'profile_stats_total': '├ 📦 Total:',
+    'profile_stats_total': '├ 📦 মোট:',
     'profile_stats_success': '├ ✅ সফল:',
     'profile_stats_faiহয়েছে': '├ ❌ ব্যর্থ:',
     'profile_stats_processing': '├ ⏳ প্রক্রিয়াকরণ:',
     'profile_stats_remaining': '└ 📋 Remaining:',
     'profile_speed': '⚡ প্রক্রিয়াকরণ speed: {speed}/sec',
-    'profile_time_elapsed': '⏱️ Time elapsed:',
+    'profile_time_elapsed': '⏱️ সময় elapsed:',
     'profile_time_remaining': '⏳ Estimated remaining:',
     'profile_current_processing': '🔄 Currently processing:',
     'profile_wait_tip': '💡 Tip: অনুগ্রহ করে অপেক্ষা করুন patiently, do not close the dialog',
     
-    # 11. Processing Status
+    # 11. প্রক্রিয়াকরণ অবস্থা
     'profile_status_success': '✅ সফল',
     'profile_status_faiহয়েছে': '❌ ব্যর্থ:',
     'profile_status_modifying_name': 'Modifying name...',
@@ -2107,7 +2107,7 @@ TEXTS = {
     'profile_action_name_success': '✅ Name: {name}',
     'profile_action_name_faiহয়েছে': '❌ Name update faiহয়েছে',
     'profile_action_name_faiহয়েছে_error': '❌ Name update faiহয়েছে: {error}',
-    'profile_action_avatar_deleted': '✅ Deleted all avatars',
+    'profile_action_avatar_deleted': '✅ মুছুনd all avatars',
     'profile_action_avatar_delete_faiহয়েছে': '❌ Avatar deletion faiহয়েছে',
     'profile_action_avatar_delete_faiহয়েছে_error': '❌ Avatar deletion faiহয়েছে: {error}',
     'profile_action_avatar_uploaded': '✅ Avatar uploaded',
@@ -2119,7 +2119,7 @@ TEXTS = {
     'profile_action_username_success': '✅ ব্যবহারকারীname: {username}',
     'profile_action_username_faiহয়েছে': '❌ ব্যবহারকারীname update faiহয়েছে',
     'profile_action_username_faiহয়েছে_error': '❌ ব্যবহারকারীname update faiহয়েছে: {error}',
-    'profile_action_username_deleted': '✅ ব্যবহারকারীname: Deleted',
+    'profile_action_username_deleted': '✅ ব্যবহারকারীname: মুছুনd',
     'profile_action_username_delete_faiহয়েছে': '❌ ব্যবহারকারীname deletion faiহয়েছে',
     'profile_action_username_delete_faiহয়েছে_error': '❌ ব্যবহারকারীname deletion faiহয়েছে: {error}',
     'profile_action_username_occupied': '❌ ব্যবহারকারীname already taken: {username}',
@@ -2131,65 +2131,65 @@ TEXTS = {
     # 12. Modification Results
     'profile_complete': '✅ Profile modification complete!',
     'profile_result_stats': '📊 Statistics:',
-    'profile_result_total': '• Total:',
+    'profile_result_total': '• মোট:',
     'profile_result_success': '• সফল: {count} ✅',
     'profile_result_faiহয়েছে': '• ব্যর্থ: {count} ❌',
     'profile_error_stats': '📋 ত্রুটি type statistics:',
-    'profile_files_sent': '📁 Files sent:',
+    'profile_files_sent': '📁 ফাইলs sent:',
     'profile_file_report': '• Detaiহয়েছে report:',
     'profile_file_success': '• সফলful অ্যাকাউন্ট:',
     'profile_file_faiহয়েছে': '• ব্যর্থ অ্যাকাউন্ট:',
     
-    # 13. Output Files
-    'profile_output_report': '📋 Profile Modification Detaiহয়েছে Report',
+    # 13. Output ফাইলs
+    'profile_output_report': '📋 Profile Modification Detaiহয়েছে রিপোর্ট',
     'profile_output_success': '✅ সফলful অ্যাকাউন্ট ({count})',
     'profile_output_faiহয়েছে': '❌ ব্যর্থ অ্যাকাউন্ট ({count})',
     
-    # 14. Report Content
-    'profile_report_title': '📋 Profile Modification Detaiহয়েছে Report',
+    # 14. রিপোর্ট Content
+    'profile_report_title': '📋 Profile Modification Detaiহয়েছে রিপোর্ট',
     'profile_report_time': 'Generated time:',
-    'profile_report_summary': 'Total: {total} | সফল: {success} | ব্যর্থ: {faiহয়েছে}',
+    'profile_report_summary': 'মোট: {total} | সফল: {success} | ব্যর্থ: {faiহয়েছে}',
     'profile_report_success_title': '✅ সফলful অ্যাকাউন্ট ({count})',
     'profile_report_faiহয়েছে_title': '❌ ব্যর্থ অ্যাকাউন্ট ({count})',
-    'profile_report_file': 'File:',
+    'profile_report_file': 'ফাইল:',
     'profile_report_name_change': '- Name: Before {before}  After {after} ✓',
-    'profile_report_avatar_deleted': '- Avatar: Deleted ✓',
-    'profile_report_avatar_updated': '- Avatar: Updated ✓',
-    'profile_report_avatar_uploaded': '- Avatar: Uploaded new avatar ✓',
+    'profile_report_avatar_deleted': '- Avatar: মুছুনd ✓',
+    'profile_report_avatar_updated': '- Avatar: আপডেটd ✓',
+    'profile_report_avatar_uploaded': '- Avatar: আপলোডed new avatar ✓',
     'profile_report_bio_change': '- Bio: Before {before}  After {after} ✓',
-    'profile_report_bio_deleted': '- Bio: Deleted ✓',
+    'profile_report_bio_deleted': '- Bio: মুছুনd ✓',
     'profile_report_bio_cleared': '- Bio: Cleared ✓',
     'profile_report_username_change': '- ব্যবহারকারীname: Before {before}  After {after} ✓',
-    'profile_report_username_deleted': '- ব্যবহারকারীname: Deleted ✓',
+    'profile_report_username_deleted': '- ব্যবহারকারীname: মুছুনd ✓',
     'profile_report_error_type': 'ত্রুটি type:',
     'profile_report_error_reason': 'ত্রুটি reason:',
     'profile_report_error_stats': '📊 ত্রুটি Statistics',
     
-    # 15. Error Types
+    # 15. ত্রুটি Types
     'profile_error_auth_expired': 'Authorization expired, need to re-login',
-    'profile_error_timeout': 'Connection timeout',
+    'profile_error_timeout': 'সংযোগ timeout',
     'profile_error_flood': 'Too many operations, please try again later',
     'profile_error_username_taken': 'ব্যবহারকারীname already taken',
     'profile_error_username_invalid': 'Invalid username format',
     'profile_error_network': 'Network connection error',
     'profile_error_unknown': 'Unknown error',
-    'profile_error_banned': 'Account has been banned',
-    'profile_error_deactivated': 'Account has been deactivated',
-    'profile_error_unauthorized': 'Account unauthorized',
+    'profile_error_banned': 'অ্যাকাউন্ট has been banned',
+    'profile_error_deactivated': 'অ্যাকাউন্ট has been deactivated',
+    'profile_error_unauthorized': 'অ্যাকাউন্ট unauthorized',
     'profile_error_rpc_error': 'টেলিগ্রাম API error',
     'profile_error_password_needed': '2FA password required',
     'profile_error_phone_banned': 'Phone number has been banned',
-    'profile_error_flood_wait': 'Rate limit triggered, please wait {seconds} seconds',
+    'profile_error_flood_wait': 'Rate limit triggered, অনুগ্রহ করে অপেক্ষা করুন {seconds} seconds',
     
     # 16. Random Generation Config Display Values
     'profile_display_random_by_country': '✅ Random generate (by country)',
-    'profile_display_delete_history': '🗑️ Delete all history',
+    'profile_display_delete_history': '🗑️ মুছুন all history',
     'profile_display_keep': '📷 Keep',
     'profile_display_random': '🎲 Random generate',
-    'profile_display_delete': '🗑️ Delete',
+    'profile_display_delete': '🗑️ মুছুন',
     'profile_display_no_modify': '⏩ কোনো modification',
     'profile_display_custom': '✏️ Custom',
-    'profile_display_delete_all': '🗑️ Delete all',
+    'profile_display_delete_all': '🗑️ মুছুন all',
     'profile_display_clear': '📝 Leave empty',
     
     # 17. Other Prompt Messages
@@ -2204,7 +2204,7 @@ TEXTS = {
     'profile_field_bio': 'Bio',
     'profile_field_username': 'ব্যবহারকারীname',
     
-    # ===== Check Contact Limit Feature =====
+    # ===== চেক Contact Limit Feature =====
     # 1. Feature Introduction Page
     'contact_limit_title': '🔍 চেক Contact Limit',
     'contact_limit_upload': '📤 Please upload ZIP file containing Session or TData',
@@ -2218,41 +2218,41 @@ TEXTS = {
     'contact_limit_wait': '⏳ অনুগ্রহ করে অপেক্ষা করুন patiently during detection...',
     'contact_limit_cancel': '💡 To cancel, click /start to return to main menu',
     
-    # 2. Found Accounts
+    # 2. Found অ্যাকাউন্টs
     'contact_limit_found': '📊 Found {total} অ্যাকাউন্ট, {unique} after deduplication, starting detection...',
     'contact_limit_estimate': '⏳ Estimated time: {time}',
     
-    # 3. Processing Progress
+    # 3. প্রক্রিয়াকরণ অগ্রগতি
     'contact_limit_progress': '📊 Detection progress: [{current}/{total}]',
     'contact_limit_current': '❌ Current:',
-    'contact_limit_status': 'Status:',
+    'contact_limit_status': 'অবস্থা:',
     'contact_limit_stats': 'Statistics:',
-    'contact_limit_completed': '• Completed:',
+    'contact_limit_completed': '• সম্পূর্ণd:',
     'contact_limit_remaining': '• Remaining:',
     'contact_limit_percent': '• অগ্রগতি:',
     'contact_limit_elapsed': '⏱️ Elapsed:',
     
-    # 4. Detection Complete
+    # 4. Detection সম্পূর্ণ
     'contact_limit_complete': '✅ Detection complete!',
-    'contact_limit_time': '⏱️ Time: {time}',
+    'contact_limit_time': '⏱️ সময়: {time}',
     'contact_limit_report_sent': '📊 Detection report and categorized ফাইল sent',
     
-    # 5. Output Files
-    'contact_limit_report_file': '📊 Contact Limit Detection Report',
+    # 5. Output ফাইলs
+    'contact_limit_report_file': '📊 Contact Limit Detection রিপোর্ট',
     'contact_limit_normal': '✅ Normal: {count}',
     'contact_limit_limited': '⚠️ Limited: {count}',
     'contact_limit_banned': '🚫 নিষিদ্ধ: {count}',
     'contact_limit_faiহয়েছে': '❌ ব্যর্থ: {count}',
     'contact_limit_check_faiহয়েছে_zip': 'Contact check faiহয়েছে',
     
-    # 6. Report Content
-    'contact_limit_report_title': '📊 Contact Limit Detection Report',
+    # 6. রিপোর্ট Content
+    'contact_limit_report_title': '📊 Contact Limit Detection রিপোর্ট',
     'contact_limit_report_time': 'Detection time: {time} (Beijing time)',
-    'contact_limit_report_total': 'Total detected: {count} অ্যাকাউন্ট',
+    'contact_limit_report_total': 'মোট detected: {count} অ্যাকাউন্ট',
     'contact_limit_report_principle': 'Detection principle explanation:',
     'contact_limit_report_normal_desc': '✅ Normal: সফলfully imported test contact and found user',
     'contact_limit_report_limited_desc': '⚠️ Limited: Import successful but user not found / FloodWait triggered / Import faiহয়েছে',
-    'contact_limit_report_banned_desc': '❌ নিষিদ্ধ: Account banned or deactivated',
+    'contact_limit_report_banned_desc': '❌ নিষিদ্ধ: অ্যাকাউন্ট banned or deactivated',
     'contact_limit_report_faiহয়েছে_desc': '❌ ব্যর্থ: Detection error or unauthorized',
     'contact_limit_report_stats': 'Statistics',
     'contact_limit_report_normal_count': '✅ Normal অ্যাকাউন্ট: {count}',
@@ -2260,36 +2260,36 @@ TEXTS = {
     'contact_limit_report_banned_count': '❌ নিষিদ্ধ: {count}',
     'contact_limit_report_faiহয়েছে_count': '❌ Detection faiহয়েছে: {count}',
     'contact_limit_report_detail': '📋 Detaiহয়েছে List',
-    'contact_limit_report_normal_list': '【✅ Normal Accounts】',
+    'contact_limit_report_normal_list': '【✅ Normal অ্যাকাউন্টs】',
     'contact_limit_report_limited_list': '【⚠️ Contact Limited】',
     'contact_limit_report_banned_list': '【❌ নিষিদ্ধ】',
     'contact_limit_report_faiহয়েছে_list': '【❌ Detection ব্যর্থ】',
     'contact_limit_report_none': 'None',
     
-    # 7. Status Types
+    # 7. অবস্থা Types
     'contact_limit_status_normal': '✅ Normal',
     'contact_limit_status_limited': '⚠️ Limited',
     'contact_limit_status_banned': '🚫 নিষিদ্ধ',
     'contact_limit_status_faiহয়েছে': '❌ ব্যর্থ',
-    'contact_limit_status_connection_error': '⚠️ Connection error: {error}',
+    'contact_limit_status_connection_error': '⚠️ সংযোগ error: {error}',
     'contact_limit_status_auth_error': 'Authorization expired',
     'contact_limit_status_flood_wait': 'FloodWait triggered',
     'contact_limit_status_import_faiহয়েছে': 'Import faiহয়েছে',
     'contact_limit_status_user_not_found': 'ব্যবহারকারী not found',
     
-    # 8. Time Units
+    # 8. সময় Units
     'contact_limit_minute': 'minute(s)',
     'contact_limit_second': 'second(s)',
     
-    # 9. ZIP File Naming
+    # 9. ZIP ফাইল Naming
     'contact_limit_zip_normal': 'Contactচেক_Normal',
     'contact_limit_zip_limited': 'Contactচেক_Limited',
     'contact_limit_zip_faiহয়েছে': 'Contactচেক_ব্যর্থ',
     
-    # ===== Activate/Redeem Membership Feature =====
-    # 1. Membership Center Page
+    # ===== Activate/Redeem সদস্যপদ Feature =====
+    # 1. সদস্যপদ Center Page
     'member_center_title': '💳 সদস্যপদ Center',
-    'member_current_status': '📊 Current Status',
+    'member_current_status': '📊 Current অবস্থা',
     'member_feature_title': '💡 Features',
     'member_feature1': '• Redeem card code to activate membership',
     'member_feature2': '• সদস্যপদ duration auto-accumulates',
@@ -2297,8 +2297,8 @@ TEXTS = {
     'member_operation_title': '🎯 Operation Options',
     'member_operation_desc': 'Please select the operation you want to perform',
     
-    # 2. Membership Status Types
-    'member_status_admin': '👑 Admin (স্থায়ী)',
+    # 2. সদস্যপদ অবস্থা Types
+    'member_status_admin': '👑 প্রশাসক (স্থায়ী)',
     'member_status_none': '❌ কোনো সদস্যপদ',
     'member_status_member': '💎 Member',
     'member_status_expire': '• মেয়াদ শেষ time: {time}',
@@ -2319,13 +2319,13 @@ TEXTS = {
     'redeem_tip3': '• Duration auto-accumulates after successful redemption',
     'redeem_timeout': '⏰ Auto-cancel if no input within 5 minutes',
     
-    # 5. Redemption Success
+    # 5. Redemption সফল
     'redeem_success': '✅ Redemption সফলful!',
     'redeem_info_title': '📋 Redemption Info',
     'redeem_info_code': '• Code: {code}',
     'redeem_info_level': '• সদস্যপদ level: {level}',
     'redeem_info_days': '• Days added: {days} day(s)',
-    'redeem_current_status': '💎 Current সদস্যপদ Status',
+    'redeem_current_status': '💎 Current সদস্যপদ অবস্থা',
     'redeem_current_level': '• সদস্যপদ level: {level}',
     'redeem_current_expire': '• মেয়াদ শেষ time: {time}',
     'redeem_thanks': 'Thank you for your support!',
@@ -2338,33 +2338,33 @@ TEXTS = {
     'redeem_error_invalid': 'Invalid code status',
     'redeem_error_check': 'Please check if your code is correct',
     
-    # 7. Membership Level Names
+    # 7. সদস্যপদ Level Names
     'member_level_member': 'Member',
-    'member_level_admin': 'Admin',
+    'member_level_admin': 'প্রশাসক',
     
-    # ===== Admin Panel Features =====
-    # 1. Admin Panel Main
+    # ===== প্রশাসক Panel Features =====
+    # 1. প্রশাসক Panel Main
     'admin_panel_title': '👑 অ্যাডমিন প্যানেল',
-    'admin_panel_access_denied': '❌ Admin only',
+    'admin_panel_access_denied': '❌ প্রশাসক only',
     'admin_system_stats': '📊 System Statistics',
-    'admin_total_users': 'Total ব্যবহারকারীs',
+    'admin_total_users': 'মোট ব্যবহারকারীs',
     'admin_today_active': 'Active Today',
     'admin_week_active': 'Active This Week',
     'admin_active_members': 'Active Members',
     'admin_trial_members': 'Trial Members',
     'admin_recent_users': 'Recent New ব্যবহারকারীs',
-    'admin_info': '👑 Admin Info',
-    'admin_count': 'Admin Count',
+    'admin_info': '👑 প্রশাসক Info',
+    'admin_count': 'প্রশাসক সংখ্যা',
     'admin_your_permission': 'Your Permission',
-    'admin_super_admin': '👑 Super Admin',
-    'admin_normal_admin': '🔧 Normal Admin',
-    'admin_system_time': 'System Time',
+    'admin_super_admin': '👑 Super প্রশাসক',
+    'admin_normal_admin': '🔧 Normal প্রশাসক',
+    'admin_system_time': 'System সময়',
     'admin_quick_actions': '🔧 Quick Actions',
     'admin_quick_actions_desc': 'Click buttons below to manage',
     'admin_btn_user_management': '👥 ব্যবহারকারী Management',
     'admin_btn_user_stats': '📊 ব্যবহারকারী Statistics',
     'admin_btn_proxy_management': '📡 প্রক্সি ম্যানেজমেন্ট',
-    'admin_btn_admin_management': '👑 Admin Management',
+    'admin_btn_admin_management': '👑 প্রশাসক Management',
     'admin_btn_search_user': '🔍 Search ব্যবহারকারী',
     'admin_btn_recent_users': '📋 Recent ব্যবহারকারীs',
     'admin_btn_card_activation': '💳 Card Activation',
@@ -2373,12 +2373,12 @@ TEXTS = {
     'admin_btn_broadcast': '📢 Broadcast',
     'admin_btn_back_panel': '🔙 পিছনে to অ্যাডমিন প্যানেল',
     
-    # 2. User Management
+    # 2. ব্যবহারকারী Management
     'user_management_title': '👥 ব্যবহারকারী Management',
     'user_management_recent_active': '📋 Recently Active ব্যবহারকারীs (7 days)',
     'user_management_no_active': 'কোনো active users',
     'user_management_legend': '📖 Legend',
-    'user_management_legend_admin': '👑 = Admin',
+    'user_management_legend_admin': '👑 = প্রশাসক',
     'user_management_legend_vip': '💎 = VIP',
     'user_management_legend_normal': '❌ = Normal ব্যবহারকারী',
     'user_management_time_hours_ago': '{hours}h ago',
@@ -2389,10 +2389,10 @@ TEXTS = {
     'user_management_btn_stats': '📊 ব্যবহারকারী Statistics',
     'user_management_btn_refresh': '🔄 Refresh',
     
-    # 3. User Statistics
+    # 3. ব্যবহারকারী Statistics
     'user_stats_title': '📊 ব্যবহারকারী Statistics',
     'user_stats_basic_data': '👥 ব্যবহারকারী Overview',
-    'user_stats_total_users': 'Total ব্যবহারকারীs',
+    'user_stats_total_users': 'মোট ব্যবহারকারীs',
     'user_stats_today_active': 'Active Today',
     'user_stats_week_active': 'Active This Week',
     'user_stats_recent_new': 'Recent New ব্যবহারকারীs',
@@ -2404,10 +2404,10 @@ TEXTS = {
     'user_stats_activity_analysis': '📈 Activity Analysis',
     'user_stats_week_rate': 'Weekly Active Rate',
     'user_stats_day_rate': 'Daily Active Rate',
-    'user_stats_time': '📅 Statistics Time',
+    'user_stats_time': '📅 Statistics সময়',
     'user_stats_btn_refresh': '🔄 Refresh Data',
     
-    # 4. Search User
+    # 4. Search ব্যবহারকারী
     'search_user_title': '🔍 Search ব্যবহারকারী',
     'search_user_prompt': '📝 Please enter search keywords:',
     'search_user_methods': 'Supported search methods:',
@@ -2425,29 +2425,29 @@ TEXTS = {
     'search_user_found': 'Found {count} matching users:',
     'search_user_btn_continue': '🔍 Continue Search',
     
-    # 5. Recent Users
+    # 5. Recent ব্যবহারকারীs
     'recent_users_title': '📋 Recently Registered ব্যবহারকারীs',
     'recent_users_no_data': 'কোনো user data',
     'recent_users_registered': '{time}',
     'recent_users_btn_refresh': '🔄 Refresh List',
     
-    # 6. Admin Management
-    'admin_manage_title': '👑 Admin Management',
-    'admin_manage_list': '📋 Current Admin List',
-    'admin_manage_super': '👑 Super Admin',
-    'admin_manage_normal': '👤 Normal Admin',
+    # 6. প্রশাসক Management
+    'admin_manage_title': '👑 প্রশাসক Management',
+    'admin_manage_list': '📋 Current প্রশাসক List',
+    'admin_manage_super': '👑 Super প্রশাসক',
+    'admin_manage_normal': '👤 Normal প্রশাসক',
     'admin_manage_no_admins': 'কোনো admins',
     'admin_manage_nickname': 'ডাকনাম',
     'admin_manage_username': 'ব্যবহারকারীname',
-    'admin_manage_added_time': 'Added Time',
-    'admin_manage_admin_prefix': 'Admin',
-    'admin_manage_config_admin': 'Config File Admin',
+    'admin_manage_added_time': 'যোগ করুনed সময়',
+    'admin_manage_admin_prefix': 'প্রশাসক',
+    'admin_manage_config_admin': 'Config ফাইল প্রশাসক',
     'admin_manage_system_builtin': 'System Built-in',
     'admin_manage_description': '📖 Description',
     'admin_manage_desc_super': 'Super admins are from config file',
     'admin_manage_desc_normal': 'Normal admins can be added via commands',
     
-    # 7. User Details
+    # 7. ব্যবহারকারী Details
     'user_detail_title': '👤 ব্যবহারকারী Details',
     'user_detail_basic_info': '📋 Basic Info',
     'user_detail_nickname': 'ডাকনাম',
@@ -2456,19 +2456,19 @@ TEXTS = {
     'user_detail_level': 'Level',
     'user_detail_expiry': 'মেয়াদ শেষ',
     'user_detail_usage_stats': '📊 Usage Statistics',
-    'user_detail_register_time': 'Registration Time',
+    'user_detail_register_time': 'Registration সময়',
     'user_detail_last_active': 'Last Active',
-    'user_detail_usage_count': 'Usage Count',
+    'user_detail_usage_count': 'Usage সংখ্যা',
     'user_detail_btn_gift': '🎁 Gift সদস্যপদ',
     'user_detail_btn_ban': '🚫 Ban ব্যবহারকারী',
     'user_detail_btn_back_list': 'পিছনে to List',
     'user_detail_not_found': '❌ ব্যবহারকারী {user_id} not found',
     
-    # 8. Gift Membership
+    # 8. Gift সদস্যপদ
     'gift_membership_title': '🎁 Gift সদস্যপদ',
     'gift_membership_user_info': '📋 ব্যবহারকারী Info',
-    'gift_membership_current_status': '💎 Current সদস্যপদ Status',
-    'gift_membership_select_days': '⏰ Select Gift Duration',
+    'gift_membership_current_status': '💎 Current সদস্যপদ অবস্থা',
+    'gift_membership_select_days': '⏰ নির্বাচন Gift Duration',
     'gift_membership_select_prompt': 'Please select membership days to gift:',
     'gift_membership_1day': '1 Day',
     'gift_membership_7days': '7 Days',
@@ -2482,44 +2482,44 @@ TEXTS = {
     'gift_membership_days_gifted': 'Days Gifted',
     'gift_membership_btn_continue': '🔄 Continue Gifting',
     
-    # 9. Ban User
+    # 9. Ban ব্যবহারকারী
     'ban_user_confirm_title': '⚠️ নিশ্চিত করুন Ban ব্যবহারকারী',
     'ban_user_confirm_prompt': '⚠️ Are you sure you want to ban this user?',
     'ban_user_confirm_desc': 'After banning, this user will not be able to use the bot.',
     'ban_user_btn_confirm': '✅ নিশ্চিত করুন Ban',
     'ban_user_success': '✅ Ban সফলful!',
     'ban_user_info': '📋 Ban Info',
-    'ban_user_time': 'Ban Time',
+    'ban_user_time': 'Ban সময়',
     'ban_user_desc': 'This user has been banned and cannot use the bot.',
     
-    # 10. Proxy Management Panel
+    # 10. প্রক্সি Management Panel
     'proxy_panel_title': '📡 প্রক্সি ম্যানেজমেন্ট Panel',
-    'proxy_panel_overview': '📊 Proxy Overview',
-    'proxy_panel_total': 'Total Proxies',
+    'proxy_panel_overview': '📊 প্রক্সি Overview',
+    'proxy_panel_total': 'মোট Proxies',
     'proxy_panel_available': 'Available Proxies',
     'proxy_panel_invalid': 'Invalid Proxies',
     'proxy_panel_success_rate': 'সফল Rate',
-    'proxy_panel_select_op': '🔧 Select Operation:',
+    'proxy_panel_select_op': '🔧 নির্বাচন Operation:',
     'proxy_panel_btn_status': '📊 প্রক্সি স্ট্যাটাস',
     'proxy_panel_btn_test': '🔄 Test Proxies',
-    'proxy_panel_btn_stats': '📈 Proxy Statistics',
+    'proxy_panel_btn_stats': '📈 প্রক্সি Statistics',
     'proxy_panel_btn_clean': '🗑 Clean Invalid',
     'proxy_panel_btn_optimize': '⚡ গতি Optimization',
-    'proxy_panel_btn_back': 'পিছনে to Proxy Panel',
+    'proxy_panel_btn_back': 'পিছনে to প্রক্সি Panel',
     
-    # 11. Proxy Status
-    'proxy_status_title': '📊 Proxy Detaiহয়েছে Status',
+    # 11. প্রক্সি অবস্থা
+    'proxy_status_title': '📊 প্রক্সি Detaiহয়েছে অবস্থা',
     'proxy_status_basic': '📈 Basic Statistics',
     'proxy_status_performance': '⚡ Performance Metrics',
-    'proxy_status_avg_response': 'Average Response',
-    'proxy_status_fastest': 'Fastest Response',
-    'proxy_status_slowest': 'Slowest Response',
+    'proxy_status_avg_response': 'গড় প্রতিক্রিয়া',
+    'proxy_status_fastest': 'Fastest প্রতিক্রিয়া',
+    'proxy_status_slowest': 'Slowest প্রতিক্রিয়া',
     'proxy_status_region': '🌍 Region Distribution',
-    'proxy_status_update_time': '🕐 Update Time',
-    'proxy_status_btn_refresh': '🔄 Refresh Status',
+    'proxy_status_update_time': '🕐 আপডেট সময়',
+    'proxy_status_btn_refresh': '🔄 Refresh অবস্থা',
     
     # 12. Test Proxies
-    'proxy_test_title': '🔄 Proxy Test',
+    'proxy_test_title': '🔄 প্রক্সি Test',
     'proxy_test_description': '📋 Test Description',
     'proxy_test_desc_connectivity': 'Will test connectivity of all প্রক্সি',
     'proxy_test_desc_time': 'Testing may take a few minutes',
@@ -2532,16 +2532,16 @@ TEXTS = {
     'proxy_test_available': 'Available',
     'proxy_test_invalid': 'Invalid',
     'proxy_test_wait': 'অনুগ্রহ করে অপেক্ষা করুন...',
-    'proxy_test_complete': '✅ Proxy Test Complete!',
+    'proxy_test_complete': '✅ প্রক্সি Test সম্পূর্ণ!',
     'proxy_test_results': '📊 Test Results',
-    'proxy_test_total': 'Total Tested',
+    'proxy_test_total': 'মোট Tested',
     'proxy_test_duration': '⏱ Duration',
     'proxy_test_seconds': 'seconds',
     'proxy_test_btn_clean': '🗑 Clean Invalid Proxies',
     'proxy_test_btn_retest': '🔄 Retest',
     
-    # 13. Proxy Statistics
-    'proxy_stats_title': '📈 Proxy Statistics Info',
+    # 13. প্রক্সি Statistics
+    'proxy_stats_title': '📈 প্রক্সি Statistics Info',
     'proxy_stats_usage': '📊 Usage Statistics',
     'proxy_stats_today_requests': 'Today\'s Requests',
     'proxy_stats_success_requests': 'সফলful Requests',
@@ -2555,31 +2555,31 @@ TEXTS = {
     
     # 14. Clean Invalid Proxies
     'proxy_clean_title': '🗑 Clean Invalid Proxies',
-    'proxy_clean_current_status': '📊 Current Status',
+    'proxy_clean_current_status': '📊 Current অবস্থা',
     'proxy_clean_invalid_count': 'Invalid Proxies',
     'proxy_clean_proxies_unit': 'প্রক্সি',
     'proxy_clean_of_total': 'of total',
     'proxy_clean_confirm': '⚠️ নিশ্চিত করুন Clean?',
     'proxy_clean_warning': 'This will permanently delete all invalid প্রক্সি and cannot be undone.',
     'proxy_clean_btn_confirm': '✅ নিশ্চিত করুন Clean',
-    'proxy_clean_starting': '🚀 Starting to clean {count} প্রক্সি...',
+    'proxy_clean_starting': '🚀 শুরু হচ্ছে to clean {count} প্রক্সি...',
     'proxy_clean_fast_mode': 'Fast মোড: On',
     'proxy_clean_concurrency': 'Concurrency',
     'proxy_clean_wait': 'অনুগ্রহ করে অপেক্ষা করুন, cleaning may take a few minutes...',
-    'proxy_clean_complete': '✅ Clean Complete!',
+    'proxy_clean_complete': '✅ Clean সম্পূর্ণ!',
     'proxy_clean_results': '📊 Clean Results',
     'proxy_clean_cleaned': 'Cleaned',
     'proxy_clean_remaining': 'Remaining Proxies',
-    'proxy_clean_faiহয়েছে': '❌ Proxy Clean ব্যর্থ',
+    'proxy_clean_faiহয়েছে': '❌ প্রক্সি Clean ব্যর্থ',
     'proxy_clean_no_proxies': 'কোনো available প্রক্সি',
     
-    # 15. Speed Optimization
+    # 15. গতি Optimization
     'proxy_optimize_title': '⚡ গতি Optimization Config',
     'proxy_optimize_current': '⚙️ Current Settings',
     'proxy_optimize_fast_mode': 'Fast মোড',
     'proxy_optimize_on': '🟢 On',
     'proxy_optimize_off': '🔴 Off',
-    'proxy_optimize_timeout': 'চেক Timeout',
+    'proxy_optimize_timeout': 'চেক সময়out',
     'proxy_optimize_retry': 'Smart Retry',
     'proxy_optimize_times': 'times',
     'proxy_optimize_auto_clean': 'Auto Clean',
@@ -2598,18 +2598,18 @@ TEXTS = {
     # 16. Card Activation
     'card_activation_title': '🎫 Card Activation',
     'card_activation_description': '📋 Function Description',
-    'card_activation_desc_select': 'Select days to generate card',
+    'card_activation_desc_select': 'নির্বাচন days to generate card',
     'card_activation_desc_count': 'Generate 1 card at a time',
     'card_activation_desc_format': 'Card is 8-digit uppercase alphanumeric',
     'card_activation_desc_usage': 'Each card can only be used once',
-    'card_activation_select_validity': '🎯 Select Validity Period',
+    'card_activation_select_validity': '🎯 নির্বাচন Validity Period',
     'card_activation_select_prompt': 'Please select the card validity period:',
     'card_activation_success': '✅ Card Generated সফলfully!',
     'card_activation_info': '🎫 Card Info',
     'card_activation_code': 'Card Code',
     'card_activation_vip': 'VIP',
     'card_activation_validity': 'Validity',
-    'card_activation_status': 'Status',
+    'card_activation_status': 'অবস্থা',
     'card_activation_unused': 'Unused',
     'card_activation_tips': '💡 Tips',
     'card_activation_tip_save': 'Please keep the card code safe',
@@ -2626,14 +2626,14 @@ TEXTS = {
     'manual_activation_note1': 'Days selection will appear after input',
     'manual_activation_note2': 'সদস্যপদ duration auto-accumulates',
     'manual_activation_confirm_user': '👤 নিশ্চিত করুন ব্যবহারকারী Info',
-    'manual_activation_select_days': '⏰ Select Activation Duration',
+    'manual_activation_select_days': '⏰ নির্বাচন Activation Duration',
     'manual_activation_select_prompt': 'Please select membership days for this user:',
     'manual_activation_success': '✅ Activation সফলful!',
     'manual_activation_info': '📋 Activation Info',
-    'manual_activation_days_added': 'Days Added',
+    'manual_activation_days_added': 'Days যোগ করুনed',
     'manual_activation_btn_continue': '🔄 Continue Activation',
     
-    # 18. Revoke Membership
+    # 18. Revoke সদস্যপদ
     'revoke_membership_title': 'Revoke সদস্যপদ',
     'revoke_membership_prompt': '📝 Please enter username (@name) or user ID to revoke:',
     'revoke_membership_note': 'Revoking will remove all membership privileges',
@@ -2657,16 +2657,16 @@ TEXTS = {
     'broadcast_menu_feature_buttons': 'Can add custom buttons (URL or callback)',
     'broadcast_menu_feature_throttle': 'Smart throttling to avoid rate limits',
     'broadcast_menu_feature_progress': 'Real-time progress display',
-    'broadcast_menu_feature_history': 'Complete history records',
-    'broadcast_menu_select_op': '🔧 Select Operation',
+    'broadcast_menu_feature_history': 'সম্পূর্ণ history records',
+    'broadcast_menu_select_op': '🔧 নির্বাচন Operation',
     'broadcast_menu_click_start': 'Click buttons below to start:',
-    'broadcast_menu_btn_create': '📝 Create Broadcast',
+    'broadcast_menu_btn_create': '📝 তৈরি Broadcast',
     'broadcast_menu_btn_history': '📋 History',
     'broadcast_menu_btn_back': 'পিছনে',
     
-    # 20. Create Broadcast
-    'broadcast_create_title': '📝 Create Broadcast',
-    'broadcast_create_current_status': '📊 Current Status',
+    # 20. তৈরি Broadcast
+    'broadcast_create_title': '📝 তৈরি Broadcast',
+    'broadcast_create_current_status': '📊 Current অবস্থা',
     'broadcast_create_media': 'Media',
     'broadcast_create_text': 'Text',
     'broadcast_create_buttons': 'Buttons',
@@ -2720,31 +2720,31 @@ TEXTS = {
     'broadcast_preview_title': '🔍 Full Preview',
     'broadcast_preview_label': '📢 Preview',
     
-    # 25. Select Target Users
-    'broadcast_target_title': '📝 Create Broadcast - Step 4/4',
+    # 25. নির্বাচন Target ব্যবহারকারীs
+    'broadcast_target_title': '📝 তৈরি Broadcast - Step 4/4',
     'broadcast_target_subtitle': 'Title',
     'broadcast_target_content_set': 'Content Set',
-    'broadcast_target_select': '🎯 Please Select Target ব্যবহারকারীs',
+    'broadcast_target_select': '🎯 Please নির্বাচন Target ব্যবহারকারীs',
     'broadcast_target_prompt': 'Please select user group to send notification:',
-    'broadcast_target_all': '👥 All ব্যবহারকারীs',
+    'broadcast_target_all': '👥 সব ব্যবহারকারীs',
     'broadcast_target_vip': '💎 VIP Only',
     'broadcast_target_active': '🔥 Active ব্যবহারকারীs (7d)',
     'broadcast_target_new': '🆕 New ব্যবহারকারীs (7d)',
     
-    # 26. Broadcast Preview Confirmation
+    # 26. Broadcast Preview নিশ্চিতation
     'broadcast_confirm_title': 'Broadcast Preview',
     'broadcast_confirm_title_label': '📋 Title',
     'broadcast_confirm_target': '🎯 Target',
     'broadcast_confirm_users': 'users',
     'broadcast_confirm_content': '📄 Content',
     'broadcast_confirm_send': '⚠️ নিশ্চিত করুন Send?',
-    'broadcast_confirm_estimate': 'Estimated Time',
+    'broadcast_confirm_estimate': 'Estimated সময়',
     'broadcast_confirm_mode': 'Send মোড: Smart Throttle Batch Send',
-    'broadcast_confirm_btn_start': '✅ Start Sending',
+    'broadcast_confirm_btn_start': '✅ Start পাঠানো হচ্ছে',
     'broadcast_confirm_btn_edit': '✏️ পিছনে to Edit',
     
-    # 27. Send Progress
-    'broadcast_send_starting': '🚀 Starting broadcast...',
+    # 27. Send অগ্রগতি
+    'broadcast_send_starting': '🚀 শুরু হচ্ছে broadcast...',
     'broadcast_send_initializing': 'Initializing...',
     'broadcast_send_broadcasting': '📡 Broadcasting...',
     'broadcast_send_target': 'Target',
@@ -2752,30 +2752,30 @@ TEXTS = {
     'broadcast_send_success': 'সফল',
     'broadcast_send_faiহয়েছে': 'ব্যর্থ',
     
-    # 28. Send Complete
-    'broadcast_complete_title': '✅ Broadcast Complete!',
+    # 28. Send সম্পূর্ণ
+    'broadcast_complete_title': '✅ Broadcast সম্পূর্ণ!',
     'broadcast_complete_stats': '📊 Send Statistics',
     'broadcast_complete_target_users': 'Target ব্যবহারকারীs',
-    'broadcast_complete_total_time': 'Total Time',
-    'broadcast_complete_avg_speed': 'Average গতি',
+    'broadcast_complete_total_time': 'মোট সময়',
+    'broadcast_complete_avg_speed': 'গড় গতি',
     'broadcast_complete_users_sec': 'users/sec',
     'broadcast_complete_id': '📋 Broadcast ID',
     
     # 29. Broadcast History
     'broadcast_history_title': '📋 Broadcast History',
-    'broadcast_history_all': 'All',
+    'broadcast_history_all': 'সব',
     'broadcast_history_btn_back': 'পিছনে to History',
     
     # 30. Broadcast Details
     'broadcast_detail_title': '📋 Broadcast Details',
     'broadcast_detail_id': '🆔 ID',
     'broadcast_detail_title_label': '📝 Title',
-    'broadcast_detail_created': '📅 Created Time',
-    'broadcast_detail_status': '📊 Status',
-    'broadcast_detail_completed': '✅ Completed',
+    'broadcast_detail_created': '📅 তৈরিd সময়',
+    'broadcast_detail_status': '📊 অবস্থা',
+    'broadcast_detail_completed': '✅ সম্পূর্ণd',
     'broadcast_detail_target_group': '🎯 Target Group',
-    'broadcast_detail_all_users': 'All ব্যবহারকারীs',
-    'broadcast_detail_target_count': '🎯 Target Count',
+    'broadcast_detail_all_users': 'সব ব্যবহারকারীs',
+    'broadcast_detail_target_count': '🎯 Target সংখ্যা',
     'broadcast_detail_results': '📈 Send Results',
     'broadcast_detail_duration': 'Duration',
     'broadcast_detail_content': '📄 Content',

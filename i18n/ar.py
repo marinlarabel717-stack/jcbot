@@ -1,11 +1,11 @@
 TEXTS = {
-    # ===== Main Menu =====
+    # ===== Main القائمة =====
     'bot_title': '🔍 بوت إدارة حسابات تيليجرام V8.0',
     'main_menu_title': '🏠 القائمة الرئيسية',
     'main_menu_welcome': '👋 مرحباً بك في بوت إدارة حسابات تيليجرام!',
     'main_menu_select': 'الرجاء تحديد وظيفة:',
     
-    # User info
+    # المستخدم info
     'user_info': 'معلومات المستخدم',
     'user_nickname': 'الاسم المستعار',
     'user_id': 'ID',
@@ -17,7 +17,7 @@ TEXTS = {
     'membership_admin': 'مسؤول',
     'default_user': 'مستخدم',
     
-    # Proxy status
+    # الوكيل status
     'proxy_status': 'حالة الوكيل',
     'proxy_mode': 'وضع الوكيل',
     'proxy_mode_enabتم': '🟢مفعّل',
@@ -47,7 +47,7 @@ TEXTS = {
     'btn_admin_panel': '👑 لوحة المسؤول',
     'btn_proxy_panel': '📡 إدارة الوكيل',
     
-    # Language switch
+    # اللغة switch
     'btn_language_menu': '🌐 تغيير اللغة',
     'language_menu_title': '🌐 اختر اللغة',
     'language_chinese': '🇨🇳 中文',
@@ -59,7 +59,7 @@ TEXTS = {
     'language_vietnamese': '🇻🇳 Tiếng Việt',
     'language_switched': '✅ تم تغيير اللغة إلى العربية',
     
-    # Back button
+    # رجوع button
     'btn_back_to_menu': 'العودة إلى القائمة',
     'btn_back': '◀️ رجوع',
     'btn_cancel': '❌ إلغاء',
@@ -71,13 +71,13 @@ TEXTS = {
     'status_failed': '❌ فشل',
     'status_cancelled': '❌ ملغى',
     
-    # Proxy status
+    # الوكيل status
     'proxy_enabled': '🌐 وضع الوكيل: مفعّل',
     'proxy_disabled': '🌐 وضع الوكيل: معطل',
     'proxy_count': '🌐 وضع الوكيل: مفعّل ({count} وكلاء)',
     
-    # ===== Account Check =====
-    # Upload prompt interface
+    # ===== الحساب فحص =====
+    # تحميل prompt interface
     'account_check_upload_title': '📨 الرجاء تحميل ملفات حسابك',
     'account_check_supported_formats': '📋 التنسيقات المدعومة',
     'account_check_format_zip': '· أرشيف ZIP (موصى به)',
@@ -96,7 +96,7 @@ TEXTS = {
     'account_check_threads': '⚡ خيوط متزامنة: {count}',
     'account_check_please_wait': 'يرجى الانتظار, عرض التقدم في الوقت الفعلي...',
     
-    # Check progress
+    # فحص progress
     'account_check_in_progress': '⚡ جارٍ الفحص...',
     'account_check_progress_title': '📊 فحص التقدم',
     'account_check_progress_percent': '· التقدم: {percent}% ({done}/{total})',
@@ -104,18 +104,18 @@ TEXTS = {
     'account_check_mode': '· الوضع: {mode}',
     'account_check_speed': '· السرعة: {speed} حسابات/sec',
     'account_check_remaining': '· Est. remaining: {time} min',
-    'account_check_proxy_stats': '🔄 Proxy Usage Stats',
+    'account_check_proxy_stats': '🔄 إحصائيات استخدام الوكيل',
     'account_check_proxies_used': '· Proxies used: {count}',
     'account_check_fallback_local': '· Fallback local: {count}',
     'account_check_faiتم_proxies': '· فشل وكلاء: {count}',
-    'account_check_optimization': '⚡ Optimization Status',
+    'account_check_optimization': '⚡ Optimization الحالة',
     'account_check_fast_mode': '· Fast mode: {status}',
     'account_check_fast_mode_on': '🟢 On',
     'account_check_fast_mode_off': '🔴 Off',
     'account_check_concurrency': '· Concurrency: {count}',
     'account_check_timeout': '· فحص timeout: {seconds}s',
     
-    # Account status categories
+    # الحساب status categories
     'status_no_restriction': 'بدون قيود',
     'status_spambot': 'رسائل غير مرغوب فيها',
     'status_frozen': 'مجمد',
@@ -127,46 +127,46 @@ TEXTS = {
     'zip_spambot': 'رسائل غير مرغوب فيها_{count}',
     'zip_frozen': 'مجمد_{count}',
     'zip_banned': 'محظور_{count}',
-    'zip_connection_error': 'Connectionخطأ_{count}',
+    'zip_connection_error': 'الاتصالخطأ_{count}',
     
-    # File descriptions
+    # ملف descriptions
     'file_desc_no_restriction': '📦 بدون قيود - {count} حسابات',
     'file_desc_spambot': '📦 رسائل غير مرغوب فيها - {count} حسابات',
     'file_desc_frozen': '📦 مجمد - {count} حسابات',
     'file_desc_banned': '📦 محظور - {count} حسابات',
     'file_desc_connection_error': '📦 خطأ - {count} حسابات',
     
-    # Check completion and summary
+    # فحص completion and summary
     'check_time': '⏰ فحص time: {time}',
     'check_mode_label': '🌐 فحص mode: {mode}',
     'check_mode_proxy': 'وضع الوكيل',
     'check_mode_local': 'الوضع المحلي',
-    'all_files_sent': '📤 All ملفات sent successfully!',
-    'send_summary': '📊 Send Summary',
+    'all_files_sent': '📤 جميع ملفات تم الإرسال بنجاح!',
+    'send_summary': '📊 Send ملخص',
     'files_sent_count': '· نجحfully sent: {count} ملفات',
     'check_mode_summary': '· فحص mode: {mode}',
     'check_duration': '· فحص duration: {seconds}s',
     'thanks_message': 'Thanks for using the enhanced bot! To check again, click /start',
     
-    # Proxy stats and other statistics
+    # الوكيل stats and other statistics
     'total_accounts': 'إجمالي الحسابات',
-    'proxy_usage_stats': '📡 Proxy Usage Stats',
+    'proxy_usage_stats': '📡 إحصائيات استخدام الوكيل',
     'proxies_used_stat': 'Proxies Used',
-    'fallback_local_stat': 'Fallback Local',
+    'fallback_local_stat': 'Fallback محلي',
     'faiتم_proxies_stat': 'فشل Proxies',
-    'local_only_stat': 'Local Only',
-    'proxy_connection': '📡 Proxy Connection',
+    'local_only_stat': 'محلي Only',
+    'proxy_connection': '📡 الوكيل الاتصال',
     'local_connection': '🏠 اتصال محلي',
-    'performance_stats': '⚡ Performance Stats',
-    'average_speed': 'Average السرعة',
-    'sending_files': '🚀 Sending classified ملفات, please wait...',
+    'performance_stats': '⚡ إحصائيات الأداء',
+    'average_speed': 'متوسط السرعة',
+    'sending_files': '🚀 إرسال مصنفة ملفات, يرجى الانتظار...',
     'processing_file': '📥 جارٍ المعالجة your file...',
     'accounts_unit': '',
     'seconds_unit': 's',
     'minutes_unit': 'min',
     'accounts_per_second': 'حسابات/s',
     
-    # ===== Format Conversion =====
+    # ===== التنسيق التحويل =====
     # Function introduction page
     'format_conversion_title': '🔄 تحويل التنسيق',
     'format_conversion_supported': '📁 Supported تحويلs',
@@ -208,9 +208,9 @@ TEXTS = {
     'session_to_tdata_info2': '· Batch convert to Tdata format',
     'session_to_tdata_info3': '· Generate corresponding Tdata مجلدات',
     
-    # Conversion progress
+    # التحويل progress
     'processing_your_file': '📥 جارٍ المعالجة your file...',
-    'start_conversion': '🔄 Starting conversion...',
+    'start_conversion': '🔄 بدء conversion...',
     'found_files': '📁 Found {count} ملفات',
     'initializing': '⏳ Initializing...',
     'conversion_in_progress': '🔄 التنسيق conversion in progress...',
@@ -223,10 +223,10 @@ TEXTS = {
     'conversion_remaining': '⏱️ Est. remaining: {time}s',
     'processing_files': 'جارٍ المعالجة your ملفات',
     
-    # Conversion complete (intermediate state)
+    # التحويل complete (intermediate state)
     'conversion_complete': '🎉 تحويل complete!',
     'conversion_stats': '📊 تحويل Stats',
-    'conversion_total': '· Total: {count}',
+    'conversion_total': '· المجموع: {count}',
     'conversion_success': '· ✅ نجح: {count}',
     'conversion_faiتم': '· ❌ فشل: {count}',
     'conversion_duration': '· Duration: {time}s',
@@ -241,48 +241,48 @@ TEXTS = {
     'file_desc_conversion_faiتم': '📦 تحويل faiتم ({count} حسابات)',
     'report_filename_success': 'session_to_tdata_success-report.txt',
     'report_filename_faiتم': 'conversion_faiتم-report.txt',
-    'report_desc_success': '📋 تحويل نجح Detaiتم Report',
-    'report_desc_faiتم': '📋 تحويل فشل Detaiتم Report',
+    'report_desc_success': '📋 تحويل نجح Detaiتم تقرير',
+    'report_desc_faiتم': '📋 تحويل فشل Detaiتم تقرير',
     'report_contains_accounts': 'يحتوي على details of {count} حسابات',
     
     # Final completion summary
     'conversion_task_complete': '✅ تحويل task complete!',
-    'conversion_total_count': '· Total: {count}',
+    'conversion_total_count': '· المجموع: {count}',
     'conversion_success_percent': '· ✅ نجح: {count} ({percent}%)',
     'conversion_faiتم_percent': '· ❌ فشل: {count} ({percent}%)',
-    'conversion_total_time': '· ⏱️ Total time: {seconds}s ({minutes}min)',
+    'conversion_total_time': '· ⏱️ المجموع time: {seconds}s ({minutes}min)',
     'conversion_avg_speed': '· 🚀 Avg speed: {speed}/sec',
-    'all_results_sent': '📥 All result ملفات sent!',
+    'all_results_sent': '📥 جميع result ملفات sent!',
     
-    # Report TXT template
-    'report_title_success': 'تحويل التنسيق Report - نجح',
-    'report_title_faiتم': 'تحويل التنسيق Report - فشل',
+    # تقرير TXT template
+    'report_title_success': 'تحويل التنسيق تقرير - نجح',
+    'report_title_faiتم': 'تحويل التنسيق تقرير - فشل',
     'report_generated_time': 'Generated: {time}',
     'report_conversion_type': 'تحويل type: {type}',
-    'report_total_count': 'Total: {count}',
+    'report_total_count': 'المجموع: {count}',
     'report_detail_list': 'Detail List:',
-    'report_file': 'File: {filename}',
+    'report_file': 'ملف: {filename}',
     'report_info': 'Info: Phone: {phone} | مستخدمname: {username}',
-    'report_time': 'Time: {time}',
+    'report_time': 'الوقت: {time}',
     'report_error': 'خطأ: {error}',
     'report_no_username': '@Noمستخدمname',
     
-    # Error messages
+    # خطأ messages
     'error_file_type': 'نوع الملف error',
     'error_need_tdata': 'Need Tdata file, but found {type} format',
     'error_need_session': 'Need Session file, but found {type} format',
-    'error_unauthorized': 'Account unauthorized',
+    'error_unauthorized': 'الحساب unauthorized',
     'error_auth_key_invalid': 'Auth key invalid',
     'error_file_locked': 'TData file is locked',
     'error_session_locked': 'Session file is locked',
-    'error_connection_timeout': 'Connection timeout',
+    'error_connection_timeout': 'الاتصال timeout',
     'error_network_faiتم': 'Network connection faiتم',
     'error_conversion_faiتم': 'تحويل faiتم',
     'error_no_valid_files': 'No valid ملفات found',
     'error_ensure_correct_format': 'Please ensure ZIP contains the correct format',
     'error_click_function_button': 'Please click the corresponding function button first',
     
-    # ===== Change 2FA Feature =====
+    # ===== تغيير 2FA Feature =====
     # Function introduction page
     'change_2fa_title': '🔐 Batch تعديل 2FA كلمة المرور',
     'change_2fa_core_features': '✨ Core Features',
@@ -295,10 +295,10 @@ TEXTS = {
     'change_2fa_two_formats': 'Two formats supported: New password only (موصى به) or Old + New password',
     'change_2fa_auto_detect_old': 'System auto-detects old password first, no manual input needed',
     'change_2fa_timeout': '5-minute input timeout protection',
-    'change_2fa_auto_update': '🔄 Auto Update كلمة المرور Files',
+    'change_2fa_auto_update': '🔄 Auto تحديث كلمة المرور ملفs',
     'change_2fa_session_update': 'Session format: Unified twofa field, removes other password fields',
     'change_2fa_tdata_update': 'TData format: Auto-update 2fa.txt and other password ملفات',
-    'change_2fa_sync_update': 'Files sync immediately after successful change',
+    'change_2fa_sync_update': 'ملفs sync immediately after successful change',
     'change_2fa_no_manual_edit': 'No manual config file editing needed',
     'change_2fa_notes': '⚠️ Notes',
     'change_2fa_note1': 'System will first try to auto-detect existing password',
@@ -310,7 +310,7 @@ TEXTS = {
     'change_2fa_upload_prompt': '🚀 Please upload your ZIP file...',
     'change_2fa_processing': 'جارٍ المعالجة your ملفات',
     
-    # Password input prompts
+    # كلمة المرور input prompts
     'change_2fa_found_files': '📁 Found {count} account ملفات',
     'change_2fa_file_type': '📊 نوع الملف: {type}',
     'change_2fa_enter_password': '🔐 Please enter password info:',
@@ -327,58 +327,58 @@ TEXTS = {
     'change_2fa_wait_password': '⏰ Please send password within 5 minutes...',
     
     # Modification progress
-    'change_2fa_starting': '🔄 Starting password change...',
+    'change_2fa_starting': '🔄 بدء password change...',
     'change_2fa_found_count': '📊 Found {count} ملفات',
     'change_2fa_new_password': '🔐 New password: {password}',
-    'change_2fa_please_wait': '⏳ جارٍ المعالجة, please wait...',
+    'change_2fa_please_wait': '⏳ جارٍ المعالجة, يرجى الانتظار...',
     'change_2fa_in_progress': '🔐 2FA password change in progress...',
     'change_2fa_current_progress': '📊 Current التقدم',
     'change_2fa_processed': 'Processed: {processed}/{total}',
     'change_2fa_speed': 'السرعة: {speed}/sec',
     'change_2fa_elapsed': 'Elapsed: {elapsed}s',
-    'change_2fa_success_count': '✅ Change success: {count}',
-    'change_2fa_faiتم_count': '❌ Change faiتم: {count}',
+    'change_2fa_success_count': '✅ تغيير success: {count}',
+    'change_2fa_faiتم_count': '❌ تغيير faiتم: {count}',
     'change_2fa_remaining': '⏱️ Est. remaining: {time}s',
     
     # Modification complete
     'change_2fa_complete': '🎉 2FA password change complete!',
-    'change_2fa_stats': '📊 Change Stats',
-    'change_2fa_total': '· Total: {count}',
+    'change_2fa_stats': '📊 تغيير Stats',
+    'change_2fa_total': '· المجموع: {count}',
     'change_2fa_success': '· ✅ نجح: {count}',
     'change_2fa_faiتم': '· ❌ فشل: {count}',
     'change_2fa_duration': '· ⏱️ Duration: {time}s',
     'change_2fa_speed_stat': '· 🚀 السرعة: {speed}/sec',
-    'change_2fa_sending_results': '📦 Sending result ملفات...',
+    'change_2fa_sending_results': '📦 إرسال result ملفات...',
     
-    # Sending complete
-    'change_2fa_all_sent': '🎉 All ملفات sent successfully!',
-    'change_2fa_send_summary': '📋 Send Summary',
-    'change_2fa_files_sent': '· Files sent: {count}',
-    'change_2fa_total_accounts': '· Total حسابات: {count}',
+    # إرسال complete
+    'change_2fa_all_sent': '🎉 جميع ملفات تم الإرسال بنجاح!',
+    'change_2fa_send_summary': '📋 Send ملخص',
+    'change_2fa_files_sent': '· ملفs sent: {count}',
+    'change_2fa_total_accounts': '· المجموع حسابات: {count}',
     'change_2fa_success_count': '· ✅ نجح: {count}',
     'change_2fa_faiتم_count': '· ❌ فشل: {count}',
     'change_2fa_time_spent': '· ⏱️ Duration: {time}s',
     'change_2fa_use_again': 'To use again, click /start',
     
     # Result file naming
-    'zip_change_2fa_success': 'Change2FA_نجح_{count}',
-    'zip_change_2fa_faiتم': 'Change2FA_فشل_{count}',
+    'zip_change_2fa_success': 'تغيير2FA_نجح_{count}',
+    'zip_change_2fa_faiتم': 'تغيير2FA_فشل_{count}',
     'file_desc_change_2fa_success': '📦 نجح ({count} حسابات)',
     'file_desc_change_2fa_faiتم': '📦 فشل ({count} حسابات)',
     'change_2fa_process_time': '⏰ Process time: {time}',
-    'report_change_2fa_success': 'Change2FA_نجح_{count}_Report.txt',
-    'report_change_2fa_faiتم': 'Change2FA_فشل_{count}_Report.txt',
-    'report_desc_change_2fa_success': '📋 نجح Detaiتم Report',
-    'report_desc_change_2fa_faiتم': '📋 فشل Detaiتم Report',
+    'report_change_2fa_success': 'تغيير2FA_نجح_{count}_تقرير.txt',
+    'report_change_2fa_faiتم': 'تغيير2FA_فشل_{count}_تقرير.txt',
+    'report_desc_change_2fa_success': '📋 نجح Detaiتم تقرير',
+    'report_desc_change_2fa_faiتم': '📋 فشل Detaiتم تقرير',
     'report_contains_details': 'يحتوي على details of {count} حسابات',
     
-    # Report TXT template
-    'report_2fa_title_success': '2FA كلمة المرور Change Report - نجح',
-    'report_2fa_title_faiتم': '2FA كلمة المرور Change Report - فشل',
-    'report_2fa_total': 'Total: {count}',
+    # تقرير TXT template
+    'report_2fa_title_success': '2FA كلمة المرور تغيير تقرير - نجح',
+    'report_2fa_title_faiتم': '2FA كلمة المرور تغيير تقرير - فشل',
+    'report_2fa_total': 'المجموع: {count}',
     'report_2fa_generated': 'Generated: {time}',
     'report_2fa_detail_list': 'Detail List:',
-    'report_2fa_account': 'Account: {account}',
+    'report_2fa_account': 'الحساب: {account}',
     'report_2fa_details': 'Details: {info}',
     'report_2fa_process_time': 'Process time: {time}',
     'report_2fa_old_password_not_found': 'Old password not found',
@@ -388,7 +388,7 @@ TEXTS = {
     
     # Failure analysis and solutions
     'report_2fa_failure_analysis': 'Failure Analysis and Solutions:',
-    'report_2fa_reason_unauthorized': 'Account unauthorized',
+    'report_2fa_reason_unauthorized': 'الحساب unauthorized',
     'report_2fa_reason_unauthorized_desc1': 'TData file may not be logged in or expired',
     'report_2fa_reason_unauthorized_desc2': 'Suggest re-login account',
     'report_2fa_reason_wrong_password': 'Wrong old password',
@@ -398,12 +398,12 @@ TEXTS = {
     'report_2fa_reason_network_desc1': 'فحص if proxy settings are correct',
     'report_2fa_reason_network_desc2': 'Try local connection or change proxy',
     
-    # Additional status messages (for assembling detail information)
+    # إضافةitional status messages (for assembling detail information)
     'status_tdata_updated': 'TData file updated',
     'status_no_json_found': 'but JSON file not found',
     'status_file_update_faiتم': 'but file update faiتم',
     
-    # ===== Batch Create Feature =====
+    # ===== Batch إنشاء Feature =====
     # 1. Feature Introduction Page
     'batch_create_title': '📦 إنشاء مجمع Groups/Channels',
     'batch_create_features': 'Features:',
@@ -415,7 +415,7 @@ TEXTS = {
     'batch_create_feature6': '· Support custom or random username generation',
     'batch_create_feature7': '· Process up to 10 حسابات simultaneously',
     'batch_create_steps': 'Usage Steps:',
-    'batch_create_step1': '1. Upload Session or TData ملفات (ZIP supported)',
+    'batch_create_step1': '1. تحميل Session or TData ملفات (ZIP supported)',
     'batch_create_step2': '2. System auto-verifies حسابات and shows available count',
     'batch_create_step3': '3. Configure creation parameters (type, naming rules, etc.)',
     'batch_create_step4': '4. تأكيد and start batch creation',
@@ -423,40 +423,40 @@ TEXTS = {
     'batch_create_notes': 'Notes:',
     'batch_create_note1': '⚠️ Use responsibly to avoid triggering تيليجرام limits',
     'batch_create_note2': '⚠️ Suggest creating in batches, don\'t create too many at once',
-    'batch_create_note3': '⚠️ Created groups/channels belong to corresponding حسابات',
+    'batch_create_note3': '⚠️ إنشاءd groups/channels belong to corresponding حسابات',
     'batch_create_upload_prompt': '📤 Please upload account ملفات',
     'batch_create_supported_formats': 'التنسيقات المدعومة: .session / TData folder / .zip archive',
     
-    # 2. Account Verification
+    # 2. الحساب Verification
     'batch_create_found_files': '✅ Found {count} account ملفات',
     'batch_create_verifying': '⏳ Verifying حسابات...',
     'batch_create_verifying_progress': 'التقدم: {done}/{total}',
-    'batch_create_verify_complete': '✅ Account verification complete',
+    'batch_create_verify_complete': '✅ الحساب verification complete',
     'batch_create_statistics': 'Statistics:',
-    'batch_create_total_accounts': '· Total حسابات: {count}',
+    'batch_create_total_accounts': '· المجموع حسابات: {count}',
     'batch_create_valid_accounts': '· Valid حسابات: {count}',
     'batch_create_invalid_accounts': '· Invalid حسابات: {count}',
     'batch_create_can_create_today': '· Can create today: {count}',
     'batch_create_next_step': 'Next step:',
     'batch_create_select_type': 'Please select the type to create',
-    'batch_create_btn_group': 'Create Group',
-    'batch_create_btn_channel': 'Create Channel',
+    'batch_create_btn_group': 'إنشاء Group',
+    'batch_create_btn_channel': 'إنشاء Channel',
     'batch_create_btn_cancel': 'إلغاء',
     'batch_create_btn_back': 'رجوع',
     
-    # 3. Step 1: Set Creation Count
+    # 3. Step 1: Set Creation العدد
     'batch_create_group_title': '📦 إنشاء مجمع Groups',
     'batch_create_channel_title': '📦 إنشاء مجمع Channels',
-    'batch_create_account_info': 'Account Info:',
-    'batch_create_step1_title': 'Step 1/4: Set Creation Count',
+    'batch_create_account_info': 'الحساب Info:',
+    'batch_create_step1_title': 'Step 1/4: Set Creation العدد',
     'batch_create_step1_prompt': 'Please enter the number to create per account (1-10):',
     'batch_create_step1_example': '💡 Example: Enter 5 to create 5 groups per valid account',
     'batch_create_step1_example_channel': '💡 Example: Enter 5 to create 5 channels per valid account',
     
-    # 4. Step 2: Set Admins
-    'batch_create_count_set_group': '✅ Count set: {count} per group/account',
-    'batch_create_count_set_channel': '✅ Count set: {count} per channel/account',
-    'batch_create_step2_title': 'Step 2/4: Set Admins (Optional, multiple supported)',
+    # 4. Step 2: Set المسؤولs
+    'batch_create_count_set_group': '✅ العدد set: {count} per group/account',
+    'batch_create_count_set_channel': '✅ العدد set: {count} per channel/account',
+    'batch_create_step2_title': 'Step 2/4: Set المسؤولs (Optional, multiple supported)',
     'batch_create_step2_prompt': 'Please send usernames to add as admins:',
     'batch_create_step2_format': 'التنسيق:',
     'batch_create_step2_format1': '· Single admin: Enter username directly',
@@ -468,7 +468,7 @@ TEXTS = {
     'batch_create_btn_skip': 'Skip',
     
     # 5. Step 3: Set Name and Description
-    'batch_create_admins_set': '✅ Admins set: {admins}',
+    'batch_create_admins_set': '✅ المسؤولs set: {admins}',
     'batch_create_admins_count': '({count} total)',
     'batch_create_admins_none': 'None',
     'batch_create_step3_title_group': 'Step 3/4: Set Group Name and Description',
@@ -489,31 +489,31 @@ TEXTS = {
     'batch_create_step4_title_group': 'Step 4/4: Set Group Links',
     'batch_create_step4_title_channel': 'Step 4/4: Set Channel Links',
     'batch_create_step4_prompt': 'Please select link setting method:',
-    'batch_create_step4_option1': '· Custom upload: Upload TXT file with custom usernames',
+    'batch_create_step4_option1': '· Custom upload: تحميل TXT file with custom usernames',
     'batch_create_step4_option2': '· Auto generate: System randomly generates unique usernames',
     'batch_create_step4_tip1': '💡 Custom username format: One per line, with or without @',
     'batch_create_step4_tip2': '💡 If username exists or unavailable, will auto-skip',
     'batch_create_btn_custom': 'Custom',
     'batch_create_btn_auto': 'Auto Generate',
     
-    # 7. Custom Username Upload
-    'batch_create_custom_title': 'Upload Custom مستخدمnames',
+    # 7. Custom المستخدمname تحميل
+    'batch_create_custom_title': 'تحميل Custom مستخدمnames',
     'batch_create_custom_prompt': 'Please upload TXT file with usernames, or enter directly:',
     'batch_create_custom_format': 'التنسيق: One username per line',
     'batch_create_custom_example': 'Example:',
     'batch_create_custom_tip1': '💡 With or without @ symbol',
     'batch_create_custom_tip2': '💡 If username exists, will auto-skip',
     
-    # 8. Final Confirmation
+    # 8. Final تأكيدation
     'batch_create_confirm_title': '📋 Final تأكيدation',
     'batch_create_confirm_type_group': 'Creation type: Group',
     'batch_create_confirm_type_channel': 'Creation type: Channel',
-    'batch_create_confirm_account_stats': 'Account Statistics:',
+    'batch_create_confirm_account_stats': 'الحساب Statistics:',
     'batch_create_confirm_valid_count': '· Valid حسابات: {count}',
-    'batch_create_confirm_per_account': '· Create per account: {count}',
+    'batch_create_confirm_per_account': '· إنشاء per account: {count}',
     'batch_create_confirm_total_estimate': '· Estimated total: {count}',
     'batch_create_confirm_config': 'Configuration:',
-    'batch_create_confirm_admins': '· Admins: {count} ({admins})',
+    'batch_create_confirm_admins': '· المسؤولs: {count} ({admins})',
     'batch_create_confirm_names': '· Name count: {count}',
     'batch_create_confirm_link_auto': '· Link mode: Auto generate',
     'batch_create_confirm_link_custom': '· Link mode: Custom',
@@ -526,36 +526,36 @@ TEXTS = {
     'batch_create_confirm_tip3': '· If username exists, will auto-skip',
     'batch_create_confirm_tip4': '· Detaiتم report will be generated after completion',
     'batch_create_confirm_question': 'تأكيد to start creation?',
-    'batch_create_btn_confirm': 'تأكيد Create',
+    'batch_create_btn_confirm': 'تأكيد إنشاء',
     
-    # 9. Creation Progress
+    # 9. Creation التقدم
     'batch_create_creating': '⏳ Creating...',
     'batch_create_wait_report': 'يرجى الانتظار, detaiتم report will be sent after completion',
-    'batch_create_starting': '🚀 Starting batch creation',
+    'batch_create_starting': '🚀 بدء batch creation',
     'batch_create_progress': 'التقدم: {done}/{total} ({percent}%)',
-    'batch_create_status_preparing': 'Status: Preparing...',
+    'batch_create_status_preparing': 'الحالة: Preparing...',
     'batch_create_btn_view_log': 'View Log',
     
-    # 10. Creation Complete
+    # 10. Creation مكتمل
     'batch_create_complete': '✅ Batch creation complete',
-    'batch_create_stats_total': '· Total: {count}',
+    'batch_create_stats_total': '· المجموع: {count}',
     'batch_create_stats_success': '· نجح: {count}',
     'batch_create_stats_faiتم': '· فشل: {count}',
     'batch_create_stats_skipped': '· Skipped: {count}',
     'batch_create_success_rate': 'نجح rate: {percent}%',
     'batch_create_report_below': '📄 See detaiتم report in file below',
-    'batch_create_detaiتم_report': '📊 Batch Creation Detaiتم Report',
-    'batch_create_success_list': '✅ نجحfully Created List',
+    'batch_create_detaiتم_report': '📊 Batch Creation Detaiتم تقرير',
+    'batch_create_success_list': '✅ نجحfully إنشاءd List',
     
-    # 11. Report TXT Template - Detaiتم Report
-    'report_batch_create_title': 'إنشاء مجمع Groups/Channels - Result Report',
+    # 11. تقرير TXT Template - Detaiتم تقرير
+    'report_batch_create_title': 'إنشاء مجمع Groups/Channels - Result تقرير',
     'report_batch_create_generated': 'Generated: {time}',
     'report_batch_create_stats': 'Statistics:',
-    'report_batch_create_total': '  Total: {count}',
+    'report_batch_create_total': '  المجموع: {count}',
     'report_batch_create_success': '  نجح: {count}',
     'report_batch_create_faiتم': '  فشل: {count}',
     'report_batch_create_skipped': '  Skipped: {count}',
-    'report_batch_create_success_list': 'نجحfully Created List:',
+    'report_batch_create_success_list': 'نجحfully إنشاءd List:',
     'report_batch_create_type': 'Type: {type}',
     'report_batch_create_type_group': 'group',
     'report_batch_create_type_channel': 'channel',
@@ -567,12 +567,12 @@ TEXTS = {
     'report_batch_create_creator_account': 'Creator account: {account}',
     'report_batch_create_creator_username': 'Creator username: {username}',
     'report_batch_create_creator_id': 'Creator ID: {id}',
-    'report_batch_create_admins': 'Admins: {admins}',
+    'report_batch_create_admins': 'المسؤولs: {admins}',
     'report_batch_create_admins_none': '@None',
-    'report_batch_create_admin_faiتم': 'Admin add faiتم:',
+    'report_batch_create_admin_faiتم': 'المسؤول add faiتم:',
     'report_batch_create_admin_faiتم_reason': '  - {admin}: مستخدمname @{admin} does not exist or invalid',
     
-    # 12. Report TXT Template - Success List
+    # 12. تقرير TXT Template - نجح List
     'report_success_list_title': 'إنشاء مجمع - نجح List',
     'report_success_list_generated': 'Generated: {time}',
     'report_success_list_count': 'نجح count: {count}',
@@ -584,9 +584,9 @@ TEXTS = {
     'report_success_list_channel_link': 'Channel link: {link}',
     'report_success_list_creator': 'Creator account: {account}',
     'report_success_list_creator_username': 'Creator username: {username}',
-    'report_success_list_admin_username': 'Admin username: {admin}',
+    'report_success_list_admin_username': 'المسؤول username: {admin}',
     
-    # 13. Report TXT Template - Failure List
+    # 13. تقرير TXT Template - Failure List
     'report_failure_list_title': '❌ Failure Details List',
     'report_failure_list_header': 'إنشاء مجمع - Failure List (Detaiتم Reasons)',
     'report_failure_list_generated': 'Generated: {time}',
@@ -598,21 +598,21 @@ TEXTS = {
     'report_failure_list_creator': 'Creator account: {account}',
     'report_failure_list_reason': 'Failure reason: {reason}',
     
-    # Batch Create - Account Frozen
-    'batch_create_account_frozen_skipped': 'Account frozen, creation skipped',
+    # Batch إنشاء - الحساب Frozen
+    'batch_create_account_frozen_skipped': 'الحساب frozen, creation skipped',
     
-    # Batch Create - Error Messages
+    # Batch إنشاء - خطأ Messages
     'batch_create_feature_disabتم': '❌ Batch create feature is disabتم',
     'batch_create_session_expired': '❌ Session expired',
     'batch_create_session_expired_restart': '❌ Session expired, please restart',
-    'batch_create_count_range_error': '❌ Count must be between 1-10, please re-enter',
+    'batch_create_count_range_error': '❌ العدد must be between 1-10, please re-enter',
     'batch_create_faiتم': '❌ Creation faiتم',
     'batch_create_error': 'خطأ: {error}',
     'error_upload_zip_only': '❌ Please upload ZIP format archive',
     
-    # Batch Create - Progress Messages
-    'batch_create_progress_completed': 'Completed {count}',
-    'batch_create_status_completed': 'Status: Completed {count}',
+    # Batch إنشاء - التقدم Messages
+    'batch_create_progress_completed': 'مكتملd {count}',
+    'batch_create_status_completed': 'الحالة: مكتملd {count}',
     
     # ===== Forget 2FA Feature =====
     # 1. Feature Introduction Page
@@ -620,7 +620,7 @@ TEXTS = {
     'forget_2fa_important': '⚠️ Important Notes:',
     'forget_2fa_note1': '· Will initiate تيليجرام official password reset process',
     'forget_2fa_note2': '· كلمة المرور will be removed after 7-day cooling period',
-    'forget_2fa_note3': '· Proxy connection preferred (to avoid restrictions)',
+    'forget_2fa_note3': '· الوكيل connection preferred (to avoid restrictions)',
     'forget_2fa_note4': '· Auto fallback to local connection if proxy fails',
     'forget_2fa_note5': '· Auto random delay between حسابات (5-15s)',
     'forget_2fa_proxy_warning': '⚠️ Warning: Insufficient وكلاء! Only {count} available, recommend at least 10',
@@ -633,12 +633,12 @@ TEXTS = {
     'forget_2fa_upload_auto': '· Auto-detect file format',
     'forget_2fa_result_categories': '📊 Result Categories:',
     'forget_2fa_category_reset': '· ✅ Reset Requested - نجحfully requested password reset (wait 7 days)',
-    'forget_2fa_category_no_reset': '· ⚠️ No Reset Needed - Account has no 2FA password',
+    'forget_2fa_category_no_reset': '· ⚠️ No Reset Needed - الحساب has no 2FA password',
     'forget_2fa_category_cooling': '· ⏳ In Cooling Period - Already in cooling period',
-    'forget_2fa_category_faiتم': '· ❌ فشل - Connection faiتم/other errors',
+    'forget_2fa_category_faiتم': '· ❌ فشل - الاتصال faiتم/other errors',
     'forget_2fa_back_menu': 'رجوع to القائمة الرئيسية',
     
-    # 2. Processing Progress
+    # 2. معالجة التقدم
     'forget_2fa_processing': '🔓 جارٍ المعالجة نسيت 2FA...',
     'forget_2fa_progress': 'التقدم: {done}/{total} ({percent}%)',
     'forget_2fa_elapsed': '⏱ Elapsed: {time}s',
@@ -649,28 +649,28 @@ TEXTS = {
     'forget_2fa_stat_faiتم': '❌ فشل: {count}',
     'forget_2fa_stat_pending': '📊 Pending: {count}',
     'forget_2fa_current': 'Current: {filename}...',
-    'forget_2fa_status_reset': 'Status: ✅ Reset Requested',
-    'forget_2fa_status_no_reset': 'Status: ⚠️ No Reset Needed',
-    'forget_2fa_status_cooling': 'Status: ⏳ In Cooling Period',
-    'forget_2fa_status_faiتم': 'Status: ❌ فشل',
-    'forget_2fa_proxy_using': 'Proxy: ✅ Using Proxy',
-    'forget_2fa_proxy_local': 'Proxy: ❌ اتصال محلي',
+    'forget_2fa_status_reset': 'الحالة: ✅ Reset Requested',
+    'forget_2fa_status_no_reset': 'الحالة: ⚠️ No Reset Needed',
+    'forget_2fa_status_cooling': 'الحالة: ⏳ In Cooling Period',
+    'forget_2fa_status_faiتم': 'الحالة: ❌ فشل',
+    'forget_2fa_proxy_using': 'الوكيل: ✅ Using الوكيل',
+    'forget_2fa_proxy_local': 'الوكيل: ❌ اتصال محلي',
     
-    # 3. Processing Complete
-    'forget_2fa_complete': '✅ نسيت 2FA جارٍ المعالجة Complete!',
+    # 3. معالجة مكتمل
+    'forget_2fa_complete': '✅ نسيت 2FA جارٍ المعالجة مكتمل!',
     'forget_2fa_results': '📊 جارٍ المعالجة Results',
-    'forget_2fa_total_accounts': '· Total حسابات: {count}',
+    'forget_2fa_total_accounts': '· المجموع حسابات: {count}',
     'forget_2fa_result_reset': '· ✅ Reset Requested: {count}',
     'forget_2fa_result_no_reset': '· ⚠️ No Reset Needed: {count}',
     'forget_2fa_result_cooling': '· ⏳ In Cooling Period: {count}',
     'forget_2fa_result_faiتم': '· ❌ فشل: {count}',
-    'forget_2fa_total_time': '⏱ Total time: {time}s',
+    'forget_2fa_total_time': '⏱ المجموع time: {time}s',
     'forget_2fa_batch_id': '🆔 Batch ID: {batch_id}',
     'forget_2fa_notes': '📝 Notes:',
-    'forget_2fa_notes_wait': '· Accounts with reset requested need to wait 7-day cooling period',
+    'forget_2fa_notes_wait': '· الحسابs with reset requested need to wait 7-day cooling period',
     'forget_2fa_notes_remove': '· 2FA password will be removed after cooling period ends',
     
-    # 4. Result File Naming
+    # 4. Result ملف Naming
     'zip_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}',
     'zip_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}',
     'zip_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}',
@@ -679,56 +679,56 @@ TEXTS = {
     'file_desc_forget_2fa_no_reset': '📦 نسيت 2FA - No Reset Needed ({count})',
     'file_desc_forget_2fa_cooling': '📦 نسيت 2FA - In Cooling Period ({count})',
     'file_desc_forget_2fa_faiتم': '📦 نسيت 2FA - فشل ({count})',
-    'report_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}_Report.txt',
-    'report_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}_Report.txt',
-    'report_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}_Report.txt',
-    'report_forget_2fa_faiتم': 'Forgot2FA_فشل_{count}_Report.txt',
-    'report_desc_forget_2fa_reset': '📋 Detaiتم Report - Reset Requested',
-    'report_desc_forget_2fa_no_reset': '📋 Detaiتم Report - No Reset Needed',
-    'report_desc_forget_2fa_cooling': '📋 Detaiتم Report - In Cooling Period',
-    'report_desc_forget_2fa_faiتم': '📋 Detaiتم Report - فشل',
+    'report_forget_2fa_reset': 'Forgot2FA_ResetRequested_{count}_تقرير.txt',
+    'report_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{count}_تقرير.txt',
+    'report_forget_2fa_cooling': 'Forgot2FA_InCooling_{count}_تقرير.txt',
+    'report_forget_2fa_faiتم': 'Forgot2FA_فشل_{count}_تقرير.txt',
+    'report_desc_forget_2fa_reset': '📋 Detaiتم تقرير - Reset Requested',
+    'report_desc_forget_2fa_no_reset': '📋 Detaiتم تقرير - No Reset Needed',
+    'report_desc_forget_2fa_cooling': '📋 Detaiتم تقرير - In Cooling Period',
+    'report_desc_forget_2fa_faiتم': '📋 Detaiتم تقرير - فشل',
     
-    # 5. Report TXT Template - Reset Requested
-    'report_forget_2fa_title_reset': 'نسيت 2FA Report - Reset Requested',
-    'report_forget_2fa_total': 'Total: {count}',
+    # 5. تقرير TXT Template - Reset Requested
+    'report_forget_2fa_title_reset': 'نسيت 2FA تقرير - Reset Requested',
+    'report_forget_2fa_total': 'المجموع: {count}',
     'report_forget_2fa_generated': 'Generated: {time}',
     'report_forget_2fa_detail_list': 'Detail List:',
     'report_forget_2fa_item_reset': '✅ {filename}',
     'report_forget_2fa_phone': 'Phone: {phone}',
-    'report_forget_2fa_status_reset_waiting': 'Status: كلمة المرور reset requested, waiting for cooling period, until: {date}',
-    'report_forget_2fa_proxy_using': 'Proxy: ✅ Using Proxy',
-    'report_forget_2fa_proxy_local': 'Proxy: ❌ اتصال محلي',
+    'report_forget_2fa_status_reset_waiting': 'الحالة: كلمة المرور reset requested, waiting for cooling period, until: {date}',
+    'report_forget_2fa_proxy_using': 'الوكيل: ✅ Using الوكيل',
+    'report_forget_2fa_proxy_local': 'الوكيل: ❌ اتصال محلي',
     'report_forget_2fa_cooling_until': 'Cooling period until: {date}',
     'report_forget_2fa_duration': 'Duration: {time}s',
     
-    # 6. Report TXT Template - No Reset Needed
-    'report_forget_2fa_title_no_reset': 'نسيت 2FA Report - No Reset Needed',
+    # 6. تقرير TXT Template - No Reset Needed
+    'report_forget_2fa_title_no_reset': 'نسيت 2FA تقرير - No Reset Needed',
     'report_forget_2fa_item_no_reset': '⚠️ {filename}',
-    'report_forget_2fa_status_detect_faiتم': 'Status: فشل to detect 2FA status: {error}',
-    'report_forget_2fa_status_no_2fa': 'Status: Account has no 2FA password set',
+    'report_forget_2fa_status_detect_faiتم': 'الحالة: فشل to detect 2FA status: {error}',
+    'report_forget_2fa_status_no_2fa': 'الحالة: الحساب has no 2FA password set',
     
-    # 7. Report TXT Template - In Cooling Period
-    'report_forget_2fa_title_cooling': 'نسيت 2FA Report - In Cooling Period',
+    # 7. تقرير TXT Template - In Cooling Period
+    'report_forget_2fa_title_cooling': 'نسيت 2FA تقرير - In Cooling Period',
     'report_forget_2fa_item_cooling': '⏳ {filename}',
-    'report_forget_2fa_status_in_cooling': 'Status: Already in cooling period, until: {date}',
+    'report_forget_2fa_status_in_cooling': 'الحالة: Already in cooling period, until: {date}',
     
-    # 8. Report TXT Template - Faiتم
-    'report_forget_2fa_title_faiتم': 'نسيت 2FA Report - فشل',
+    # 8. تقرير TXT Template - Faiتم
+    'report_forget_2fa_title_faiتم': 'نسيت 2FA تقرير - فشل',
     'report_forget_2fa_item_faiتم': '❌ {filename}',
-    'report_forget_2fa_status_connection_faiتم': 'Status: Connection faiتم (all وكلاء and local faiتم)',
+    'report_forget_2fa_status_connection_faiتم': 'الحالة: الاتصال faiتم (all وكلاء and local faiتم)',
     
-    # 9. Initialization and Processing Messages
+    # 9. Initialization and معالجة Messages
     'forget_2fa_found_accounts': '📊 Found {count} حسابات',
     'forget_2fa_format': '📁 التنسيق: {format}',
-    'forget_2fa_proxy_count': '📡 Proxy: {count} available',
+    'forget_2fa_proxy_count': '📡 الوكيل: {count} available',
     'forget_2fa_initializing': '⏳ Initializing...',
     'forget_2fa_processing_file': '📥 جارٍ المعالجة your file...',
     'forget_2fa_no_valid_files': '❌ No valid ملفات found',
     'forget_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format ملفات',
-    'forget_2fa_sending_results': '📦 Sending result ملفات...',
+    'forget_2fa_sending_results': '📦 إرسال result ملفات...',
     'forget_2fa_send_faiتم': '❌ فشل to send result ملفات',
     
-    # 10. Status Mapping Text
+    # 10. الحالة Mapping Text
     'forget_2fa_status_requested': 'Reset Requested',
     'forget_2fa_status_no_2fa': 'No Reset Needed',
     'forget_2fa_status_cooling': 'In Cooling Period',
@@ -736,9 +736,9 @@ TEXTS = {
     'forget_2fa_status_local': 'اتصال محلي',
     'forget_2fa_status_unknown': 'Unknown',
     
-    # ===== Delete 2FA Feature =====
+    # ===== حذف 2FA Feature =====
     # 1. Feature Introduction Page
-    'delete_2fa_title': '❌ Batch Delete 2FA كلمة المرور',
+    'delete_2fa_title': '❌ Batch حذف 2FA كلمة المرور',
     'delete_2fa_core_features': '✨ Core Features',
     'delete_2fa_auto_detect': '🔍 Auto كلمة المرور Detection',
     'delete_2fa_tdata_detect': 'TData format: Auto-detect 2fa.txt, twofa.txt, password.txt',
@@ -749,10 +749,10 @@ TEXTS = {
     'delete_2fa_auto_read': 'Auto-detect: Read current password from file',
     'delete_2fa_manual_input': 'Manual input: مستخدم enters current 2FA password',
     'delete_2fa_timeout': '5-minute input timeout protection',
-    'delete_2fa_auto_update': '🔄 Auto Update كلمة المرور Files',
+    'delete_2fa_auto_update': '🔄 Auto تحديث كلمة المرور ملفs',
     'delete_2fa_session_update': 'Session format: Unified twofa field cleared, removes other password fields',
     'delete_2fa_tdata_update': 'TData format: Auto-delete or clear 2fa.txt and other password ملفات',
-    'delete_2fa_sync_update': 'Files sync immediately after successful deletion',
+    'delete_2fa_sync_update': 'ملفs sync immediately after successful deletion',
     'delete_2fa_no_manual_edit': 'No manual config file editing needed',
     'delete_2fa_notes': '⚠️ Notes',
     'delete_2fa_note1': 'After deleting 2FA, account will no longer require 2FA password',
@@ -764,7 +764,7 @@ TEXTS = {
     'delete_2fa_upload_prompt': '🚀 Please upload your ZIP file...',
     'delete_2fa_back_menu': 'رجوع to القائمة الرئيسية',
     
-    # 2. Password Input Method Selection
+    # 2. كلمة المرور Input Method اخترion
     'delete_2fa_found_files': '📁 Found {count} account ملفات',
     'delete_2fa_file_type': '📊 نوع الملف: {type}',
     'delete_2fa_select_method': '🔐 Please select password input method:',
@@ -780,35 +780,35 @@ TEXTS = {
     'delete_2fa_btn_manual': 'Manual Input كلمة المرور',
     'delete_2fa_btn_cancel': 'إلغاء',
     
-    # 3. Manual Password Input
+    # 3. Manual كلمة المرور Input
     'delete_2fa_enter_password': '🔐 Please enter current 2FA password:',
     'delete_2fa_enter_desc1': '· Enter your current 2FA password',
     'delete_2fa_enter_desc2': '· System will verify password and delete 2FA',
     'delete_2fa_enter_desc3': '· Please send password within 5 minutes...',
     'delete_2fa_cancel_hint': '💡 To cancel, click /start to return to main menu',
     
-    # 4. Deletion Progress
+    # 4. Deletion التقدم
     'delete_2fa_in_progress': '🗑️ Deleting 2FA password...',
     'delete_2fa_current_progress': '📊 Current التقدم',
     'delete_2fa_processed': '· Processed: {done}/{total}',
     'delete_2fa_speed': '· السرعة: {speed}/sec',
     'delete_2fa_elapsed': '· Duration: {time}s',
-    'delete_2fa_success_count': '✅ Delete success: {count}',
-    'delete_2fa_faiتم_count': '❌ Delete faiتم: {count}',
+    'delete_2fa_success_count': '✅ حذف success: {count}',
+    'delete_2fa_faiتم_count': '❌ حذف faiتم: {count}',
     'delete_2fa_remaining': '⏱️ Est. remaining: {time}s',
     
-    # 5. Deletion Complete
+    # 5. Deletion مكتمل
     'delete_2fa_complete': '🎉 2FA password deletion complete!',
     'delete_2fa_stats': '📊 Deletion Stats',
-    'delete_2fa_total': '· Total: {count}',
+    'delete_2fa_total': '· المجموع: {count}',
     'delete_2fa_success': '· ✅ نجح: {count}',
     'delete_2fa_faiتم': '· ❌ فشل: {count}',
     'delete_2fa_duration': '· ⏱️ Duration: {time}s',
     'delete_2fa_speed_stat': '· 🚀 السرعة: {speed}/sec',
-    'delete_2fa_sending_results': '📦 Sending result ملفات...',
+    'delete_2fa_sending_results': '📦 إرسال result ملفات...',
     
-    # 6. Task Complete Summary
-    'delete_2fa_task_complete': '✅ Delete 2FA task complete!',
+    # 6. Task مكتمل ملخص
+    'delete_2fa_task_complete': '✅ حذف 2FA task complete!',
     'delete_2fa_final_stats': '📊 Final Statistics',
     'delete_2fa_final_success': '· نجح: {count}',
     'delete_2fa_final_faiتم': '· فشل: {count}',
@@ -818,49 +818,49 @@ TEXTS = {
     'delete_2fa_tip2': '· كلمة المرور config in ملفات has been auto-cleared',
     'delete_2fa_tip3': '· Please keep result ملفات safe',
     
-    # 7. Result File Naming
-    'zip_delete_2fa_success': 'Delete2FA_نجح_{count}',
-    'zip_delete_2fa_faiتم': 'Delete2FA_فشل_{count}',
+    # 7. Result ملف Naming
+    'zip_delete_2fa_success': 'حذف2FA_نجح_{count}',
+    'zip_delete_2fa_faiتم': 'حذف2FA_فشل_{count}',
     'file_desc_delete_2fa_success': '📦 نجح ({count} حسابات)',
     'file_desc_delete_2fa_faiتم': '📦 فشل ({count} حسابات)',
     'delete_2fa_process_time': '⏰ Process time: {time}',
-    'report_delete_2fa_success': 'Delete2FA_نجح_{count}_Report.txt',
-    'report_delete_2fa_faiتم': 'Delete2FA_فشل_{count}_Report.txt',
-    'report_desc_delete_2fa_success': '📋 نجح Detaiتم Report',
-    'report_desc_delete_2fa_faiتم': '📋 فشل Detaiتم Report',
+    'report_delete_2fa_success': 'حذف2FA_نجح_{count}_تقرير.txt',
+    'report_delete_2fa_faiتم': 'حذف2FA_فشل_{count}_تقرير.txt',
+    'report_desc_delete_2fa_success': '📋 نجح Detaiتم تقرير',
+    'report_desc_delete_2fa_faiتم': '📋 فشل Detaiتم تقرير',
     'report_delete_2fa_contains': 'يحتوي على details of {count} حسابات',
     
-    # 8. Report TXT Template - Success
-    'report_delete_2fa_title_success': '2FA كلمة المرور Deletion Report - نجح',
-    'report_delete_2fa_total': 'Total: {count}',
+    # 8. تقرير TXT Template - نجح
+    'report_delete_2fa_title_success': '2FA كلمة المرور Deletion تقرير - نجح',
+    'report_delete_2fa_total': 'المجموع: {count}',
     'report_delete_2fa_generated': 'Generated: {time}',
     'report_delete_2fa_detail_list': 'Detail List:',
-    'report_delete_2fa_account': 'Account: {account}',
+    'report_delete_2fa_account': 'الحساب: {account}',
     'report_delete_2fa_details': 'Details: {info}',
     'report_delete_2fa_process_time': 'Process time: {time}',
     'report_delete_2fa_using_proxy': 'Using proxy',
-    'report_delete_2fa_local_connection': 'Local connection',
+    'report_delete_2fa_local_connection': 'محلي connection',
     'report_delete_2fa_success_msg': 'كلمة المرور deleted successfully, file updated',
     'report_delete_2fa_success_no_json': '2FA password deleted',
     'report_delete_2fa_success_with_json': '2FA password deleted, file updated',
     'report_delete_2fa_success_update_faiتم': '2FA password deleted, but file update faiتم',
     'report_delete_2fa_manual_faiتم': 'Manual deletion faiتم',
-    'report_delete_2fa_error_unauthorized': 'Account unauthorized',
+    'report_delete_2fa_error_unauthorized': 'الحساب unauthorized',
     'report_delete_2fa_error_wrong_password': 'Wrong password',
     'report_delete_2fa_error_no_2fa': '2FA not set',
     'report_delete_2fa_error_flood': 'Too many requests, please try later',
-    'report_delete_2fa_error_frozen': 'Account frozen/banned',
+    'report_delete_2fa_error_frozen': 'الحساب frozen/banned',
     'report_delete_2fa_error_deletion_faiتم': 'Deletion faiتم',
     'report_delete_2fa_error_network': 'Network connection faiتم',
     'report_delete_2fa_error_general': 'خطأ',
     'report_delete_2fa_error_session_not_found': 'Converted session file not found',
     'report_delete_2fa_error_exception': 'Exception',
     
-    # 9. Report TXT Template - Faiتم
-    'report_delete_2fa_title_faiتم': '2FA كلمة المرور Deletion Report - فشل',
+    # 9. تقرير TXT Template - Faiتم
+    'report_delete_2fa_title_faiتم': '2FA كلمة المرور Deletion تقرير - فشل',
     'report_delete_2fa_error': 'خطأ: {error}',
     'report_delete_2fa_failure_analysis': 'Failure Analysis and Solutions:',
-    'report_delete_2fa_reason_unauthorized': 'Account unauthorized',
+    'report_delete_2fa_reason_unauthorized': 'الحساب unauthorized',
     'report_delete_2fa_reason_unauthorized_desc1': 'TData file may not be logged in or expired',
     'report_delete_2fa_reason_unauthorized_desc2': 'Suggest re-login account',
     'report_delete_2fa_reason_wrong_password': 'Wrong old password',
@@ -871,16 +871,16 @@ TEXTS = {
     'report_delete_2fa_reason_network_desc2': 'Try local connection or change proxy',
     
     # 10. Other Messages
-    'delete_2fa_starting': '🗑️ Starting 2FA password deletion...',
+    'delete_2fa_starting': '🗑️ بدء 2FA password deletion...',
     'delete_2fa_found_count': '📊 Found {count} ملفات',
-    'delete_2fa_please_wait': '⏳ جارٍ المعالجة, please wait...',
+    'delete_2fa_please_wait': '⏳ جارٍ المعالجة, يرجى الانتظار...',
     'delete_2fa_processing_file': '📥 جارٍ المعالجة your file...',
     'delete_2fa_no_valid_files': '❌ No valid ملفات found',
     'delete_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account ملفات',
-    'delete_2fa_faiتم_msg': '❌ Delete 2FA faiتم',
+    'delete_2fa_faiتم_msg': '❌ حذف 2FA faiتم',
     'delete_2fa_error_msg': 'خطأ: {error}',
     
-    # ===== Add 2FA Feature =====
+    # ===== إضافة 2FA Feature =====
     # 1. Feature Introduction Page
     'add_2fa_title': '➕ إضافة 2FA كلمة المرور',
     'add_2fa_features': '📋 Features:',
@@ -891,72 +891,72 @@ TEXTS = {
     'add_2fa_format1': '· أرشيف ZIP (containing Session or TData)',
     'add_2fa_format2': '· Auto-detect file type and add corresponding 2FA config',
     'add_2fa_rules': '⚙️ جارٍ المعالجة rules:',
-    'add_2fa_rule1': '· Session file → Create JSON file with same name (contains twofa field)',
-    'add_2fa_rule2': '· TData directory → Create 2fa.txt file (same level as tdata)',
+    'add_2fa_rule1': '· Session file → إنشاء JSON file with same name (contains twofa field)',
+    'add_2fa_rule2': '· TData directory → إنشاء 2fa.txt file (same level as tdata)',
     'add_2fa_upload_prompt': '📤 الرجاء تحميل ملفات حسابك',
     'add_2fa_back_menu': 'رجوع to القائمة الرئيسية',
     
-    # 2. Processing
+    # 2. معالجة
     'add_2fa_processing': 'جارٍ المعالجة ملفات....',
     
-    # 3. Scan Complete
-    'add_2fa_scan_complete': '✅ File scan complete!',
+    # 3. Scan مكتمل
+    'add_2fa_scan_complete': '✅ ملف scan complete!',
     'add_2fa_statistics': '📊 Statistics',
-    'add_2fa_total_accounts': '· Total حسابات: {count}',
+    'add_2fa_total_accounts': '· المجموع حسابات: {count}',
     'add_2fa_file_type': '· نوع الملف: {type}',
     
-    # 4. Enter Password
+    # 4. Enter كلمة المرور
     'add_2fa_enter_password': '📝 Please enter the 2FA password to set',
     'add_2fa_enter_desc1': '· This password will apply to all حسابات',
     'add_2fa_enter_desc2': '· Session ملفات will create corresponding JSON config ملفات',
     'add_2fa_enter_desc3': '· TData directories will create 2fa.txt ملفات',
     'add_2fa_timeout': '⏰ Auto-cancel if not entered within 5 minutes',
     
-    # 5. Password Received
+    # 5. كلمة المرور Received
     'add_2fa_password_received': '✅ 2FA password received',
     'add_2fa_password_display': 'كلمة المرور: {password}',
     'add_2fa_processing_now': 'جارٍ المعالجة...',
     
-    # 6. Add Complete
+    # 6. إضافة مكتمل
     'add_2fa_complete': '✅ إضافة 2FA complete!',
     'add_2fa_results': '📊 جارٍ المعالجة Results',
     'add_2fa_success': '· نجح: {count}',
     'add_2fa_faiتم': '· فشل: {count}',
-    'add_2fa_total': '· Total: {count}',
+    'add_2fa_total': '· المجموع: {count}',
     'add_2fa_duration': '· Duration: {time}s',
     'add_2fa_password_set': '🔐 2FA password set: {password}',
     
-    # 7. Result File Naming
+    # 7. Result ملف Naming
     'zip_add_2fa_result': 'add_2fa_result_{timestamp}',
     'file_desc_add_2fa_success': '📦 إضافة 2FA Result - نجح {count}',
-    'zip_add_2fa_success': 'Add2FA_نجح_{count}',
-    'zip_add_2fa_faiتم': 'Add2FA_فشل_{count}',
+    'zip_add_2fa_success': 'إضافة2FA_نجح_{count}',
+    'zip_add_2fa_faiتم': 'إضافة2FA_فشل_{count}',
     'file_desc_add_2fa_success_count': '📦 نجح ({count} حسابات)',
     'file_desc_add_2fa_faiتم_count': '📦 فشل ({count} حسابات)',
-    'report_add_2fa_success': 'Add2FA_نجح_{count}_Report.txt',
-    'report_add_2fa_faiتم': 'Add2FA_فشل_{count}_Report.txt',
-    'report_desc_add_2fa_success': '📋 نجح Detaiتم Report',
-    'report_desc_add_2fa_faiتم': '📋 فشل Detaiتم Report',
+    'report_add_2fa_success': 'إضافة2FA_نجح_{count}_تقرير.txt',
+    'report_add_2fa_faiتم': 'إضافة2FA_فشل_{count}_تقرير.txt',
+    'report_desc_add_2fa_success': '📋 نجح Detaiتم تقرير',
+    'report_desc_add_2fa_faiتم': '📋 فشل Detaiتم تقرير',
     
-    # 8. Report TXT Template
-    'report_add_2fa_title_success': '2FA كلمة المرور Add Report - نجح',
-    'report_add_2fa_title_faiتم': '2FA كلمة المرور Add Report - فشل',
-    'report_add_2fa_total': 'Total: {count}',
+    # 8. تقرير TXT Template
+    'report_add_2fa_title_success': '2FA كلمة المرور إضافة تقرير - نجح',
+    'report_add_2fa_title_faiتم': '2FA كلمة المرور إضافة تقرير - فشل',
+    'report_add_2fa_total': 'المجموع: {count}',
     'report_add_2fa_generated': 'Generated: {time}',
     'report_add_2fa_detail_list': 'Detail List:',
-    'report_add_2fa_account': 'Account: {account}',
+    'report_add_2fa_account': 'الحساب: {account}',
     'report_add_2fa_details': 'Details: {info}',
     'report_add_2fa_process_time': 'Process time: {time}',
     'report_add_2fa_config_created': '2FA config file created',
     
-    # 9. Errors and Other Messages
+    # 9. خطأs and Other Messages
     'add_2fa_no_pending_task': '❌ No pending إضافة 2FA task, please start over',
     'add_2fa_operation_timeout': '❌ Operation timeout, please start over',
     'add_2fa_password_empty': '❌ 2FA password cannot be empty, please re-enter',
     'add_2fa_no_valid_files': '❌ No valid ملفات found',
     'add_2fa_ensure_format': 'Please ensure ZIP contains Session or TData format account ملفات',
     'add_2fa_processing_file': '📥 جارٍ المعالجة your file...',
-    'add_2fa_processing_config': '🔄 Adding 2FA config...',
+    'add_2fa_processing_config': '🔄 إضافةing 2FA config...',
     'add_2fa_processing_faiتم': '❌ جارٍ المعالجة faiتم',
     'add_2fa_error': 'خطأ: {error}',
     'add_2fa_result_success_desc': '✅ نجح',
@@ -964,59 +964,59 @@ TEXTS = {
     'add_2fa_result_error_desc': '❌ خطأ',
     'add_2fa_need_member': '❌ العضوية required to use إضافة 2FA feature',
     
-    # ===== Account Split Feature =====
+    # ===== الحساب Split Feature =====
     # 1. Feature Introduction Page
-    'split_title': '📦 Account File Classification',
+    'split_title': '📦 الحساب ملف Classification',
     'split_features': '🎯 Features',
     'split_features_desc': 'Support uploading ZIP ملفات with multiple حسابات (TData directories or Session+JSON ملفات), auto-detect and classify:',
     'split_methods': '📋 Supported Classification Methods',
-    'split_method_country': '1️⃣ Split by Country Code',
+    'split_method_country': '1️⃣ Split by العددry Code',
     'split_method_country_desc1': '· Auto-detect phone number → area code → country',
     'split_method_country_desc2': '· Generate one ZIP per country',
-    'split_method_country_desc3': '· Naming: Country+Code+Count',
+    'split_method_country_desc3': '· Naming: العددry+Code+العدد',
     'split_method_quantity': '2️⃣ Split by Quantity',
     'split_method_quantity_desc1': '· Support single or multiple quantities',
     'split_method_quantity_desc2': '· Mixed countries use "Mixed" label naming',
-    'split_method_quantity_desc3': '· All unidentified use "Unknown" label naming',
+    'split_method_quantity_desc3': '· جميع unidentified use "Unknown" label naming',
     'split_steps': '💡 Usage Steps',
     'split_step1': '1. Click button below to start',
-    'split_step2': '2. Upload ZIP file with حسابات',
-    'split_step3': '3. Select split method',
+    'split_step2': '2. تحميل ZIP file with حسابات',
+    'split_step3': '3. اختر split method',
     'split_step4': '4. Wait for processing and receive results',
     'split_notes': '⚠️ Notes',
     'split_note1': '· Support TData and Session formats',
-    'split_note2': '· File size limit 100MB',
+    'split_note2': '· ملف size limit 100MB',
     'split_note3': '· Auto-detect phone number and country info',
-    'split_start_upload': '📤 Start Upload',
+    'split_start_upload': '📤 Start تحميل',
     'split_back_menu': '◀️ رجوع to القائمة الرئيسية',
     
-    # 2. Upload File
+    # 2. تحميل ملف
     'split_upload_prompt': '📤 Please upload account ملفات',
     'split_formats': 'التنسيقات المدعومة:',
     'split_format1': '· Session ملفات ZIP (.session)',
     'split_format2': '· Session+JSON ملفات ZIP (.session + .json)',
     'split_format3': '· TData مجلدات ZIP',
-    'split_size_limit': '⚠️ File size limit 100MB',
+    'split_size_limit': '⚠️ ملف size limit 100MB',
     'split_timeout': '⏰ 5 minutes timeout',
     'split_back': 'رجوع to القائمة الرئيسية',
     
-    # 3. Scan Complete
-    'split_scan_complete': '✅ File scan complete!',
+    # 3. Scan مكتمل
+    'split_scan_complete': '✅ ملف scan complete!',
     'split_statistics': '📊 Statistics',
-    'split_total_accounts': '· Total حسابات: {count}',
+    'split_total_accounts': '· المجموع حسابات: {count}',
     'split_identified': '· Identified: {count}',
     'split_unidentified': '· Unidentified: {count}',
     'split_file_type': '· نوع الملف: {type}',
     'split_select_method': '🎯 Please select split method:',
     
-    # 4. Select Split Method Buttons
+    # 4. اختر Split Method Buttons
     'split_select_prompt': 'Please select split method:',
-    'split_btn_country': '🌍 Split by Country',
+    'split_btn_country': '🌍 Split by العددry',
     'split_btn_quantity': '🔢 Split by Quantity',
     'split_btn_cancel': '❌ إلغاء',
     
-    # 5. Select Quantity Mode
-    'split_quantity_mode': '🔢 Select quantity mode:',
+    # 5. اختر Quantity الوضع
+    'split_quantity_mode': '🔢 اختر quantity mode:',
     'split_single_quantity': '1️⃣ Single Quantity',
     'split_single_quantity_desc': 'Split by fixed quantity, e.g. 10 per package',
     'split_multiple_quantity': '🔢 Multiple Quantities',
@@ -1037,40 +1037,40 @@ TEXTS = {
     'split_enter_multiple_desc': 'System will split in order: 1st package 10, 2nd package 20, 3rd package 30',
     'split_enter_multiple_remainder': 'Remainder will be notified but not packaged',
     
-    # 8. Processing
-    'split_sending_results': '📤 Sending results...',
+    # 8. معالجة
+    'split_sending_results': '📤 إرسال results...',
     'split_processing': 'جارٍ المعالجة...',
     'split_processing_file': '📥 جارٍ المعالجة your file...',
-    'split_processing_country': '🔄 Starting split by country...',
+    'split_processing_country': '🔄 بدء split by country...',
     'split_processing_country_desc': 'Grouping and packaging...',
-    'split_processing_quantity_single': '🔄 Starting split by quantity...',
+    'split_processing_quantity_single': '🔄 بدء split by quantity...',
     'split_processing_quantity_single_desc': '{qty} حسابات per package',
-    'split_processing_quantity_multi': '🔄 Starting split by quantity...',
+    'split_processing_quantity_multi': '🔄 بدء split by quantity...',
     'split_processing_quantity_multi_sequence': 'Quantity sequence: {sequence}',
-    'split_processing_quantity_multi_total': 'Total حسابات: {total}',
+    'split_processing_quantity_multi_total': 'المجموع حسابات: {total}',
     'split_processing_quantity_multi_requested': 'Requested quantity: {requested}',
     'split_remainder_unallocated': '⚠️ Remaining {remainder} حسابات unallocated',
     'split_remainder_exceeded': '⚠️ Requested quantity exceeded, last package may be insufficient',
     
-    # Error messages
+    # خطأ messages
     'split_error_no_task': '❌ No pending classification task',
     'split_error_qty_exceeds': '❌ Quantity {qty} exceeds total حسابات {total}',
     
-    # 9. Classification Complete
+    # 9. Classification مكتمل
     'split_complete': '✅ Classification complete!',
-    'split_result_total': '· Total حسابات: {count}',
+    'split_result_total': '· المجموع حسابات: {count}',
     'split_result_sent': '· Sent: {count} ملفات',
-    'split_result_method_country': '· Classification: By Country Code',
+    'split_result_method_country': '· Classification: By العددry Code',
     'split_result_method_quantity': '· Classification: By Quantity',
     'split_result_sequence': '· Quantity sequence: {sequence}',
     'split_use_again': 'To use again, click /start',
     
-    # 10. Result File Naming
+    # 10. Result ملف Naming
     'split_file_contains': 'يحتوي على {count} حسابات',
     'split_mixed': 'Mixed',
     'split_unknown': 'Unknown',
     
-    # 11. Country Name Translations
+    # 11. العددry Name Translations
     'country_czech_republic': 'Czech Republic',
     'country_china': 'China',
     'country_united_states': 'United States',
@@ -1189,7 +1189,7 @@ TEXTS = {
     'country_hong_kong': 'Hong Kong',
     'country_macau': 'Macau',
     
-    # Additional countries
+    # إضافةitional countries
     'country_afghanistan': 'Afghanistan',
     'country_albania': 'Albania',
     'country_andorra': 'Andorra',
@@ -1336,7 +1336,7 @@ TEXTS = {
     'country_us_virgin_islands': 'U.S. Virgin Islands',
     'country_antarctica': 'Antarctica',
     
-    # ===== API Conversion Feature =====
+    # ===== API التحويل Feature =====
     # Feature introduction page
     'api_title': '🔗 API تحويل التنسيق',
     'api_core_features': '🎯 Core Features',
@@ -1350,14 +1350,14 @@ TEXTS = {
     'api_verify_feature3': '· Support HTTP API call to get verification code',
     'api_verify_feature4': '· 5-minute auto-expiry protection',
     'api_usage': '📤 Usage',
-    'api_usage_step1': '1. Upload ZIP file (containing TData or Session)',
+    'api_usage_step1': '1. تحميل ZIP file (containing TData or Session)',
     'api_usage_step2': '2. System auto-analyzes account info',
     'api_usage_step3': '3. Generate API format file and verification links',
-    'api_usage_step4': '4. Download and use results',
+    'api_usage_step4': '4. تنزيل and use results',
     'api_upload_prompt': 'Please upload your file...',
     'api_back_menu': 'رجوع to القائمة الرئيسية',
     
-    # Processing
+    # معالجة
     'api_processing_file': 'جارٍ المعالجة your file',
     
     # Scan complete
@@ -1372,7 +1372,7 @@ TEXTS = {
     'api_2fa_timeout': '⏰ 5 minutes timeout',
     'api_skip': 'skip',
     
-    # Conversion progress
+    # التحويل progress
     'api_converting': '🔄 API conversion in progress...',
     'api_progress': '📊 تحويل التقدم',
     'api_progress_percent': '· التقدم: {percent}% ({done}/{total})',
@@ -1380,7 +1380,7 @@ TEXTS = {
     'api_progress_faiتم': '· ❌ فشل: {count}',
     'api_progress_speed': '· Avg speed: {speed}/sec',
     'api_progress_remaining': '· Est. remaining: {time} min',
-    'api_processing_status': '⚡ جارٍ المعالجة Status',
+    'api_processing_status': '⚡ جارٍ المعالجة الحالة',
     'api_file_type_session': '· نوع الملف: SESSION',
     'api_file_type_tdata': '· نوع الملف: TDATA',
     'api_2fa_mode_auto': '· 2FA mode: Auto-detect',
@@ -1388,16 +1388,16 @@ TEXTS = {
     'api_elapsed_time': '· Elapsed: {time}s',
     'api_failure_stats': '❌ Failure Statistics',
     
-    # Conversion complete
+    # التحويل complete
     'api_complete': '🎉 API format conversion complete!',
     'api_statistics': '📊 تحويل Statistics',
-    'api_stat_total': '· Total: {count}',
+    'api_stat_total': '· المجموع: {count}',
     'api_stat_success': '· ✅ نجح: {count} ({percent}%)',
     'api_stat_faiتم': '· ❌ فشل: {count} ({percent}%)',
     'api_stat_duration': '· ⏱️ Duration: {time}s',
     'api_stat_speed': '· 🚀 السرعة: {speed}/sec',
     'api_failure_details': '❌ Failure Details',
-    'api_sending_txt': '📄 Sending TXT file...',
+    'api_sending_txt': '📄 إرسال TXT file...',
     
     # Result files
     'api_result_filename': 'TG_API_{count}_حسابات.txt',
@@ -1407,15 +1407,15 @@ TEXTS = {
     # Failure reason translations
     'api_failure_reason_conversion_faiتم': 'تحويل faiتم',
     'api_failure_reason_unauthorized': 'Unauthorized',
-    'api_failure_reason_timeout': 'Connection timeout',
+    'api_failure_reason_timeout': 'الاتصال timeout',
     'api_failure_reason_conversion_error': 'تحويل error',
     'api_failure_reason_concurrent_error': 'Concurrent error',
-    'api_failure_reason_file_not_exist': 'File not exist',
-    'api_failure_reason_file_corrupted': 'File corrupted',
+    'api_failure_reason_file_not_exist': 'ملف not exist',
+    'api_failure_reason_file_corrupted': 'ملف corrupted',
     'api_failure_reason_dir_not_exist': 'Directory not exist',
     'api_failure_reason_unknown': 'Unknown error',
     
-    # ===== File Rename Feature =====
+    # ===== ملف Rename Feature =====
     # 1. Feature Introduction Page
     'rename_title': '📝 إعادة تسمية الملف',
     'rename_features': '💡 Features',
@@ -1427,33 +1427,33 @@ TEXTS = {
     'rename_timeout_upload': '⏰ Auto-cancel if no upload within 5 minutes',
     'rename_btn_cancel': 'إلغاء',
     
-    # 2. File Received
-    'rename_file_received': '✅ File received',
+    # 2. ملف Received
+    'rename_file_received': '✅ ملف received',
     'rename_original_name': '📁 Original filename: {filename}',
-    'rename_file_size': '📏 File size: {size}',
+    'rename_file_size': '📏 ملف size: {size}',
     'rename_enter_new_name': '✏️ Please enter new filename',
     'rename_name_only': '· Enter filename only (without extension)',
     'rename_ext_keep': '· Extension {ext} will be automatically kept',
     'rename_illegal_clean': '· Illegal characters will be auto-cleaned',
     'rename_timeout_input': '⏰ Auto-cancel if no input within 5 minutes',
     
-    # 3. Rename Success
-    'rename_success': '✅ File renamed successfully',
+    # 3. Rename نجح
+    'rename_success': '✅ ملف renamed successfully',
     'rename_old_name': 'Original filename: {old_name}',
     'rename_new_name': 'New filename: {new_name}',
     'rename_telegram_tip': '💡 If the filename is incorrect when downloading, it may be due to تيليجرام client restrictions\nThe actual file contains all characters, including Emoji and special brackets',
-    'rename_file_sent': '✅ File sent!',
+    'rename_file_sent': '✅ ملف sent!',
     
-    # 4. Error Messages
+    # 4. خطأ Messages
     'rename_no_task': '❌ No pending rename task',
-    'rename_download_faiتم': '❌ File download faiتم: {error}',
+    'rename_download_faiتم': '❌ ملف download faiتم: {error}',
     'rename_invalid_name': '❌ Invalid filename, please re-enter',
-    'rename_send_faiتم': '❌ File send faiتم',
+    'rename_send_faiتم': '❌ ملف send faiتم',
     'rename_faiتم': '❌ Rename faiتم: {error}',
     
-    # ===== Account Merge Feature =====
+    # ===== الحساب Merge Feature =====
     # 1. Feature Introduction Page
-    'merge_title': '🧩 Account File Merge',
+    'merge_title': '🧩 الحساب ملف Merge',
     'merge_features': '💡 Features',
     'merge_feature1': '· Auto-extract all ZIP ملفات',
     'merge_feature2': '· Recursively scan and identify TData حسابات',
@@ -1463,40 +1463,40 @@ TEXTS = {
     'merge_zip_only': '⚠️ Only .zip ملفات accepted',
     'merge_multi_upload': '· Can upload multiple ZIP ملفات',
     'merge_auto_scan': '· System will auto-extract and scan contents',
-    'merge_click_complete': 'Click "✅ Complete Merge" after upload',
+    'merge_click_complete': 'Click "✅ مكتمل Merge" after upload',
     
     # 2. Buttons
-    'merge_btn_complete': '✅ Complete Merge',
+    'merge_btn_complete': '✅ مكتمل Merge',
     'merge_btn_cancel': '❌ إلغاء',
-    'merge_btn_continue': '📁 Continue Upload',
+    'merge_btn_continue': '📁 Continue تحميل',
     
-    # 3. After File Upload
+    # 3. After ملف تحميل
     'merge_received_zip': '✅ Received ZIP file {count}',
-    'merge_filename': 'Filename: {filename}',
+    'merge_filename': 'ملفname: {filename}',
     'merge_select_action': 'Please select next action:',
-    'merge_action_continue': '· Continue upload: Add more ZIP ملفات',
-    'merge_action_complete': '· Complete merge: Start processing all ملفات',
+    'merge_action_continue': '· Continue upload: إضافة more ZIP ملفات',
+    'merge_action_complete': '· مكتمل merge: Start processing all ملفات',
     
-    # 4. Processing
+    # 4. معالجة
     'merge_processing': '🔄 جارٍ المعالجة ملفات...',
     
     # 5. Results
-    'merge_complete': '✅ Account file merge complete!',
+    'merge_complete': '✅ الحساب file merge complete!',
     'merge_results': '📊 جارٍ المعالجة Results',
     'merge_result_zip': '· Extracted ZIP ملفات: {count}',
     'merge_result_tdata': '· TData حسابات: {count}',
     'merge_result_session': '· Session ملفات: {count} (support pure Session or Session+JSON)',
-    'merge_generated': '📦 Generated Files',
-    'merge_total_files': 'Total {count} ملفات (normal and duplicate ملفات packed separately)',
+    'merge_generated': '📦 Generated ملفs',
+    'merge_total_files': 'المجموع {count} ملفات (normal and duplicate ملفات packed separately)',
     
-    # 6. Output File Descriptions
-    'merge_session_files': 'Session Files ({count} items)',
-    'merge_tdata_files': 'TData Files ({count} items)',
+    # 6. Output ملف Descriptions
+    'merge_session_files': 'Session ملفs ({count} items)',
+    'merge_tdata_files': 'TData ملفs ({count} items)',
     
-    # 7. Error and Hint Messages
+    # 7. خطأ and Hint Messages
     'merge_no_task': '❌ No pending merge task',
     'merge_zip_only_error': '❌ Only .zip ملفات supported, please re-upload',
-    'merge_download_faiتم': '❌ File download faiتم: {error}',
+    'merge_download_faiتم': '❌ ملف download faiتم: {error}',
     'merge_continue_upload_hint': '✅ Please continue uploading ZIP ملفات',
     'merge_received_files': 'Received ملفات: {count}',
     'merge_upload_next': '• Please upload next ZIP file',
@@ -1510,7 +1510,7 @@ TEXTS = {
     'cleanup_important': '⚠️ Important Notice',
     'cleanup_intro': 'This feature will perform the following operations on uploaded حسابات:',
     'cleanup_action1': '· 🚪 Leave all groups and channels',
-    'cleanup_action2': '· 🗑️ Delete all chat history (revoke when possible)',
+    'cleanup_action2': '· 🗑️ حذف all chat history (revoke when possible)',
     'cleanup_action3': '· 📇 Clear all contacts',
     'cleanup_action4': '· 📁 Archive remaining conversations',
     'cleanup_irreversible': '🔴 Irreversible Operation',
@@ -1526,30 +1526,30 @@ TEXTS = {
     'cleanup_btn_cancel': '❌ إلغاء',
     'cleanup_btn_confirm': '✅ تأكيد Cleanup',
     
-    # 3. After File Upload
+    # 3. After ملف تحميل
     'cleanup_processing_file': 'جارٍ المعالجة your file',
     'cleanup_found_accounts': '✅ Found {count} account ملفات',
     'cleanup_type_session': '📊 Type: SESSION',
     'cleanup_type_tdata': '📊 Type: TDATA',
     
-    # 4. Confirm Cleanup
+    # 4. تأكيد Cleanup
     'cleanup_confirm_title': '⚠️ تأكيد cleanup operation?',
     'cleanup_confirm_intro': 'This operation will:',
     'cleanup_confirm_action1': '· Leave all groups and channels',
-    'cleanup_confirm_action2': '· Delete all chat history',
+    'cleanup_confirm_action2': '· حذف all chat history',
     'cleanup_confirm_action3': '· Clear all contacts',
     'cleanup_confirm_action4': '· Archive remaining conversations',
     'cleanup_confirm_warn': '🔴 This operation is irreversible!',
     
-    # 5. Processing Progress
-    'cleanup_starting': 'Starting cleanup',
+    # 5. معالجة التقدم
+    'cleanup_starting': 'بدء cleanup',
     'cleanup_initializing': 'Initializing...',
-    'cleanup_in_progress': '🧹 Cleaning in progress, please wait.',
+    'cleanup_in_progress': '🧹 Cleaning in progress, يرجى الانتظار.',
     'cleanup_current': '📄 Current: {filename}',
-    'cleanup_total_progress': '📊 Total progress: {current}/{total} ({percent}%)',
+    'cleanup_total_progress': '📊 المجموع progress: {current}/{total} ({percent}%)',
     'cleanup_eta': '⏳ Estimated completion: {time} remaining',
     'cleanup_eta_alt': 'Estimated completion time: {time} remaining',
-    'cleanup_status': '🔄 Status:',
+    'cleanup_status': '🔄 الحالة:',
     'cleanup_status_profile': '🔄 Cleaning account info (avatar, name, bio)...',
     'cleanup_status_get_dialogs': '📋 Getting dialog list...',
     'cleanup_status_found_dialogs': '📊 Found {groups} groups, {channels} channels, {users} users',
@@ -1558,23 +1558,23 @@ TEXTS = {
     'cleanup_status_delete_contacts': '📇 Deleting contacts...',
     'cleanup_status_archive_dialogs': '📁 Archiving remaining conversations...',
     
-    # 6. Cleanup Complete
+    # 6. Cleanup مكتمل
     'cleanup_complete': '✅ Cleanup complete!',
     'cleanup_statistics': '📊 Cleanup Statistics',
-    'cleanup_stat_total': '· Total حسابات: {count}',
+    'cleanup_stat_total': '· المجموع حسابات: {count}',
     'cleanup_stat_success': '· ✅ نجح: {count} ({percent}%)',
     'cleanup_stat_frozen': '· ❄️ مجمد: {count} ({percent}%)',
     'cleanup_stat_faiتم': '· ❌ فشل: {count}',
     'cleanup_packing': '📦 Packing account ملفات...',
     
-    # 7. Output Files
-    'cleanup_summary_report': '📋 Cleanup Summary Report',
+    # 7. Output ملفs
+    'cleanup_summary_report': '📋 Cleanup ملخص تقرير',
     'cleanup_success_accounts': '📦 نجحfully cleaned حسابات ({count})',
     'cleanup_faiتم_accounts': '📦 فشل to clean حسابات ({count})',
     
-    # 8. Cleanup Report Content
-    'cleanup_report_title': 'Batch Cleanup Detaiتم Report',
-    'cleanup_report_time': 'Cleanup Time',
+    # 8. Cleanup تقرير Content
+    'cleanup_report_title': 'Batch Cleanup Detaiتم تقرير',
+    'cleanup_report_time': 'Cleanup الوقت',
     'cleanup_report_concurrency': 'Concurrency',
     'cleanup_report_concurrent_accounts': 'حسابات simultaneously',
     'cleanup_report_total': 'إجمالي الحسابات',
@@ -1584,8 +1584,8 @@ TEXTS = {
     'cleanup_report_details': 'Detaiتم Results',
     'cleanup_report_error': 'خطأ:',
     'cleanup_report_stats': 'Stats:',
-    'cleanup_report_deleted_dialogs': 'Deleted {count} conversations',
-    'cleanup_report_deleted_contacts': 'Deleted {count} contacts',
+    'cleanup_report_deleted_dialogs': 'حذفd {count} conversations',
+    'cleanup_report_deleted_contacts': 'حذفd {count} contacts',
     'cleanup_report_unauthorized': 'Session unauthorized',
     'cleanup_report_success_list': 'نجحfully Cleaned',
     'cleanup_report_faiتم_list': 'فشل to Clean',
@@ -1596,12 +1596,12 @@ TEXTS = {
     'cleanup_report_profile_cleared': 'Profile cleared',
     'cleanup_report_groups_left': 'Left {count} groups',
     'cleanup_report_channels_left': 'Left {count} channels',
-    'cleanup_report_histories_deleted': 'Deleted {count} conversations',
-    'cleanup_report_contacts_deleted_label': 'Deleted {count} contacts',
+    'cleanup_report_histories_deleted': 'حذفd {count} conversations',
+    'cleanup_report_contacts_deleted_label': 'حذفd {count} contacts',
     'cleanup_report_error_details': 'خطأ details:',
-    'cleanup_report_frozen_accounts': 'مجمد Accounts',
+    'cleanup_report_frozen_accounts': 'مجمد الحسابs',
     
-    # 9. Errors and Other Messages
+    # 9. خطأs and Other Messages
     'cleanup_feature_disabتم': '❌ One-click cleanup feature is disabتم',
     'cleanup_need_member': '❌ العضوية required for one-click cleanup',
     'cleanup_no_valid_files': '❌ No valid ملفات found',
@@ -1614,13 +1614,13 @@ TEXTS = {
     'cleanup_already_processed': 'Processed Statistics',
     'cleanup_actual_processed': '· Processed: {actual}/{total}',
     'cleanup_error_info': '⚠️ خطأ info:',
-    'cleanup_sending_results': '📦 Sending processed results...',
+    'cleanup_sending_results': '📦 إرسال processed results...',
     'cleanup_incomplete': '⚠️ Cleanup incomplete',
     'cleanup_may_interrupted': '⚠️ جارٍ المعالجة may have been interrupted or encountered errors',
     'cleanup_results_sent': '✅ Cleanup results sent',
     'cleanup_send_faiتم': '❌ فشل to send cleanup results',
-    'cleanup_frozen_detected': 'Account frozen',
-    'cleanup_connection_faiتم': 'Connection faiتم',
+    'cleanup_frozen_detected': 'الحساب frozen',
+    'cleanup_connection_faiتم': 'الاتصال faiتم',
     'cleanup_timeout_error': 'Cleanup timeout',
     
     # ===== Re-authorization Feature =====
@@ -1634,16 +1634,16 @@ TEXTS = {
     'reauth_desc5': '· Support proxy connection (fallback to local on timeout)',
     'reauth_desc6': '· Use random device parameters to prevent risk control',
     'reauth_workflow_title': 'Workflow:',
-    'reauth_workflow1': '1. Upload account ملفات (Session/TData/ZIP)',
+    'reauth_workflow1': '1. تحميل account ملفات (Session/TData/ZIP)',
     'reauth_workflow2': '2. Enter old password (or auto-detect 2FA from JSON)',
     'reauth_workflow3': '3. Enter new password',
     'reauth_workflow4': '4. System auto-completes re-authorization',
     'reauth_workflow5': '5. Results packaged by category (success/faiتم)',
     'reauth_fail_title': 'Failure Categories:',
-    'reauth_fail_frozen': '· مجمد: Account has been frozen',
-    'reauth_fail_banned': '· محظور: Account has been banned',
+    'reauth_fail_frozen': '· مجمد: الحساب has been frozen',
+    'reauth_fail_banned': '· محظور: الحساب has been banned',
     'reauth_fail_wrong_pwd': '· Wrong كلمة المرور: Old password incorrect',
-    'reauth_fail_network': '· Network خطأ: Connection timeout or network issues',
+    'reauth_fail_network': '· Network خطأ: الاتصال timeout or network issues',
     'reauth_notes_title': 'Notes:',
     'reauth_note1': '⚠️ After re-authorization, old sessions will be invalidated immediately',
     'reauth_note2': '⚠️ Please ensure you provide the correct old password',
@@ -1658,13 +1658,13 @@ TEXTS = {
     'reauth_btn_cancel': '❌ إلغاء',
     'reauth_btn_confirm': '✅ تأكيد Start',
     
-    # 3. After File Upload
+    # 3. After ملف تحميل
     'reauth_processing_file': 'جارٍ المعالجة file',
     'reauth_found_accounts': '✅ Found {count} account ملفات',
     'reauth_file_type_session': 'نوع الملف: SESSION',
     'reauth_file_type_tdata': 'نوع الملف: TDATA',
     
-    # 4. Password Selection
+    # 4. كلمة المرور اخترion
     'reauth_pwd_method_title': 'Please select old password input method:',
     'reauth_pwd_auto': '· Auto-detect: Automatically find password from ملفات',
     'reauth_pwd_manual': '· Manual input: Manually enter old password',
@@ -1673,28 +1673,28 @@ TEXTS = {
     'reauth_pwd_auto_tdata': '- TData format: Any .txt file containing 2fa/twofa/password (case insensitive)',
     'reauth_pwd_auto_example': 'Example: 2FA.txt, twoFA.TXT, password.txt, etc.',
     
-    # 5. Password Detection Result
+    # 5. كلمة المرور Detection Result
     'reauth_pwd_detect_complete': '✅ كلمة المرور auto-detection complete',
     'reauth_pwd_stats': 'Statistics:',
-    'reauth_pwd_total': '· Total ملفات: {count}',
+    'reauth_pwd_total': '· المجموع ملفات: {count}',
     'reauth_pwd_detected': '· نجحfully detected: {count}',
     'reauth_pwd_not_detected': '· Not detected: {count}',
-    'reauth_pwd_empty_note': '💡 Accounts without detected password will be processed with empty password',
+    'reauth_pwd_empty_note': '💡 الحسابs without detected password will be processed with empty password',
     
-    # 6. Manual Input Old Password
+    # 6. Manual Input Old كلمة المرور
     'reauth_manual_old_pwd_title': '📝 Manual Input Old كلمة المرور',
     'reauth_manual_old_pwd_prompt': 'Please enter old password (if account has 2FA password)',
     'reauth_manual_old_pwd_tip': '💡 If no password, enter "无" or "skip"',
     'reauth_old_pwd_saved': '✅ Old password saved',
     
-    # 7. New Password Input
+    # 7. New كلمة المرور Input
     'reauth_new_pwd_prompt': 'Please enter new password (for re-authorized حسابات)',
     'reauth_new_pwd_tip': '💡 If no new password needed, enter "无" or "skip"',
     
-    # 8. Final Confirmation
+    # 8. Final تأكيدation
     'reauth_final_confirm': '📋 Final تأكيدation',
-    'reauth_account_info': 'Account Info:',
-    'reauth_account_count': '· Account count: {count}',
+    'reauth_account_info': 'الحساب Info:',
+    'reauth_account_count': '· الحساب count: {count}',
     'reauth_pwd_settings': 'كلمة المرور Settings:',
     'reauth_old_pwd': '· Old password: {value}',
     'reauth_new_pwd': '· New password: {value}',
@@ -1702,8 +1702,8 @@ TEXTS = {
     'reauth_pwd_masked': '***',
     'reauth_process_flow': 'Process Flow:',
     'reauth_flow1': '1. Reset all sessions (kick other devices)',
-    'reauth_flow2': '2. Delete old password',
-    'reauth_flow3': '3. Create new session (random device parameters)',
+    'reauth_flow2': '2. حذف old password',
+    'reauth_flow3': '3. إنشاء new session (random device parameters)',
     'reauth_flow4': '4. Set new password',
     'reauth_flow5': '5. Verify old sessions invalidated',
     'reauth_flow6': '6. Package categorized results',
@@ -1713,23 +1713,23 @@ TEXTS = {
     'reauth_important3': '· Detaiتم report will be generated after completion',
     'reauth_confirm_question': 'تأكيد to start re-authorization?',
     
-    # 9. Processing Progress
+    # 9. معالجة التقدم
     'reauth_in_progress': '🔄 Re-authorizing...',
     'reauth_please_wait': 'يرجى الانتظار, detaiتم report will be sent after completion',
-    'reauth_starting': '🚀 Starting re-authorization...',
+    'reauth_starting': '🚀 بدء re-authorization...',
     'reauth_start': '▶️ Start re-authorization',
     'reauth_progress': 'التقدم: {current}/{total} ({percent}%)',
-    'reauth_stat_account_count': '📊 Account Count',
+    'reauth_stat_account_count': '📊 الحساب العدد',
     'reauth_stat_success': '✅ Authorization نجح',
-    'reauth_stat_frozen': '❄️ مجمد Accounts',
-    'reauth_stat_banned': '🚫 محظور Accounts',
+    'reauth_stat_frozen': '❄️ مجمد الحسابs',
+    'reauth_stat_banned': '🚫 محظور الحسابs',
     'reauth_stat_2fa_error': '🔑 2FA خطأ',
     'reauth_stat_network_error': '🌐 Network خطأ',
     
-    # 10. Processing Result
-    'reauth_complete': '✅ Re-authorization Complete',
+    # 10. معالجة Result
+    'reauth_complete': '✅ Re-authorization مكتمل',
     'reauth_result_stats': 'Statistics:',
-    'reauth_result_total': '· Total: {count}',
+    'reauth_result_total': '· المجموع: {count}',
     'reauth_result_success': '· ✅ نجح: {count}',
     'reauth_result_frozen': '· ❄️ مجمد: {count}',
     'reauth_result_banned': '· 🚫 محظور: {count}',
@@ -1739,18 +1739,18 @@ TEXTS = {
     'reauth_success_rate': 'نجح Rate: {percent}%',
     'reauth_see_report': '📄 See detaiتم report in file below',
     
-    # 11. Output Files
-    'reauth_file_report': '📄 Re-authorization Detaiتم Report',
+    # 11. Output ملفs
+    'reauth_file_report': '📄 Re-authorization Detaiتم تقرير',
     'reauth_file_success': '📦 نجحfully authorized حسابات ({count})',
     'reauth_file_frozen': '📦 مجمد حسابات ({count})',
     'reauth_file_banned': '📦 محظور حسابات ({count})',
     'reauth_file_wrong_pwd': '📦 Wrong password حسابات ({count})',
     'reauth_file_network': '📦 Network error حسابات ({count})',
-    'reauth_file_other': '📦 Accounts with other errors ({count})',
+    'reauth_file_other': '📦 الحسابs with other errors ({count})',
     
-    # 12. Report Content
-    'reauth_report_title': 'Re-authorization Report',
-    'reauth_report_time': 'Generated Time:',
+    # 12. تقرير Content
+    'reauth_report_title': 'Re-authorization تقرير',
+    'reauth_report_time': 'Generated الوقت:',
     'reauth_report_total': 'إجمالي الحسابات:',
     'reauth_report_success': 'نجح:',
     'reauth_report_frozen': 'مجمد:',
@@ -1758,10 +1758,10 @@ TEXTS = {
     'reauth_report_pwd_error': 'كلمة المرور خطأ:',
     'reauth_report_network': 'Network خطأ:',
     'reauth_report_other': 'Other خطأ:',
-    'reauth_report_file': 'File:',
+    'reauth_report_file': 'ملف:',
     'reauth_report_error': 'خطأ:',
     
-    # Report category titles
+    # تقرير category titles
     'reauth_report_category_success': 'SUCCESS',
     'reauth_report_category_frozen': 'FROZEN',
     'reauth_report_category_banned': 'BANNED',
@@ -1769,24 +1769,24 @@ TEXTS = {
     'reauth_report_category_network_error': 'NETWORK_ERROR',
     'reauth_report_category_other_error': 'OTHER_ERROR',
     
-    # Report detail fields
+    # تقرير detail fields
     'reauth_report_phone': 'Phone:',
     'reauth_report_device_model': 'Device الوضعl:',
     'reauth_report_system_version': 'System Version:',
     'reauth_report_app_version': 'App Version:',
-    'reauth_report_connection': 'Connection:',
+    'reauth_report_connection': 'الاتصال:',
     'reauth_report_new_password': 'New كلمة المرور:',
     
-    # Connection method values
-    'reauth_connection_proxy': 'Using Proxy',
+    # الاتصال method values
+    'reauth_connection_proxy': 'Using الوكيل',
     'reauth_connection_local': 'اتصال محلي',
     'reauth_connection_local_fallback': 'اتصال محلي (fallback after proxy faiتم)',
     
-    # Report generation faiتم
-    'reauth_report_gen_faiتم': 'Report generation faiتم:',
-    'reauth_report_total_success': 'Total: {total}, نجح: {success}',
+    # تقرير generation faiتم
+    'reauth_report_gen_faiتم': 'تقرير generation faiتم:',
+    'reauth_report_total_success': 'المجموع: {total}, نجح: {success}',
     
-    # Additional messages
+    # إضافةitional messages
     'reauth_need_member': '⚠️ Re-authorization feature requires membership\n\nPlease activate membership first',
     'reauth_session_expired': '❌ Session expired',
     'reauth_session_expired_restart': '❌ Session expired, please restart',
@@ -1796,9 +1796,9 @@ TEXTS = {
     'reauth_error': 'خطأ: {error}',
     'reauth_file_type': 'نوع الملف: {type}',
     
-    # ===== Query Registration Time Feature =====
+    # ===== Query Registration الوقت Feature =====
     # 1. Feature Introduction Page
-    'regtime_title': '🕰️ Query Registration Time',
+    'regtime_title': '🕰️ Query Registration الوقت',
     'regtime_intro': 'This feature queries the accurate registration time of حسابات and classifies by date:',
     'regtime_feature1': '• 📅 Classify by full date (Year-Month-Day)',
     'regtime_feature2': '• 🎯 Multiple methods to get the most accurate registration time',
@@ -1813,21 +1813,21 @@ TEXTS = {
     'regtime_note4': '4. Recommend batch processing no more than 100 حسابات',
     'regtime_note5': '5. Will automatically use the most accurate method to get registration time',
     'regtime_upload_title': '📤 Please upload account ملفات:',
-    'regtime_upload_session': '• Session format: Upload .session ملفات (can be zipped)',
-    'regtime_upload_tdata': '• TData format: Upload zip file containing tdata directory',
+    'regtime_upload_session': '• Session format: تحميل .session ملفات (can be zipped)',
+    'regtime_upload_tdata': '• TData format: تحميل zip file containing tdata directory',
     
     # 2. Buttons
     'regtime_btn_back': 'رجوع to القائمة الرئيسية',
     'regtime_btn_start': '✅ Start Query',
     'regtime_btn_cancel': '❌ إلغاء',
     
-    # 3. After File Upload
+    # 3. After ملف تحميل
     'regtime_processing_file': 'جارٍ المعالجة file',
     'regtime_found_accounts': '✅ Found {count} account ملفات',
     'regtime_file_type_session': 'نوع الملف: SESSION',
     'regtime_file_type_tdata': 'نوع الملف: TDATA',
     
-    # 4. Processing Info
+    # 4. معالجة Info
     'regtime_process_title': 'جارٍ المعالجة Info:',
     'regtime_process1': '• Priority: Get accurate registration time from @تيليجرام official chat',
     'regtime_process2': '• رجوعup: Saved Messages or user ID estimation',
@@ -1840,34 +1840,34 @@ TEXTS = {
     'regtime_accuracy3': '3. مستخدم ID estimation (backup only)',
     'regtime_ready_question': 'Ready to start query?',
     
-    # 5. Processing Progress
+    # 5. معالجة التقدم
     'regtime_querying': 'Querying',
     'regtime_may_take_minutes': 'May take a few minutes',
     'regtime_progress_title': '🔄 Query التقدم',
-    'regtime_progress_total': '• Total: {count}',
+    'regtime_progress_total': '• المجموع: {count}',
     'regtime_progress_processed': '• Processed: {count}',
     'regtime_progress_success': '• نجح: {count}',
     'regtime_progress_faiتم': '• فشل: {count}',
     'regtime_please_wait': '⏳ يرجى الانتظار...',
     
     # 6. Query Results
-    'regtime_complete': '✅ Registration Time Query Complete',
+    'regtime_complete': '✅ Registration الوقت Query مكتمل',
     'regtime_stats_title': 'Statistics:',
-    'regtime_stats_total': '• Total: {count}',
+    'regtime_stats_total': '• المجموع: {count}',
     'regtime_stats_success': '• ✅ نجح: {count}',
     'regtime_stats_faiتم': '• ❌ فشل: {count}',
     'regtime_classify_title': 'Classified by registration date:',
     'regtime_classify_item': '• {date}: {count}',
     'regtime_see_report': '📄 See detaiتم report in ملفات below',
     
-    # 7. Output Files
-    'regtime_file_report': '📋 Registration Time Query Detaiتم Report',
-    'regtime_file_classified': '📦 Registration time classified حسابات ({count} حسابات, sorted into مجلدات by date)',
+    # 7. Output ملفs
+    'regtime_file_report': '📋 Registration الوقت Query Detaiتم تقرير',
+    'regtime_file_مصنفة': '📦 Registration time مصنفة حسابات ({count} حسابات, sorted into مجلدات by date)',
     'regtime_file_faiتم': '❌ فشل query حسابات ({count}, with detaiتم failure reasons)',
     
-    # 8. Report Content
-    'regtime_report_title': 'Registration Time Query Report',
-    'regtime_report_time': 'Generated Time:',
+    # 8. تقرير Content
+    'regtime_report_title': 'Registration الوقت Query تقرير',
+    'regtime_report_time': 'Generated الوقت:',
     'regtime_report_total': 'إجمالي الحسابات:',
     'regtime_report_success': 'نجح:',
     'regtime_report_faiتم': 'فشل:',
@@ -1879,7 +1879,7 @@ TEXTS = {
     'regtime_source_all_chats': '• all_chats: From scanning all chats (✅ Accurate)',
     'regtime_source_estimated': '• estimated: Estimated based on user ID (⚠️ May be inaccurate, error could be months or years)',
     'regtime_date_header': '📅 {date} ({count} حسابات)',
-    'regtime_field_file': 'File:',
+    'regtime_field_file': 'ملف:',
     'regtime_field_phone': 'Phone:',
     'regtime_field_userid': 'مستخدم ID:',
     'regtime_field_username': 'مستخدمname:',
@@ -1890,19 +1890,19 @@ TEXTS = {
     'regtime_error_label': 'ERROR:',
     'regtime_error_field': 'خطأ:',
     
-    # 9. Faiتم Report
-    'regtime_fail_report_title': 'فشل Query Accounts Details',
-    'regtime_fail_total': 'Total فشل:',
-    'regtime_fail_frozen': '【مجمد Accounts】({count})',
-    'regtime_fail_banned': '【محظور Accounts】({count})',
+    # 9. Faiتم تقرير
+    'regtime_fail_report_title': 'فشل Query الحسابs Details',
+    'regtime_fail_total': 'المجموع فشل:',
+    'regtime_fail_frozen': '【مجمد الحسابs】({count})',
+    'regtime_fail_banned': '【محظور الحسابs】({count})',
     'regtime_fail_other_errors': '【Other خطأs】({count})',
     'regtime_fail_type': 'Type:',
     'regtime_fail_reason': 'Failure Reason:',
-    'regtime_fail_unauthorized': 'Account unauthorized or expired',
-    'regtime_fail_timeout': 'Connection timeout',
-    'regtime_fail_timeout_both': 'Connection timeout (both proxy and local faiتم)',
-    'regtime_fail_frozen_account': 'Account has been frozen',
-    'regtime_fail_banned_account': 'Account has been banned',
+    'regtime_fail_unauthorized': 'الحساب unauthorized or expired',
+    'regtime_fail_timeout': 'الاتصال timeout',
+    'regtime_fail_timeout_both': 'الاتصال timeout (both proxy and local faiتم)',
+    'regtime_fail_frozen_account': 'الحساب has been frozen',
+    'regtime_fail_banned_account': 'الحساب has been banned',
     'regtime_fail_opentele': 'opentele not instalتم, cannot process TData format',
     'regtime_fail_tdata_load': 'TData unauthorized or loading faiتم',
     'regtime_fail_tdata_timeout': 'TData loading timeout',
@@ -1913,7 +1913,7 @@ TEXTS = {
     # 10. ZIP Folder Names
     'regtime_folder_name': '{date} registered حسابات ({count})',
     
-    # 11. Additional Messages
+    # 11. إضافةitional Messages
     'regtime_need_member': '❌ Registration time query feature requires membership\n\nPlease activate membership first',
     'regtime_session_expired': '❌ Session expired, please re-upload ملفات',
     'regtime_no_valid_files': '❌ No valid ملفات found\n\nPlease ensure ZIP contains Session or TData format ملفات',
@@ -1935,7 +1935,7 @@ TEXTS = {
     'profile_random_bio': '• Bio: Choose to leave empty or randomly generate in corresponding language',
     'profile_random_username': '• مستخدمname: Choose to delete or randomly generate new username',
     'profile_custom_mode_title': '✏️ Custom Generation الوضع:',
-    'profile_custom_upload': '• Upload txt file (one content per line)',
+    'profile_custom_upload': '• تحميل txt file (one content per line)',
     'profile_custom_manual': '• Or manually enter content',
     'profile_custom_support': '• Supports custom name, avatar, bio, username',
     'profile_notes_title': '⚠️ Notes:',
@@ -1945,12 +1945,12 @@ TEXTS = {
     'profile_note4': '4. Supports Session and TData formats',
     'profile_select_mode': 'Please select modification mode:',
     
-    # 2. Mode Selection Buttons
+    # 2. الوضع اخترion Buttons
     'profile_btn_random': '🎲 Random Generation',
     'profile_btn_custom': '✏️ Custom Generation',
     'profile_btn_back': 'رجوع to القائمة الرئيسية',
     
-    # 3. Random Generation Mode Configuration
+    # 3. Random Generation الوضع Configuration
     'profile_random_config_title': '🎲 Random Generation الوضع',
     'profile_current_config': 'Current Configuration:',
     'profile_config_name': '• Name:',
@@ -1964,11 +1964,11 @@ TEXTS = {
     # 4. Configuration Option Values
     'profile_opt_auto_generate': '✅ Auto-generate by country',
     'profile_opt_random_generate': '✅ Random generate',
-    'profile_opt_delete_all': '🗑️ Delete all',
-    'profile_opt_delete_all_history': '🗑️ Delete all history',
+    'profile_opt_delete_all': '🗑️ حذف all',
+    'profile_opt_delete_all_history': '🗑️ حذف all history',
     'profile_opt_keep_current': '📷 Keep current',
     'profile_opt_no_modify': '⏩ No modification',
-    'profile_opt_delete': '🗑️ Delete',
+    'profile_opt_delete': '🗑️ حذف',
     'profile_opt_random_bio': '🎲 Random generate bio',
     'profile_opt_random_username': '🎲 Random generate username',
     'profile_opt_clear_bio': '📝 Leave empty',
@@ -1978,18 +1978,18 @@ TEXTS = {
     'profile_btn_bio': 'Bio:',
     'profile_btn_username': 'مستخدمname:',
     'profile_btn_name': 'Name:',
-    'profile_btn_upload': '📤 Upload account ملفات to start',
+    'profile_btn_upload': '📤 تحميل account ملفات to start',
     'profile_btn_return': 'Return',
     'profile_btn_cancel': '❌ إلغاء',
     
-    # 6. Custom Mode Configuration
+    # 6. Custom الوضع Configuration
     'profile_custom_config_title': '✏️ Custom Generation الوضع',
     'profile_custom_tip_title': '💡 Configuration method:',
     'profile_custom_tip1': '1. Click buttons to configure each item',
     'profile_custom_tip2': '2. Supports uploading txt file or manual input',
     'profile_custom_tip3': '3. Can choose not to modify an item (leave empty)',
     'profile_custom_rule_title': '📊 Smart allocation rules:',
-    'profile_custom_rule1': '• 1 content + N حسابات = All حسابات use the same content',
+    'profile_custom_rule1': '• 1 content + N حسابات = جميع حسابات use the same content',
     'profile_custom_rule2': '• M contents + N حسابات (M&lt;N) = Cyclic use',
     'profile_custom_rule3': '• M contents + N حسابات (M≥N) = One-to-one correspondence',
     'profile_custom_select': 'Please select items to configure:',
@@ -2000,28 +2000,28 @@ TEXTS = {
     'profile_custom_status_no_modify': '⏩ No modification',
     'profile_custom_field_config': '📝 Configure {field}',
     'profile_custom_field_select': 'Please select operation:',
-    'profile_custom_field_upload_txt': '📄 Upload txt file',
+    'profile_custom_field_upload_txt': '📄 تحميل txt file',
     'profile_custom_field_manual_input': '✍️ Manual input',
     'profile_custom_field_no_modify': '⏩ No modification for this item',
     'profile_custom_field_view_configured': '📊 View configured ({count})',
     'profile_custom_field_clear_config': '🗑 Clear configuration',
-    'profile_custom_field_upload_images': '🖼 Upload image file/ZIP',
-    'profile_custom_field_delete_all_avatar': '🗑 Delete all avatars',
+    'profile_custom_field_upload_images': '🖼 تحميل image file/ZIP',
+    'profile_custom_field_delete_all_avatar': '🗑 حذف all avatars',
     'profile_custom_field_clear_bio': '📝 Clear bio',
-    'profile_custom_field_delete_username': '🗑 Delete username',
+    'profile_custom_field_delete_username': '🗑 حذف username',
     'profile_custom_field_back_to_menu': '🔙 رجوع to configuration menu',
     
-    # 8. Upload Prompts
+    # 8. تحميل Prompts
     'profile_upload_title': '📤 Please upload account ملفات',
     'profile_upload_format': 'التنسيقات المدعومة:',
-    'profile_upload_session': '• Session format: Upload .session ملفات (can be zipped)',
-    'profile_upload_tdata': '• TData format: Upload zip file containing tdata directory',
+    'profile_upload_session': '• Session format: تحميل .session ملفات (can be zipped)',
+    'profile_upload_tdata': '• TData format: تحميل zip file containing tdata directory',
     'profile_upload_timeout': '⏱ Please upload ملفات within 5 minutes...',
     'profile_upload_cancel': '💡 To cancel, click /start to return to main menu',
     'profile_processing_file': 'جارٍ المعالجة file',
     
     # Custom upload prompts
-    'profile_custom_upload_photo_title': '📤 Upload {field} file',
+    'profile_custom_upload_photo_title': '📤 تحميل {field} file',
     'profile_custom_upload_photo_format': 'التنسيقات المدعومة:',
     'profile_custom_upload_photo_single': '• Single image: jpg, png, jpeg, webp',
     'profile_custom_upload_photo_multi': '• Multiple images: Pack into zip file',
@@ -2029,8 +2029,8 @@ TEXTS = {
     'profile_custom_upload_photo_notice': '💡 Note:',
     'profile_custom_upload_photo_size': '• Recommended image size: 640x640 or higher',
     'profile_custom_upload_photo_limit': '• Recommended file size: Not more than 5MB',
-    'profile_custom_upload_txt_title': '📤 Upload {field} txt file',
-    'profile_custom_upload_txt_format': 'File format:',
+    'profile_custom_upload_txt_title': '📤 تحميل {field} txt file',
+    'profile_custom_upload_txt_format': 'ملف format:',
     'profile_custom_upload_txt_line': '• One {field} per line',
     'profile_custom_upload_txt_encoding': '• UTF-8 encoding',
     'profile_custom_upload_txt_skip': '• Empty lines supported (will be skipped)',
@@ -2053,19 +2053,19 @@ TEXTS = {
     'profile_custom_view_more': '... {count} more',
     'profile_custom_input_empty': '❌ Input is empty, please re-enter',
     'profile_custom_no_images': '❌ No valid image ملفات found\n\nالتنسيقات المدعومة: jpg, png, jpeg, webp, gif',
-    'profile_custom_encoding_error': '❌ File encoding error\n\nPlease save file with UTF-8 encoding',
-    'profile_custom_file_empty': '❌ File content is empty',
+    'profile_custom_encoding_error': '❌ ملف encoding error\n\nPlease save file with UTF-8 encoding',
+    'profile_custom_file_empty': '❌ ملف content is empty',
     'profile_custom_processing_faiتم': '❌ <b>جارٍ المعالجة faiتم</b>\n\nخطأ: {error}',
     'profile_photo_processing': '📥 <b>جارٍ المعالجة image...</b>',
     'profile_photo_uploaded_success': '✅ <b>Image uploaded</b>\n\nAvatar photo saved successfully',
     'profile_photo_upload_faiتم': '❌ <b>Image upload faiتم</b>\n\nخطأ: {error}',
     'button_back_previous': '⬅️ رجوع',
     
-    # 9. Confirmation Page
+    # 9. تأكيدation Page
     'profile_confirm_title': '📝 Ready to start editing profile',
-    'profile_file_info': '📁 File information:',
+    'profile_file_info': '📁 ملف information:',
     'profile_file_type': '├ Type:',
-    'profile_file_count': '└ Count: {count} حسابات',
+    'profile_file_count': '└ العدد: {count} حسابات',
     'profile_modify_config': '⚙️ Modification configuration:',
     'profile_config_name_label': '├ Name:',
     'profile_config_avatar_label': '├ Avatar:',
@@ -2078,21 +2078,21 @@ TEXTS = {
     'profile_confirm_question': 'تأكيد to start modification?',
     'profile_btn_confirm': '✅ تأكيد and start',
     
-    # 10. Processing Progress
+    # 10. معالجة التقدم
     'profile_progress_title': '📝 Profile Modification التقدم',
     'profile_stats_title': '📊 Statistics:',
-    'profile_stats_total': '├ 📦 Total:',
+    'profile_stats_total': '├ 📦 المجموع:',
     'profile_stats_success': '├ ✅ نجح:',
     'profile_stats_faiتم': '├ ❌ فشل:',
     'profile_stats_processing': '├ ⏳ جارٍ المعالجة:',
     'profile_stats_remaining': '└ 📋 Remaining:',
     'profile_speed': '⚡ جارٍ المعالجة speed: {speed}/sec',
-    'profile_time_elapsed': '⏱️ Time elapsed:',
+    'profile_time_elapsed': '⏱️ الوقت elapsed:',
     'profile_time_remaining': '⏳ Estimated remaining:',
     'profile_current_processing': '🔄 Currently processing:',
     'profile_wait_tip': '💡 Tip: يرجى الانتظار patiently, do not close the dialog',
     
-    # 11. Processing Status
+    # 11. معالجة الحالة
     'profile_status_success': '✅ نجح',
     'profile_status_faiتم': '❌ فشل:',
     'profile_status_modifying_name': 'Modifying name...',
@@ -2107,7 +2107,7 @@ TEXTS = {
     'profile_action_name_success': '✅ Name: {name}',
     'profile_action_name_faiتم': '❌ Name update faiتم',
     'profile_action_name_faiتم_error': '❌ Name update faiتم: {error}',
-    'profile_action_avatar_deleted': '✅ Deleted all avatars',
+    'profile_action_avatar_deleted': '✅ حذفd all avatars',
     'profile_action_avatar_delete_faiتم': '❌ Avatar deletion faiتم',
     'profile_action_avatar_delete_faiتم_error': '❌ Avatar deletion faiتم: {error}',
     'profile_action_avatar_uploaded': '✅ Avatar uploaded',
@@ -2119,7 +2119,7 @@ TEXTS = {
     'profile_action_username_success': '✅ مستخدمname: {username}',
     'profile_action_username_faiتم': '❌ مستخدمname update faiتم',
     'profile_action_username_faiتم_error': '❌ مستخدمname update faiتم: {error}',
-    'profile_action_username_deleted': '✅ مستخدمname: Deleted',
+    'profile_action_username_deleted': '✅ مستخدمname: حذفd',
     'profile_action_username_delete_faiتم': '❌ مستخدمname deletion faiتم',
     'profile_action_username_delete_faiتم_error': '❌ مستخدمname deletion faiتم: {error}',
     'profile_action_username_occupied': '❌ مستخدمname already taken: {username}',
@@ -2131,65 +2131,65 @@ TEXTS = {
     # 12. Modification Results
     'profile_complete': '✅ Profile modification complete!',
     'profile_result_stats': '📊 Statistics:',
-    'profile_result_total': '• Total:',
+    'profile_result_total': '• المجموع:',
     'profile_result_success': '• نجح: {count} ✅',
     'profile_result_faiتم': '• فشل: {count} ❌',
     'profile_error_stats': '📋 خطأ type statistics:',
-    'profile_files_sent': '📁 Files sent:',
+    'profile_files_sent': '📁 ملفs sent:',
     'profile_file_report': '• Detaiتم report:',
     'profile_file_success': '• نجحful حسابات:',
     'profile_file_faiتم': '• فشل حسابات:',
     
-    # 13. Output Files
-    'profile_output_report': '📋 Profile Modification Detaiتم Report',
+    # 13. Output ملفs
+    'profile_output_report': '📋 Profile Modification Detaiتم تقرير',
     'profile_output_success': '✅ نجحful حسابات ({count})',
     'profile_output_faiتم': '❌ فشل حسابات ({count})',
     
-    # 14. Report Content
-    'profile_report_title': '📋 Profile Modification Detaiتم Report',
+    # 14. تقرير Content
+    'profile_report_title': '📋 Profile Modification Detaiتم تقرير',
     'profile_report_time': 'Generated time:',
-    'profile_report_summary': 'Total: {total} | نجح: {success} | فشل: {faiتم}',
+    'profile_report_summary': 'المجموع: {total} | نجح: {success} | فشل: {faiتم}',
     'profile_report_success_title': '✅ نجحful حسابات ({count})',
     'profile_report_faiتم_title': '❌ فشل حسابات ({count})',
-    'profile_report_file': 'File:',
+    'profile_report_file': 'ملف:',
     'profile_report_name_change': '- Name: Before {before}  After {after} ✓',
-    'profile_report_avatar_deleted': '- Avatar: Deleted ✓',
-    'profile_report_avatar_updated': '- Avatar: Updated ✓',
-    'profile_report_avatar_uploaded': '- Avatar: Uploaded new avatar ✓',
+    'profile_report_avatar_deleted': '- Avatar: حذفd ✓',
+    'profile_report_avatar_updated': '- Avatar: تحديثd ✓',
+    'profile_report_avatar_uploaded': '- Avatar: تحميلed new avatar ✓',
     'profile_report_bio_change': '- Bio: Before {before}  After {after} ✓',
-    'profile_report_bio_deleted': '- Bio: Deleted ✓',
+    'profile_report_bio_deleted': '- Bio: حذفd ✓',
     'profile_report_bio_cleared': '- Bio: Cleared ✓',
     'profile_report_username_change': '- مستخدمname: Before {before}  After {after} ✓',
-    'profile_report_username_deleted': '- مستخدمname: Deleted ✓',
+    'profile_report_username_deleted': '- مستخدمname: حذفd ✓',
     'profile_report_error_type': 'خطأ type:',
     'profile_report_error_reason': 'خطأ reason:',
     'profile_report_error_stats': '📊 خطأ Statistics',
     
-    # 15. Error Types
+    # 15. خطأ Types
     'profile_error_auth_expired': 'Authorization expired, need to re-login',
-    'profile_error_timeout': 'Connection timeout',
+    'profile_error_timeout': 'الاتصال timeout',
     'profile_error_flood': 'Too many operations, please try again later',
     'profile_error_username_taken': 'مستخدمname already taken',
     'profile_error_username_invalid': 'Invalid username format',
     'profile_error_network': 'Network connection error',
     'profile_error_unknown': 'Unknown error',
-    'profile_error_banned': 'Account has been banned',
-    'profile_error_deactivated': 'Account has been deactivated',
-    'profile_error_unauthorized': 'Account unauthorized',
+    'profile_error_banned': 'الحساب has been banned',
+    'profile_error_deactivated': 'الحساب has been deactivated',
+    'profile_error_unauthorized': 'الحساب unauthorized',
     'profile_error_rpc_error': 'تيليجرام API error',
     'profile_error_password_needed': '2FA password required',
     'profile_error_phone_banned': 'Phone number has been banned',
-    'profile_error_flood_wait': 'Rate limit triggered, please wait {seconds} seconds',
+    'profile_error_flood_wait': 'Rate limit triggered, يرجى الانتظار {seconds} seconds',
     
     # 16. Random Generation Config Display Values
     'profile_display_random_by_country': '✅ Random generate (by country)',
-    'profile_display_delete_history': '🗑️ Delete all history',
+    'profile_display_delete_history': '🗑️ حذف all history',
     'profile_display_keep': '📷 Keep',
     'profile_display_random': '🎲 Random generate',
-    'profile_display_delete': '🗑️ Delete',
+    'profile_display_delete': '🗑️ حذف',
     'profile_display_no_modify': '⏩ No modification',
     'profile_display_custom': '✏️ Custom',
-    'profile_display_delete_all': '🗑️ Delete all',
+    'profile_display_delete_all': '🗑️ حذف all',
     'profile_display_clear': '📝 Leave empty',
     
     # 17. Other Prompt Messages
@@ -2204,7 +2204,7 @@ TEXTS = {
     'profile_field_bio': 'Bio',
     'profile_field_username': 'مستخدمname',
     
-    # ===== Check Contact Limit Feature =====
+    # ===== فحص Contact Limit Feature =====
     # 1. Feature Introduction Page
     'contact_limit_title': '🔍 فحص Contact Limit',
     'contact_limit_upload': '📤 Please upload ZIP file containing Session or TData',
@@ -2218,41 +2218,41 @@ TEXTS = {
     'contact_limit_wait': '⏳ يرجى الانتظار patiently during detection...',
     'contact_limit_cancel': '💡 To cancel, click /start to return to main menu',
     
-    # 2. Found Accounts
+    # 2. Found الحسابs
     'contact_limit_found': '📊 Found {total} حسابات, {unique} after deduplication, starting detection...',
     'contact_limit_estimate': '⏳ Estimated time: {time}',
     
-    # 3. Processing Progress
+    # 3. معالجة التقدم
     'contact_limit_progress': '📊 Detection progress: [{current}/{total}]',
     'contact_limit_current': '❌ Current:',
-    'contact_limit_status': 'Status:',
+    'contact_limit_status': 'الحالة:',
     'contact_limit_stats': 'Statistics:',
-    'contact_limit_completed': '• Completed:',
+    'contact_limit_completed': '• مكتملd:',
     'contact_limit_remaining': '• Remaining:',
     'contact_limit_percent': '• التقدم:',
     'contact_limit_elapsed': '⏱️ Elapsed:',
     
-    # 4. Detection Complete
+    # 4. Detection مكتمل
     'contact_limit_complete': '✅ Detection complete!',
-    'contact_limit_time': '⏱️ Time: {time}',
+    'contact_limit_time': '⏱️ الوقت: {time}',
     'contact_limit_report_sent': '📊 Detection report and categorized ملفات sent',
     
-    # 5. Output Files
-    'contact_limit_report_file': '📊 Contact Limit Detection Report',
+    # 5. Output ملفs
+    'contact_limit_report_file': '📊 Contact Limit Detection تقرير',
     'contact_limit_normal': '✅ Normal: {count}',
     'contact_limit_limited': '⚠️ Limited: {count}',
     'contact_limit_banned': '🚫 محظور: {count}',
     'contact_limit_faiتم': '❌ فشل: {count}',
     'contact_limit_check_faiتم_zip': 'Contact check faiتم',
     
-    # 6. Report Content
-    'contact_limit_report_title': '📊 Contact Limit Detection Report',
+    # 6. تقرير Content
+    'contact_limit_report_title': '📊 Contact Limit Detection تقرير',
     'contact_limit_report_time': 'Detection time: {time} (Beijing time)',
-    'contact_limit_report_total': 'Total detected: {count} حسابات',
+    'contact_limit_report_total': 'المجموع detected: {count} حسابات',
     'contact_limit_report_principle': 'Detection principle explanation:',
     'contact_limit_report_normal_desc': '✅ Normal: نجحfully imported test contact and found user',
     'contact_limit_report_limited_desc': '⚠️ Limited: Import successful but user not found / FloodWait triggered / Import faiتم',
-    'contact_limit_report_banned_desc': '❌ محظور: Account banned or deactivated',
+    'contact_limit_report_banned_desc': '❌ محظور: الحساب banned or deactivated',
     'contact_limit_report_faiتم_desc': '❌ فشل: Detection error or unauthorized',
     'contact_limit_report_stats': 'Statistics',
     'contact_limit_report_normal_count': '✅ Normal حسابات: {count}',
@@ -2260,36 +2260,36 @@ TEXTS = {
     'contact_limit_report_banned_count': '❌ محظور: {count}',
     'contact_limit_report_faiتم_count': '❌ Detection faiتم: {count}',
     'contact_limit_report_detail': '📋 Detaiتم List',
-    'contact_limit_report_normal_list': '【✅ Normal Accounts】',
+    'contact_limit_report_normal_list': '【✅ Normal الحسابs】',
     'contact_limit_report_limited_list': '【⚠️ Contact Limited】',
     'contact_limit_report_banned_list': '【❌ محظور】',
     'contact_limit_report_faiتم_list': '【❌ Detection فشل】',
     'contact_limit_report_none': 'None',
     
-    # 7. Status Types
+    # 7. الحالة Types
     'contact_limit_status_normal': '✅ Normal',
     'contact_limit_status_limited': '⚠️ Limited',
     'contact_limit_status_banned': '🚫 محظور',
     'contact_limit_status_faiتم': '❌ فشل',
-    'contact_limit_status_connection_error': '⚠️ Connection error: {error}',
+    'contact_limit_status_connection_error': '⚠️ الاتصال error: {error}',
     'contact_limit_status_auth_error': 'Authorization expired',
     'contact_limit_status_flood_wait': 'FloodWait triggered',
     'contact_limit_status_import_faiتم': 'Import faiتم',
     'contact_limit_status_user_not_found': 'مستخدم not found',
     
-    # 8. Time Units
+    # 8. الوقت Units
     'contact_limit_minute': 'minute(s)',
     'contact_limit_second': 'second(s)',
     
-    # 9. ZIP File Naming
+    # 9. ZIP ملف Naming
     'contact_limit_zip_normal': 'Contactفحص_Normal',
     'contact_limit_zip_limited': 'Contactفحص_Limited',
     'contact_limit_zip_faiتم': 'Contactفحص_فشل',
     
-    # ===== Activate/Redeem Membership Feature =====
-    # 1. Membership Center Page
+    # ===== Activate/Redeem العضوية Feature =====
+    # 1. العضوية Center Page
     'member_center_title': '💳 العضوية Center',
-    'member_current_status': '📊 Current Status',
+    'member_current_status': '📊 Current الحالة',
     'member_feature_title': '💡 Features',
     'member_feature1': '• Redeem card code to activate membership',
     'member_feature2': '• العضوية duration auto-accumulates',
@@ -2297,8 +2297,8 @@ TEXTS = {
     'member_operation_title': '🎯 Operation Options',
     'member_operation_desc': 'Please select the operation you want to perform',
     
-    # 2. Membership Status Types
-    'member_status_admin': '👑 Admin (دائم)',
+    # 2. العضوية الحالة Types
+    'member_status_admin': '👑 المسؤول (دائم)',
     'member_status_none': '❌ لا عضوية',
     'member_status_member': '💎 Member',
     'member_status_expire': '• انتهاء الصلاحية time: {time}',
@@ -2319,13 +2319,13 @@ TEXTS = {
     'redeem_tip3': '• Duration auto-accumulates after successful redemption',
     'redeem_timeout': '⏰ Auto-cancel if no input within 5 minutes',
     
-    # 5. Redemption Success
+    # 5. Redemption نجح
     'redeem_success': '✅ Redemption نجحful!',
     'redeem_info_title': '📋 Redemption Info',
     'redeem_info_code': '• Code: {code}',
     'redeem_info_level': '• العضوية level: {level}',
     'redeem_info_days': '• Days added: {days} day(s)',
-    'redeem_current_status': '💎 Current العضوية Status',
+    'redeem_current_status': '💎 Current العضوية الحالة',
     'redeem_current_level': '• العضوية level: {level}',
     'redeem_current_expire': '• انتهاء الصلاحية time: {time}',
     'redeem_thanks': 'Thank you for your support!',
@@ -2338,33 +2338,33 @@ TEXTS = {
     'redeem_error_invalid': 'Invalid code status',
     'redeem_error_check': 'Please check if your code is correct',
     
-    # 7. Membership Level Names
+    # 7. العضوية Level Names
     'member_level_member': 'Member',
-    'member_level_admin': 'Admin',
+    'member_level_admin': 'المسؤول',
     
-    # ===== Admin Panel Features =====
-    # 1. Admin Panel Main
+    # ===== المسؤول Panel Features =====
+    # 1. المسؤول Panel Main
     'admin_panel_title': '👑 لوحة المسؤول',
-    'admin_panel_access_denied': '❌ Admin only',
+    'admin_panel_access_denied': '❌ المسؤول only',
     'admin_system_stats': '📊 System Statistics',
-    'admin_total_users': 'Total مستخدمs',
+    'admin_total_users': 'المجموع مستخدمs',
     'admin_today_active': 'Active Today',
     'admin_week_active': 'Active This Week',
     'admin_active_members': 'Active Members',
     'admin_trial_members': 'Trial Members',
     'admin_recent_users': 'Recent New مستخدمs',
-    'admin_info': '👑 Admin Info',
-    'admin_count': 'Admin Count',
+    'admin_info': '👑 المسؤول Info',
+    'admin_count': 'المسؤول العدد',
     'admin_your_permission': 'Your Permission',
-    'admin_super_admin': '👑 Super Admin',
-    'admin_normal_admin': '🔧 Normal Admin',
-    'admin_system_time': 'System Time',
+    'admin_super_admin': '👑 Super المسؤول',
+    'admin_normal_admin': '🔧 Normal المسؤول',
+    'admin_system_time': 'System الوقت',
     'admin_quick_actions': '🔧 Quick Actions',
     'admin_quick_actions_desc': 'Click buttons below to manage',
     'admin_btn_user_management': '👥 مستخدم Management',
     'admin_btn_user_stats': '📊 مستخدم Statistics',
     'admin_btn_proxy_management': '📡 إدارة الوكيل',
-    'admin_btn_admin_management': '👑 Admin Management',
+    'admin_btn_admin_management': '👑 المسؤول Management',
     'admin_btn_search_user': '🔍 Search مستخدم',
     'admin_btn_recent_users': '📋 Recent مستخدمs',
     'admin_btn_card_activation': '💳 Card Activation',
@@ -2373,12 +2373,12 @@ TEXTS = {
     'admin_btn_broadcast': '📢 Broadcast',
     'admin_btn_back_panel': '🔙 رجوع to لوحة المسؤول',
     
-    # 2. User Management
+    # 2. المستخدم Management
     'user_management_title': '👥 مستخدم Management',
     'user_management_recent_active': '📋 Recently Active مستخدمs (7 days)',
     'user_management_no_active': 'No active users',
     'user_management_legend': '📖 Legend',
-    'user_management_legend_admin': '👑 = Admin',
+    'user_management_legend_admin': '👑 = المسؤول',
     'user_management_legend_vip': '💎 = VIP',
     'user_management_legend_normal': '❌ = Normal مستخدم',
     'user_management_time_hours_ago': '{hours}h ago',
@@ -2389,10 +2389,10 @@ TEXTS = {
     'user_management_btn_stats': '📊 مستخدم Statistics',
     'user_management_btn_refresh': '🔄 Refresh',
     
-    # 3. User Statistics
+    # 3. المستخدم Statistics
     'user_stats_title': '📊 مستخدم Statistics',
     'user_stats_basic_data': '👥 مستخدم Overview',
-    'user_stats_total_users': 'Total مستخدمs',
+    'user_stats_total_users': 'المجموع مستخدمs',
     'user_stats_today_active': 'Active Today',
     'user_stats_week_active': 'Active This Week',
     'user_stats_recent_new': 'Recent New مستخدمs',
@@ -2404,10 +2404,10 @@ TEXTS = {
     'user_stats_activity_analysis': '📈 Activity Analysis',
     'user_stats_week_rate': 'Weekly Active Rate',
     'user_stats_day_rate': 'Daily Active Rate',
-    'user_stats_time': '📅 Statistics Time',
+    'user_stats_time': '📅 Statistics الوقت',
     'user_stats_btn_refresh': '🔄 Refresh Data',
     
-    # 4. Search User
+    # 4. Search المستخدم
     'search_user_title': '🔍 Search مستخدم',
     'search_user_prompt': '📝 Please enter search keywords:',
     'search_user_methods': 'Supported search methods:',
@@ -2425,29 +2425,29 @@ TEXTS = {
     'search_user_found': 'Found {count} matching users:',
     'search_user_btn_continue': '🔍 Continue Search',
     
-    # 5. Recent Users
+    # 5. Recent المستخدمs
     'recent_users_title': '📋 Recently Registered مستخدمs',
     'recent_users_no_data': 'No user data',
     'recent_users_registered': '{time}',
     'recent_users_btn_refresh': '🔄 Refresh List',
     
-    # 6. Admin Management
-    'admin_manage_title': '👑 Admin Management',
-    'admin_manage_list': '📋 Current Admin List',
-    'admin_manage_super': '👑 Super Admin',
-    'admin_manage_normal': '👤 Normal Admin',
+    # 6. المسؤول Management
+    'admin_manage_title': '👑 المسؤول Management',
+    'admin_manage_list': '📋 Current المسؤول List',
+    'admin_manage_super': '👑 Super المسؤول',
+    'admin_manage_normal': '👤 Normal المسؤول',
     'admin_manage_no_admins': 'No admins',
     'admin_manage_nickname': 'الاسم المستعار',
     'admin_manage_username': 'مستخدمname',
-    'admin_manage_added_time': 'Added Time',
-    'admin_manage_admin_prefix': 'Admin',
-    'admin_manage_config_admin': 'Config File Admin',
+    'admin_manage_added_time': 'إضافةed الوقت',
+    'admin_manage_admin_prefix': 'المسؤول',
+    'admin_manage_config_admin': 'Config ملف المسؤول',
     'admin_manage_system_builtin': 'System Built-in',
     'admin_manage_description': '📖 Description',
     'admin_manage_desc_super': 'Super admins are from config file',
     'admin_manage_desc_normal': 'Normal admins can be added via commands',
     
-    # 7. User Details
+    # 7. المستخدم Details
     'user_detail_title': '👤 مستخدم Details',
     'user_detail_basic_info': '📋 Basic Info',
     'user_detail_nickname': 'الاسم المستعار',
@@ -2456,19 +2456,19 @@ TEXTS = {
     'user_detail_level': 'Level',
     'user_detail_expiry': 'انتهاء الصلاحية',
     'user_detail_usage_stats': '📊 Usage Statistics',
-    'user_detail_register_time': 'Registration Time',
+    'user_detail_register_time': 'Registration الوقت',
     'user_detail_last_active': 'Last Active',
-    'user_detail_usage_count': 'Usage Count',
+    'user_detail_usage_count': 'Usage العدد',
     'user_detail_btn_gift': '🎁 Gift العضوية',
     'user_detail_btn_ban': '🚫 Ban مستخدم',
     'user_detail_btn_back_list': 'رجوع to List',
     'user_detail_not_found': '❌ مستخدم {user_id} not found',
     
-    # 8. Gift Membership
+    # 8. Gift العضوية
     'gift_membership_title': '🎁 Gift العضوية',
     'gift_membership_user_info': '📋 مستخدم Info',
-    'gift_membership_current_status': '💎 Current العضوية Status',
-    'gift_membership_select_days': '⏰ Select Gift Duration',
+    'gift_membership_current_status': '💎 Current العضوية الحالة',
+    'gift_membership_select_days': '⏰ اختر Gift Duration',
     'gift_membership_select_prompt': 'Please select membership days to gift:',
     'gift_membership_1day': '1 Day',
     'gift_membership_7days': '7 Days',
@@ -2482,44 +2482,44 @@ TEXTS = {
     'gift_membership_days_gifted': 'Days Gifted',
     'gift_membership_btn_continue': '🔄 Continue Gifting',
     
-    # 9. Ban User
+    # 9. Ban المستخدم
     'ban_user_confirm_title': '⚠️ تأكيد Ban مستخدم',
     'ban_user_confirm_prompt': '⚠️ Are you sure you want to ban this user?',
     'ban_user_confirm_desc': 'After banning, this user will not be able to use the bot.',
     'ban_user_btn_confirm': '✅ تأكيد Ban',
     'ban_user_success': '✅ Ban نجحful!',
     'ban_user_info': '📋 Ban Info',
-    'ban_user_time': 'Ban Time',
+    'ban_user_time': 'Ban الوقت',
     'ban_user_desc': 'This user has been banned and cannot use the bot.',
     
-    # 10. Proxy Management Panel
+    # 10. الوكيل Management Panel
     'proxy_panel_title': '📡 إدارة الوكيل Panel',
-    'proxy_panel_overview': '📊 Proxy Overview',
-    'proxy_panel_total': 'Total Proxies',
+    'proxy_panel_overview': '📊 الوكيل Overview',
+    'proxy_panel_total': 'المجموع Proxies',
     'proxy_panel_available': 'Available Proxies',
     'proxy_panel_invalid': 'Invalid Proxies',
     'proxy_panel_success_rate': 'نجح Rate',
-    'proxy_panel_select_op': '🔧 Select Operation:',
+    'proxy_panel_select_op': '🔧 اختر Operation:',
     'proxy_panel_btn_status': '📊 حالة الوكيل',
     'proxy_panel_btn_test': '🔄 Test Proxies',
-    'proxy_panel_btn_stats': '📈 Proxy Statistics',
+    'proxy_panel_btn_stats': '📈 الوكيل Statistics',
     'proxy_panel_btn_clean': '🗑 Clean Invalid',
     'proxy_panel_btn_optimize': '⚡ السرعة Optimization',
-    'proxy_panel_btn_back': 'رجوع to Proxy Panel',
+    'proxy_panel_btn_back': 'رجوع to الوكيل Panel',
     
-    # 11. Proxy Status
-    'proxy_status_title': '📊 Proxy Detaiتم Status',
+    # 11. الوكيل الحالة
+    'proxy_status_title': '📊 الوكيل Detaiتم الحالة',
     'proxy_status_basic': '📈 Basic Statistics',
     'proxy_status_performance': '⚡ Performance Metrics',
-    'proxy_status_avg_response': 'Average Response',
-    'proxy_status_fastest': 'Fastest Response',
-    'proxy_status_slowest': 'Slowest Response',
+    'proxy_status_avg_response': 'متوسط استجابة',
+    'proxy_status_fastest': 'Fastest استجابة',
+    'proxy_status_slowest': 'Slowest استجابة',
     'proxy_status_region': '🌍 Region Distribution',
-    'proxy_status_update_time': '🕐 Update Time',
-    'proxy_status_btn_refresh': '🔄 Refresh Status',
+    'proxy_status_update_time': '🕐 تحديث الوقت',
+    'proxy_status_btn_refresh': '🔄 Refresh الحالة',
     
     # 12. Test Proxies
-    'proxy_test_title': '🔄 Proxy Test',
+    'proxy_test_title': '🔄 الوكيل Test',
     'proxy_test_description': '📋 Test Description',
     'proxy_test_desc_connectivity': 'Will test connectivity of all وكلاء',
     'proxy_test_desc_time': 'Testing may take a few minutes',
@@ -2532,16 +2532,16 @@ TEXTS = {
     'proxy_test_available': 'Available',
     'proxy_test_invalid': 'Invalid',
     'proxy_test_wait': 'يرجى الانتظار...',
-    'proxy_test_complete': '✅ Proxy Test Complete!',
+    'proxy_test_complete': '✅ الوكيل Test مكتمل!',
     'proxy_test_results': '📊 Test Results',
-    'proxy_test_total': 'Total Tested',
+    'proxy_test_total': 'المجموع Tested',
     'proxy_test_duration': '⏱ Duration',
     'proxy_test_seconds': 'seconds',
     'proxy_test_btn_clean': '🗑 Clean Invalid Proxies',
     'proxy_test_btn_retest': '🔄 Retest',
     
-    # 13. Proxy Statistics
-    'proxy_stats_title': '📈 Proxy Statistics Info',
+    # 13. الوكيل Statistics
+    'proxy_stats_title': '📈 الوكيل Statistics Info',
     'proxy_stats_usage': '📊 Usage Statistics',
     'proxy_stats_today_requests': 'Today\'s Requests',
     'proxy_stats_success_requests': 'نجحful Requests',
@@ -2555,31 +2555,31 @@ TEXTS = {
     
     # 14. Clean Invalid Proxies
     'proxy_clean_title': '🗑 Clean Invalid Proxies',
-    'proxy_clean_current_status': '📊 Current Status',
+    'proxy_clean_current_status': '📊 Current الحالة',
     'proxy_clean_invalid_count': 'Invalid Proxies',
     'proxy_clean_proxies_unit': 'وكلاء',
     'proxy_clean_of_total': 'of total',
     'proxy_clean_confirm': '⚠️ تأكيد Clean?',
     'proxy_clean_warning': 'This will permanently delete all invalid وكلاء and cannot be undone.',
     'proxy_clean_btn_confirm': '✅ تأكيد Clean',
-    'proxy_clean_starting': '🚀 Starting to clean {count} وكلاء...',
+    'proxy_clean_starting': '🚀 بدء to clean {count} وكلاء...',
     'proxy_clean_fast_mode': 'Fast الوضع: On',
     'proxy_clean_concurrency': 'Concurrency',
     'proxy_clean_wait': 'يرجى الانتظار, cleaning may take a few minutes...',
-    'proxy_clean_complete': '✅ Clean Complete!',
+    'proxy_clean_complete': '✅ Clean مكتمل!',
     'proxy_clean_results': '📊 Clean Results',
     'proxy_clean_cleaned': 'Cleaned',
     'proxy_clean_remaining': 'Remaining Proxies',
-    'proxy_clean_faiتم': '❌ Proxy Clean فشل',
+    'proxy_clean_faiتم': '❌ الوكيل Clean فشل',
     'proxy_clean_no_proxies': 'No available وكلاء',
     
-    # 15. Speed Optimization
+    # 15. السرعة Optimization
     'proxy_optimize_title': '⚡ السرعة Optimization Config',
     'proxy_optimize_current': '⚙️ Current Settings',
     'proxy_optimize_fast_mode': 'Fast الوضع',
     'proxy_optimize_on': '🟢 On',
     'proxy_optimize_off': '🔴 Off',
-    'proxy_optimize_timeout': 'فحص Timeout',
+    'proxy_optimize_timeout': 'فحص الوقتout',
     'proxy_optimize_retry': 'Smart Retry',
     'proxy_optimize_times': 'times',
     'proxy_optimize_auto_clean': 'Auto Clean',
@@ -2598,18 +2598,18 @@ TEXTS = {
     # 16. Card Activation
     'card_activation_title': '🎫 Card Activation',
     'card_activation_description': '📋 Function Description',
-    'card_activation_desc_select': 'Select days to generate card',
+    'card_activation_desc_select': 'اختر days to generate card',
     'card_activation_desc_count': 'Generate 1 card at a time',
     'card_activation_desc_format': 'Card is 8-digit uppercase alphanumeric',
     'card_activation_desc_usage': 'Each card can only be used once',
-    'card_activation_select_validity': '🎯 Select Validity Period',
+    'card_activation_select_validity': '🎯 اختر Validity Period',
     'card_activation_select_prompt': 'Please select the card validity period:',
     'card_activation_success': '✅ Card Generated نجحfully!',
     'card_activation_info': '🎫 Card Info',
     'card_activation_code': 'Card Code',
     'card_activation_vip': 'VIP',
     'card_activation_validity': 'Validity',
-    'card_activation_status': 'Status',
+    'card_activation_status': 'الحالة',
     'card_activation_unused': 'Unused',
     'card_activation_tips': '💡 Tips',
     'card_activation_tip_save': 'Please keep the card code safe',
@@ -2626,14 +2626,14 @@ TEXTS = {
     'manual_activation_note1': 'Days selection will appear after input',
     'manual_activation_note2': 'العضوية duration auto-accumulates',
     'manual_activation_confirm_user': '👤 تأكيد مستخدم Info',
-    'manual_activation_select_days': '⏰ Select Activation Duration',
+    'manual_activation_select_days': '⏰ اختر Activation Duration',
     'manual_activation_select_prompt': 'Please select membership days for this user:',
     'manual_activation_success': '✅ Activation نجحful!',
     'manual_activation_info': '📋 Activation Info',
-    'manual_activation_days_added': 'Days Added',
+    'manual_activation_days_added': 'Days إضافةed',
     'manual_activation_btn_continue': '🔄 Continue Activation',
     
-    # 18. Revoke Membership
+    # 18. Revoke العضوية
     'revoke_membership_title': 'Revoke العضوية',
     'revoke_membership_prompt': '📝 Please enter username (@name) or user ID to revoke:',
     'revoke_membership_note': 'Revoking will remove all membership privileges',
@@ -2657,16 +2657,16 @@ TEXTS = {
     'broadcast_menu_feature_buttons': 'Can add custom buttons (URL or callback)',
     'broadcast_menu_feature_throttle': 'Smart throttling to avoid rate limits',
     'broadcast_menu_feature_progress': 'Real-time progress display',
-    'broadcast_menu_feature_history': 'Complete history records',
-    'broadcast_menu_select_op': '🔧 Select Operation',
+    'broadcast_menu_feature_history': 'مكتمل history records',
+    'broadcast_menu_select_op': '🔧 اختر Operation',
     'broadcast_menu_click_start': 'Click buttons below to start:',
-    'broadcast_menu_btn_create': '📝 Create Broadcast',
+    'broadcast_menu_btn_create': '📝 إنشاء Broadcast',
     'broadcast_menu_btn_history': '📋 History',
     'broadcast_menu_btn_back': 'رجوع',
     
-    # 20. Create Broadcast
-    'broadcast_create_title': '📝 Create Broadcast',
-    'broadcast_create_current_status': '📊 Current Status',
+    # 20. إنشاء Broadcast
+    'broadcast_create_title': '📝 إنشاء Broadcast',
+    'broadcast_create_current_status': '📊 Current الحالة',
     'broadcast_create_media': 'Media',
     'broadcast_create_text': 'Text',
     'broadcast_create_buttons': 'Buttons',
@@ -2720,31 +2720,31 @@ TEXTS = {
     'broadcast_preview_title': '🔍 Full Preview',
     'broadcast_preview_label': '📢 Preview',
     
-    # 25. Select Target Users
-    'broadcast_target_title': '📝 Create Broadcast - Step 4/4',
+    # 25. اختر Target المستخدمs
+    'broadcast_target_title': '📝 إنشاء Broadcast - Step 4/4',
     'broadcast_target_subtitle': 'Title',
     'broadcast_target_content_set': 'Content Set',
-    'broadcast_target_select': '🎯 Please Select Target مستخدمs',
+    'broadcast_target_select': '🎯 Please اختر Target مستخدمs',
     'broadcast_target_prompt': 'Please select user group to send notification:',
-    'broadcast_target_all': '👥 All مستخدمs',
+    'broadcast_target_all': '👥 جميع مستخدمs',
     'broadcast_target_vip': '💎 VIP Only',
     'broadcast_target_active': '🔥 Active مستخدمs (7d)',
     'broadcast_target_new': '🆕 New مستخدمs (7d)',
     
-    # 26. Broadcast Preview Confirmation
+    # 26. Broadcast Preview تأكيدation
     'broadcast_confirm_title': 'Broadcast Preview',
     'broadcast_confirm_title_label': '📋 Title',
     'broadcast_confirm_target': '🎯 Target',
     'broadcast_confirm_users': 'users',
     'broadcast_confirm_content': '📄 Content',
     'broadcast_confirm_send': '⚠️ تأكيد Send?',
-    'broadcast_confirm_estimate': 'Estimated Time',
+    'broadcast_confirm_estimate': 'Estimated الوقت',
     'broadcast_confirm_mode': 'Send الوضع: Smart Throttle Batch Send',
-    'broadcast_confirm_btn_start': '✅ Start Sending',
+    'broadcast_confirm_btn_start': '✅ Start إرسال',
     'broadcast_confirm_btn_edit': '✏️ رجوع to Edit',
     
-    # 27. Send Progress
-    'broadcast_send_starting': '🚀 Starting broadcast...',
+    # 27. Send التقدم
+    'broadcast_send_starting': '🚀 بدء broadcast...',
     'broadcast_send_initializing': 'Initializing...',
     'broadcast_send_broadcasting': '📡 Broadcasting...',
     'broadcast_send_target': 'Target',
@@ -2752,30 +2752,30 @@ TEXTS = {
     'broadcast_send_success': 'نجح',
     'broadcast_send_faiتم': 'فشل',
     
-    # 28. Send Complete
-    'broadcast_complete_title': '✅ Broadcast Complete!',
+    # 28. Send مكتمل
+    'broadcast_complete_title': '✅ Broadcast مكتمل!',
     'broadcast_complete_stats': '📊 Send Statistics',
     'broadcast_complete_target_users': 'Target مستخدمs',
-    'broadcast_complete_total_time': 'Total Time',
-    'broadcast_complete_avg_speed': 'Average السرعة',
+    'broadcast_complete_total_time': 'المجموع الوقت',
+    'broadcast_complete_avg_speed': 'متوسط السرعة',
     'broadcast_complete_users_sec': 'users/sec',
     'broadcast_complete_id': '📋 Broadcast ID',
     
     # 29. Broadcast History
     'broadcast_history_title': '📋 Broadcast History',
-    'broadcast_history_all': 'All',
+    'broadcast_history_all': 'جميع',
     'broadcast_history_btn_back': 'رجوع to History',
     
     # 30. Broadcast Details
     'broadcast_detail_title': '📋 Broadcast Details',
     'broadcast_detail_id': '🆔 ID',
     'broadcast_detail_title_label': '📝 Title',
-    'broadcast_detail_created': '📅 Created Time',
-    'broadcast_detail_status': '📊 Status',
-    'broadcast_detail_completed': '✅ Completed',
+    'broadcast_detail_created': '📅 إنشاءd الوقت',
+    'broadcast_detail_status': '📊 الحالة',
+    'broadcast_detail_completed': '✅ مكتملd',
     'broadcast_detail_target_group': '🎯 Target Group',
-    'broadcast_detail_all_users': 'All مستخدمs',
-    'broadcast_detail_target_count': '🎯 Target Count',
+    'broadcast_detail_all_users': 'جميع مستخدمs',
+    'broadcast_detail_target_count': '🎯 Target العدد',
     'broadcast_detail_results': '📈 Send Results',
     'broadcast_detail_duration': 'Duration',
     'broadcast_detail_content': '📄 Content',
