@@ -27,7 +27,7 @@ TEXTS = {
     'current_time': 'Текущее время',
     
     # Main menu buttons - actual menu items
-    'btn_account_check': '🚀 Check аккаунта',
+    'btn_account_check': '🚀 Проверка аккаунтов',
     'btn_format_conversion': '🔄 Конвертация формата',
     'btn_change_2fa': '🔐 Изменить 2FA',
     'btn_batch_create': '📦 Пакетное создание',
@@ -279,8 +279,8 @@ TEXTS = {
     'error_network_failed': 'Не удалось установить сетевое соединение',
     'error_conversion_failed': 'Конвертация failed',
     'error_no_valid_files': 'Нет valid files found',
-    'error_ensure_correct_format': 'Please ensure ZIP contains the correct формат',
-    'error_click_function_button': 'Please click the corresponding function button first',
+    'error_ensure_correct_format': 'Пожалуйста, убедитесь, что ZIP содержит правильный формат',
+    'error_click_function_button': 'Пожалуйста, сначала нажмите соответствующую кнопку функции',
     
     # ===== Change 2FA Feature =====
     # Function introduction page
@@ -304,8 +304,8 @@ TEXTS = {
     'change_2fa_note1': 'System will first try в auto-detect existing password',
     'change_2fa_note2': 'Рекомендуется: Use "new password only" формат, let system auto-detect old password',
     'change_2fa_note3': 'If auto-detection fails, your entered old password will be used',
-    'change_2fa_note4': 'Please enter password within 5 minutes, or task will auto-cancel',
-    'change_2fa_note5': 'Please ensure account is logged in и session файл is valid',
+    'change_2fa_note4': 'Пожалуйста, введите password within 5 minutes, or task will auto-cancel',
+    'change_2fa_note5': 'Пожалуйста, убедитесь account is logged in и session файл is valid',
     'change_2fa_note6': 'Пароль files will auto-update и be included in result ZIP after success',
     'change_2fa_upload_prompt': '🚀 Пожалуйста, загрузите ваш ZIP файл...',
     'change_2fa_processing': 'Обработка your files',
@@ -313,7 +313,7 @@ TEXTS = {
     # Password input prompts
     'change_2fa_found_files': '📁 Найдено {count} account files',
     'change_2fa_file_type': '📊 Тип файла: {type}',
-    'change_2fa_enter_password': '🔐 Please enter password info:',
+    'change_2fa_enter_password': '🔐 Please введите password info:',
     'change_2fa_format1': 'Формат 1 (Рекомендуется): Только новый пароль',
     'change_2fa_format1_example': 'NewПароль123',
     'change_2fa_format1_desc': 'System will auto-detect old password',
@@ -438,7 +438,7 @@ TEXTS = {
     'batch_create_invalid_accounts': '· Invalid аккаунтов: {count}',
     'batch_create_can_create_today': '· Can create today: {count}',
     'batch_create_next_step': 'Next step:',
-    'batch_create_select_type': 'Please select the type в create',
+    'batch_create_select_type': 'Пожалуйста, выберите the type в create',
     'batch_create_btn_group': 'Create Group',
     'batch_create_btn_channel': 'Create Channel',
     'batch_create_btn_cancel': 'Отмена',
@@ -449,7 +449,7 @@ TEXTS = {
     'batch_create_channel_title': '📦 Пакетное создание Channels',
     'batch_create_account_info': 'Account Информация:',
     'batch_create_step1_title': 'Step 1/4: Set Creation Count',
-    'batch_create_step1_prompt': 'Please enter the number в create per account (1-10):',
+    'batch_create_step1_prompt': 'Пожалуйста, введите the number в create per account (1-10):',
     'batch_create_step1_example': '💡 Example: Enter 5 в create 5 groups per valid account',
     'batch_create_step1_example_channel': '💡 Example: Enter 5 в create 5 channels per valid account',
     
@@ -473,22 +473,22 @@ TEXTS = {
     'batch_create_admins_none': 'None',
     'batch_create_step3_title_group': 'Step 3/4: Set Group Name и Description',
     'batch_create_step3_title_channel': 'Step 3/4: Set Channel Name и Description',
-    'batch_create_step3_prompt': 'Please upload a TXT файл with names и descriptions, or enter manually (for small amounts)',
-    'batch_create_step3_prompt_channel': 'Please upload a TXT файл with names и descriptions, or enter manually (for small amounts)',
+    'batch_create_step3_prompt': 'Пожалуйста, загрузите a TXT файл with names и descriptions, or введите manually (for small amounts)',
+    'batch_create_step3_prompt_channel': 'Пожалуйста, загрузите a TXT файл with names и descriptions, or введите manually (for small amounts)',
     'batch_create_step3_format': 'Формат:',
     'batch_create_step3_format_group': 'Group Name|Group Description',
     'batch_create_step3_format_channel': 'Channel Name|Channel Description',
     'batch_create_step3_tip1': '💡 Description can be empty (like line 3)',
     'batch_create_step3_tip2': '💡 Нужен в prepare at least {count} lines',
     'batch_create_step3_tip3': '💡 If lines are insufficient, existing names will be reused',
-    'batch_create_step3_upload': 'Please upload TXT файл or enter directly:',
+    'batch_create_step3_upload': 'Пожалуйста, загрузите TXT файл or введите directly:',
     
     # 6. Step 4: Set Links
     'batch_create_names_saved_group': '✅ Saved {count} group names',
     'batch_create_names_saved_channel': '✅ Saved {count} channel names',
     'batch_create_step4_title_group': 'Step 4/4: Set Group Links',
     'batch_create_step4_title_channel': 'Step 4/4: Set Channel Links',
-    'batch_create_step4_prompt': 'Please select link setting method:',
+    'batch_create_step4_prompt': 'Пожалуйста, выберите link setting method:',
     'batch_create_step4_option1': '· Custom upload: Upload TXT файл with custom usernames',
     'batch_create_step4_option2': '· Auto generate: System randomly generates unique usernames',
     'batch_create_step4_tip1': '💡 Custom username формат: One per line, with or without @',
@@ -498,7 +498,7 @@ TEXTS = {
     
     # 7. Custom Username Upload
     'batch_create_custom_title': 'Upload Custom Usernames',
-    'batch_create_custom_prompt': 'Please upload TXT файл with usernames, or enter directly:',
+    'batch_create_custom_prompt': 'Пожалуйста, загрузите TXT файл with usernames, or введите directly:',
     'batch_create_custom_format': 'Формат: One username per line',
     'batch_create_custom_example': 'Example:',
     'batch_create_custom_tip1': '💡 With or without @ symbol',
@@ -724,7 +724,7 @@ TEXTS = {
     'forget_2fa_initializing': '⏳ Инициализация...',
     'forget_2fa_processing_file': '📥 Обработка your файл...',
     'forget_2fa_no_valid_files': '❌ Нет valid files found',
-    'forget_2fa_ensure_format': 'Please ensure ZIP contains Session or TData формат files',
+    'forget_2fa_ensure_format': 'Пожалуйста, убедитесь ZIP содержит Session or TData формат files',
     'forget_2fa_sending_results': '📦 Sending result files...',
     'forget_2fa_send_failed': '❌ Не удалось в send result files',
     
@@ -757,9 +757,9 @@ TEXTS = {
     'delete_2fa_notes': '⚠️ Примечания',
     'delete_2fa_note1': 'After deleting 2FA, account will no longer require 2FA password',
     'delete_2fa_note2': 'System will first try в auto-detect existing password',
-    'delete_2fa_note3': 'If auto-detection fails, you can manually enter current password',
+    'delete_2fa_note3': 'If auto-detection fails, you can manually введите current password',
     'delete_2fa_note4': 'Please complete within 5 minutes, or task will auto-cancel',
-    'delete_2fa_note5': 'Please ensure account is logged in и session файл is valid',
+    'delete_2fa_note5': 'Пожалуйста, убедитесь account is logged in и session файл is valid',
     'delete_2fa_note6': 'Пароль files will auto-update и be included in result ZIP after success',
     'delete_2fa_upload_prompt': '🚀 Пожалуйста, загрузите ваш ZIP файл...',
     'delete_2fa_back_menu': 'Назад в Главное меню',
@@ -767,21 +767,21 @@ TEXTS = {
     # 2. Password Input Method Selection
     'delete_2fa_found_files': '📁 Найдено {count} account files',
     'delete_2fa_file_type': '📊 Тип файла: {type}',
-    'delete_2fa_select_method': '🔐 Please select password input method:',
+    'delete_2fa_select_method': '🔐 Please выберите password input method:',
     'delete_2fa_auto_detect_title': '🔍 Auto-detect Пароль',
     'delete_2fa_auto_detect_desc1': '· System auto-reads current 2FA password from файл',
     'delete_2fa_auto_detect_desc2': '· TData формат: Detect 2fa.txt, twofa.txt, password.txt',
     'delete_2fa_auto_detect_desc3': '· Session формат: Detect password полеs in JSON',
     'delete_2fa_manual_title': '✏️ Manual Input Пароль',
-    'delete_2fa_manual_desc1': '· You manually enter current 2FA password',
+    'delete_2fa_manual_desc1': '· You manually введите current 2FA password',
     'delete_2fa_manual_desc2': '· For cases when auto-detection fails',
-    'delete_2fa_select_timeout': '⏰ Please select within 5 minutes...',
+    'delete_2fa_select_timeout': '⏰ Please выберите within 5 minutes...',
     'delete_2fa_btn_auto': 'Auto-detect Пароль',
     'delete_2fa_btn_manual': 'Manual Input Пароль',
     'delete_2fa_btn_cancel': 'Отмена',
     
     # 3. Manual Password Input
-    'delete_2fa_enter_password': '🔐 Please enter current 2FA password:',
+    'delete_2fa_enter_password': '🔐 Please введите current 2FA password:',
     'delete_2fa_enter_desc1': '· Enter your current 2FA password',
     'delete_2fa_enter_desc2': '· System will verify password и delete 2FA',
     'delete_2fa_enter_desc3': '· Please send password within 5 minutes...',
@@ -876,7 +876,7 @@ TEXTS = {
     'delete_2fa_please_wait': '⏳ Обработка, пожалуйста, подождите...',
     'delete_2fa_processing_file': '📥 Обработка your файл...',
     'delete_2fa_no_valid_files': '❌ Нет valid files found',
-    'delete_2fa_ensure_format': 'Please ensure ZIP contains Session or TData формат account files',
+    'delete_2fa_ensure_format': 'Пожалуйста, убедитесь ZIP содержит Session or TData формат account files',
     'delete_2fa_failed_msg': '❌ Delete 2FA failed',
     'delete_2fa_error_msg': 'Ошибка: {error}',
     
@@ -906,7 +906,7 @@ TEXTS = {
     'add_2fa_file_type': '· Тип файла: {type}',
     
     # 4. Enter Password
-    'add_2fa_enter_password': '📝 Please enter the 2FA password в set',
+    'add_2fa_enter_password': '📝 Please введите the 2FA password в set',
     'add_2fa_enter_desc1': '· This password will apply в all аккаунтов',
     'add_2fa_enter_desc2': '· Session files will create corresponding JSON config files',
     'add_2fa_enter_desc3': '· TData directories will create 2fa.txt files',
@@ -954,7 +954,7 @@ TEXTS = {
     'add_2fa_operation_timeout': '❌ Operation timeout, please start over',
     'add_2fa_password_empty': '❌ 2FA password cannot be empty, please re-enter',
     'add_2fa_no_valid_files': '❌ Нет valid files found',
-    'add_2fa_ensure_format': 'Please ensure ZIP contains Session or TData формат account files',
+    'add_2fa_ensure_format': 'Пожалуйста, убедитесь ZIP содержит Session or TData формат account files',
     'add_2fa_processing_file': '📥 Обработка your файл...',
     'add_2fa_processing_config': '🔄 Adding 2FA config...',
     'add_2fa_processing_failed': '❌ Обработка failed',
@@ -973,7 +973,7 @@ TEXTS = {
     'split_method_country': '1️⃣ Split by Country Code',
     'split_method_country_desc1': '· Auto-detect phone number → area code → country',
     'split_method_country_desc2': '· Generate one ZIP per country',
-    'split_method_country_desc3': '· Naминg: Country+Code+Count',
+    'split_method_country_desc3': '· Именование: Страна+Код+Количество',
     'split_method_quantity': '2️⃣ Split by Quantity',
     'split_method_quantity_desc1': '· Support single or multiple quantities',
     'split_method_quantity_desc2': '· Mixed countries use "Mixed" label naming',
@@ -1007,10 +1007,10 @@ TEXTS = {
     'split_identified': '· Identified: {count}',
     'split_unidentified': '· Unidentified: {count}',
     'split_file_type': '· Тип файла: {type}',
-    'split_select_method': '🎯 Please select split method:',
+    'split_select_method': '🎯 Please выберите split method:',
     
     # 4. Select Split Method Buttons
-    'split_select_prompt': 'Please select split method:',
+    'split_select_prompt': 'Пожалуйста, выберите split method:',
     'split_btn_country': '🌍 Split by Country',
     'split_btn_quantity': '🔢 Split by Quantity',
     'split_btn_cancel': '❌ Отмена',
@@ -1026,13 +1026,13 @@ TEXTS = {
     'split_btn_back': '◀️ Назад',
     
     # 6. Single Quantity Input
-    'split_enter_single': '🔢 Please enter аккаунтов per package',
+    'split_enter_single': '🔢 Please введите аккаунтов per package',
     'split_enter_single_example': 'Example: 10',
-    'split_enter_single_desc': 'System will split by this quantity, last package contains remainder',
+    'split_enter_single_desc': 'System will split by this quantity, last package содержит remainder',
     'split_enter_timeout': '⏰ 5 minutes timeout',
     
     # 7. Multiple Quantity Input
-    'split_enter_multiple': '🔢 Please enter multiple quantities (space separated)',
+    'split_enter_multiple': '🔢 Please введите multiple quantities (space separated)',
     'split_enter_multiple_example': 'Example: 10 20 30',
     'split_enter_multiple_desc': 'System will split in order: 1st package 10, 2nd package 20, 3rd package 30',
     'split_enter_multiple_remainder': 'Remainder will be notified but not packaged',
@@ -1354,7 +1354,7 @@ TEXTS = {
     'api_usage_step2': '2. System auto-analyzes account info',
     'api_usage_step3': '3. Generate API формат файл и verification links',
     'api_usage_step4': '4. Download и use results',
-    'api_upload_prompt': 'Please upload your файл...',
+    'api_upload_prompt': 'Пожалуйста, загрузите your файл...',
     'api_back_menu': 'Назад в Главное меню',
     
     # Processing
@@ -1366,7 +1366,7 @@ TEXTS = {
     'api_type_tdata': '📊 Type: TDATA',
     
     # Input 2FA password
-    'api_enter_2fa': '🔐 Please enter the 2FA password в display on webpage:',
+    'api_enter_2fa': '🔐 Please введите the 2FA password в display on webpage:',
     'api_2fa_example': '· Send 2FA password directly, e.g.: My2FA@2024',
     'api_2fa_skip': '· Or reply "skip" в use auto-detect',
     'api_2fa_timeout': '⏰ 5 minutes timeout',
@@ -1431,7 +1431,7 @@ TEXTS = {
     'rename_file_received': '✅ File received',
     'rename_original_name': '📁 Original filename: {filename}',
     'rename_file_size': '📏 File size: {size}',
-    'rename_enter_new_name': '✏️ Please enter new filename',
+    'rename_enter_new_name': '✏️ Please введите new filename',
     'rename_name_only': '· Enter filename only (without extension)',
     'rename_ext_keep': '· Extension {ext} will be automatically kept',
     'rename_illegal_clean': '· Illegal characters will be auto-cleaned',
@@ -1441,7 +1441,7 @@ TEXTS = {
     'rename_success': '✅ File renamed successfully',
     'rename_old_name': 'Original filename: {old_name}',
     'rename_new_name': 'New filename: {new_name}',
-    'rename_telegram_tip': '💡 If the filename is incorrect when downloading, it may be due в Телеграм client restrictions\nThe actual файл contains all characters, including Emoji и special brackets',
+    'rename_telegram_tip': '💡 If the filename is incorrect when downloading, it may be due в Телеграм client restrictions\nThe actual файл содержит all characters, including Emoji и special brackets',
     'rename_file_sent': '✅ File sent!',
     
     # 4. Error Messages
@@ -1473,7 +1473,7 @@ TEXTS = {
     # 3. After File Upload
     'merge_received_zip': '✅ Received ZIP файл {count}',
     'merge_filename': 'Filename: {filename}',
-    'merge_select_action': 'Please select next action:',
+    'merge_select_action': 'Пожалуйста, выберите next action:',
     'merge_action_continue': '· Continue upload: Add more ZIP files',
     'merge_action_complete': '· Complete merge: Start processing all files',
     
@@ -1605,7 +1605,7 @@ TEXTS = {
     'cleanup_feature_disabled': '❌ One-click cleanup feature is disabно',
     'cleanup_need_member': '❌ Членство required for one-click cleanup',
     'cleanup_no_valid_files': '❌ Нет valid files found',
-    'cleanup_ensure_format': 'Please ensure ZIP contains Session or TData формат files',
+    'cleanup_ensure_format': 'Пожалуйста, убедитесь ZIP содержит Session or TData формат files',
     'cleanup_no_pending_task': '❌ Нет pending cleanup task',
     'cleanup_operation_timeout': '❌ Operation timeout, please restart',
     'cleanup_processing_failed': '❌ Обработка failed',
@@ -1646,7 +1646,7 @@ TEXTS = {
     'reauth_fail_network': '· Network Ошибка: Тайм-аут соединения or network issues',
     'reauth_notes_title': 'Примечания:',
     'reauth_note1': '⚠️ After re-authorization, old sessions will be invalidated immediately',
-    'reauth_note2': '⚠️ Please ensure you provide the correct old password',
+    'reauth_note2': '⚠️ Please убедитесь you provide the correct old password',
     'reauth_note3': '⚠️ Recommend setting new password в improve account секurity',
     'reauth_upload_prompt': '📤 Please upload account files',
     'reauth_supported_formats': 'Поддерживаемые форматы: .session / TData folder / .zip archive',
@@ -1665,9 +1665,9 @@ TEXTS = {
     'reauth_file_type_tdata': 'Тип файла: TDATA',
     
     # 4. Password Selection
-    'reauth_pwd_method_title': 'Please select old password input method:',
+    'reauth_pwd_method_title': 'Пожалуйста, выберите old password input method:',
     'reauth_pwd_auto': '· Auto-detect: Automatically find password from files',
-    'reauth_pwd_manual': '· Manual input: Manually enter old password',
+    'reauth_pwd_manual': '· Manual input: Manually введите old password',
     'reauth_pwd_auto_support': '💡 Auto-detect supports:',
     'reauth_pwd_auto_session': '- Session формат: twofa/password/2fa полеs in JSON',
     'reauth_pwd_auto_tdata': '- TData формат: Any .txt файл содержащий 2fa/twofa/password (case insensitive)',
@@ -1683,13 +1683,13 @@ TEXTS = {
     
     # 6. Manual Input Old Password
     'reauth_manual_old_pwd_title': '📝 Manual Input Old Пароль',
-    'reauth_manual_old_pwd_prompt': 'Please enter old password (if account has 2FA password)',
-    'reauth_manual_old_pwd_tip': '💡 If no password, enter "无" or "skip"',
+    'reauth_manual_old_pwd_prompt': 'Пожалуйста, введите old password (if account has 2FA password)',
+    'reauth_manual_old_pwd_tip': '💡 If no password, введите "无" or "skip"',
     'reauth_old_pwd_saved': '✅ Old password saved',
     
     # 7. New Password Input
-    'reauth_new_pwd_prompt': 'Please enter new password (for re-authorized аккаунтов)',
-    'reauth_new_pwd_tip': '💡 If no new password needed, enter "无" or "skip"',
+    'reauth_new_pwd_prompt': 'Пожалуйста, введите new password (for re-authorized аккаунтов)',
+    'reauth_new_pwd_tip': '💡 If no new password needed, введите "无" or "skip"',
     
     # 8. Final Confirmation
     'reauth_final_confirm': '📋 Final Подтвердитьation',
@@ -1791,7 +1791,7 @@ TEXTS = {
     'reauth_session_expired': '❌ Session expired',
     'reauth_session_expired_restart': '❌ Session expired, please restart',
     'reauth_no_valid_files': '❌ Нет valid files found',
-    'reauth_ensure_format': 'Please ensure ZIP contains Session or TData формат files',
+    'reauth_ensure_format': 'Пожалуйста, убедитесь ZIP содержит Session or TData формат files',
     'reauth_failed': '❌ Re-authorization failed',
     'reauth_error': 'Ошибка: {error}',
     'reauth_file_type': 'Тип файла: {type}',
@@ -1834,7 +1834,7 @@ TEXTS = {
     'regtime_process3': '• Classify аккаунтов by same date (Year-Month-Day)',
     'regtime_process4': '• Generate classification report и packaged files',
     'regtime_accuracy_title': '🎯 Data Accuracy:',
-    'regtime_accuracy_intro': 'We use multiple methods в ensure the most accurate registration time:',
+    'regtime_accuracy_intro': 'We use multiple methods в убедитесь the most accurate registration time:',
     'regtime_accuracy1': '1. First message in Телеграм official chat (most accurate)',
     'regtime_accuracy2': '2. First message in Saved Messages (fairly accurate)',
     'regtime_accuracy3': '3. Пользователь ID estimation (backup only)',
@@ -1916,7 +1916,7 @@ TEXTS = {
     # 11. Additional Messages
     'regtime_need_member': '❌ Registration time query feature requires membership\n\nPlease activate membership first',
     'regtime_session_expired': '❌ Session expired, please re-upload files',
-    'regtime_no_valid_files': '❌ Нет valid files found\n\nPlease ensure ZIP contains Session or TData формат files',
+    'regtime_no_valid_files': '❌ Нет valid files found\n\nPlease убедитесь ZIP содержит Session or TData формат files',
     'regtime_processing_failed': '❌ Обработка failed',
     'regtime_processing_error': 'Ошибка: {error}',
     
@@ -1936,14 +1936,14 @@ TEXTS = {
     'profile_random_username': '• Username: Choose в delete or randomly generate new username',
     'profile_custom_mode_title': '✏️ Custom Generation Режим:',
     'profile_custom_upload': '• Upload txt файл (one content per line)',
-    'profile_custom_manual': '• Or manually enter content',
+    'profile_custom_manual': '• Or manually введите content',
     'profile_custom_support': '• Supports custom name, avatar, bio, username',
     'profile_notes_title': '⚠️ Примечания:',
     'profile_note1': '1. Телеграм has rate limits for proфайл modifications',
     'profile_note2': '2. System will automatically add appropriate delays в avoid rate limiting',
     'profile_note3': '3. Usernames will be automatically checked for availability',
     'profile_note4': '4. Supports Session и TData форматs',
-    'profile_select_mode': 'Please select modification mode:',
+    'profile_select_mode': 'Пожалуйста, выберите modification mode:',
     
     # 2. Mode Selection Buttons
     'profile_btn_random': '🎲 Rиom Generation',
@@ -1992,14 +1992,14 @@ TEXTS = {
     'profile_custom_rule1': '• 1 content + N аккаунтов = All аккаунтов use the same content',
     'profile_custom_rule2': '• M contents + N аккаунтов (M&lt;N) = Cyclic use',
     'profile_custom_rule3': '• M contents + N аккаунтов (M≥N) = One-в-one correspondence',
-    'profile_custom_select': 'Please select items в configure:',
+    'profile_custom_select': 'Пожалуйста, выберите items в configure:',
     
     # 7. Custom Field Configuration
     'profile_custom_status_configured': '✅ Configured ({count})',
     'profile_custom_status_pending': '⏳ Pending',
     'profile_custom_status_no_modify': '⏩ Нет modification',
     'profile_custom_field_config': '📝 Настроить {field}',
-    'profile_custom_field_select': 'Please select operation:',
+    'profile_custom_field_select': 'Пожалуйста, выберите operation:',
     'profile_custom_field_upload_txt': '📄 Upload txt файл',
     'profile_custom_field_manual_input': '✍️ Manual input',
     'profile_custom_field_no_modify': '⏩ Нет modification for this item',
@@ -2295,7 +2295,7 @@ TEXTS = {
     'member_feature2': '• Членство duration auto-accumulates',
     'member_feature3': '• Supports multiple redemptions',
     'member_operation_title': '🎯 Operation Options',
-    'member_operation_desc': 'Please select the operation you want в perform',
+    'member_operation_desc': 'Пожалуйста, выберите the operation you want в perform',
     
     # 2. Membership Status Types
     'member_status_admin': '👑 Admin (Постоянно)',
@@ -2312,7 +2312,7 @@ TEXTS = {
     
     # 4. Redeem Code Page
     'redeem_title': '🎟️ Redeem Code',
-    'redeem_input_prompt': '📋 Please enter the code (up в 10 characters)',
+    'redeem_input_prompt': '📋 Please введите the code (up в 10 characters)',
     'redeem_tip_title': '💡 Tips:',
     'redeem_tip1': '• Enter the code you received',
     'redeem_tip2': '• Code is case-insensitive',
@@ -2409,7 +2409,7 @@ TEXTS = {
     
     # 4. Search User
     'search_user_title': '🔍 Search Пользователь',
-    'search_user_prompt': '📝 Please enter search keywords:',
+    'search_user_prompt': '📝 Please введите search keywords:',
     'search_user_methods': 'Supported search methods:',
     'search_user_by_id': 'Пользователь ID (numbers only)',
     'search_user_by_username': 'Username (@username or username)',
@@ -2469,7 +2469,7 @@ TEXTS = {
     'gift_membership_user_info': '📋 Пользователь Информация',
     'gift_membership_current_status': '💎 Current Членство Status',
     'gift_membership_select_days': '⏰ Select Gift Продолжительность',
-    'gift_membership_select_prompt': 'Please select membership деньs в gift:',
+    'gift_membership_select_prompt': 'Пожалуйста, выберите membership деньs в gift:',
     'gift_membership_1day': '1 Day',
     'gift_membership_7days': '7 Days',
     'gift_membership_30days': '30 Days',
@@ -2603,7 +2603,7 @@ TEXTS = {
     'card_activation_desc_format': 'Card is 8-digit uppercase alphanumeric',
     'card_activation_desc_usage': 'Each card can only be used once',
     'card_activation_select_validity': '🎯 Select Validity Period',
-    'card_activation_select_prompt': 'Please select the card validity period:',
+    'card_activation_select_prompt': 'Пожалуйста, выберите the card validity period:',
     'card_activation_success': '✅ Card Создано Успешноfully!',
     'card_activation_info': '🎫 Card Информация',
     'card_activation_code': 'Card Code',
@@ -2618,7 +2618,7 @@ TEXTS = {
     
     # 17. Manual Activation
     'manual_activation_title': '👤 Manual Activation',
-    'manual_activation_prompt': '📝 Please enter user в activate',
+    'manual_activation_prompt': '📝 Please введите user в activate',
     'manual_activation_formats': 'Поддерживаемые форматы:',
     'manual_activation_format_id': 'Пользователь ID (numbers only)',
     'manual_activation_format_username': 'Username (@username)',
@@ -2627,7 +2627,7 @@ TEXTS = {
     'manual_activation_note2': 'Членство duration auto-accumulates',
     'manual_activation_confirm_user': '👤 Подтвердить Пользователь Информация',
     'manual_activation_select_days': '⏰ Select Activation Продолжительность',
-    'manual_activation_select_prompt': 'Please select membership деньs for this user:',
+    'manual_activation_select_prompt': 'Пожалуйста, выберите membership деньs for this user:',
     'manual_activation_success': '✅ Activation Успешноful!',
     'manual_activation_info': '📋 Activation Информация',
     'manual_activation_days_added': 'Days Added',
@@ -2635,7 +2635,7 @@ TEXTS = {
     
     # 18. Revoke Membership
     'revoke_membership_title': 'Revoke Членство',
-    'revoke_membership_prompt': '📝 Please enter username (@name) or user ID в revoke:',
+    'revoke_membership_prompt': '📝 Please введите username (@name) or user ID в revoke:',
     'revoke_membership_note': 'Revoking will remove all membership privileges',
     'revoke_membership_timeout': '⏰ Valid within 5 minutes',
     'revoke_membership_confirm': '⚠️ Подтвердить Revoke Членство',
@@ -2694,7 +2694,7 @@ TEXTS = {
     
     # 22. Set Broadcast Text
     'broadcast_text_title': '📝 Set Broadcast Text',
-    'broadcast_text_prompt': '📋 Please enter broadcast content',
+    'broadcast_text_prompt': '📋 Please введите broadcast content',
     'broadcast_text_html_support': 'Supports HTML формат:',
     'broadcast_text_bold': 'bold',
     'broadcast_text_italic': 'italic',
@@ -2705,7 +2705,7 @@ TEXTS = {
     
     # 23. Set Broadcast Buttons
     'broadcast_buttons_title': '🔘 Set Broadcast Butвns',
-    'broadcast_buttons_prompt': 'Please enter custom buttons (optional)',
+    'broadcast_buttons_prompt': 'Пожалуйста, введите custom buttons (optional)',
     'broadcast_buttons_format': 'One button per line (max 4)',
     'broadcast_buttons_url_format': 'URL button формат',
     'broadcast_buttons_callback_format': 'Callback button формат',
@@ -2725,7 +2725,7 @@ TEXTS = {
     'broadcast_target_subtitle': 'Title',
     'broadcast_target_content_set': 'Content Set',
     'broadcast_target_select': '🎯 Please Select Target Пользовательs',
-    'broadcast_target_prompt': 'Please select user group в send notification:',
+    'broadcast_target_prompt': 'Пожалуйста, выберите user group в send notification:',
     'broadcast_target_all': '👥 All Пользовательs',
     'broadcast_target_vip': '💎 VIP Только',
     'broadcast_target_active': '🔥 Active Пользовательs (7d)',
