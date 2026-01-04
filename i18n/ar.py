@@ -92,13 +92,13 @@ TEXTS = {
     'account_check_starting': '⚡ بدء فحص {count} حساب...',
     'account_check_file_type': '📁 نوع الملف: {type}',
     'account_check_proxy_mode': '🌐 وضع البروكسي',
-    'account_check_local_mode': '🔴 Local وضع',
+    'account_check_local_mode': '🔴 وضع محلي',
     'account_check_threads': '⚡ الخيوط المتزامنة: {count}',
-    'account_check_please_wait': 'يرجى الانتظار, showing التقدم في الوقت الفعلي...',
+    'account_check_please_wait': 'يرجى الانتظار, عرض التقدم في الوقت الفعلي...',
     
     # فحصالتقدم
     'account_check_in_progress': '⚡ الفحص قيد التقدم...',
-    'account_check_progress_title': '📊 Check التقدم',
+    'account_check_progress_title': '📊 تقدم الفحص',
     'account_check_progress_percent': '· التقدم: {percent}% ({done}/{total})',
     'account_check_format': '· الصيغة: {صيغة}',
     'account_check_mode': '· الوضع: {وضع}',
@@ -140,25 +140,25 @@ TEXTS = {
     'check_time': '⏰ وقت الفحص: {time}',
     'check_mode_label': '🌐 وضع الفحص: {وضع}',
     'check_mode_proxy': 'وضع البروكسي',
-    'check_mode_local': 'Local وضع',
+    'check_mode_local': 'وضع محلي',
     'all_files_sent': '📤 تم إرسال جميع الملفات successfully!',
-    'send_summary': '📊 Send Summary',
+    'send_summary': '📊 Send الملخص',
     'files_sent_count': '· تم الإرسال بنجاح: {count} ملف',
     'check_mode_summary': '· وضع الفحص: {وضع}',
-    'check_duration': '· Check duration: {ثانية}s',
+    'check_duration': '· فحص duration: {ثانية}s',
     'thanks_message': 'Thanks for using the enhanced bot! To check again, click /start',
     
     # نيابةمعالجةإحصائياتوهوإحصائيات
     'total_accounts': 'الإجمالي حسابs',
     'proxy_usage_stats': '📡 بروكسي Usage Stats',
     'proxies_used_stat': 'Proxies Used',
-    'fallback_local_stat': 'Fallback Local',
+    'fallback_local_stat': 'Fallback محلي',
     'failed_proxies_stat': 'فشل Proxies',
-    'local_only_stat': 'Local Only',
-    'proxy_connection': '📡 بروكسي Connection',
+    'local_only_stat': 'محلي Only',
+    'proxy_connection': '📡 بروكسي الاتصال',
     'local_connection': '🏠 اتصال محلي',
     'performance_stats': '⚡ Performance Stats',
-    'average_speed': 'Average السرعة',
+    'average_speed': 'المتوسط السرعة',
     'sending_files': '🚀 Sending classified ملف, please wait...',
     'processing_file': '📥 جاري المعالجة your ملف...',
     'accounts_unit': '',
@@ -214,10 +214,10 @@ TEXTS = {
     'found_files': '📁 Found {count} ملف',
     'initializing': '⏳ Initializing...',
     'conversion_in_progress': '🔄 الصيغة conversion in progress...',
-    'conversion_current_progress': '📊 Current التقدم',
+    'conversion_current_progress': '📊 الحالي التقدم',
     'conversion_processed': '· Processed: {done}/{total}',
     'conversion_speed': '· السرعة: {speed}/sec',
-    'conversion_elapsed': '· Elapsed: {time}s',
+    'conversion_elapsed': '· منقضي: {time}s',
     'conversion_success_count': '✅ Conversion success: {count}',
     'conversion_error_count': '❌ Conversion error: {count}',
     'conversion_remaining': '⏱️ Est. remaining: {time}s',
@@ -275,7 +275,7 @@ TEXTS = {
     'error_auth_key_invalid': 'Auth key invalid',
     'error_file_locked': 'TData ملف is locked',
     'error_session_locked': 'Session ملف is locked',
-    'error_connection_timeout': 'Connection timeout',
+    'error_connection_timeout': 'الاتصال timeout',
     'error_network_failed': 'Network connection failed',
     'error_conversion_failed': 'Conversion failed',
     'error_no_valid_files': 'No valid ملف found',
@@ -332,10 +332,10 @@ TEXTS = {
     'change_2fa_new_password': '🔐 كلمة المرور الجديدة: {password}',
     'change_2fa_please_wait': '⏳ جاري المعالجة, please wait...',
     'change_2fa_in_progress': '🔐 2FA password change in progress...',
-    'change_2fa_current_progress': '📊 Current التقدم',
+    'change_2fa_current_progress': '📊 الحالي التقدم',
     'change_2fa_processed': 'Processed: {processed}/{total}',
     'change_2fa_speed': 'السرعة: {speed}/sec',
-    'change_2fa_elapsed': 'Elapsed: {elapsed}s',
+    'change_2fa_elapsed': 'منقضي: {elapsed}s',
     'change_2fa_success_count': '· ✅ نجاح: {count}',
     'change_2fa_failed_count': '· ❌ فشل: {count}',
     'change_2fa_remaining': '⏱️ Est. remaining: {time}s',
@@ -352,7 +352,7 @@ TEXTS = {
     
     # إرسالمكتمل
     'change_2fa_all_sent': '🎉 تم إرسال جميع الملفات successfully!',
-    'change_2fa_send_summary': '📋 Send Summary',
+    'change_2fa_send_summary': '📋 Send الملخص',
     'change_2fa_files_sent': '· ملفs sent: {count}',
     'change_2fa_total_accounts': '· الإجمالي حساب: {count}',
     'change_2fa_success_count': '· ✅ نجاح: {count}',
@@ -392,10 +392,10 @@ TEXTS = {
     'report_2fa_reason_unauthorized_desc1': 'TData ملف may not be مسجل الدخول or expired',
     'report_2fa_reason_unauthorized_desc2': 'Suggest re-login حساب',
     'report_2fa_reason_wrong_password': 'Wrong old password',
-    'report_2fa_reason_wrong_password_desc1': 'Check if password ملف content is correct',
+    'report_2fa_reason_wrong_password_desc1': 'فحص if password ملف content is correct',
     'report_2fa_reason_wrong_password_desc2': 'تأكيد if password field in JSON is accurate',
     'report_2fa_reason_network': 'Network connection failed',
-    'report_2fa_reason_network_desc1': 'Check if  بروكسي settings are correct',
+    'report_2fa_reason_network_desc1': 'فحص if  بروكسي settings are correct',
     'report_2fa_reason_network_desc2': 'Try local connection or change  بروكسي',
     
     # مبلغخارجالحالةرسالة（استخدامفيمجموعةتثبيتتفصيليمعلومات）
@@ -624,7 +624,7 @@ TEXTS = {
     'forget_2fa_note4': '· Auto fallback to local connection if  بروكسي fails',
     'forget_2fa_note5': '· Auto random delay between حساب (5-15s)',
     'forget_2fa_proxy_warning': '⚠️ تحذير: غير كافٍ  بروكسي! Only {count} متاح, يُنصح على الأقل 10',
-    'forget_2fa_proxy_status': '📡 Current حالة البروكسي',
+    'forget_2fa_proxy_status': '📡 الحالي حالة البروكسي',
     'forget_2fa_proxy_mode_enabled': '· وضع البروكسي: 🟢مفعّل',
     'forget_2fa_proxy_mode_disabled': '· وضع البروكسي: 🔴معطّل',
     'forget_2fa_proxy_available': '· متاح  بروكسي: {count}',
@@ -635,20 +635,20 @@ TEXTS = {
     'forget_2fa_category_reset': '· ✅ Reset Requested - نجاحfully requested password reset (wait 7 أيام)',
     'forget_2fa_category_no_reset': '· ⚠️ No Reset Needed - حساب has no 2FA password',
     'forget_2fa_category_cooling': '· ⏳ In Cooling الفترة - Already in cooling period',
-    'forget_2fa_category_failed': '· ❌ فشل - Connection failed/other errors',
+    'forget_2fa_category_failed': '· ❌ فشل - الاتصال failed/other errors',
     'forget_2fa_back_menu': 'رجوع to القائمة الرئيسية',
     
     # 2. معالجةالتقدم
     'forget_2fa_processing': '🔓 جاري المعالجة نسيت 2FA...',
     'forget_2fa_progress': 'التقدم: {done}/{total} ({percent}%)',
-    'forget_2fa_elapsed': '⏱ Elapsed: {time}s',
+    'forget_2fa_elapsed': '⏱ منقضي: {time}s',
     'forget_2fa_speed': '⚡ السرعة: {speed}/sec',
     'forget_2fa_stat_reset': '✅ Reset Requested: {count}',
     'forget_2fa_stat_no_reset': '⚠️ No Reset Needed: {count}',
     'forget_2fa_stat_cooling': '⏳ In Cooling الفترة: {count}',
     'forget_2fa_stat_failed': '❌ فشل: {count}',
     'forget_2fa_stat_pending': '📊 Pending: {count}',
-    'forget_2fa_current': 'Current: {ملفname}...',
+    'forget_2fa_current': 'الحالي: {ملفname}...',
     'forget_2fa_status_reset': 'الحالة: ✅ Reset Requested',
     'forget_2fa_status_no_reset': 'الحالة: ⚠️ No Reset Needed',
     'forget_2fa_status_cooling': 'In Cooling الفترة',
@@ -715,7 +715,7 @@ TEXTS = {
     # 8. تقريرTXTنموذجلوحة - فشل
     'report_forget_2fa_title_failed': 'نسيت 2FA تقرير - فشل',
     'report_forget_2fa_item_failed': '❌ {ملفname}',
-    'report_forget_2fa_status_connection_failed': 'الحالة: Connection failed (all  بروكسي and local failed)',
+    'report_forget_2fa_status_connection_failed': 'الحالة: الاتصال failed (all  بروكسي and local failed)',
     
     # 9. أوليتحويلوجاري المعالجةرسالة
     'forget_2fa_found_accounts': '📊 Found {count} حساب',
@@ -789,7 +789,7 @@ TEXTS = {
     
     # 4. حذفالتقدم
     'delete_2fa_in_progress': '🗑️ Deleting 2FA password...',
-    'delete_2fa_current_progress': '📊 Current التقدم',
+    'delete_2fa_current_progress': '📊 الحالي التقدم',
     'delete_2fa_processed': '· Processed: {done}/{total}',
     'delete_2fa_speed': '· السرعة: {speed}/sec',
     'delete_2fa_elapsed': '· المدة: {time}s',
@@ -839,7 +839,7 @@ TEXTS = {
     'report_delete_2fa_details': 'تفاصيل: {info}',
     'report_delete_2fa_process_time': 'Process time: {time}',
     'report_delete_2fa_using_proxy': 'Using  بروكسي',
-    'report_delete_2fa_local_connection': 'Local connection',
+    'report_delete_2fa_local_connection': 'محلي connection',
     'report_delete_2fa_success_msg': 'كلمة المرور deleted successfully, ملف updated',
     'report_delete_2fa_success_no_json': '2FA password deleted',
     'report_delete_2fa_success_with_json': '2FA password deleted, ملف updated',
@@ -864,10 +864,10 @@ TEXTS = {
     'report_delete_2fa_reason_unauthorized_desc1': 'TData ملف may not be مسجل الدخول or expired',
     'report_delete_2fa_reason_unauthorized_desc2': 'Suggest re-login حساب',
     'report_delete_2fa_reason_wrong_password': 'Wrong old password',
-    'report_delete_2fa_reason_wrong_password_desc1': 'Check if password ملف content is correct',
+    'report_delete_2fa_reason_wrong_password_desc1': 'فحص if password ملف content is correct',
     'report_delete_2fa_reason_wrong_password_desc2': 'تأكيد if password field in JSON is accurate',
     'report_delete_2fa_reason_network': 'Network connection failed',
-    'report_delete_2fa_reason_network_desc1': 'Check if  بروكسي settings are correct',
+    'report_delete_2fa_reason_network_desc1': 'فحص if  بروكسي settings are correct',
     'report_delete_2fa_reason_network_desc2': 'Try local connection or change  بروكسي',
     
     # 10. هورسالة
@@ -1049,7 +1049,7 @@ TEXTS = {
     'split_processing_quantity_multi_sequence': 'Quantity sequence: {sequence}',
     'split_processing_quantity_multi_total': 'الإجمالي حساب: {total}',
     'split_processing_quantity_multi_requested': 'Requested الكمية: {requested}',
-    'split_remainder_unallocated': '⚠️ Remaining {remainder} حساب unallocated',
+    'split_remainder_unallocated': '⚠️ متبقي {remainder} حساب unallocated',
     'split_remainder_exceeded': '⚠️ Requested الكمية exceeded, last package may be insufficient',
     
     # خطأرسالة
@@ -1386,7 +1386,7 @@ TEXTS = {
     'api_file_type_tdata': '· نوع الملف: TDATA',
     'api_2fa_mode_auto': '· 2FA وضع: Auto-detect',
     'api_2fa_mode_manual': '· 2FA وضع: Manual input',
-    'api_elapsed_time': '· Elapsed: {time}s',
+    'api_elapsed_time': '· منقضي: {time}s',
     'api_failure_stats': '❌ Failure الإحصائيات',
     
     # تحويلمكتمل
@@ -1408,7 +1408,7 @@ TEXTS = {
     # فشلأصليسببترجمةترجمة
     'api_failure_reason_conversion_failed': 'Conversion failed',
     'api_failure_reason_unauthorized': 'Unauthorized',
-    'api_failure_reason_timeout': 'Connection timeout',
+    'api_failure_reason_timeout': 'الاتصال timeout',
     'api_failure_reason_conversion_error': 'Conversion error',
     'api_failure_reason_concurrent_error': 'Concurrent error',
     'api_failure_reason_file_not_exist': 'ملف not exist',
@@ -1546,7 +1546,7 @@ TEXTS = {
     'cleanup_starting': 'بدءing cleanup',
     'cleanup_initializing': 'Initializing...',
     'cleanup_in_progress': '🧹 Cleaning in progress, please wait.',
-    'cleanup_current': '📄 Current: {ملفname}',
+    'cleanup_current': '📄 الحالي: {ملفname}',
     'cleanup_total_progress': '📊 الإجمالي progress: {current}/{total} ({percent}%)',
     'cleanup_eta': '⏳ Estimated completion: {time} remaining',
     'cleanup_eta_alt': 'Estimated completion time: {time} remaining',
@@ -1569,7 +1569,7 @@ TEXTS = {
     'cleanup_packing': '📦 Packing حساب ملف...',
     
     # 7. إدخالخروجملف
-    'cleanup_summary_report': '📋 Cleanup Summary تقرير',
+    'cleanup_summary_report': '📋 Cleanup الملخص تقرير',
     'cleanup_success_accounts': '📦 نجاحfully cleaned حساب ({count})',
     'cleanup_failed_accounts': '📦 فشل to clean حساب ({count})',
     
@@ -1621,7 +1621,7 @@ TEXTS = {
     'cleanup_results_sent': '✅ Cleanup results sent',
     'cleanup_send_failed': '❌ فشل to send cleanup results',
     'cleanup_frozen_detected': 'حساب frozen',
-    'cleanup_connection_failed': 'Connection failed',
+    'cleanup_connection_failed': 'الاتصال failed',
     'cleanup_timeout_error': 'Cleanup timeout',
     
     # ===== إعادةجديدتفويضصلاحيةالوظيفة =====
@@ -1644,7 +1644,7 @@ TEXTS = {
     'reauth_fail_frozen': '· مجمّد: حساب has been frozen',
     'reauth_fail_banned': '· محظور: حساب has been banned',
     'reauth_fail_wrong_pwd': '· Wrong كلمة المرور: كلمة المرور القديمة incorrect',
-    'reauth_fail_network': '· Network خطأ: Connection timeout or network issues',
+    'reauth_fail_network': '· Network خطأ: الاتصال timeout or network issues',
     'reauth_notes_title': 'ملاحظات:',
     'reauth_note1': '⚠️ After re-authorization, old sessions will be invalidated immediately',
     'reauth_note2': '⚠️ يرجى ensure you provide the correct old password',
@@ -1775,7 +1775,7 @@ TEXTS = {
     'reauth_report_device_model': 'Device الوضعl:',
     'reauth_report_system_version': 'System Version:',
     'reauth_report_app_version': 'App Version:',
-    'reauth_report_connection': 'Connection:',
+    'reauth_report_connection': 'الاتصال:',
     'reauth_report_new_password': 'New كلمة المرور:',
     
     # اتصالالطريقةقيمة
@@ -1900,8 +1900,8 @@ TEXTS = {
     'regtime_fail_type': 'النوع:',
     'regtime_fail_reason': 'Failure السبب:',
     'regtime_fail_unauthorized': 'حساب unauthorized or expired',
-    'regtime_fail_timeout': 'Connection timeout',
-    'regtime_fail_timeout_both': 'Connection timeout (both  بروكسي and local failed)',
+    'regtime_fail_timeout': 'الاتصال timeout',
+    'regtime_fail_timeout_both': 'الاتصال timeout (both  بروكسي and local failed)',
     'regtime_fail_frozen_account': 'حساب has been frozen',
     'regtime_fail_banned_account': 'حساب has been banned',
     'regtime_fail_opentele': 'opentele not installed, cannot process TData صيغة',
@@ -1953,7 +1953,7 @@ TEXTS = {
     
     # 3. عشوائيآلةإنشاءالوضعالتكوين
     'profile_random_config_title': '🎲 Random Generation الوضع',
-    'profile_current_config': 'Current التكوين:',
+    'profile_current_config': 'الحالي التكوين:',
     'profile_config_name': '• الاسم:',
     'profile_config_avatar': '• Avatar:',
     'profile_config_bio': '• Bio:',
@@ -2086,7 +2086,7 @@ TEXTS = {
     'profile_stats_success': '├ ✅ نجاح:',
     'profile_stats_failed': '├ ❌ فشل:',
     'profile_stats_processing': '├ ⏳ جاري المعالجة:',
-    'profile_stats_remaining': '└ 📋 Remaining:',
+    'profile_stats_remaining': '└ 📋 متبقي:',
     'profile_speed': '⚡ جاري المعالجة speed: {speed}/sec',
     'profile_time_elapsed': '⏱️ الوقت elapsed:',
     'profile_time_remaining': '⏳ الوقت المتبقي:',
@@ -2101,7 +2101,7 @@ TEXTS = {
     'profile_status_modifying_bio': 'Modifying bio...',
     'profile_status_modifying_username': 'Modifying username...',
     'profile_status_deleting_avatar': 'Deleting avatar...',
-    'profile_status_checking_username': 'Checking username availability...',
+    'profile_status_checking_username': 'جاري الفحص username availability...',
     'profile_status_processing_complete': '✅ جاري المعالجة الإكمال',
     
     # 11.5 عمليةالنتيجةرسالة（استخدامفيactionsقائمة）
@@ -2168,7 +2168,7 @@ TEXTS = {
     
     # 15. خطأالنوع
     'profile_error_auth_expired': 'Authorization expired, need to re-login',
-    'profile_error_timeout': 'Connection timeout',
+    'profile_error_timeout': 'الاتصال timeout',
     'profile_error_flood': 'Too many العمليات, please try again later',
     'profile_error_username_taken': 'اسم المستخدم already taken',
     'profile_error_username_invalid': 'غير صالح username صيغة',
@@ -2207,7 +2207,7 @@ TEXTS = {
     
     # ===== فحصعبرمعلوماتتسجيلقيدالوظيفة =====
     # 1. الوظيفةتعريفتعريفالصفحة
-    'contact_limit_title': '🔍 Check Contact Limit',
+    'contact_limit_title': '🔍 فحص Contact Limit',
     'contact_limit_upload': '📤 يرجى رفع ZIP ملف containing Session or TData',
     'contact_limit_format_title': 'الصيغ المدعومة:',
     'contact_limit_format_session': '• Session ملف (.session)',
@@ -2225,13 +2225,13 @@ TEXTS = {
     
     # 3. معالجةالتقدم
     'contact_limit_progress': '📊 Detection progress: [{current}/{total}]',
-    'contact_limit_current': '❌ Current:',
+    'contact_limit_current': '❌ الحالي:',
     'contact_limit_status': 'الحالة:',
     'contact_limit_stats': 'الإحصائيات:',
     'contact_limit_completed': '• مكتمل:',
-    'contact_limit_remaining': '• Remaining:',
+    'contact_limit_remaining': '• متبقي:',
     'contact_limit_percent': '• التقدم:',
-    'contact_limit_elapsed': '⏱️ Elapsed:',
+    'contact_limit_elapsed': '⏱️ منقضي:',
     
     # 4. فحصمكتمل
     'contact_limit_complete': '✅ Detection الإكمال!',
@@ -2240,7 +2240,7 @@ TEXTS = {
     
     # 5. إدخالخروجملف
     'contact_limit_report_file': '📊 Contact Limit Detection تقرير',
-    'contact_limit_normal': '✅ Normal: {count}',
+    'contact_limit_normal': '✅ عادي: {count}',
     'contact_limit_limited': '⚠️ Limited: {count}',
     'contact_limit_banned': '🚫 محظور: {count}',
     'contact_limit_failed': '❌ فشل: {count}',
@@ -2251,24 +2251,24 @@ TEXTS = {
     'contact_limit_report_time': 'Detection time: {time} (Beijing time)',
     'contact_limit_report_total': 'الإجمالي detected: {count} حساب',
     'contact_limit_report_principle': 'Detection principle explanation:',
-    'contact_limit_report_normal_desc': '✅ Normal: نجاحfully imported test contact and found user',
+    'contact_limit_report_normal_desc': '✅ عادي: نجاحfully imported test contact and found user',
     'contact_limit_report_limited_desc': '⚠️ Limited: Import successful but user not found / FloodWait triggered / Import failed',
     'contact_limit_report_banned_desc': '❌ محظور: حساب banned or deactivated',
     'contact_limit_report_failed_desc': '❌ فشل: Detection error or unauthorized',
     'contact_limit_report_stats': 'الإحصائيات',
-    'contact_limit_report_normal_count': '✅ Normal حساب: {count}',
+    'contact_limit_report_normal_count': '✅ عادي حساب: {count}',
     'contact_limit_report_limited_count': '⚠️ Contact limited: {count}',
     'contact_limit_report_banned_count': '❌ محظور: {count}',
     'contact_limit_report_failed_count': '❌ Detection failed: {count}',
     'contact_limit_report_detail': '📋 Detailed قائمة',
-    'contact_limit_report_normal_list': '【✅ Normal حسابs】',
+    'contact_limit_report_normal_list': '【✅ عادي حسابs】',
     'contact_limit_report_limited_list': '【⚠️ Contact Limited】',
     'contact_limit_report_banned_list': '【❌ محظور】',
     'contact_limit_report_failed_list': '【❌ Detection فشل】',
     'contact_limit_report_none': 'None',
     
     # 7. الحالةالنوع
-    'contact_limit_status_normal': '✅ Normal',
+    'contact_limit_status_normal': '✅ عادي',
     'contact_limit_status_limited': '⚠️ Limited',
     'contact_limit_status_banned': '🚫 محظور',
     'contact_limit_status_failed': '❌ فشل',
@@ -2290,7 +2290,7 @@ TEXTS = {
     # ===== تفعيل/استردادالعضويةالوظيفة =====
     # 1. العضويةوسطقلبالصفحة
     'member_center_title': '💳 العضوية Center',
-    'member_current_status': '📊 Current الحالة',
+    'member_current_status': '📊 الحالي الحالة',
     'member_feature_title': '💡 الميزات',
     'member_feature1': '• Redeem البطاقة الرمز to activate membership',
     'member_feature2': '• العضوية duration auto-accumulates',
@@ -2326,7 +2326,7 @@ TEXTS = {
     'redeem_info_code': '• Code: {الرمز}',
     'redeem_info_level': '• العضوية level: {level}',
     'redeem_info_days': '• Days added: {أيام} day(s)',
-    'redeem_current_status': '💎 Current العضوية الحالة',
+    'redeem_current_status': '💎 الحالي العضوية الحالة',
     'redeem_current_level': '• العضوية level: {level}',
     'redeem_current_expire': '• تاريخ الانتهاء time: {time}',
     'redeem_thanks': 'Thank you for your support!',
@@ -2358,7 +2358,7 @@ TEXTS = {
     'admin_count': 'Admin العدد',
     'admin_your_permission': 'Your Permission',
     'admin_super_admin': '👑 Super Admin',
-    'admin_normal_admin': '🔧 Normal Admin',
+    'admin_normal_admin': '🔧 عادي Admin',
     'admin_system_time': 'System الوقت',
     'admin_quick_actions': '🔧 Quick الإجراءات',
     'admin_quick_actions_desc': 'Click buttons below to manage',
@@ -2381,7 +2381,7 @@ TEXTS = {
     'user_management_legend': '📖 Legend',
     'user_management_legend_admin': '👑 = Admin',
     'user_management_legend_vip': '💎 = VIP',
-    'user_management_legend_normal': '❌ = Normal مستخدم',
+    'user_management_legend_normal': '❌ = عادي مستخدم',
     'user_management_time_hours_ago': '{hours}h ago',
     'user_management_time_days_ago': '{أيام}d ago',
     'user_management_user_prefix': 'مستخدم',
@@ -2434,9 +2434,9 @@ TEXTS = {
     
     # 6. الإدارةعضوالإدارة
     'admin_manage_title': '👑 Admin Management',
-    'admin_manage_list': '📋 Current Admin قائمة',
+    'admin_manage_list': '📋 الحالي Admin قائمة',
     'admin_manage_super': '👑 Super Admin',
-    'admin_manage_normal': '👤 Normal Admin',
+    'admin_manage_normal': '👤 عادي Admin',
     'admin_manage_no_admins': 'No admins',
     'admin_manage_nickname': 'الاسم المستعار',
     'admin_manage_username': 'اسم المستخدم',
@@ -2446,7 +2446,7 @@ TEXTS = {
     'admin_manage_system_builtin': 'System Built-in',
     'admin_manage_description': '📖 الوصف',
     'admin_manage_desc_super': 'Super admins are from config ملف',
-    'admin_manage_desc_normal': 'Normal admins can be added via commands',
+    'admin_manage_desc_normal': 'عادي admins can be added via commands',
     
     # 7. المستخدمالتفاصيل
     'user_detail_title': '👤 مستخدم تفاصيل',
@@ -2468,7 +2468,7 @@ TEXTS = {
     # 8. إهداءالعضوية
     'gift_membership_title': '🎁 Gift العضوية',
     'gift_membership_user_info': '📋 مستخدم Info',
-    'gift_membership_current_status': '💎 Current العضوية الحالة',
+    'gift_membership_current_status': '💎 الحالي العضوية الحالة',
     'gift_membership_select_days': '⏰ اختر Gift المدة',
     'gift_membership_select_prompt': 'يرجى الاختيار membership أيام to gift:',
     'gift_membership_1day': '1 Day',
@@ -2512,7 +2512,7 @@ TEXTS = {
     'proxy_status_title': '📊 بروكسي Detailed الحالة',
     'proxy_status_basic': '📈 Basic الإحصائيات',
     'proxy_status_performance': '⚡ Performance Metrics',
-    'proxy_status_avg_response': 'Average Response',
+    'proxy_status_avg_response': 'المتوسط Response',
     'proxy_status_fastest': 'Fastest Response',
     'proxy_status_slowest': 'Slowest Response',
     'proxy_status_region': '🌍 Region Distribution',
@@ -2556,7 +2556,7 @@ TEXTS = {
     
     # 14. تنظيففقدصالحنيابةمعالجة
     'proxy_clean_title': '🗑 Clean غير صالح Proxies',
-    'proxy_clean_current_status': '📊 Current الحالة',
+    'proxy_clean_current_status': '📊 الحالي الحالة',
     'proxy_clean_invalid_count': 'غير صالح Proxies',
     'proxy_clean_proxies_unit': ' بروكسي',
     'proxy_clean_of_total': 'of total',
@@ -2570,17 +2570,17 @@ TEXTS = {
     'proxy_clean_complete': '✅ Clean مكتمل!',
     'proxy_clean_results': '📊 Clean النتائج',
     'proxy_clean_cleaned': 'Cleaned',
-    'proxy_clean_remaining': 'Remaining Proxies',
+    'proxy_clean_remaining': 'متبقي Proxies',
     'proxy_clean_failed': '❌ بروكسي Clean فشل',
     'proxy_clean_no_proxies': 'No متاح  بروكسي',
     
     # 15. سرعةدرجةتحسين
     'proxy_optimize_title': '⚡ السرعة Optimization Config',
-    'proxy_optimize_current': '⚙️ Current الإعدادات',
+    'proxy_optimize_current': '⚙️ الحالي الإعدادات',
     'proxy_optimize_fast_mode': 'Fast الوضع',
     'proxy_optimize_on': '🟢 On',
     'proxy_optimize_off': '🔴 Off',
-    'proxy_optimize_timeout': 'Check الوقتout',
+    'proxy_optimize_timeout': 'فحص الوقتout',
     'proxy_optimize_retry': 'Smart Retry',
     'proxy_optimize_times': 'times',
     'proxy_optimize_auto_clean': 'Auto Clean',
@@ -2667,7 +2667,7 @@ TEXTS = {
     
     # 20. إنشاءمجموعةإرسال
     'broadcast_create_title': '📝 إنشاء Broadcast',
-    'broadcast_create_current_status': '📊 Current الحالة',
+    'broadcast_create_current_status': '📊 الحالي الحالة',
     'broadcast_create_media': 'Media',
     'broadcast_create_text': 'Text',
     'broadcast_create_buttons': 'Buttons',
@@ -2758,7 +2758,7 @@ TEXTS = {
     'broadcast_complete_stats': '📊 Send الإحصائيات',
     'broadcast_complete_target_users': 'الهدف مستخدمs',
     'broadcast_complete_total_time': 'الإجمالي الوقت',
-    'broadcast_complete_avg_speed': 'Average السرعة',
+    'broadcast_complete_avg_speed': 'المتوسط السرعة',
     'broadcast_complete_users_sec': 'users/sec',
     'broadcast_complete_id': '📋 Broadcast ID',
     
