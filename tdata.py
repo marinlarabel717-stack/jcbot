@@ -1260,6 +1260,99 @@ def detect_tdata_structure(account_path: str) -> Optional[Tuple]:
     logger.warning(f"未找到有效的TData结构 - {account_path}")
     return None
 
+def is_valid_tdata(tdata_path: str) -> bool:
+    """
+    检查 tdata 目录是否有效
+    
+    有效的 tdata 目录应该包含:
+    - 一个类似 D877F783D5D3EF8C 的子目录
+    - 该子目录下有 key_datas 文件或 key_data 文件
+    
+    Args:
+        tdata_path: tdata 目录路径
+        
+    Returns:
+        bool: 是否为有效的 tdata 目录
+    """
+    if not os.path.isdir(tdata_path):
+        return False
+    
+    try:
+        for item in os.listdir(tdata_path):
+            item_path = os.path.join(tdata_path, item)
+            if os.path.isdir(item_path):
+                # 检查是否有 key_datas 文件
+                key_datas_path = os.path.join(item_path, 'key_datas')
+                if os.path.exists(key_datas_path):
+                    return True
+                
+                # 有些版本可能是 key_data (没有s)
+                key_data_path = os.path.join(item_path, 'key_data')
+                if os.path.exists(key_data_path):
+                    return True
+    except (OSError, PermissionError) as e:
+        logger.warning(f"检查tdata目录失败 {tdata_path}: {e}")
+        return False
+    
+    return False
+
+def scan_tdata_accounts(base_path: str) -> list:
+    """
+    统一的 tdata 账号扫描函数
+    
+    正确的 tdata 结构: 手机号/tdata/xxx/key_datas
+    以手机号文件夹为单位识别账号
+    
+    Args:
+        base_path: 解压后的根目录
+        
+    Returns:
+        账号列表，每个账号包含:
+        - phone: 手机号
+        - tdata_path: tdata 完整路径
+        - account_path: 账号根目录（手机号文件夹）
+    """
+    accounts = []
+    seen_phones = set()  # 用于去重
+    
+    def scan_directory(dir_path):
+        """递归扫描目录"""
+        if not os.path.isdir(dir_path):
+            return
+        
+        try:
+            for item in os.listdir(dir_path):
+                item_path = os.path.join(dir_path, item)
+                
+                if not os.path.isdir(item_path):
+                    continue
+                
+                # 检查是否是 手机号/tdata 结构
+                tdata_path = os.path.join(item_path, 'tdata')
+                if os.path.isdir(tdata_path):
+                    # 检查 tdata 目录下是否有有效的账号数据
+                    if is_valid_tdata(tdata_path):
+                        phone = item  # 文件夹名就是手机号
+                        
+                        # 去重：同一个手机号只添加一次
+                        if phone not in seen_phones:
+                            seen_phones.add(phone)
+                            accounts.append({
+                                'phone': phone,
+                                'tdata_path': tdata_path,
+                                'account_path': item_path
+                            })
+                            logger.info(f"找到账号: {phone} -> {tdata_path}")
+                else:
+                    # 递归扫描子目录
+                    scan_directory(item_path)
+        except (OSError, PermissionError) as e:
+            logger.warning(f"扫描目录失败 {dir_path}: {e}")
+    
+    scan_directory(base_path)
+    logger.info(f"扫描完成: 共找到 {len(accounts)} 个唯一账号")
+    return accounts
+
 def copy_session_to_temp(session_path: str) -> Tuple[str, str]:
     """复制session文件到临时目录避免并发冲突
     
@@ -4787,10 +4880,9 @@ class FileProcessor:
             return False, None
     
     def scan_zip_file(self, zip_path: str, user_id: int, task_id: str) -> Tuple[List[Tuple[str, str]], str, str]:
-        """扫描ZIP文件 - 修复重复计数问题"""
+        """扫描ZIP文件 - 使用统一的tdata扫描逻辑"""
         session_files = []
         tdata_folders = []
-        seen_tdata_paths = set()  # 防止重复计数TData目录
         seen_session_files = set()  # 防止重复计数Session文件（基于规范化路径）
         
         # 在uploads目录下为每个任务创建专属文件夹
@@ -4806,7 +4898,7 @@ class FileProcessor:
             
             print(f"📦 文件解压完成: {task_upload_dir}")
             
-            # 扫描解压后的文件
+            # 先扫描Session文件
             for root, dirs, files in os.walk(task_upload_dir):
                 for file in files:
                     if file.endswith('.session'):
@@ -4835,109 +4927,17 @@ class FileProcessor:
                             print(f"📄 找到Session文件: {file} (带JSON)")
                         else:
                             print(f"📄 找到Session文件: {file} (纯Session，无JSON)")
-                
-                for dir_name in dirs:
-                    dir_path = os.path.join(root, dir_name)
-                    
-                    # 【关键修复】支持四种TData结构（包括变体）：
-                    # 0. tdata子目录包装: account/tdata/D877F783D5D3EF8C/maps + key_data(s)（最常见）
-                    #    变体: account/tdata/key_datas + D877F783D5D3EF8C/maps（key文件在D877外）
-                    # 1. 标准结构: account/D877F783D5D3EF8C/maps + key_data(s)
-                    # 2. 直接D877结构: D877F783D5D3EF8C/maps + key_data(s)
-                    # 3. 嵌套结构: D877F783D5D3EF8C/D877*/maps + key_data(s)
-                    # 注: 已移除"tdata目录自身"的检测以避免重复识别（每个账号被识别两次的问题）
-                    
-                    d877_check_path = None
-                    maps_file = None
-                    is_valid_tdata = False
-                    tdata_root_path = None  # 用于TDesktop的实际TData根目录路径
-                    
-                    # 情况0: 检查是否有tdata子目录，然后在tdata里找D877F783D5D3EF8C（最常见的结构）
-                    tdata_wrapper_path = os.path.join(dir_path, "tdata")
-                    if os.path.exists(tdata_wrapper_path) and os.path.isdir(tdata_wrapper_path):
-                        tdata_d877_path = os.path.join(tdata_wrapper_path, "D877F783D5D3EF8C")
-                        if os.path.exists(tdata_d877_path):
-                            # 先检查标准结构（key文件在D877内），如果失败则检查变体结构（key文件在tdata目录）
-                            is_valid_tdata, maps_file = self._validate_tdata_structure(tdata_d877_path, check_parent_for_keys=False)
-                            if not is_valid_tdata:
-                                is_valid_tdata, maps_file = self._validate_tdata_structure(tdata_d877_path, check_parent_for_keys=True)
-                            if is_valid_tdata:
-                                d877_check_path = tdata_d877_path
-                                tdata_root_path = tdata_wrapper_path  # TDesktop需要tdata目录路径
-                                print(f"📂 检测到tdata包装结构: {dir_name}/tdata/D877F783D5D3EF8C")
-                    
-                    # 情况1: 检查是否有标准的D877F783D5D3EF8C子目录
-                    if not is_valid_tdata:
-                        standard_d877_path = os.path.join(dir_path, "D877F783D5D3EF8C")
-                        if os.path.exists(standard_d877_path):
-                            is_valid_tdata, maps_file = self._validate_tdata_structure(standard_d877_path)
-                            if is_valid_tdata:
-                                d877_check_path = standard_d877_path
-                                tdata_root_path = dir_path  # TDesktop需要包含D877的父目录
-                            else:
-                                # 如果标准路径下没有文件，检查嵌套的D877子目录（情况4）
-                                try:
-                                    for sub_dir in os.listdir(standard_d877_path):
-                                        sub_dir_path = os.path.join(standard_d877_path, sub_dir)
-                                        if os.path.isdir(sub_dir_path) and sub_dir.startswith("D877"):
-                                            is_valid_nested, maps_file = self._validate_tdata_structure(sub_dir_path)
-                                            if is_valid_nested:
-                                                d877_check_path = sub_dir_path
-                                                tdata_root_path = dir_path  # TDesktop需要最外层的D877父目录
-                                                is_valid_tdata = True
-                                                print(f"🔍 检测到嵌套TData结构: {dir_name} -> {sub_dir}")
-                                                break
-                                except (OSError, PermissionError) as e:
-                                    print(f"⚠️ 无法读取D877F783D5D3EF8C子目录: {e}")
-                    
-                    # 情况2已移除: 不再检测当前目录名为"tdata"的情况
-                    # 情况2已移除: 不再检测当前目录名为"tdata"的情况
-                    # 原因: 会导致账号被重复检测（Case 0已经处理了 account/tdata/D877 结构）
-                    # 移除此case避免同一账号被识别两次并标记为重复
-                    
-                    # 情况2: 当前目录本身就是D877开头的目录（直接包含TData文件）
-                    if not is_valid_tdata and dir_name.startswith("D877"):
-                        is_valid_tdata, maps_file = self._validate_tdata_structure(dir_path)
-                        if is_valid_tdata:
-                            d877_check_path = dir_path
-                            # 对于D877目录，TDesktop需要其父目录
-                            tdata_root_path = os.path.dirname(dir_path)
-                            print(f"📂 检测到D877目录直接包含TData文件: {dir_name}")
-                    
-                    # 如果没有找到有效的TData结构，跳过
-                    if not is_valid_tdata:
-                        continue
-                    
-                    # 防御性检查：确保tdata_root_path已设置
-                    if tdata_root_path is None:
-                        print(f"⚠️ 警告: TData路径未正确设置，跳过: {dir_name}")
-                        continue
-                    
-                    # 【修复】使用账号根目录（手机号目录）进行去重
-                    # 关键点：每个账号都有相同的"tdata"子目录，因此必须基于手机号目录去重
-                    # 例如: 8619912345678 和 8619987654321 是不同账号，虽然都有 tdata/D877F783D5D3EF8C
-                    account_root_path = self._get_account_root_from_tdata_path(tdata_root_path)
-                    normalized_path = os.path.normpath(os.path.abspath(account_root_path))
-                    
-                    # 检查是否已经添加过此账号
-                    if normalized_path in seen_tdata_paths:
-                        account_name = os.path.basename(normalized_path)
-                        print(f"⚠️ 跳过重复账号: {account_name}")
-                        continue
-                    
-                    seen_tdata_paths.add(normalized_path)
-                    
-                    # 使用新的提取方法获取手机号
-                    display_name = self.extract_phone_from_tdata_directory(tdata_root_path)
-                    
-                    # 使用tdata_root_path而不是dir_path，这是TDesktop实际需要的路径
-                    tdata_folders.append((tdata_root_path, display_name))
-                    print(f"📂 找到TData目录: {display_name} (路径: {dir_name})")
-                    
-                    # 【修复】防止os.walk递归进入已识别的tdata目录，避免重复扫描
-                    # 从dirs列表中移除此目录，阻止os.walk深入其子目录
-                    if dir_name in dirs:
-                        dirs.remove(dir_name)
+            
+            # 使用统一的tdata扫描函数
+            print(f"📂 开始扫描TData账号...")
+            tdata_accounts = scan_tdata_accounts(task_upload_dir)
+            
+            # 将tdata账号转换为与旧格式兼容的元组列表
+            for account in tdata_accounts:
+                phone = account['phone']
+                tdata_path = account['tdata_path']
+                tdata_folders.append((tdata_path, phone))
+                print(f"📂 找到TData账号: {phone} -> {tdata_path}")
         
         except Exception as e:
             print(f"❌ 文件扫描失败: {e}")
@@ -19160,36 +19160,36 @@ class EnhancedBot:
                 except Exception as e:
                     print(f"❌ 解压失败 {filename}: {e}")
         
-        # 第二步：递归扫描所有解压后的内容
-        tdata_accounts = []  # 存储 TData 账户目录路径
+        # 第二步：递归扫描所有解压后的内容 - 使用统一扫描函数
+        print("📂 开始扫描账号...")
+        
+        # 使用统一的 tdata 扫描函数
+        tdata_accounts_unified = scan_tdata_accounts(extract_dir)
+        
+        # 转换为原有格式 (account_root, tdata_dir_name)
+        tdata_accounts = []
+        for account in tdata_accounts_unified:
+            account_root = account['account_path']
+            tdata_dir_name = 'tdata'  # 统一使用 'tdata' 作为目录名
+            tdata_accounts.append((account_root, tdata_dir_name))
+            print(f"📂 找到TData账号: {account['phone']} -> {account['tdata_path']}")
+        
+        # 扫描Session文件
         session_json_pairs = []  # 存储 Session+JSON 配对
         
-        # 递归扫描函数
-        def scan_directory(dir_path):
-            """递归扫描目录寻找账户"""
+        def scan_sessions(dir_path):
+            """递归扫描Session文件"""
             try:
                 for root, dirs, filenames in os.walk(dir_path):
-                    # 检查是否是 TData 账户目录（case-insensitive）
-                    dirs_lower = [d.lower() for d in dirs]
-                    if 'tdata' in dirs_lower:
-                        # 找到 tdata 目录的实际名称
-                        tdata_dir_name = dirs[dirs_lower.index('tdata')]
-                        tdata_path = os.path.join(root, tdata_dir_name)
-                        
-                        # 检查是否包含 D877F783D5D3EF8C 标记
-                        if os.path.exists(tdata_path):
-                            for subdir in os.listdir(tdata_path):
-                                if subdir.upper() == 'D877F783D5D3EF8C':
-                                    # 找到一个 TData 账户
-                                    tdata_accounts.append((root, tdata_dir_name))
-                                    break
-                    
                     # 检查当前目录中的 Session 文件 (支持纯Session或Session+JSON配对)
                     session_files = {}
                     json_files = {}
                     
                     for fname in filenames:
                         if fname.lower().endswith('.session'):
+                            # 过滤系统文件
+                            if fname == 'tdata.session' or fname.startswith('batch_validate_') or fname.startswith('temp_') or fname.startswith('user_'):
+                                continue
                             basename = fname[:-8]  # 去掉 .session
                             session_files[basename] = os.path.join(root, fname)
                         elif fname.lower().endswith('.json'):
@@ -19203,10 +19203,11 @@ class EnhancedBot:
                         json_path = json_files.get(basename, None)  # JSON可选，可能为None
                         session_json_pairs.append((session_path, json_path, basename))
             except Exception as e:
-                print(f"❌ 扫描目录失败 {dir_path}: {e}")
+                print(f"❌ 扫描Session文件失败 {dir_path}: {e}")
         
-        # 扫描所有解压的内容
-        scan_directory(extract_dir)
+        # 扫描所有Session文件
+        scan_sessions(extract_dir)
+        print(f"📱 找到 {len(session_json_pairs)} 个Session文件")
         
         # 第三步：提取手机号并去重 - 同时追踪重复项
         # 为TData账户提取手机号
@@ -27059,19 +27060,32 @@ o5eth</code>
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir, ignore_errors=True)
         
-        # 扫描账号文件
-        accounts = []
+        # 扫描账号文件 - 使用统一的扫描逻辑
+        logger.info(f"📊 开始扫描账号文件...")
+        
+        # 先扫描 session 文件
+        session_accounts = []
         for root, dirs, files in os.walk(extract_dir):
-            # 查找 session 文件
             for file in files:
                 if file.endswith('.session') and not file.endswith('.session-journal'):
-                    accounts.append(os.path.join(root, file))
-            
-            # 查找 tdata 目录
-            if 'tdata' in [d.lower() for d in dirs]:
-                for d in dirs:
-                    if d.lower() == 'tdata':
-                        accounts.append(os.path.join(root, d))
+                    # 过滤系统文件
+                    if file == 'tdata.session' or file.startswith('batch_validate_') or file.startswith('temp_') or file.startswith('user_'):
+                        continue
+                    session_accounts.append(os.path.join(root, file))
+        
+        # 使用统一的 tdata 扫描函数
+        tdata_accounts = scan_tdata_accounts(extract_dir)
+        
+        # 合并账号列表
+        accounts = []
+        
+        # 添加 session 账号
+        for session_path in session_accounts:
+            accounts.append(session_path)
+        
+        # 添加 tdata 账号（使用 tdata_path）
+        for tdata_account in tdata_accounts:
+            accounts.append(tdata_account['tdata_path'])
         
         if not accounts:
             self.safe_edit_message_text(progress_msg, "❌ 未找到有效的账号文件")
@@ -27081,21 +27095,25 @@ o5eth</code>
         # 构建账号字典列表用于去重
         logger.info(f"📊 扫描到 {len(accounts)} 个账号文件，开始去重...")
         account_list = []
-        for account_path in accounts:
-            # 判断是 tdata 还是 session
-            is_tdata = not account_path.endswith('.session')
-            if is_tdata:
-                phone = extract_phone_from_tdata_path(account_path)
-                account_format = 'tdata'
-            else:
-                phone = extract_phone_from_path(account_path)
-                account_format = 'session'
-            
+        
+        # 添加 session 账号到列表
+        for session_path in session_accounts:
+            phone = extract_phone_from_path(session_path)
             account_list.append({
                 'phone': phone,
-                'session_path': account_path,  # 这将在处理时转换为session
-                'original_path': account_path,
-                'format': account_format
+                'session_path': session_path,
+                'original_path': session_path,
+                'format': 'session'
+            })
+        
+        # 添加 tdata 账号到列表
+        for tdata_account in tdata_accounts:
+            phone = tdata_account['phone']
+            account_list.append({
+                'phone': phone,
+                'session_path': tdata_account['tdata_path'],
+                'original_path': tdata_account['tdata_path'],
+                'format': 'tdata'
             })
         
         # 去重：按手机号去重
