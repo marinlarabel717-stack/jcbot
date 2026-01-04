@@ -1300,15 +1300,23 @@ def scan_tdata_accounts(base_path: str) -> list:
     """
     统一的 tdata 账号扫描函数
     
-    正确的 tdata 结构: 手机号/tdata/xxx/key_datas
-    以手机号文件夹为单位识别账号
+    ⚠️ 严格要求：必须是 手机号/tdata/xxx/key_datas 结构
+    不支持直接的 tdata 或 D877F783D5D3EF8C 目录
+    
+    正确示例:
+    - ✅ +8613812345678/tdata/D877F783D5D3EF8C/key_datas
+    - ✅ 79001234567/tdata/D877F783D5D3EF8C/key_datas
+    - ❌ tdata/D877F783D5D3EF8C/key_datas (缺少手机号文件夹)
+    - ❌ D877F783D5D3EF8C/key_datas (缺少手机号文件夹)
+    
+    以手机号文件夹为单位识别账号，每个手机号=一个账号
     
     Args:
         base_path: 解压后的根目录
         
     Returns:
         账号列表，每个账号包含:
-        - phone: 手机号
+        - phone: 手机号（文件夹名）
         - tdata_path: tdata 完整路径
         - account_path: 账号根目录（手机号文件夹）
     """
@@ -4987,19 +4995,21 @@ class FileProcessor:
             return tdata_folders, task_upload_dir, "tdata"
         else:
             print("❌ 未找到有效的账号文件")
-            print("💡 TData格式要求:")
-            print("   • 必须包含 D877F783D5D3EF8C 目录")
-            print("   • D877F783D5D3EF8C 目录下必须有 maps 文件 (大小 > 30 字节)")
-            print("   • key_data 或 key_datas 文件可以在以下位置:")
-            print("     - D877F783D5D3EF8C 目录内（标准）")
-            print("     - D877F783D5D3EF8C 同级目录（变体）")
-            print("💡 支持的目录结构:")
-            print("   1. account/tdata/D877F783D5D3EF8C/ (最常见)")
-            print("   2. account/tdata/key_datas + D877F783D5D3EF8C/ (变体-key在外)")
-            print("   3. account/D877F783D5D3EF8C/ (标准)")
-            print("   4. tdata/D877F783D5D3EF8C/ (直接tdata)")
-            print("   5. D877F783D5D3EF8C/ (直接D877)")
-            print("   6. D877F783D5D3EF8C/D877*/ (嵌套D877)")
+            print("💡 正确的 TData 格式要求:")
+            print("   ⚠️ 必须以手机号文件夹开头！")
+            print("")
+            print("   ✅ 正确的目录结构:")
+            print("   • 手机号/tdata/D877F783D5D3EF8C/key_datas (最常见)")
+            print("   • 手机号/tdata/D877F783D5D3EF8C/key_data (变体)")
+            print("")
+            print("   ❌ 以下结构不被支持:")
+            print("   • tdata/D877F783D5D3EF8C/ (缺少手机号文件夹)")
+            print("   • D877F783D5D3EF8C/ (缺少手机号文件夹)")
+            print("")
+            print("   📌 示例:")
+            print("   ✅ +8613812345678/tdata/D877F783D5D3EF8C/key_datas")
+            print("   ✅ 79001234567/tdata/D877F783D5D3EF8C/key_datas")
+            print("   ❌ tdata/D877F783D5D3EF8C/key_datas (无手机号)")
             shutil.rmtree(task_upload_dir, ignore_errors=True)
             return [], "", "none"
     
