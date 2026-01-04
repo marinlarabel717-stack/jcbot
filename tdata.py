@@ -1266,7 +1266,9 @@ def is_valid_tdata(tdata_path: str) -> bool:
     
     有效的 tdata 目录应该包含:
     - 一个类似 D877F783D5D3EF8C 的子目录
-    - 该子目录下有 key_datas 文件或 key_data 文件
+    - key_datas 或 key_data 文件可以在：
+      1. D877F783D5D3EF8C 子目录内（标准结构）
+      2. 与 D877F783D5D3EF8C 同级（变体结构）
     
     Args:
         tdata_path: tdata 目录路径
@@ -1278,18 +1280,30 @@ def is_valid_tdata(tdata_path: str) -> bool:
         return False
     
     try:
+        has_d877_dir = False
+        has_key_file = False
+        
         for item in os.listdir(tdata_path):
             item_path = os.path.join(tdata_path, item)
-            if os.path.isdir(item_path):
-                # 检查是否有 key_datas 文件
-                key_datas_path = os.path.join(item_path, 'key_datas')
-                if os.path.exists(key_datas_path):
-                    return True
+            
+            # 检查是否有 D877 开头的目录
+            if os.path.isdir(item_path) and item.startswith('D877'):
+                has_d877_dir = True
                 
-                # 有些版本可能是 key_data (没有s)
+                # 检查 D877 目录内是否有 key_datas 或 key_data（标准结构）
+                key_datas_path = os.path.join(item_path, 'key_datas')
                 key_data_path = os.path.join(item_path, 'key_data')
-                if os.path.exists(key_data_path):
+                if os.path.exists(key_datas_path) or os.path.exists(key_data_path):
                     return True
+            
+            # 检查与 D877 同级的 key_datas 或 key_data 文件（变体结构）
+            if item in ('key_datas', 'key_data') and os.path.isfile(item_path):
+                has_key_file = True
+        
+        # 如果有 D877 目录且有同级的 key 文件，也认为是有效的
+        if has_d877_dir and has_key_file:
+            return True
+            
     except (OSError, PermissionError) as e:
         logger.warning(f"检查tdata目录失败 {tdata_path}: {e}")
         return False
@@ -1300,14 +1314,14 @@ def scan_tdata_accounts(base_path: str) -> list:
     """
     统一的 tdata 账号扫描函数
     
-    ⚠️ 严格要求：必须是 手机号/tdata/xxx/key_datas 结构
-    不支持直接的 tdata 或 D877F783D5D3EF8C 目录
+    灵活识别：只要手机号文件夹内包含有效的 tdata 相关文件即可识别
+    支持多种路径结构：
+    - ✅ +8613812345678/tdata/D877F783D5D3EF8C/key_datas (标准结构)
+    - ✅ 79001234567/D877F783D5D3EF8C/key_datas (无tdata子目录)
+    - ✅ 79001234567/其他子目录/tdata/D877F783D5D3EF8C/key_datas (深层嵌套)
+    - ✅ 79001234567/key_datas (直接在根目录)
     
-    正确示例:
-    - ✅ +8613812345678/tdata/D877F783D5D3EF8C/key_datas
-    - ✅ 79001234567/tdata/D877F783D5D3EF8C/key_datas
-    - ❌ tdata/D877F783D5D3EF8C/key_datas (缺少手机号文件夹)
-    - ❌ D877F783D5D3EF8C/key_datas (缺少手机号文件夹)
+    关键要求：必须以手机号文件夹为根，不识别无手机号文件夹的账号
     
     以手机号文件夹为单位识别账号，每个手机号=一个账号
     
@@ -1317,7 +1331,7 @@ def scan_tdata_accounts(base_path: str) -> list:
     Returns:
         账号列表，每个账号包含:
         - phone: 手机号（文件夹名）
-        - tdata_path: tdata 完整路径
+        - tdata_path: tdata 或账号根目录路径
         - account_path: 账号根目录（手机号文件夹）
     """
     accounts = []
@@ -1329,6 +1343,38 @@ def scan_tdata_accounts(base_path: str) -> list:
         clean_name = folder_name.lstrip('+')
         # 手机号通常是10-15位数字
         return clean_name.isdigit() and 10 <= len(clean_name) <= 15
+    
+    def has_tdata_files(dir_path: str) -> bool:
+        """检查目录树中是否包含 tdata 相关文件（key_datas, key_data, D877F783D5D3EF8C等）"""
+        try:
+            for root, dirs, files in os.walk(dir_path):
+                # 检查是否有 key_datas 或 key_data 文件
+                if 'key_datas' in files or 'key_data' in files:
+                    return True
+                # 检查是否有 D877F783D5D3EF8C 目录
+                for d in dirs:
+                    if d.startswith('D877'):
+                        # 检查 D877 目录下是否有 key_datas 或 key_data
+                        d877_path = os.path.join(root, d)
+                        if os.path.exists(os.path.join(d877_path, 'key_datas')) or \
+                           os.path.exists(os.path.join(d877_path, 'key_data')):
+                            return True
+        except (OSError, PermissionError) as e:
+            logger.warning(f"检查tdata文件失败 {dir_path}: {e}")
+        return False
+    
+    def find_tdata_path(account_path: str) -> str:
+        """在账号目录中查找 tdata 路径，优先返回标准 tdata 子目录，否则返回账号根目录"""
+        # 优先查找标准的 tdata 子目录
+        tdata_path = os.path.join(account_path, 'tdata')
+        if os.path.isdir(tdata_path) and is_valid_tdata(tdata_path):
+            return tdata_path
+        
+        # 如果没有标准 tdata 子目录，但账号目录包含 tdata 文件，返回账号根目录
+        if has_tdata_files(account_path):
+            return account_path
+        
+        return None
     
     def scan_directory(dir_path):
         """递归扫描目录"""
@@ -1342,15 +1388,11 @@ def scan_tdata_accounts(base_path: str) -> list:
                 if not os.path.isdir(item_path):
                     continue
                 
-                # 检查是否是 手机号/tdata 结构
-                tdata_path = os.path.join(item_path, 'tdata')
-                if os.path.isdir(tdata_path):
-                    # 检查 tdata 目录下是否有有效的账号数据
-                    if is_valid_tdata(tdata_path):
-                        # 验证文件夹名看起来像手机号
-                        if not is_likely_phone_number(item):
-                            logger.warning(f"文件夹 '{item}' 包含有效tdata但不像手机号，仍将其作为账号处理")
-                        
+                # 检查文件夹名是否像手机号
+                if is_likely_phone_number(item):
+                    # 查找 tdata 路径
+                    tdata_path = find_tdata_path(item_path)
+                    if tdata_path:
                         phone = item  # 文件夹名就是手机号
                         
                         # 去重：同一个手机号只添加一次
@@ -1362,8 +1404,11 @@ def scan_tdata_accounts(base_path: str) -> list:
                                 'account_path': item_path
                             })
                             logger.info(f"找到账号: {phone} -> {tdata_path}")
+                    else:
+                        # 虽然文件夹名像手机号，但不包含 tdata 文件，继续递归扫描
+                        scan_directory(item_path)
                 else:
-                    # 递归扫描子目录
+                    # 不像手机号的文件夹，递归扫描子目录
                     scan_directory(item_path)
         except (OSError, PermissionError) as e:
             logger.warning(f"扫描目录失败 {dir_path}: {e}")
@@ -5009,9 +5054,11 @@ class FileProcessor:
             print("💡 正确的 TData 格式要求:")
             print("   ⚠️ 必须以手机号文件夹开头！")
             print("")
-            print("   ✅ 正确的目录结构:")
-            print("   • 手机号/tdata/D877F783D5D3EF8C/key_datas (最常见)")
-            print("   • 手机号/tdata/D877F783D5D3EF8C/key_data (变体)")
+            print("   ✅ 支持的目录结构示例:")
+            print("   • 手机号/tdata/D877F783D5D3EF8C/key_datas (标准：key在D877内)")
+            print("   • 手机号/tdata/key_datas + D877F783D5D3EF8C/ (变体：key与D877同级)")
+            print("   • 手机号/D877F783D5D3EF8C/key_datas (无tdata子目录)")
+            print("   • 手机号/其他路径/tdata/... (深层嵌套)")
             print("")
             print("   ❌ 以下结构不被支持:")
             print("   • tdata/D877F783D5D3EF8C/ (缺少手机号文件夹)")
@@ -5019,7 +5066,8 @@ class FileProcessor:
             print("")
             print("   📌 示例:")
             print("   ✅ +8613812345678/tdata/D877F783D5D3EF8C/key_datas")
-            print("   ✅ 79001234567/tdata/D877F783D5D3EF8C/key_datas")
+            print("   ✅ 79001234567/tdata/key_datas (与D877同级)")
+            print("   ✅ 79001234567/D877F783D5D3EF8C/key_datas")
             print("   ❌ tdata/D877F783D5D3EF8C/key_datas (无手机号)")
             shutil.rmtree(task_upload_dir, ignore_errors=True)
             return [], "", "none"
