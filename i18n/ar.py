@@ -616,268 +616,268 @@ TEXTS = {
     
     # ===== Forget 2FA ميزة =====
     # 1. ميزة Introduction الصفحة
-    'forget_2fa_title': '🔓 نسيت 2FA كلمة المرور',
-    'forget_2fa_important': '⚠️ Important ملاحظات:',
-    'forget_2fa_note1': '· Will initiate Telegram official كلمة المرور إعادة تعيين معالجة',
-    'forget_2fa_note2': '· كلمة المرور will be تمت الإزالة بعد 7-يوم التهدئة فترة',
-    'forget_2fa_note3': '· بروكسي اتصال preferred (to avoid قيود)',
-    'forget_2fa_note4': '· تلقائي احتياطي إلى محلي اتصال إذا بروكسي فشل',
-    'forget_2fa_note5': '· تلقائي عشوائي delay between حساب (5-15s)',
-    'forget_2fa_proxy_warning': '⚠️ Warning: Insufficient بروكسي! فقط {العدد} متاح, يوصى في least 10',
-    'forget_2fa_proxy_status': '📡 الحالي حالة البروكسي',
+    'forget_2fa_title': '🔓 نسيت كلمة مرور 2FA',
+    'forget_2fa_important': '⚠️ ملاحظات مهمة:',
+    'forget_2fa_note1': '· سيبدأ عملية إعادة تعيين كلمة المرور الرسمية من Telegram',
+    'forget_2fa_note2': '· ستتم إزالة كلمة المرور بعد فترة التهدئة البالغة 7 أيام',
+    'forget_2fa_note3': '· يُفضل الاتصال بالبروكسي (لتجنب القيود)',
+    'forget_2fa_note4': '· احتياطي تلقائي للاتصال المحلي في حالة فشل البروكسي',
+    'forget_2fa_note5': '· تأخير عشوائي تلقائي بين الحسابات (5-15 ثانية)',
+    'forget_2fa_proxy_warning': '⚠️ تحذير: بروكسي غير كافٍ! متاح فقط {العدد}، يُوصى بـ 10 على الأقل',
+    'forget_2fa_proxy_status': '📡 حالة البروكسي الحالية',
     'forget_2fa_proxy_mode_enabled': '· وضع البروكسي: 🟢مفعّل',
     'forget_2fa_proxy_mode_disabled': '· وضع البروكسي: 🔴معطّل',
-    'forget_2fa_proxy_available': '· متاح بروكسي: {العدد}',
-    'forget_2fa_upload_prompt': '📤 يرجى رفع حساب ملف:',
-    'forget_2fa_upload_support': '· دعم .zip أرشيف (Tdata/Session)',
-    'forget_2fa_upload_auto': '· كشف تلقائي ملف الصيغة',
-    'forget_2fa_result_categories': '📊 النتيجة Categories:',
-    'forget_2fa_category_reset': '· ✅ إعادة تعيين تم الطلب - بنجاح تم الطلب كلمة المرور إعادة تعيين (الانتظار 7 يوم)',
-    'forget_2fa_category_no_reset': '· ⚠️ No إعادة تعيين مطلوب - حساب has no 2FA كلمة المرور',
-    'forget_2fa_category_cooling': '· ⏳ في التهدئة فترة - Already في التهدئة فترة',
-    'forget_2fa_category_failed': '· ❌ فشل - اتصال فشل/آخر أخطاء',
+    'forget_2fa_proxy_available': '· بروكسي متاح: {العدد}',
+    'forget_2fa_upload_prompt': '📤 يرجى رفع ملف الحساب:',
+    'forget_2fa_upload_support': '· دعم أرشيف .zip (Tdata/Session)',
+    'forget_2fa_upload_auto': '· اكتشاف تلقائي لصيغة الملف',
+    'forget_2fa_result_categories': '📊 فئات النتيجة:',
+    'forget_2fa_category_reset': '· ✅ تم طلب إعادة التعيين - تم طلب إعادة تعيين كلمة المرور بنجاح (انتظر 7 أيام)',
+    'forget_2fa_category_no_reset': '· ⚠️ لا حاجة لإعادة التعيين - الحساب ليس لديه كلمة مرور 2FA',
+    'forget_2fa_category_cooling': '· ⏳ في فترة التهدئة - بالفعل في فترة التهدئة',
+    'forget_2fa_category_failed': '· ❌ فشل - فشل الاتصال/أخطاء أخرى',
     'forget_2fa_back_menu': 'رجوع إلى القائمة الرئيسية',
     
     # 2. جاري المعالجة التقدم
-    'forget_2fa_processing': '🔓 جاري المعالجة نسيت 2FA...',
+    'forget_2fa_processing': '🔓 جاري معالجة نسيت 2FA...',
     'forget_2fa_progress': 'التقدم: {done}/{إجمالي} ({percent}%)',
-    'forget_2fa_elapsed': '⏱ Elapsed: {الوقت}s',
-    'forget_2fa_speed': '⚡ السرعة: {السرعة}/sec',
-    'forget_2fa_stat_reset': '✅ إعادة تعيين تم الطلب: {العدد}',
-    'forget_2fa_stat_no_reset': '⚠️ No إعادة تعيين مطلوب: {العدد}',
-    'forget_2fa_stat_cooling': '⏳ في التهدئة فترة: {العدد}',
+    'forget_2fa_elapsed': '⏱ المنقضي: {الوقت}ث',
+    'forget_2fa_speed': '⚡ السرعة: {السرعة}/ثانية',
+    'forget_2fa_stat_reset': '✅ تم طلب إعادة التعيين: {العدد}',
+    'forget_2fa_stat_no_reset': '⚠️ لا حاجة لإعادة التعيين: {العدد}',
+    'forget_2fa_stat_cooling': '⏳ في فترة التهدئة: {العدد}',
     'forget_2fa_stat_failed': '❌ فشل: {العدد}',
-    'forget_2fa_stat_pending': '📊 Pending: {العدد}',
+    'forget_2fa_stat_pending': '📊 قيد الانتظار: {العدد}',
     'forget_2fa_current': 'الحالي: {filename}...',
-    'forget_2fa_status_reset': 'الحالة: ✅ إعادة تعيين تم الطلب',
-    'forget_2fa_status_no_reset': 'الحالة: ⚠️ No إعادة تعيين مطلوب',
-    'forget_2fa_status_cooling': 'الحالة: ⏳ في التهدئة فترة',
+    'forget_2fa_status_reset': 'الحالة: ✅ تم طلب إعادة التعيين',
+    'forget_2fa_status_no_reset': 'الحالة: ⚠️ لا حاجة لإعادة التعيين',
+    'forget_2fa_status_cooling': 'الحالة: ⏳ في فترة التهدئة',
     'forget_2fa_status_failed': 'الحالة: ❌ فشل',
     'forget_2fa_proxy_using': 'بروكسي: ✅ استخدام بروكسي',
     'forget_2fa_proxy_local': 'بروكسي: ❌ اتصال محلي',
     
     # 3. جاري المعالجة مكتمل
-    'forget_2fa_complete': '✅ نسيت 2FA جاري المعالجة مكتمل!',
-    'forget_2fa_results': '📊 جاري المعالجة النتائج',
-    'forget_2fa_total_accounts': '· الإجمالي حساب: {العدد}',
-    'forget_2fa_result_reset': '· ✅ إعادة تعيين تم الطلب: {العدد}',
-    'forget_2fa_result_no_reset': '· ⚠️ No إعادة تعيين مطلوب: {العدد}',
-    'forget_2fa_result_cooling': '· ⏳ في التهدئة فترة: {العدد}',
+    'forget_2fa_complete': '✅ اكتملت معالجة نسيت 2FA!',
+    'forget_2fa_results': '📊 نتائج المعالجة',
+    'forget_2fa_total_accounts': '· إجمالي الحسابات: {العدد}',
+    'forget_2fa_result_reset': '· ✅ تم طلب إعادة التعيين: {العدد}',
+    'forget_2fa_result_no_reset': '· ⚠️ لا حاجة لإعادة التعيين: {العدد}',
+    'forget_2fa_result_cooling': '· ⏳ في فترة التهدئة: {العدد}',
     'forget_2fa_result_failed': '· ❌ فشل: {العدد}',
-    'forget_2fa_total_time': '⏱ الإجمالي الوقت: {الوقت}s',
-    'forget_2fa_batch_id': '🆔 جماعي ID: {batch_id}',
+    'forget_2fa_total_time': '⏱ الوقت الإجمالي: {الوقت}ث',
+    'forget_2fa_batch_id': '🆔 معرّف الدفعة: {batch_id}',
     'forget_2fa_notes': '📝 ملاحظات:',
-    'forget_2fa_notes_wait': '· حسابات مع إعادة تعيين تم الطلب يحتاج إلى الانتظار 7-يوم التهدئة فترة',
-    'forget_2fa_notes_remove': '· 2FA كلمة المرور will be تمت الإزالة بعد التهدئة فترة ends',
+    'forget_2fa_notes_wait': '· الحسابات التي تم طلب إعادة تعيينها تحتاج للانتظار فترة التهدئة 7 أيام',
+    'forget_2fa_notes_remove': '· ستتم إزالة كلمة مرور 2FA بعد انتهاء فترة التهدئة',
     
     # 4. النتيجة ملف Naming
-    'zip_forget_2fa_reset': 'Forgot2FA_ResetRequested_{العدد}',
-    'zip_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{العدد}',
-    'zip_forget_2fa_cooling': 'Forgot2FA_InCooling_{العدد}',
-    'zip_forget_2fa_failed': 'Forgot2FA_Failed_{العدد}',
-    'file_desc_forget_2fa_reset': '📦 نسيت 2FA - إعادة تعيين تم الطلب ({العدد})',
-    'file_desc_forget_2fa_no_reset': '📦 نسيت 2FA - No إعادة تعيين مطلوب ({العدد})',
-    'file_desc_forget_2fa_cooling': '📦 نسيت 2FA - في التهدئة فترة ({العدد})',
+    'zip_forget_2fa_reset': 'نسيت_2FA_تم_طلب_إعادة_التعيين_{العدد}',
+    'zip_forget_2fa_no_reset': 'نسيت_2FA_لا_حاجة_لإعادة_التعيين_{العدد}',
+    'zip_forget_2fa_cooling': 'نسيت_2FA_في_التهدئة_{العدد}',
+    'zip_forget_2fa_failed': 'نسيت_2FA_فشل_{العدد}',
+    'file_desc_forget_2fa_reset': '📦 نسيت 2FA - تم طلب إعادة التعيين ({العدد})',
+    'file_desc_forget_2fa_no_reset': '📦 نسيت 2FA - لا حاجة لإعادة التعيين ({العدد})',
+    'file_desc_forget_2fa_cooling': '📦 نسيت 2FA - في فترة التهدئة ({العدد})',
     'file_desc_forget_2fa_failed': '📦 نسيت 2FA - فشل ({العدد})',
-    'report_forget_2fa_reset': 'Forgot2FA_ResetRequested_{العدد}_Report.txt',
-    'report_forget_2fa_no_reset': 'Forgot2FA_NoResetNeeded_{العدد}_Report.txt',
-    'report_forget_2fa_cooling': 'Forgot2FA_InCooling_{العدد}_Report.txt',
-    'report_forget_2fa_failed': 'Forgot2FA_Failed_{العدد}_Report.txt',
-    'report_desc_forget_2fa_reset': '📋 تفصيلي تقرير - إعادة تعيين تم الطلب',
-    'report_desc_forget_2fa_no_reset': '📋 تفصيلي تقرير - No إعادة تعيين مطلوب',
-    'report_desc_forget_2fa_cooling': '📋 تفصيلي تقرير - في التهدئة فترة',
-    'report_desc_forget_2fa_failed': '📋 تفصيلي تقرير - فشل',
+    'report_forget_2fa_reset': 'تقرير_نسيت_2FA_تم_طلب_إعادة_التعيين_{العدد}.txt',
+    'report_forget_2fa_no_reset': 'تقرير_نسيت_2FA_لا_حاجة_لإعادة_التعيين_{العدد}.txt',
+    'report_forget_2fa_cooling': 'تقرير_نسيت_2FA_في_التهدئة_{العدد}.txt',
+    'report_forget_2fa_failed': 'تقرير_نسيت_2FA_فشل_{العدد}.txt',
+    'report_desc_forget_2fa_reset': '📋 تقرير تفصيلي - تم طلب إعادة التعيين',
+    'report_desc_forget_2fa_no_reset': '📋 تقرير تفصيلي - لا حاجة لإعادة التعيين',
+    'report_desc_forget_2fa_cooling': '📋 تقرير تفصيلي - في فترة التهدئة',
+    'report_desc_forget_2fa_failed': '📋 تقرير تفصيلي - فشل',
     
     # 5. تقرير TXT Template - إعادة تعيين تم الطلب
-    'report_forget_2fa_title_reset': 'نسيت 2FA تقرير - إعادة تعيين تم الطلب',
+    'report_forget_2fa_title_reset': 'تقرير نسيت 2FA - تم طلب إعادة التعيين',
     'report_forget_2fa_total': 'الإجمالي: {العدد}',
     'report_forget_2fa_generated': 'تم الإنشاء: {الوقت}',
-    'report_forget_2fa_detail_list': 'تفاصيل قائمة:',
+    'report_forget_2fa_detail_list': 'قائمة التفاصيل:',
     'report_forget_2fa_item_reset': '✅ {filename}',
     'report_forget_2fa_phone': 'الهاتف: {الهاتف}',
-    'report_forget_2fa_status_reset_waiting': 'الحالة: كلمة المرور إعادة تعيين تم الطلب, انتظار لـ التهدئة فترة, until: {date}',
+    'report_forget_2fa_status_reset_waiting': 'الحالة: تم طلب إعادة تعيين كلمة المرور، انتظر فترة التهدئة، حتى: {date}',
     'report_forget_2fa_proxy_using': 'بروكسي: ✅ استخدام بروكسي',
     'report_forget_2fa_proxy_local': 'بروكسي: ❌ اتصال محلي',
-    'report_forget_2fa_cooling_until': 'التهدئة فترة until: {date}',
-    'report_forget_2fa_duration': 'المدة: {الوقت}s',
+    'report_forget_2fa_cooling_until': 'فترة التهدئة حتى: {date}',
+    'report_forget_2fa_duration': 'المدة: {الوقت}ث',
     
     # 6. تقرير TXT Template - No إعادة تعيين مطلوب
-    'report_forget_2fa_title_no_reset': 'نسيت 2FA تقرير - No إعادة تعيين مطلوب',
+    'report_forget_2fa_title_no_reset': 'تقرير نسيت 2FA - لا حاجة لإعادة التعيين',
     'report_forget_2fa_item_no_reset': '⚠️ {filename}',
-    'report_forget_2fa_status_detect_failed': 'الحالة: فشل إلى كشف 2FA الحالة: {خطأ}',
-    'report_forget_2fa_status_no_2fa': 'الحالة: حساب has no 2FA كلمة المرور تعيين',
+    'report_forget_2fa_status_detect_failed': 'الحالة: فشل في اكتشاف حالة 2FA: {خطأ}',
+    'report_forget_2fa_status_no_2fa': 'الحالة: الحساب ليس لديه كلمة مرور 2FA معينة',
     
     # 7. تقرير TXT Template - في التهدئة فترة
-    'report_forget_2fa_title_cooling': 'نسيت 2FA تقرير - في التهدئة فترة',
+    'report_forget_2fa_title_cooling': 'تقرير نسيت 2FA - في فترة التهدئة',
     'report_forget_2fa_item_cooling': '⏳ {filename}',
-    'report_forget_2fa_status_in_cooling': 'الحالة: Already في التهدئة فترة, until: {date}',
+    'report_forget_2fa_status_in_cooling': 'الحالة: بالفعل في فترة التهدئة، حتى: {date}',
     
     # 8. تقرير TXT Template - فشل
-    'report_forget_2fa_title_failed': 'نسيت 2FA تقرير - فشل',
+    'report_forget_2fa_title_failed': 'تقرير نسيت 2FA - فشل',
     'report_forget_2fa_item_failed': '❌ {filename}',
-    'report_forget_2fa_status_connection_failed': 'الحالة: اتصال فشل (الكل بروكسي و محلي فشل)',
+    'report_forget_2fa_status_connection_failed': 'الحالة: فشل الاتصال (فشل جميع البروكسي والاتصال المحلي)',
     
     # 9. Initialization و جاري المعالجة رسائل
-    'forget_2fa_found_accounts': '📊 موجود {العدد} حساب',
+    'forget_2fa_found_accounts': '📊 تم العثور على {العدد} حساب',
     'forget_2fa_format': '📁 الصيغة: {الصيغة}',
     'forget_2fa_proxy_count': '📡 بروكسي: {العدد} متاح',
-    'forget_2fa_initializing': '⏳ Initializing...',
-    'forget_2fa_processing_file': '📥 جاري المعالجة الخاص بك ملف...',
-    'forget_2fa_no_valid_files': '❌ No صالح ملف موجود',
-    'forget_2fa_ensure_format': 'يرجى التأكد ZIP يحتوي على Session أو TData الصيغة ملف',
-    'forget_2fa_sending_results': '📦 إرسال النتيجة ملف...',
-    'forget_2fa_send_failed': '❌ فشل إلى إرسال النتيجة ملف',
+    'forget_2fa_initializing': '⏳ جاري التهيئة...',
+    'forget_2fa_processing_file': '📥 جاري معالجة ملفك...',
+    'forget_2fa_no_valid_files': '❌ لم يتم العثور على ملفات صالحة',
+    'forget_2fa_ensure_format': 'يرجى التأكد من أن ZIP يحتوي على ملفات بصيغة Session أو TData',
+    'forget_2fa_sending_results': '📦 إرسال ملفات النتيجة...',
+    'forget_2fa_send_failed': '❌ فشل في إرسال ملفات النتيجة',
     
     # 10. الحالة Mapping Text
-    'forget_2fa_status_requested': 'إعادة تعيين تم الطلب',
-    'forget_2fa_status_no_2fa': 'No إعادة تعيين مطلوب',
-    'forget_2fa_status_cooling': 'في التهدئة فترة',
+    'forget_2fa_status_requested': 'تم طلب إعادة التعيين',
+    'forget_2fa_status_no_2fa': 'لا حاجة لإعادة التعيين',
+    'forget_2fa_status_cooling': 'في فترة التهدئة',
     'forget_2fa_status_failed': 'فشل',
     'forget_2fa_status_local': 'اتصال محلي',
-    'forget_2fa_status_unknown': 'Unknown',
+    'forget_2fa_status_unknown': 'غير معروف',
     
     # ===== حذف 2FA ميزة =====
     # 1. ميزة Introduction الصفحة
-    'delete_2fa_title': '❌ جماعي حذف 2FA كلمة المرور',
-    'delete_2fa_core_features': '✨ Core الميزات',
-    'delete_2fa_auto_detect': '🔍 تلقائي كلمة المرور الكشف',
-    'delete_2fa_tdata_detect': 'TData الصيغة: كشف تلقائي 2fa.txt, twofa.txt, كلمة المرور.txt',
-    'delete_2fa_session_detect': 'Session الصيغة: كشف تلقائي كلمة المرور حقول في JSON (يدعم twofa, twoFA, 2fa, كلمة المرور, etc.)',
-    'delete_2fa_smart_fallback': 'ذكي احتياطي: استخدام يدوياً تم الإدخال كلمة المرور إذا الكشف فشل',
-    'delete_2fa_interactive_input': '✏️ تفاعلي كلمة المرور إدخال',
-    'delete_2fa_input_choice': 'اختر كشف تلقائي أو يدوي إدخال بعد ملف رفع',
-    'delete_2fa_auto_read': 'كشف تلقائي: Read الحالي كلمة المرور من ملف',
-    'delete_2fa_manual_input': 'يدوي إدخال: مستخدم enters الحالي 2FA كلمة المرور',
-    'delete_2fa_timeout': '5-دقيقة إدخال انتهاء المهلة protection',
-    'delete_2fa_auto_update': '🔄 تلقائي تحديث كلمة المرور ملفات',
-    'delete_2fa_session_update': 'Session الصيغة: موحد twofa حقل cleared, يزيل آخر كلمة المرور حقول',
-    'delete_2fa_tdata_update': 'TData الصيغة: تلقائي-حذف أو clear 2fa.txt و آخر كلمة المرور ملف',
-    'delete_2fa_sync_update': 'ملفات sync immediately بعد ناجح الحذف',
-    'delete_2fa_no_manual_edit': 'No يدوي التكوين ملف editing مطلوب',
+    'delete_2fa_title': '❌ حذف جماعي لكلمة مرور 2FA',
+    'delete_2fa_core_features': '✨ الميزات الأساسية',
+    'delete_2fa_auto_detect': '🔍 اكتشاف تلقائي لكلمة المرور',
+    'delete_2fa_tdata_detect': 'صيغة TData: اكتشاف تلقائي لـ 2fa.txt، twofa.txt، password.txt',
+    'delete_2fa_session_detect': 'صيغة Session: اكتشاف تلقائي لحقول كلمة المرور في JSON (يدعم twofa، twoFA، 2fa، password، إلخ)',
+    'delete_2fa_smart_fallback': 'احتياطي ذكي: استخدام كلمة المرور المدخلة يدويًا إذا فشل الاكتشاف',
+    'delete_2fa_interactive_input': '✏️ إدخال تفاعلي لكلمة المرور',
+    'delete_2fa_input_choice': 'اختر الاكتشاف التلقائي أو الإدخال اليدوي بعد رفع الملف',
+    'delete_2fa_auto_read': 'اكتشاف تلقائي: قراءة كلمة المرور الحالية من الملف',
+    'delete_2fa_manual_input': 'إدخال يدوي: يدخل المستخدم كلمة مرور 2FA الحالية',
+    'delete_2fa_timeout': 'حماية مهلة إدخال 5 دقائق',
+    'delete_2fa_auto_update': '🔄 تحديث تلقائي لملفات كلمة المرور',
+    'delete_2fa_session_update': 'صيغة Session: مسح حقل twofa الموحد، إزالة حقول كلمة المرور الأخرى',
+    'delete_2fa_tdata_update': 'صيغة TData: حذف أو مسح تلقائي لـ 2fa.txt وملفات كلمة المرور الأخرى',
+    'delete_2fa_sync_update': 'مزامنة الملفات فورًا بعد الحذف الناجح',
+    'delete_2fa_no_manual_edit': 'لا يلزم تحرير ملفات التكوين يدويًا',
     'delete_2fa_notes': '⚠️ ملاحظات',
-    'delete_2fa_note1': 'بعد حذف 2FA, حساب will no longer يتطلب 2FA كلمة المرور',
-    'delete_2fa_note2': 'النظام will الأول try إلى كشف تلقائي existing كلمة المرور',
-    'delete_2fa_note3': 'إذا كشف تلقائيion فشل, أنت يمكن يدوياً أدخل الحالي كلمة المرور',
-    'delete_2fa_note4': 'يرجى مكتمل خلال 5 دقيقة, أو مهمة will إلغاء تلقائي',
-    'delete_2fa_note5': 'يرجى التأكد حساب is تسجيل دخول في و session ملف is صالح',
-    'delete_2fa_note6': 'كلمة المرور ملف will تلقائي-تحديث و be included في النتيجة ZIP بعد نجاح',
-    'delete_2fa_upload_prompt': '🚀 يرجى رفع الخاص بك ZIP ملف...',
+    'delete_2fa_note1': 'بعد حذف 2FA، لن يتطلب الحساب كلمة مرور 2FA بعد الآن',
+    'delete_2fa_note2': 'سيحاول النظام أولاً اكتشاف كلمة المرور الموجودة تلقائيًا',
+    'delete_2fa_note3': 'إذا فشل الاكتشاف التلقائي، يمكنك إدخال كلمة المرور الحالية يدويًا',
+    'delete_2fa_note4': 'يرجى الإكمال خلال 5 دقائق، وإلا سيتم إلغاء المهمة تلقائيًا',
+    'delete_2fa_note5': 'يرجى التأكد من أن الحساب مسجل الدخول وملف session صالح',
+    'delete_2fa_note6': 'سيتم تحديث ملف كلمة المرور تلقائيًا وإدراجه في ZIP النتيجة بعد النجاح',
+    'delete_2fa_upload_prompt': '🚀 يرجى رفع ملف ZIP الخاص بك...',
     'delete_2fa_back_menu': 'رجوع إلى القائمة الرئيسية',
     
     # 2. كلمة المرور إدخال الطريقة Selection
-    'delete_2fa_found_files': '📁 موجود {العدد} حساب ملف',
-    'delete_2fa_file_type': '📊 ملف النوع: {النوع}',
-    'delete_2fa_select_method': '🔐 يرجى اختر كلمة المرور إدخال الطريقة:',
-    'delete_2fa_auto_detect_title': '🔍 كشف تلقائي كلمة المرور',
-    'delete_2fa_auto_detect_desc1': '· النظام تلقائي-reads الحالي 2FA كلمة المرور من ملف',
-    'delete_2fa_auto_detect_desc2': '· TData الصيغة: كشف 2fa.txt, twofa.txt, كلمة المرور.txt',
-    'delete_2fa_auto_detect_desc3': '· Session الصيغة: كشف كلمة المرور حقول في JSON',
-    'delete_2fa_manual_title': '✏️ يدوي إدخال كلمة المرور',
-    'delete_2fa_manual_desc1': '· أنت يدوياً أدخل الحالي 2FA كلمة المرور',
-    'delete_2fa_manual_desc2': '· لـ cases عندما كشف تلقائيion فشل',
-    'delete_2fa_select_timeout': '⏰ يرجى اختر خلال 5 دقيقة...',
-    'delete_2fa_btn_auto': 'كشف تلقائي كلمة المرور',
-    'delete_2fa_btn_manual': 'يدوي إدخال كلمة المرور',
+    'delete_2fa_found_files': '📁 تم العثور على {العدد} ملف حساب',
+    'delete_2fa_file_type': '📊 نوع الملف: {النوع}',
+    'delete_2fa_select_method': '🔐 يرجى اختيار طريقة إدخال كلمة المرور:',
+    'delete_2fa_auto_detect_title': '🔍 اكتشاف تلقائي لكلمة المرور',
+    'delete_2fa_auto_detect_desc1': '· يقرأ النظام تلقائيًا كلمة مرور 2FA الحالية من الملف',
+    'delete_2fa_auto_detect_desc2': '· صيغة TData: اكتشاف 2fa.txt، twofa.txt، password.txt',
+    'delete_2fa_auto_detect_desc3': '· صيغة Session: اكتشاف حقول كلمة المرور في JSON',
+    'delete_2fa_manual_title': '✏️ إدخال يدوي لكلمة المرور',
+    'delete_2fa_manual_desc1': '· تدخل يدويًا كلمة مرور 2FA الحالية',
+    'delete_2fa_manual_desc2': '· للحالات التي يفشل فيها الاكتشاف التلقائي',
+    'delete_2fa_select_timeout': '⏰ يرجى الاختيار خلال 5 دقائق...',
+    'delete_2fa_btn_auto': 'اكتشاف تلقائي لكلمة المرور',
+    'delete_2fa_btn_manual': 'إدخال يدوي لكلمة المرور',
     'delete_2fa_btn_cancel': 'إلغاء',
     
     # 3. يدوي كلمة المرور إدخال
-    'delete_2fa_enter_password': '🔐 يرجى أدخل الحالي 2FA كلمة المرور:',
-    'delete_2fa_enter_desc1': '· أدخل الخاص بك الحالي 2FA كلمة المرور',
-    'delete_2fa_enter_desc2': '· النظام will verify كلمة المرور و حذف 2FA',
-    'delete_2fa_enter_desc3': '· يرجى إرسال كلمة المرور خلال 5 دقيقة...',
-    'delete_2fa_cancel_hint': '💡 لـ إلغاء, النقر على /بدء إلى return إلى main القائمة',
+    'delete_2fa_enter_password': '🔐 يرجى إدخال كلمة مرور 2FA الحالية:',
+    'delete_2fa_enter_desc1': '· أدخل كلمة مرور 2FA الحالية',
+    'delete_2fa_enter_desc2': '· سيتحقق النظام من كلمة المرور ويحذف 2FA',
+    'delete_2fa_enter_desc3': '· يرجى إرسال كلمة المرور خلال 5 دقائق...',
+    'delete_2fa_cancel_hint': '💡 للإلغاء، انقر على /بدء للعودة إلى القائمة الرئيسية',
     
     # 4. الحذف التقدم
-    'delete_2fa_in_progress': '🗑️ حذف 2FA كلمة المرور...',
-    'delete_2fa_current_progress': '📊 الحالي التقدم',
-    'delete_2fa_processed': '· Processed: {done}/{إجمالي}',
-    'delete_2fa_speed': '· السرعة: {السرعة}/sec',
-    'delete_2fa_elapsed': '· المدة: {الوقت}s',
-    'delete_2fa_success_count': '✅ حذف نجاح: {العدد}',
-    'delete_2fa_failed_count': '❌ حذف فشل: {العدد}',
-    'delete_2fa_remaining': '⏱️ المتوقع. المتبقي: {الوقت}s',
+    'delete_2fa_in_progress': '🗑️ حذف كلمة مرور 2FA...',
+    'delete_2fa_current_progress': '📊 التقدم الحالي',
+    'delete_2fa_processed': '· تمت المعالجة: {done}/{إجمالي}',
+    'delete_2fa_speed': '· السرعة: {السرعة}/ثانية',
+    'delete_2fa_elapsed': '· المدة: {الوقت}ث',
+    'delete_2fa_success_count': '✅ حذف ناجح: {العدد}',
+    'delete_2fa_failed_count': '❌ فشل الحذف: {العدد}',
+    'delete_2fa_remaining': '⏱️ المتبقي المتوقع: {الوقت}ث',
     
     # 5. الحذف مكتمل
-    'delete_2fa_complete': '🎉 2FA كلمة المرور الحذف مكتمل!',
-    'delete_2fa_stats': '📊 الحذف إحصائيات',
+    'delete_2fa_complete': '🎉 اكتمل حذف كلمة مرور 2FA!',
+    'delete_2fa_stats': '📊 إحصائيات الحذف',
     'delete_2fa_total': '· الإجمالي: {العدد}',
     'delete_2fa_success': '· ✅ نجاح: {العدد}',
     'delete_2fa_failed': '· ❌ فشل: {العدد}',
-    'delete_2fa_duration': '· ⏱️ المدة: {الوقت}s',
-    'delete_2fa_speed_stat': '· 🚀 السرعة: {السرعة}/sec',
-    'delete_2fa_sending_results': '📦 إرسال النتيجة ملف...',
+    'delete_2fa_duration': '· ⏱️ المدة: {الوقت}ث',
+    'delete_2fa_speed_stat': '· 🚀 السرعة: {السرعة}/ثانية',
+    'delete_2fa_sending_results': '📦 إرسال ملفات النتيجة...',
     
     # 6. مهمة مكتمل ملخص
-    'delete_2fa_task_complete': '✅ حذف 2FA مهمة مكتمل!',
-    'delete_2fa_final_stats': '📊 Final الإحصائيات',
+    'delete_2fa_task_complete': '✅ مهمة حذف 2FA مكتملة!',
+    'delete_2fa_final_stats': '📊 الإحصائيات النهائية',
     'delete_2fa_final_success': '· نجاح: {العدد}',
     'delete_2fa_final_failed': '· فشل: {العدد}',
     'delete_2fa_final_sent': '· تم الإرسال: {العدد} ملف',
-    'delete_2fa_tips': '💡 Tips',
-    'delete_2fa_tip1': '· بنجاح تم الحذف حساب no longer يحتاج 2FA كلمة المرور',
-    'delete_2fa_tip2': '· كلمة المرور التكوين في ملف has been تلقائي-cleared',
-    'delete_2fa_tip3': '· يرجى الاحتفاظ النتيجة ملف safe',
+    'delete_2fa_tips': '💡 نصائح',
+    'delete_2fa_tip1': '· الحسابات المحذوفة بنجاح لم تعد تحتاج إلى كلمة مرور 2FA',
+    'delete_2fa_tip2': '· تم مسح تكوين كلمة المرور في الملف تلقائيًا',
+    'delete_2fa_tip3': '· يرجى الاحتفاظ بملفات النتيجة بأمان',
     
     # 7. النتيجة ملف Naming
-    'zip_delete_2fa_success': 'Delete2FA_Success_{العدد}',
-    'zip_delete_2fa_failed': 'Delete2FA_Failed_{العدد}',
+    'zip_delete_2fa_success': 'نجاح_حذف_2FA_{العدد}',
+    'zip_delete_2fa_failed': 'فشل_حذف_2FA_{العدد}',
     'file_desc_delete_2fa_success': '📦 نجاح ({العدد} حساب)',
     'file_desc_delete_2fa_failed': '📦 فشل ({العدد} حساب)',
-    'delete_2fa_process_time': '⏰ معالجة الوقت: {الوقت}',
-    'report_delete_2fa_success': 'Delete2FA_Success_{العدد}_Report.txt',
-    'report_delete_2fa_failed': 'Delete2FA_Failed_{العدد}_Report.txt',
-    'report_desc_delete_2fa_success': '📋 نجاح تفصيلي تقرير',
-    'report_desc_delete_2fa_failed': '📋 فشل تفصيلي تقرير',
-    'report_delete_2fa_contains': 'يحتوي على تفاصيل of {العدد} حساب',
+    'delete_2fa_process_time': '⏰ وقت المعالجة: {الوقت}',
+    'report_delete_2fa_success': 'تقرير_نجاح_حذف_2FA_{العدد}.txt',
+    'report_delete_2fa_failed': 'تقرير_فشل_حذف_2FA_{العدد}.txt',
+    'report_desc_delete_2fa_success': '📋 تقرير تفصيلي للنجاح',
+    'report_desc_delete_2fa_failed': '📋 تقرير تفصيلي للفشل',
+    'report_delete_2fa_contains': 'يحتوي على تفاصيل {العدد} حساب',
     
     # 8. تقرير TXT Template - نجاح
-    'report_delete_2fa_title_success': '2FA كلمة المرور الحذف تقرير - نجاح',
+    'report_delete_2fa_title_success': 'تقرير حذف كلمة مرور 2FA - نجاح',
     'report_delete_2fa_total': 'الإجمالي: {العدد}',
     'report_delete_2fa_generated': 'تم الإنشاء: {الوقت}',
-    'report_delete_2fa_detail_list': 'تفاصيل قائمة:',
+    'report_delete_2fa_detail_list': 'قائمة التفاصيل:',
     'report_delete_2fa_account': 'حساب: {حساب}',
     'report_delete_2fa_details': 'تفاصيل: {معلومات}',
-    'report_delete_2fa_process_time': 'معالجة الوقت: {الوقت}',
+    'report_delete_2fa_process_time': 'وقت المعالجة: {الوقت}',
     'report_delete_2fa_using_proxy': 'استخدام بروكسي',
-    'report_delete_2fa_local_connection': 'محلي اتصال',
-    'report_delete_2fa_success_msg': 'كلمة المرور تم الحذف بنجاح, ملف تم التحديث',
-    'report_delete_2fa_success_no_json': '2FA كلمة المرور تم الحذف',
-    'report_delete_2fa_success_with_json': '2FA كلمة المرور تم الحذف, ملف تم التحديث',
-    'report_delete_2fa_success_update_failed': '2FA كلمة المرور تم الحذف, لكن ملف تحديث فشل',
-    'report_delete_2fa_manual_failed': 'يدوي الحذف فشل',
+    'report_delete_2fa_local_connection': 'اتصال محلي',
+    'report_delete_2fa_success_msg': 'تم حذف كلمة المرور بنجاح، تم تحديث الملف',
+    'report_delete_2fa_success_no_json': 'تم حذف كلمة مرور 2FA',
+    'report_delete_2fa_success_with_json': 'تم حذف كلمة مرور 2FA، تم تحديث الملف',
+    'report_delete_2fa_success_update_failed': 'تم حذف كلمة مرور 2FA، لكن فشل تحديث الملف',
+    'report_delete_2fa_manual_failed': 'فشل الحذف اليدوي',
     'report_delete_2fa_error_unauthorized': 'حساب غير مصرح',
-    'report_delete_2fa_error_wrong_password': 'Wrong كلمة المرور',
-    'report_delete_2fa_error_no_2fa': '2FA لا تعيين',
-    'report_delete_2fa_error_flood': 'Too many requests, يرجى try later',
+    'report_delete_2fa_error_wrong_password': 'كلمة مرور خاطئة',
+    'report_delete_2fa_error_no_2fa': '2FA غير معيّن',
+    'report_delete_2fa_error_flood': 'طلبات كثيرة جداً، يرجى المحاولة لاحقاً',
     'report_delete_2fa_error_frozen': 'حساب مجمّد/محظور',
-    'report_delete_2fa_error_deletion_failed': 'الحذف فشل',
-    'report_delete_2fa_error_network': 'الشبكة اتصال فشل',
+    'report_delete_2fa_error_deletion_failed': 'فشل الحذف',
+    'report_delete_2fa_error_network': 'فشل اتصال الشبكة',
     'report_delete_2fa_error_general': 'خطأ',
-    'report_delete_2fa_error_session_not_found': 'تم التحويل session ملف لا موجود',
-    'report_delete_2fa_error_exception': 'Exception',
+    'report_delete_2fa_error_session_not_found': 'ملف session المحوّل غير موجود',
+    'report_delete_2fa_error_exception': 'استثناء',
     
     # 9. تقرير TXT Template - فشل
-    'report_delete_2fa_title_failed': '2FA كلمة المرور الحذف تقرير - فشل',
+    'report_delete_2fa_title_failed': 'تقرير حذف كلمة مرور 2FA - فشل',
     'report_delete_2fa_error': 'خطأ: {خطأ}',
-    'report_delete_2fa_failure_analysis': 'فشل Analysis و Solutions:',
+    'report_delete_2fa_failure_analysis': 'تحليل الفشل والحلول:',
     'report_delete_2fa_reason_unauthorized': 'حساب غير مصرح',
-    'report_delete_2fa_reason_unauthorized_desc1': 'TData ملف قد لا be تسجيل دخول في أو منتهي الصلاحية',
-    'report_delete_2fa_reason_unauthorized_desc2': 'Suggest re-login حساب',
-    'report_delete_2fa_reason_wrong_password': 'Wrong قديم كلمة المرور',
-    'report_delete_2fa_reason_wrong_password_desc1': 'فحص إذا كلمة المرور ملف المحتوى is الصحيح',
-    'report_delete_2fa_reason_wrong_password_desc2': 'تأكيد إذا كلمة المرور حقل في JSON is دقيق',
-    'report_delete_2fa_reason_network': 'الشبكة اتصال فشل',
-    'report_delete_2fa_reason_network_desc1': 'فحص إذا بروكسي الإعدادات are الصحيح',
-    'report_delete_2fa_reason_network_desc2': 'Try محلي اتصال أو change بروكسي',
+    'report_delete_2fa_reason_unauthorized_desc1': 'قد لا يكون ملف TData مسجل الدخول أو منتهي الصلاحية',
+    'report_delete_2fa_reason_unauthorized_desc2': 'يُنصح بإعادة تسجيل الدخول للحساب',
+    'report_delete_2fa_reason_wrong_password': 'كلمة مرور قديمة خاطئة',
+    'report_delete_2fa_reason_wrong_password_desc1': 'تحقق من صحة محتوى ملف كلمة المرور',
+    'report_delete_2fa_reason_wrong_password_desc2': 'تأكد من دقة حقل كلمة المرور في JSON',
+    'report_delete_2fa_reason_network': 'فشل اتصال الشبكة',
+    'report_delete_2fa_reason_network_desc1': 'تحقق من صحة إعدادات البروكسي',
+    'report_delete_2fa_reason_network_desc2': 'جرب الاتصال المحلي أو تغيير البروكسي',
     
     # 10. آخر رسائل
-    'delete_2fa_starting': '🗑️ بدء 2FA كلمة المرور الحذف...',
-    'delete_2fa_found_count': '📊 موجود {العدد} ملف',
-    'delete_2fa_please_wait': '⏳ جاري المعالجة, يرجى الانتظار...',
-    'delete_2fa_processing_file': '📥 جاري المعالجة الخاص بك ملف...',
-    'delete_2fa_no_valid_files': '❌ No صالح ملف موجود',
-    'delete_2fa_ensure_format': 'يرجى التأكد ZIP يحتوي على Session أو TData الصيغة حساب ملف',
-    'delete_2fa_failed_msg': '❌ حذف 2FA فشل',
+    'delete_2fa_starting': '🗑️ بدء حذف كلمة مرور 2FA...',
+    'delete_2fa_found_count': '📊 تم العثور على {العدد} ملف',
+    'delete_2fa_please_wait': '⏳ جاري المعالجة، يرجى الانتظار...',
+    'delete_2fa_processing_file': '📥 جاري معالجة ملفك...',
+    'delete_2fa_no_valid_files': '❌ لم يتم العثور على ملفات صالحة',
+    'delete_2fa_ensure_format': 'يرجى التأكد من أن ZIP يحتوي على ملفات حساب بصيغة Session أو TData',
+    'delete_2fa_failed_msg': '❌ فشل حذف 2FA',
     'delete_2fa_error_msg': 'خطأ: {خطأ}',
     
     # ===== إضافة 2FA ميزة =====
