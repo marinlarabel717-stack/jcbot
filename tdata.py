@@ -11353,6 +11353,11 @@ class EnhancedBot:
         buttons = [
             [InlineKeyboardButton(t(user_id, 'language_chinese'), callback_data="set_language_zh")],
             [InlineKeyboardButton(t(user_id, 'language_english'), callback_data="set_language_en")],
+            [InlineKeyboardButton(t(user_id, 'language_russian'), callback_data="set_language_ru")],
+            [InlineKeyboardButton(t(user_id, 'language_arabic'), callback_data="set_language_ar")],
+            [InlineKeyboardButton(t(user_id, 'language_bengali'), callback_data="set_language_bn")],
+            [InlineKeyboardButton(t(user_id, 'language_persian'), callback_data="set_language_fa")],
+            [InlineKeyboardButton(t(user_id, 'language_vietnamese'), callback_data="set_language_vi")],
             [InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_main")]
         ]
         
