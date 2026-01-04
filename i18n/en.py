@@ -52,6 +52,11 @@ TEXTS = {
     'language_menu_title': '🌐 选择语言 / Select Language',
     'language_chinese': '🇨🇳 中文',
     'language_english': '🇬🇧 English',
+    'language_russian': '🇷🇺 Русский',
+    'language_arabic': '🇸🇦 العربية',
+    'language_bengali': '🇧🇩 বাংলা',
+    'language_persian': '🇮🇷 فارسی',
+    'language_vietnamese': '🇻🇳 Tiếng Việt',
     'language_switched': '✅ Language switched to English',
     
     # Back button
