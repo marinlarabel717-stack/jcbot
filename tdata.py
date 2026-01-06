@@ -2463,12 +2463,12 @@ class Config:
         
         
         # 忘记2FA批量处理速度优化配置
-        self.FORGET2FA_CONCURRENT = int(os.getenv("FORGET2FA_CONCURRENT", "50"))  # 并发数从30提升到50
-        self.FORGET2FA_MIN_DELAY = float(os.getenv("FORGET2FA_MIN_DELAY", "0.3"))  # 批次间最小延迟（秒）
-        self.FORGET2FA_MAX_DELAY = float(os.getenv("FORGET2FA_MAX_DELAY", "0.8"))  # 批次间最大延迟（秒）
+        self.FORGET2FA_CONCURRENT = int(os.getenv("FORGET2FA_CONCURRENT", "50"))  # 并发数50（高速处理）
+        self.FORGET2FA_MIN_DELAY = float(os.getenv("FORGET2FA_MIN_DELAY", "3.0"))  # 批次间最小延迟3秒
+        self.FORGET2FA_MAX_DELAY = float(os.getenv("FORGET2FA_MAX_DELAY", "6.0"))  # 批次间最大延迟6秒
         self.FORGET2FA_NOTIFY_WAIT = float(os.getenv("FORGET2FA_NOTIFY_WAIT", "0.5"))  # 等待通知到达的时间（秒）
-        self.FORGET2FA_MAX_PROXY_RETRIES = int(os.getenv("FORGET2FA_MAX_PROXY_RETRIES", "2"))  # 代理重试次数从3减到2
-        self.FORGET2FA_PROXY_TIMEOUT = int(os.getenv("FORGET2FA_PROXY_TIMEOUT", "15"))  # 代理超时时间（秒）
+        self.FORGET2FA_MAX_PROXY_RETRIES = int(os.getenv("FORGET2FA_MAX_PROXY_RETRIES", "3"))  # 代理重试次数3次
+        self.FORGET2FA_PROXY_TIMEOUT = int(os.getenv("FORGET2FA_PROXY_TIMEOUT", "10"))  # 代理超时时间10秒
         self.FORGET2FA_DEFAULT_COUNTRY_PREFIX = os.getenv("FORGET2FA_DEFAULT_COUNTRY_PREFIX", "+62")  # 默认国家前缀
         
         # API格式转换器和验证码服务器配置
@@ -2571,11 +2571,11 @@ PROXY_DEBUG_VERBOSE=false
 BASE_URL=http://127.0.0.1:5000
 # 忘记2FA批量处理速度优化配置
 FORGET2FA_CONCURRENT=50
-FORGET2FA_MIN_DELAY=0.3
-FORGET2FA_MAX_DELAY=0.8
+FORGET2FA_MIN_DELAY=3.0
+FORGET2FA_MAX_DELAY=6.0
 FORGET2FA_NOTIFY_WAIT=0.5
-FORGET2FA_MAX_PROXY_RETRIES=2
-FORGET2FA_PROXY_TIMEOUT=15
+FORGET2FA_MAX_PROXY_RETRIES=3
+FORGET2FA_PROXY_TIMEOUT=10
 FORGET2FA_DEFAULT_COUNTRY_PREFIX=+62
 # API格式转换器和验证码服务器配置
 WEB_SERVER_PORT=8080
@@ -8697,17 +8697,53 @@ def _find_available_port(preferred: int = 8080, max_tries: int = 20) -> Optional
 # 忘记2FA管理器
 # ================================
 
-class Forget2FAManager:
-    """忘记2FA管理器 - 官方密码重置流程（优化版 - 提升批量处理速度）"""
+class ProxyRotator:
+    """代理轮换器 - 用于2FA重置防封"""
+    def __init__(self, proxies: list):
+        self.proxies = proxies
+        self.index = 0
+        self.lock = None  # 将在异步环境中初始化
     
-    # 配置常量 - 从环境变量或配置读取，可根据需要调整
-    # 速度优化：提高并发数，减少延迟
-    DEFAULT_CONCURRENT_LIMIT = 50      # 默认并发数限制（从30提升到50）
-    DEFAULT_MAX_PROXY_RETRIES = 2      # 默认代理重试次数（从3减到2）
-    DEFAULT_PROXY_TIMEOUT = 15         # 默认代理超时时间（秒，从30减到15）
-    DEFAULT_MIN_DELAY = 0.3            # 批次间最小延迟（秒，从1减到0.3）
-    DEFAULT_MAX_DELAY = 0.8            # 批次间最大延迟（秒，从3减到0.8）
-    DEFAULT_NOTIFY_WAIT = 0.5          # 等待通知到达的时间（秒，从2减到0.5）
+    def get_next_proxy(self):
+        """获取下一个代理，用完后循环复用（线程安全）"""
+        if not self.proxies:
+            return None
+        
+        proxy = self.proxies[self.index]
+        self.index = (self.index + 1) % len(self.proxies)
+        return proxy
+
+
+def utc_to_beijing(utc_time):
+    """将 UTC 时间转换为北京时间 (UTC+8)"""
+    if utc_time is None:
+        return "N/A"
+    
+    # 如果是字符串，先转换为 datetime
+    if isinstance(utc_time, str):
+        utc_time = datetime.fromisoformat(utc_time.replace('Z', '+00:00'))
+    
+    # 如果没有时区信息，假设是 UTC
+    if utc_time.tzinfo is None:
+        utc_time = utc_time.replace(tzinfo=timezone.utc)
+    
+    # 转换为北京时间 (UTC+8)
+    beijing_tz = timezone(timedelta(hours=8))
+    beijing_time = utc_time.astimezone(beijing_tz)
+    
+    return beijing_time.strftime('%Y-%m-%d %H:%M:%S')
+
+
+class Forget2FAManager:
+    """忘记2FA管理器 - 官方密码重置流程（高速+防封混合模式）"""
+    
+    # 配置常量 - 平衡速度与防封
+    DEFAULT_CONCURRENT_LIMIT = 50      # 并发限制50（批量高速处理）
+    DEFAULT_MAX_PROXY_RETRIES = 3      # 代理重试次数为3
+    DEFAULT_PROXY_TIMEOUT = 10         # 代理超时时间10秒
+    DEFAULT_MIN_DELAY = 3.0            # 批次间最小延迟3秒
+    DEFAULT_MAX_DELAY = 6.0            # 批次间最大延迟6秒
+    DEFAULT_NOTIFY_WAIT = 0.5          # 等待通知到达的时间
     
     def __init__(self, proxy_manager: ProxyManager, db: Database,
                  concurrent_limit: int = None,
@@ -8720,7 +8756,6 @@ class Forget2FAManager:
         self.db = db
         
         # 使用环境变量配置或传入参数或默认值
-        # 使用显式None检查以支持0值作为有效配置
         self.concurrent_limit = concurrent_limit if concurrent_limit is not None else (getattr(config, 'FORGET2FA_CONCURRENT', None) or self.DEFAULT_CONCURRENT_LIMIT)
         self.max_proxy_retries = max_proxy_retries if max_proxy_retries is not None else (getattr(config, 'FORGET2FA_MAX_PROXY_RETRIES', None) or self.DEFAULT_MAX_PROXY_RETRIES)
         self.proxy_timeout = proxy_timeout if proxy_timeout is not None else (getattr(config, 'FORGET2FA_PROXY_TIMEOUT', None) or self.DEFAULT_PROXY_TIMEOUT)
@@ -8728,11 +8763,19 @@ class Forget2FAManager:
         self.max_delay = max_delay if max_delay is not None else (getattr(config, 'FORGET2FA_MAX_DELAY', None) or self.DEFAULT_MAX_DELAY)
         self.notify_wait = notify_wait if notify_wait is not None else (getattr(config, 'FORGET2FA_NOTIFY_WAIT', None) or self.DEFAULT_NOTIFY_WAIT)
         
+        # 创建代理轮换器（每个账号使用不同代理）
+        self.proxy_rotator = ProxyRotator(self.proxy_manager.proxies if self.proxy_manager.proxies else [])
+        
         # 创建信号量控制并发
         self.semaphore = asyncio.Semaphore(self.concurrent_limit)
         
-        # 打印优化后的配置
-        print(f"⚡ 忘记2FA管理器初始化: 并发={self.concurrent_limit}, 延迟={self.min_delay}-{self.max_delay}s, 通知等待={self.notify_wait}s")
+        # 打印配置
+        print(f"⚡ 忘记2FA管理器初始化（高速+防封模式）:")
+        print(f"   - 并发处理: {self.concurrent_limit}个账号/批次")
+        print(f"   - 批次间隔: {self.min_delay}-{self.max_delay}秒")
+        print(f"   - 代理策略: 每账号轮换，IP不够循环复用")
+        print(f"   - 超时重试: 最多{self.max_proxy_retries}次")
+        print(f"   - 可用代理: {len(self.proxy_rotator.proxies)}个")
     
     def create_proxy_dict(self, proxy_info: Dict) -> Optional[Dict]:
         """创建代理字典"""
@@ -8970,23 +9013,44 @@ class Forget2FAManager:
             
             # 获取最近的消息（通常重置通知是最新的几条之一）
             messages = await asyncio.wait_for(
-                client.get_messages(entity, limit=5),
+                client.get_messages(entity, limit=10),  # 增加到10条确保覆盖
                 timeout=10
             )
             
             deleted_count = 0
             for msg in messages:
                 if msg.text:
-                    # 检查是否是密码重置通知（多语言匹配）
+                    # 检查是否是密码重置通知（多语言匹配，包含更多关键词）
                     text_lower = msg.text.lower()
                     if any(keyword in text_lower for keyword in [
-                        'reset password',           # 英文
+                        # 英文关键词
+                        'reset password',
                         'reset your telegram password',
-                        '2-step verification',
+                        'request to reset password',
                         'request to reset',
-                        '重置密码',                  # 中文
+                        '2-step verification',
+                        'two-step verification',
+                        'cancel the password reset',
+                        'cancel reset request',
+                        'password reset request',
+                        # 中文关键词
+                        '重置密码',
+                        '密码重置',
                         '二次验证',
-                        '两步验证'
+                        '两步验证',
+                        '二步验证',
+                        '取消密码重置',
+                        '取消重置',
+                        # 俄语关键词
+                        'сброс пароля',
+                        'двухфакторн',
+                        # 印尼语关键词
+                        'reset kata sandi',
+                        'verifikasi dua langkah',
+                        # 其他语言
+                        'réinitialiser',  # 法语
+                        'zurücksetzen',    # 德语
+                        'restablecer',     # 西班牙语
                     ]):
                         try:
                             await client.delete_messages(entity, msg.id)
@@ -9008,7 +9072,7 @@ class Forget2FAManager:
     
     async def connect_with_proxy_fallback(self, file_path: str, account_name: str, file_type: str = 'session') -> Tuple[Optional[TelegramClient], str, bool]:
         """
-        使用代理连接，如果所有代理都超时则回退到本地连接
+        使用代理轮换器连接，IP超时自动切换下一个重试（最多3次）
         支持 session 和 tdata 两种格式
         
         Returns:
@@ -9016,7 +9080,7 @@ class Forget2FAManager:
         """
         # 检查代理是否可用
         proxy_enabled = self.db.get_proxy_enabled() if self.db else True
-        use_proxy = config.USE_PROXY and proxy_enabled and self.proxy_manager.proxies
+        use_proxy = config.USE_PROXY and proxy_enabled and len(self.proxy_rotator.proxies) > 0
         
         tried_proxies = []
         
@@ -9027,16 +9091,18 @@ class Forget2FAManager:
         # 处理 session 格式
         session_base = file_path.replace('.session', '') if file_path.endswith('.session') else file_path
         
-        # 优先尝试代理连接
+        # 优先尝试代理连接 - 使用代理轮换器
         if use_proxy:
             for attempt in range(self.max_proxy_retries):
-                proxy_info = self.proxy_manager.get_random_proxy()
+                # 使用代理轮换器获取下一个代理
+                proxy_info = self.proxy_rotator.get_next_proxy()
                 if not proxy_info:
                     break
                 
                 # 使用内部格式用于去重，但不暴露给用户
                 proxy_str_internal = self.format_proxy_string_internal(proxy_info)
                 if proxy_str_internal in tried_proxies:
+                    # 如果已尝试过这个代理，获取下一个
                     continue
                 tried_proxies.append(proxy_str_internal)
                 
@@ -9047,7 +9113,7 @@ class Forget2FAManager:
                 if not proxy_dict:
                     continue
                 
-                print(f"🌐 [{account_name}] 尝试代理连接 #{attempt + 1}")
+                print(f"🌐 [{account_name}] 尝试代理连接 #{attempt + 1} (轮换)")
                 
                 client = None
                 try:
@@ -9076,7 +9142,7 @@ class Forget2FAManager:
                     return client, proxy_str, True
                     
                 except asyncio.TimeoutError:
-                    print(f"⏱️ [{account_name}] 代理连接超时")
+                    print(f"⏱️ [{account_name}] 代理超时，切换下一个...")
                     if client:
                         try:
                             await client.disconnect()
@@ -9125,7 +9191,7 @@ class Forget2FAManager:
     async def _connect_tdata_with_proxy_fallback(self, tdata_path: str, account_name: str, 
                                                   use_proxy: bool, tried_proxies: list) -> Tuple[Optional[TelegramClient], str, bool]:
         """
-        处理TData格式的连接（使用opentele转换）
+        处理TData格式的连接（使用opentele转换）- 使用代理轮换器
         
         Returns:
             (client或None, 代理描述字符串, 是否成功连接)
@@ -9134,10 +9200,11 @@ class Forget2FAManager:
             print(f"❌ [{account_name}] opentele库未安装，无法处理TData格式")
             return None, "本地连接", False
         
-        # 优先尝试代理连接
+        # 优先尝试代理连接 - 使用代理轮换器
         if use_proxy:
             for attempt in range(self.max_proxy_retries):
-                proxy_info = self.proxy_manager.get_random_proxy()
+                # 使用代理轮换器获取下一个代理
+                proxy_info = self.proxy_rotator.get_next_proxy()
                 if not proxy_info:
                     break
                 
@@ -9154,7 +9221,7 @@ class Forget2FAManager:
                 if not proxy_dict:
                     continue
                 
-                print(f"🌐 [{account_name}] TData代理连接 #{attempt + 1}")
+                print(f"🌐 [{account_name}] TData代理连接 #{attempt + 1} (轮换)")
                 
                 client = None
                 try:
@@ -9194,7 +9261,7 @@ class Forget2FAManager:
                     return client, proxy_str, True
                     
                 except asyncio.TimeoutError:
-                    print(f"⏱️ [{account_name}] TData代理连接超时")
+                    print(f"⏱️ [{account_name}] TData代理超时，切换下一个...")
                     if client:
                         try:
                             await client.disconnect()
@@ -9325,8 +9392,9 @@ class Forget2FAManager:
                 if success:
                     result['status'] = 'requested'
                     if cooling_until:
-                        result['cooling_until'] = cooling_until.strftime('%Y-%m-%d %H:%M:%S')
-                        result['error'] = f"{reset_msg}，冷却期至: {result['cooling_until']}"
+                        # 转换为北京时间显示
+                        result['cooling_until'] = utc_to_beijing(cooling_until)
+                        result['error'] = f"{reset_msg}，冷却期至: {result['cooling_until']} (北京时间)"
                     else:
                         result['error'] = reset_msg
                     print(f"✅ [{file_name}] {reset_msg}")
@@ -9340,8 +9408,9 @@ class Forget2FAManager:
                     if "冷却期" in reset_msg or "recently" in reset_msg.lower():
                         result['status'] = 'cooling'
                         if cooling_until:
-                            result['cooling_until'] = cooling_until.strftime('%Y-%m-%d %H:%M:%S')
-                            result['error'] = f"{reset_msg}，冷却期至: {result['cooling_until']}"
+                            # 转换为北京时间显示
+                            result['cooling_until'] = utc_to_beijing(cooling_until)
+                            result['error'] = f"{reset_msg}，冷却期至: {result['cooling_until']} (北京时间)"
                         else:
                             result['error'] = reset_msg
                         print(f"⏳ [{file_name}] {reset_msg}")  # 冷却期使用⏳图标
@@ -9379,7 +9448,7 @@ class Forget2FAManager:
                                          batch_id: str,
                                          progress_callback=None) -> Dict:
         """
-        批量处理（高并发模式 - 同时处理多个账号）
+        批量处理（高速+防封混合模式 - 批量并发，每批次间隔3-6秒）
         
         Args:
             files: [(文件路径, 文件名), ...]
@@ -9432,10 +9501,12 @@ class Forget2FAManager:
             
             return result
         
-        # 使用批量并发处理
+        # 批量并发处理（每批50个，批次间延迟3-6秒）
         batch_size = self.concurrent_limit
         for i in range(0, len(files), batch_size):
             batch = files[i:i + batch_size]
+            
+            print(f"📦 处理批次 {i//batch_size + 1}/{(len(files)-1)//batch_size + 1}，包含 {len(batch)} 个账号")
             
             # 创建任务列表
             tasks = [
@@ -9446,7 +9517,7 @@ class Forget2FAManager:
             # 并发执行当前批次
             await asyncio.gather(*tasks, return_exceptions=True)
             
-            # 批次间短暂延迟（防风控）
+            # 批次间延迟（防风控）- 最后一批不延迟
             if i + batch_size < len(files):
                 delay = random.uniform(self.min_delay, self.max_delay)
                 print(f"⏳ 批次间延迟 {delay:.1f} 秒...")
