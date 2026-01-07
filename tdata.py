@@ -27157,6 +27157,15 @@ o5eth</code>
                                         added_paths.add(journal_basename)
                                         zf.write(journal_path, journal_basename)
                                         logger.debug(f"添加Journal文件到ZIP: {journal_basename}")
+                                
+                                # 同时添加 JSON 文件（如果存在）
+                                json_path = os.path.splitext(original_path)[0] + '.json'
+                                if os.path.exists(json_path):
+                                    json_basename = os.path.splitext(session_basename)[0] + '.json'
+                                    if json_basename not in added_paths:
+                                        added_paths.add(json_basename)
+                                        zf.write(json_path, json_basename)
+                                        logger.debug(f"添加JSON文件到ZIP: {json_basename}")
                 
                 logger.info(f"✅ 创建ZIP文件: {os.path.basename(zip_path)}，共 {len(added_paths)} 个文件")
                 zip_files[key] = zip_path
